@@ -1,0 +1,228 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Permissionssss
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+
+<style>
+  .submit-button{
+     margin: 20px auto;
+ }
+ .error{
+   font-size:18px !important;
+ }
+</style>
+
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div style="margin:15px 0px" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div id="snackbar"></div>
+
+
+
+
+  <form method="POST">
+    {%csrf_token%}
+    <div class="row m-2">
+      <div class="col-md-12">
+        
+        <div class="row my-4 px-3">
+          <div class="col d-flex align-items-center justify-content-between p-0">
+          
+              <span>
+              <select name="RoleID" id="RoleID" class="Select-feild" onchange="getpermissionbyrole()">
+                <option selected value="">Select Role</option>
+                {% for i in rolelist%}
+                <option value="{{i.id}}">{{i.RoleName}}</option>   
+                {%endfor%} 
+              </select>
+              <p class="error" id="roleIDerror"></p>
+            </span>
+          </div>
+        </div>
+  
+  
+        <div class="main-card mb-3 card">
+            
+              
+  
+          <div id="snackbar"></div>
+                
+  
+    
+    
+          <div class="card-body p-0 m-0 px-3">
+  
+            <div class="row">
+              <div class="col-12 d-flex justify-content-between py-3">
+                <span>Item</span>
+                <span>Action</span>
+              </div>
+              
+              {% for i in Menu  %}
+                {% if i.ParentID == 0%}
+                <div class="col-12 d-flex justify-content-between border-top py-3">
+                  <div class="Parent-Menuname">{{i.MenuName}}</div>
+                  <div>
+                    <input type="checkbox" class="Checkbox check {{i.MenuID}}Main " id="check{{i.MenuID}}" name="check" value="{{i.MenuID}}">
+                    <label for="check{{i.MenuID}}"></label>
+                  </div>
+                </div>
+                      
+                <div class="col-12 d-flex justify-content-between border-top py-3">
+                  <div class="px-4">
+                    <div class="row">
+                      {% for j in Menu  %}
+                      {% if i.MenuID == j.ParentID %}
+    
+                        <div class="col-4 d-flex justify-content-between px-0">
+                          <div  class="">{{j.MenuName}}</div>
+                          <div class="checkboxmargin{{forloop.counter}}">    
+                            <input type="checkbox" class="Checkbox 1 check {{j.ParentID}}" id="check{{j.MenuID}}" name="check" value="{{j.MenuID}}">
+                            <label for="check{{j.MenuID}}"></label>
+                          </div>
+                        </div>
+    
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              {% endfor %} 
+            </div>
+  
+  
+  
+          </div>
+  
+            
+        </div>
+        <div class="row justify-content-end">
+          <div class="col-auto">
+              <button type="submit" onclick="return permissionValidate();" class="my-4 permission-submit-button submitBtn">Submit</button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </form>
+
+       
+   
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  $(".31Main").click(function () {
+    $(".31").prop('checked', this.checked);
+  });
+  
+  $(".31").click(function () {
+    var totalCheckboxes = $('.31:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.31Main').prop('checked', false);
+    }else{
+        $('.31Main').prop('checked', true);
+    }
+  });
+
+  $(".38Main").click(function () {
+    $(".38").prop('checked', this.checked);
+  });
+  
+  $(".38").click(function () {
+    var totalCheckboxes = $('.38:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.38Main').prop('checked', false);
+    }else{
+        $('.38Main').prop('checked', true);
+    }
+  });
+
+  $(".41Main").click(function () {
+    $(".41").prop('checked', this.checked);
+  });
+  
+  $(".41").click(function () {
+    var totalCheckboxes = $('.41:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.41Main').prop('checked', false);
+    }else{
+        $('.41Main').prop('checked', true);
+    }
+  });
+
+
+
+  function permissionValidate(){
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    
+        var role = $("#RoleID").val();
+        var totalCheckboxes = $('.check:checked').length;
+       
+    
+        if (IsValid(role)) {
+          $('#roleIDerror').show().delay(3000).slideUp();
+          $('#roleIDerror').html('Role field is required');
+          $('#RoleID').focus();
+          return false;
+      }
+      else if(totalCheckboxes < 1){
+        $('#snackbar').html('');
+        $('#snackbar').html('Please Select Fields');
+        $('.check').focus();
+        return false;
+        
+      }else{
+        $('#snackbar').addClass('validationBox')
+      }
+  }
+    
+
+  function getpermissionbyrole() {
+  
+      $('.Checkbox').prop('checked', false)
+      var RoleID = $('#RoleID').val();
+      var html;
+      $.ajax({
+          type: "POST",
+          url: frontendURL + "role/getpermission",
+          data: {
+              'RoleID': RoleID,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {  
+            console.log("rep",response.data)          
+                    $(response.data[0].MenuID).each(function (j, k) {
+                      console.log("aat",k)
+                        $('#check' + k).prop('checked', true)
+                      })
+              
+              
+          }
+      });
+  }
+</script>
+{% endblock %}

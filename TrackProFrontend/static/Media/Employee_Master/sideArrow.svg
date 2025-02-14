@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_19232" data-name="Group 19232" transform="translate(-434 -672)">
+    <rect id="Rectangle_180" data-name="Rectangle 180" width="20" height="20" transform="translate(434 672)" fill="none"/>
+    <g id="Group_3488" data-name="Group 3488" transform="translate(435.667 676.583)">
+      <rect id="Rectangle_43" data-name="Rectangle 43" width="16.667" height="10.833" fill="none"/>
+      <path id="Union_2" data-name="Union 2" d="M4.516,15.871c-.006-.287,0-.574,0-.861s0-.574,0-.86a.767.767,0,1,1,1.534,0q.008.86,0,1.721a.773.773,0,0,1-.755.8H5.286A.777.777,0,0,1,4.516,15.871Zm0-4.768c-.007-.082,0-.164,0-.246q0-3.961,0-7.922V2.659c-.079.074-.13.12-.178.168q-1.485,1.5-2.97,3A.771.771,0,0,1,.15,4.883a2,2,0,0,1,.191-.212Q2.406,2.581,4.476.495A7.484,7.484,0,0,1,5.078,0h.406a7.1,7.1,0,0,1,.589.481q2.095,2.1,4.179,4.219a.869.869,0,0,1,.307.643.739.739,0,0,1-.425.691.717.717,0,0,1-.8-.081,1.586,1.586,0,0,1-.178-.167L6.244,2.84c-.051-.052-.1-.1-.193-.187v.275q0,4.023,0,8.045a.778.778,0,0,1-.723.85H5.295A.768.768,0,0,1,4.518,11.1Z" transform="translate(16.667 0.274) rotate(90)" fill="#174fa3" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

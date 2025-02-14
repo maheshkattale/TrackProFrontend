@@ -1,0 +1,326 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+TrackPro Check Report
+</div>
+{% endblock %}
+{% block content %}
+
+<style>
+  .uppercard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  padding :5px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+
+}
+.submittedbtn{
+    background-color:rgb(0 174 0);
+    color:white;
+    border: 1px solid rgb(0 174 0);
+    border-radius: 25px;
+    padding: 4px 14px;
+    font-size:12px;
+}
+.select2-container--default .select2-selection--single{
+  border-bottom:1px solid #acacac !important;
+  box-shadow:none !important;
+  border-radius: 0 !important;
+
+}
+.heading{
+text-align: left;
+font-size:14px;
+letter-spacing: 0px;
+color: #888888;
+}
+.table-div {
+    background-color: white !important;
+    border-radius: 16px !important;
+    margin: 11px 9px !important;
+    padding: 0 15px 15px 15px !important;
+
+}
+
+#projecttotalhours{
+  font-size:14px;
+}
+#projectmandays{
+  font-size:11px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+.main-wrapper {
+padding-top:3rem !important;
+}
+
+.pageheading{
+  color: var(---282828);
+text-align: left;
+font-size:20px;
+font-weight:500;
+letter-spacing: 0px;
+color: #282828;
+}
+
+</style>
+
+    
+    <!-- Main page -> Manage Task -->
+    <main class="main-wrapper">
+      <!-- ==================Row1======================= -->
+      <div class="uppercard">
+
+        <div class="row mb-4">
+         
+          <div class="col-md-4">
+            <div class="p-2 pageheading">TrackPro Check Report</div>
+          </div>
+          <div class="col-md-2">
+           
+          </div>
+         
+          <div class="col-md-3">
+            <select id='year' name="year" class="select2dropdown" onchange="onchangeweek();">
+               <option value="">Select Year</option>
+                {% for y in yearlist%}
+                  {% if y.Year == curryear %}
+                  <option value="{{y.Year}}" selected>{{y.Year}}</option>
+                    {%else%}
+                  <option value="{{y.Year}}">{{y.Year}}</option>
+                  {%endif%} 
+                {% endfor %}
+                <option ></option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select id='week' name="week" class="select2dropdown" onchange="viewprojectdetails();">
+             
+            </select>
+          </div>
+          </div>
+          <div class="row m-2 pt-2">
+            <table class="Projectdata">
+              <tbody>
+              <tr>
+                <td>
+                  <span class="heading">Total Task:</span>
+                  <span class="maindetails" id="totaltask"></span>
+                </td>
+              <td>
+                <span class="heading">Task Checked:</span>
+                <span class="maindetails" id="checkedtask"></span>
+              </td>
+
+            <td>
+              <span class="heading">Task Unchecked:</span>
+              <span class="maindetails" id="uncheckedtask"></span>
+            </td>
+               
+            <td>
+                <span class="heading">Employees:</span>
+                <span class="maindetails" id="empcount"></span>
+            </td>
+
+              <td>
+                <span class="heading">Managers:</span>
+                <span class="maindetails" id="managercount"></span>
+              </td>
+            </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+      <div class="mangacc_div">
+         <div class="accordion" id="accordionmanagerExample">
+
+
+        </div>
+    </div>
+       
+    </main>
+  {%endblock%}{%block script%}{{block.super}}
+
+
+  <script src="https://rawgit.com/unconditional/jquery-table2excel/master/src/jquery.table2excel.js"></script>
+  <script>
+
+$(document).ready(function () {
+
+ $('.input-feild').on("focus", function () {
+ var label = $('label[for=' + this.id + ']');
+ label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+ });
+
+ onchangeweek();
+ });
+
+ function onchangeweek(){
+    var year = $('#year').val();
+    $.ajax({
+    type: 'post',
+    url: frontendURL + 'checktrackpro/TrackProResultWeek',
+    data: {
+        'year':year,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+    },
+    dataType: 'json',
+    success: function(response) {
+        console.log("week data",response)
+        var ophtml = ""
+        $('#week').empty()
+      
+        $.each(response, function(i, o) {
+                $('#week').append(`<option value="`+o.Week+`">`+o.Week+`</option>`)
+            });
+        $('#week').prepend(`<option value="All">All Weeks</option>`)
+        viewprojectdetails();
+    }
+    })
+ }
+
+ 
+ 
+ function viewprojectdetails(){
+  var year = $('#year').val();
+  var week = $('#week').val();
+  
+  $.ajax({
+    type: 'post',
+    url: frontendURL + 'checktrackpro/warcheckreportdata',
+    data: {
+        'Year':year,
+        'Week':week,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+    },
+    dataType: 'json',
+    beforeSend: function() {
+      swal({
+          icon: "info",
+          title: "",
+          text: "Loading...",
+          buttons: false,
+
+      });
+    },
+    success: function(response) {
+      console.log("resmodal",response.data)
+        $("#totaltask").html(response.data.alltaskcount);
+        $("#checkedtask").html(response.data.checkedtaskcount+"/"+response.data.alltaskcount);
+        $("#uncheckedtask").html(response.data.uncheckedtaskcount+"/"+response.data.alltaskcount);
+        $("#empcount").html(response.data.uncheckedempcount+"/"+response.data.task_allempcount);
+        $("#managercount").html(response.data.Uncheckedmanagercount+"/"+response.data.task_allmangcount);
+       
+      var taskdetail ="" ; 
+      $.each(response.data.Managerdata, function(i,o){
+       
+       taskdetail += `
+     
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading`+o.id+`">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#modal`+o.id+`" aria-expanded="false" aria-controls="modal`+o.id+`">
+                <span class="col-md-4">` +o.managersrno+ ` : ` +o.managername+ `</span> 
+                <span class="col-md-4">Total Unchecked Tasks : `+o.TotaluncheckedTask+`</span>
+                <span class="col-md-4">Total Employees : `+o.TotalEmployees+`</span>
+              </button>
+            </h2>
+            <div id="modal`+o.id+`" class="accordion-collapse collapse" aria-labelledby="heading`+o.id+`" data-bs-parent="#accordionmanagerExample">
+              <div class="accordion-body">
+                <table class="table accmanagertable table-hover">
+                  <thead>
+                    <th>Sr.No</th>
+                    <th style="width:20%;">Employee Name</th>
+                    <th>Unchecked Tasks</th>
+                    <th>Total Tasks(Under Manager)</th>
+                    <th>All Tasks</th>
+                    <th>Final Submit Status</th>
+                    <th>Action</th>
+                  </thead>
+
+                  <tbody>
+                    ${o.empdata.map(l => `
+                    <tr>
+                        <td>` + l.empsrno + `</td>
+                        <td>` + l.empname + `</td>
+                        <td style="text-align:center">` + l.uncheckedcount + `</td>
+                        <td style="text-align:center">` + l.allmanagertaskcount +`</td>
+                        <td style="text-align:center">` + l.allemptask +`</td>
+                        <td style="text-align:center">` + l.finalsubmit + `</td>
+                        <td><div id="btnstr`+l.strempid+``+l.strmanagerid+`">` + l.finalsubmitstr + `</div></td>
+                    </tr>
+                    `).join("\n")}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+       
+        `
+      })
+  
+    $('#accordionmanagerExample').html(taskdetail);
+    swal.close()
+
+    }
+  })
+  
+}
+ 
+function finalsubmitemp(empid,managerid){
+  var year = $('#year').val();
+  var week = $('#week').val();
+  swal({title: "Are you sure?",
+            text: "you want to final submit ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }) 
+.then((isConfirm) => {
+    if (isConfirm) {
+      $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/reportfinalsubmit',
+        data: {
+            'Year':year,
+            'Week':week,
+            'empid':empid,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log("reponsereport",response)
+          if (response.n == 0) {
+            swal({
+            title: "",
+            text: response.message,
+            button: "ok",
+            });
+          } else {
+            swal({
+            title: "",
+            text: response.message,
+            button: "ok",
+            timer: 1000
+            });
+            console.log("wgdwgd",'#btnstr'+empid+managerid)
+            var submithtml = `<button type="button" class="submittedbtn">Submitted</button>`
+            $('#btnstr'+empid+managerid).html(submithtml);
+            }
+        }
+      })
+    }
+    else {
+        swal("TrackPro Score is not added!", {
+        icon: "error",
+        });
+    }
+  })
+}
+    
+</script>
+ {%endblock%}

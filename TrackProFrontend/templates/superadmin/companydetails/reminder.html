@@ -1,0 +1,356 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Reminders
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<style>
+    .fa-bell{
+        color:rgba(255, 0, 0, 0.573);
+    }
+    .fa-info{
+        color:#174fa3;
+    }
+    .head {
+        background-color: white;
+        padding: 10px;
+    }
+    .card{
+            padding:5px;
+        }
+    .card-footer {
+        background-color: white;
+    }
+</style>
+
+<main class="main-wrapper">
+
+    <div class="title-div">
+
+        <!-- <span class="company-title">Reminders</span> -->
+        <span ></span>
+        
+
+    </div> 
+    <!--  -->
+    <div class="leads-div">
+
+        <!-- Card-Box_Nav-Bar_Nav-Pills -->
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link active" id="pills-incomplete-tab" data-bs-toggle="pill" data-bs-target="#pills-incomplete" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Incomplete Registration</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-active-tab" data-bs-toggle="pill" data-bs-target="#pills-active" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Active Company</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-inactive-tab" data-bs-toggle="pill" data-bs-target="#pills-inactive" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">InActive Company</button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="pills-tabContent">
+
+            <!-- 1st-Pane -->
+            <div class="tab-pane fade show active" id="pills-incomplete" role="tabpanel" aria-labelledby="pills-incomplete_registration-tab">
+                
+                <div class="row">
+                    {%for i in incompletereminder%}
+                    <div class="col-lg-4 mt-3">
+
+                        <div id="card" class="card text-start">
+
+                            <div class="card-header head d-flex justify-content-between align-items-center">
+                                <span>                                   
+                                        <h5 class="card-company-name">{{i.companyName}}</h5>
+
+                                </span>
+                                <span>
+                                        
+                                    <div class=" foot d-flex justify-content-end">
+                                    <a href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}" title="Send Remainder" class="remainder mx-2"> <img class="lead-icon-eye" src="{% static "assets/icons/bell-iocon.svg"%}"/> 
+                                     </a> 
+                                    <a href="{% url 'company:viewCompany' i.id %}" class="information" data-toggle="tooltip" title="More details"> <img class="lead-icon-eye" src="{% static "assets/icons/Group 19829.svg"%}" /> </a>
+
+
+                                    <div class="modal fade" id="exampleModal{{i.id}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div id="snackbar"></div>
+                                                <!-- Modal Header -->
+                                                <div class="modal-header d-flex justify-content-center">
+                                                    <h4 class="modal-title">Send Reminder</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    
+                                                    <div>
+                                                    <div class="row">
+
+                                                        <!-- Company Type Name -->
+                                                        <div class="col-lg-12 mt-4">
+                                                            <div class="input-bx">
+                                                                
+                                                                <h5 class="text-center">Are you sure you want send Reminder ?</h5>
+                                                                
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!--  -->
+                                            <div class="d-flex justify-content-around align-items-center mt-2">
+                                                <button data-bs-dismiss="modal" type="reset" id="button" class="btn mt-3">CLOSE</button>
+                                                <button onclick="sendReminder({{i.id}})" id="button" class="btn mt-3">SEND</button>
+                                            </div>
+
+                                                </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                </span>
+                                
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p class="empCardField">Registered At :</p>
+                                        <p>{{i.created_at}}</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p class="empCardField">Company Admin:</p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.memberadmin}}">{{i.memberadmin}}</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="empCardField">Company Type:</p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyType}}">{{i.companyType}}</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="empCardField">Company Adress:</p>
+                                        <p  class="company-address-text" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyAddress}}">{{i.companyAddress}}.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                    {%endfor%}
+
+                    
+
+                </div>
+                
+            </div>
+
+            <!-- 2nd Pane -->
+            <div class="tab-pane fade" id="pills-active" role="tabpanel" aria-labelledby="pills-active_company-tab">
+                
+                <div class="row">
+                    {%for i in activereminderlist%}
+                    <div class="col-lg-4 mt-3">
+
+                        <div id="card" class="card text-start">
+
+                            <div class="card-header head d-flex justify-content-between align-items-center">
+                                <span>                                   
+                                    <h5 class="card-company-name">{{i.companyName}}</h5>
+
+                                </span>
+                                <span>
+                                    
+                                <a href="{% url 'company:viewCompany' i.id %}" class="information" data-toggle="tooltip" title="More details"> <i
+                                    class="fa fa-duotone fa-info"></i> </a>
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p class="empCardField">Registered At : </p>
+                                        <p>{{i.created_at}}</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p class="empCardField"> Company Admin:</p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.memberadmin}}">{{i.memberadmin}}</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="empCardField">Company Type: </p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyType}}">{{i.companyType}}</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="empCardField">Company Adress: </p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyAddress}}">{{i.companyAddress}}.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    {%endfor%}
+                    
+                </div>
+
+            </div>
+
+            <!-- 3rd Pane -->
+            <div class="tab-pane fade" id="pills-inactive" role="tabpanel" aria-labelledby="pills-inactive_company-tab">
+                
+                <div class="row">
+                    {%for i in inactivereminderlist%}
+                    <div class="col-lg-4 mt-3">
+
+                        <div id="card" class="card text-start">
+
+                            <div class="card-header head d-flex justify-content-between align-items-center">
+                                <span>                                   
+                                    <h5 class="card-company-name">{{i.companyName}}</h5>
+
+                                </span>
+                                <span>
+                                    
+                                <div class="foot d-flex justify-content-end">
+                                    {% comment %} <a href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}" class="fa fa-duotone fa-bell remainder mx-3"></a> {% endcomment %}
+                                        <a href="javascript: void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}" title="Send Remainder" class="remainder mx-3"> <i
+                                            class="fa fa-duotone fa-bell"></i> </a> 
+                                    <a href="{% url 'company:viewCompany' i.id %}" class="information" data-toggle="tooltip" title="More details"> <i
+                                            class="fa fa-duotone fa-info"></i> </a>
+                                    <div class="modal fade" id="exampleModal{{i.id}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div id="snackbar"></div>
+                                                <!-- Modal Header -->
+                                                <div class="modal-header d-flex justify-content-center">
+                                                    <h4 class="modal-title">Send Reminder</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    
+                                                    <div>
+                                                    <div class="row">
+
+                                                        <!-- Company Type Name -->
+                                                        <div class="col-lg-12 mt-4">
+                                                            <div class="input-bx">
+                                                                
+                                                                <h5 class="text-center">Are you sure you want send Reminder ?</h5>
+                                                                
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!--  -->
+                                            <div class="d-flex justify-content-around align-items-center mt-2">
+                                                <button data-bs-dismiss="modal" type="reset" id="button" class="btn mt-3">CLOSE</button>
+                                                <button onclick="sendReminder({{i.id}})" id="button" class="btn mt-3">SEND</button>
+                                            </div>
+
+                                                </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p class="empCardField">Registered At :</p>
+                                        <p>{{i.created_at}}</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p class="empCardField">Company Admin:</p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.memberadmin}}">{{i.memberadmin}}</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="empCardField">Company Type:</p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyType}}">{{i.companyType}}</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <p class="empCardField">Company Adress:</p>
+                                        <p data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyAddress}}">{{i.companyAddress}}.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+
+                    
+                    {%endfor%}
+
+                    
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+{%endblock%}{%block script%}{{block.super}}
+<script>
+    $(document).ready(function () {
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+
+
+})
+
+    function sendReminder(id){
+         
+        $.ajax({
+            type: "POST",
+            url: frontendURL+"company/sendreminder",
+            data: {
+                'companyId': id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("response",response.data.response.n)  
+                if (response.data.response.n) {
+                    location.reload();
+                }else{
+                   location.reload();
+                }            
+            }
+        });
+    }
+</script>
+{%endblock%}

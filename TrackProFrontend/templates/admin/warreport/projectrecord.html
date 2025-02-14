@@ -1,0 +1,694 @@
+{% extends "index.html" %} {% load static %}{% block headercontent %}
+<div class="nav-item newheading">
+  Project Report
+</div>
+{% endblock %}{% block content %}
+
+<style>
+  .activeicons {
+    width: 24px;
+    height: 26px;
+  }
+  td {
+    text-align: left;
+  }
+  .tooltip-inner {
+    max-width: 100% !important;
+  }
+  .uppercard {
+    background-color: white;
+    border: 1px solid #f8f1f1;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #acacac !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .hoverdiv {
+    width: 600px;
+    justify-content: space-between;
+  }
+  .tasktitlehover {
+    width: 250px;
+  }
+  .tooltip-inner {
+    background-color: white;
+    color: black;
+    box-shadow: 2px 4px #888888;
+    z-index: 111;
+  }
+
+  .heading {
+    color: var(--unnamed-color-888888);
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0px;
+    color: #888888;
+  }
+  .table-div {
+    background-color: white !important;
+    border-radius: 16px !important;
+    margin: 11px 9px !important;
+    padding: 5px 15px 15px 15px !important;
+  }
+  #myTable2 > tbody > tr > td {
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 12px !important;
+    font-size: 13px;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  #pagination-demo2 {
+    display: flex;
+    justify-content: end;
+  }
+  #myTable2 > thead > tr > th {
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size: 15px;
+    padding: 10px;
+   
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .dataTables_filter input[type="search"] {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0px !important;
+    margin: 0 2px 0 2px !important;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button .active:hover {
+    background-color: #b9f7ff !important;
+    outline-color: #b9f7ff !important;
+    border-color: #b9f7ff !important;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height: 30px !important;
+    padding: 2px 7px 7px 5px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+  }
+
+  .page-link {
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height: 30px !important;
+    padding: 5px 7px 7px 4px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+  }
+  .page-link:hover {
+    color: black !important;
+    background: white !important;
+  }
+  .page-item.active .page-link {
+    color: #9b9b9b !important;
+  }
+  .previous {
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+  }
+  .next {
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+  }
+  #projecttotalhours {
+    font-size: 14px;
+  }
+  #projectmandays {
+    font-size: 11px;
+  }
+  .previous:after {
+    visibility: visible !important;
+    content: "\f053" !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-right: 15px;
+  }
+  .next::before {
+    visibility: visible !important;
+    content: "\f054" !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-left: 15px;
+  }
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+  }
+  .main-wrapper {
+    padding-top: 3rem !important;
+  }
+  .datetootip {
+    position: relative;
+    display: inline-block;
+    color: black;
+    cursor: pointer;
+  }
+
+  .datetootip .tooltiptext {
+    visibility: hidden;
+    width: 145px;
+    background-color: #fff;
+    color: #056b90;
+    text-align: center;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size: 10px;
+    /* height:30px; */
+
+    /* Position the datetootip */
+    position: absolute;
+    z-index: 1;
+    top: 95%;
+    left: -30%;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .datetootip:hover {
+    font-size: 16px;
+  }
+  .tooltiptext a {
+    text-decoration: none;
+  }
+  .datetootip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .datetootip2 {
+    position: relative;
+    display: inline-block;
+    color: black;
+    cursor: pointer;
+  }
+
+  .datetootip2 .tooltiptext2 {
+    visibility: hidden;
+    width: 145px;
+    background-color: #fff;
+    color: #056b90;
+    text-align: center;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size: 10px;
+    /* height:30px; */
+
+    /* Position the datetootip */
+    position: absolute;
+    z-index: 1;
+    top: 95%;
+    left: -30%;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .datetootip2:hover {
+    font-size: 16px;
+  }
+  .tooltiptext2 a {
+    text-decoration: none;
+  }
+  .datetootip2:hover .tooltiptext2 {
+    visibility: visible;
+  }
+  .pageheading {
+    color: var(---282828);
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #282828;
+  }
+
+
+  .maindetails {
+    font-weight: 500;
+  }
+
+  .excel-add-btn {
+    width: 35%;
+    color: #fff;
+    padding: 6px;
+    border-radius: 15px;
+    background-color: #174fa3;
+    font-weight: 500;
+    border: none;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+}
+.exceldiv{
+    display: flex;
+    justify-content: flex-end;
+    text-align: center;
+    align-items: center;
+}
+</style>
+
+<!-- Main page -> Manage Task -->
+<main class="main-wrapper">
+  <!-- ==================Row1======================= -->
+  <div class="uppercard">
+    <div class="row mb-4 mx-1">
+      
+
+      <div class="col-md-3">
+        <select
+          id="projectName"
+          name="projectName"
+          class="select2dropdown"
+          onchange="ProjectDetailPagination();"
+        >
+          {% for i in projectlist%}
+          <option value="{{i.id}}">{{i.ProjectName}}</option>
+          {%endfor%}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select id="deptName" name="deptName" class="select2dropdown" onchange="ProjectDetailPagination();">
+          <option value="">Select Department</option>
+        {% for i in departmentlist%}
+        <option value="{{i.id}}">{{i.DepartmentName}}</option>
+        {%endfor%}
+      </select>
+      </div>
+      <div class="col-md-3 mt-2">
+        
+        <input type="text" id="searchname"  class="form-control" placeholder="Search by Employee Name" oninput="ProjectDetailPagination();">
+      </div>
+      <div class="col-md-3 exceldiv mt-2">
+        <button type="button" onclick="downloadexcelreport();" class="excel-add-btn">Excel <i class="fa fa-download ms-2 mt-1" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="row m-2 pt-2">
+      <table class="Projectdata">
+        <tbody>
+          <tr>
+            <td>
+              <div class="heading">Project:</div>
+              <div class="maindetails" id="selectedProjectName"></div>
+            </td>
+            <td>
+              <div class="heading">Start Date:</div>
+              <div class="maindetails" id="projectstartdate"></div>
+            </td>
+
+            <td>
+              <div class="heading">End Date:</div>
+              <div class="maindetails" id="projectenddate"></div>
+            </td>
+
+            <td>
+              <div class="heading">Project Total Hours:</div>
+              <div class="maindetails">
+                <span id="projecttotalhours"></span>
+                <span id="projectmandays"></span>
+              </div>
+            </td>
+
+            <td>
+              <div class="heading">No of Team:</div>
+              <div class="datetootip2 maindetails" id="no_ofteams"></div>
+            </td>
+
+            <td>
+              <div class="heading">No of Tasks:</div>
+              <div class="maindetails" id="No_oftasks"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tablecard">
+    <div class="table-div">
+      <table class="row-border w-100 projecttaskdetails" id="myTable2">
+        <thead>
+          <th style="width: 35%">Task Detail</th>
+          <th>Task Start Date</th>
+          <th>Task End Date</th>
+          <th>Employee Name</th>
+          <th>Grade</th>
+
+          <th>Hours</th>
+        </thead>
+
+        <tbody class="projecttbody"></tbody>
+      </table>
+
+      <div
+        class="row d-flex justify-content-center m-3"
+        id="secondpagination-demo2"
+      >
+        <ul id="pagination-demo2" class="pagination-sm"></ul>
+      </div>
+    </div>
+  </div>
+</main>
+{%endblock%}{%block script%}{{block.super}}
+
+<script src="https://rawgit.com/unconditional/jquery-table2excel/master/src/jquery.table2excel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $(".input-feild").on("focus", function () {
+      var label = $("label[for=" + this.id + "]");
+      label
+        .delay("slow")
+        .animate(
+          { "font-size": "14px", "font-weight": "400", padding: "1px" },
+          "slow"
+        );
+    });
+    ProjectDetailPagination();
+  });
+
+
+  function downloadexcelreport(){
+    var projectName = $("#projectName").val();
+    var deptname = $("#deptName").val();
+    var searchname = $("#searchname").val();
+
+     $.ajax({
+      type: "post",
+      url: frontendURL + "project/excelprojectreport",
+      data: {
+        projectName: projectName,
+        deptname: deptname,
+        searchname: searchname,
+      },
+      dataType: "json",
+      beforeSend: function () {},
+      success: function (response) {
+
+        urlpath = response.downloadurl
+        window.location.href = urlpath;
+
+      },
+    })
+
+  }
+
+  function ProjectDetail(p) {
+    var trHTML = "";
+    var employeeDetail = "";
+    var employeeTask = [];
+    var listHTML = "";
+    projectName = $("#projectName").val();
+    var deptname = $("#deptName").val();
+    var searchname = $("#searchname").val();
+    $.ajax({
+      type: "post",
+      url: frontendURL + "project/getnewProjectDetail",
+      data: {
+        p: p,
+        projectName: projectName,
+        deptname: deptname,
+        searchname: searchname,
+      },
+      dataType: "json",
+      beforeSend: function () {},
+      success: function (response) {
+
+        if (response.n == 1) {
+          $.each(response.data.teamlist, function (m, n) {
+            listHTML += `<span>` + n + `</span> <br>`;
+          });
+          var tooltiphtml = "";
+          tooltiphtml =
+            `` +
+            response.data.teammatecount +
+            `<span class="tooltiptext2">
+                              ` +
+            listHTML +
+            `
+                      </span>`;
+          $("#selectedProjectName").html(
+            response.data.fisrttaskdetail.ProjectName
+          );
+          $("#projectstartdate").html(response.data.projectstartdate);
+          $("#projectenddate").html(response.data.projectend_date);
+          $("#no_ofteams").html(tooltiphtml);
+          $("#No_oftasks").html(response.data.totaltaskcount);
+          $("#projecttotalhours").html(response.data.projecttotalhours);
+          console.log("------------------------", response.data.projecttotalhours);
+
+          mnnndays = "(" + response.data.mandays + " Mandays)";
+          $("#projectmandays").html(mnnndays);
+
+          $.each(response.data.Taskdata, function (i, o) {
+            trHTML +=
+              `<tr id='activerow` +
+              o.id +
+              `' data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                          <td class="taskdet">` +
+              o.TaskTitle +
+              `</td>
+                          <td>` +
+              o.AssignDate +
+              `</td>
+                          <td>` +
+              o.endtaskdate +
+              `</td>
+                          <td>` +
+              o.CreatedBy +
+              `</td>
+                          <td>` +
+              o.grade +
+              `</td>
+                          <td><div class="datetootip">` +
+              o.taskhours +
+              `<span class="tooltiptext">
+                                  ${o.daywisetime
+                                    .map(
+                                      (l) => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `
+                                    )
+                                    .join("\n")}
+                                 </span></div></td>
+                      </tr>`;
+          });
+          // initialiseDataTable(trHTML);
+          $(".projecttbody").html(trHTML);
+
+
+          $.each(response.data.Taskdata, function (i, o) {
+            if (o.IsParent == true) {
+              $("#activerow" + o.id).css(
+                "background-color",
+                "rgb(182 206 199 / 67%)"
+              );
+              $("#activerow" + o.id).css("opacity", "1");
+            } else if (o.ParentTaskId != "") {
+              $("#activerow" + o.id).css(
+                "background-color",
+                "rgb(216 224 187 / 57%)"
+              );
+              var tablehtml = `${o.Hovertaskdata.map(
+                (l) =>
+                  `
+                                            <div class="d-flex hoverdiv">
+                                              <p class="tasktitlehover">
+                                                ` +
+                  l.TaskTitle +
+                  `
+                                              </p>
+                                              <p>` +
+                  l.CreatedBy +
+                  `</p>
+                                              <p>` +
+                  l.Changeddate +
+                  `</p>
+                                              <p>` +
+                  l.taskhoursstr +
+                  `</p>
+                                              <p>` +
+                  l.remarkstr +
+                  ` ` +
+                  l.bonusstr +
+                  `</p>
+
+                                            </div>
+                                            `
+              ).join("\n")}  
+                              `;
+              $("#activerow" + o.id).attr("title", tablehtml);
+            } else {
+              $("#activerow" + o.id).addClass("managermatched");
+            }
+          });
+
+          var tooltipTriggerList = [].slice.call(
+            document.querySelectorAll('[data-bs-toggle="tooltip"]')
+          );
+          var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+          });
+          var totalfilter = Math.ceil(parseInt(response.count) / 10);
+          $("#pagination-demo2").twbsPagination({
+            totalPages: totalfilter,
+            visiblePages: 3,
+            next: "Next",
+            prev: "Prev",
+            onPageClick: function (event, page) {
+              var testflag = true;
+              //fetch content and render here
+              filternamepageno = page;
+              if (testflag == true) {
+                testflag = false;
+                ProjectDetail(page);
+              }
+              $("#page-content").text("Page " + page) + " content here";
+            },
+          });
+        } else {
+          $(".projecttbody").html("");
+          $("#selectedProjectName").html("--");
+          $("#projectstartdate").html("--");
+          $("#projectenddate").html("--");
+          $("#no_ofteams").html("--");
+          $("#No_oftasks").html("--");
+          $("#projecttotalhours").html("--");
+        }
+      },
+    });
+
+
+   /* $.ajax({
+      type: "post",
+      url: frontendURL + "project/getProjecttotaltime",
+      data: {
+        p: p,
+        projectName: projectName,
+        deptname: deptname,
+        searchname: searchname,
+      },
+      dataType: "json",
+      beforeSend: function () {},
+      success: function (response) {
+
+        if (response.n == 1) {
+          console.log("count", response.data.count,response.data.projecttotalhours);
+
+          $("#projecttotalhours").html(response.data.projecttotalhours);
+        } 
+      },
+    });*/
+
+
+
+
+  }
+
+  function ProjectDetailPagination() {
+    var testflag = true;
+    $("#secondpagination-demo2").html(
+      '<ul id="pagination-demo2" class="pagination-sm"></ul>'
+    );
+    ProjectDetail(1);
+  }
+
+  function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable("#myTable2")) {
+      $("#myTable2").DataTable().destroy();
+    }
+    $("#myTable2 tbody").empty();
+    $(".projecttbody").html(trHTML);
+    var table = $("#myTable2").DataTable({
+      // sDom: 'lrtip',
+      //  autoWidth: false
+      ordering: false,
+      bLengthChange: false,
+    });
+    //   var buttons = new $.fn.dataTable.Buttons(table, {
+    //   buttons: [{
+    //         title: "Project Record",
+    //         extend : 'excel',
+    //         text : '<span class="exportButton">Download Excel Report <i class="fa fa-file-excel-o" aria-hidden="true"></i></span> '
+    //       }]
+    // }).container().appendTo($('#ExportReport'));
+  }
+
+
+
+  function exportReport() {
+    var table = $(".projecttaskdetails");
+    var employeeName = $("#selectedProjectName").text();
+    var currentDate = new Date().toISOString().split("T")[0];
+    dateArray = currentDate.split("-");
+    year = dateArray[0];
+    month = dateArray[1];
+    day = dateArray[2];
+    todayDate = day + "-" + month + "-" + year;
+    var excelFileName = employeeName + " " + todayDate;
+
+    // $(".projecttaskdetails").table2excel({
+    //     exclude: ".noExl",
+    //     name: "Student_List",
+    //     filename: excelFileName,//do not include extension
+    //     fileext: ".xls", // file extension
+    //     preserveColors: true,
+    //     sheetName: todayDate
+
+    // });
+
+    $("<table>").append(table.$("tr").clone()).table2excel({
+      exclude: ".excludeThisClass",
+      name: "Worksheet Name",
+      fileext: ".xls",
+      filename: "excelFileName", //do not include extension
+    });
+  }
+</script>
+{%endblock%}

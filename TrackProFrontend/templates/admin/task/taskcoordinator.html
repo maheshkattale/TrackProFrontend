@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<h1>Manage Task</h1>
+        <p class="d-none d-md-block">
+          Task Co-ordinators.
+        </p>
+{% endblock %}
+{% block content %}
+
+<main class="main-wrapper">
+  <!-- ==================Row1======================= -->
+  <div class="leave-application-section">
+ 
+      
+    <div class="row">
+    
+        <div class="col-md-12">
+          
+        <div class="leave-tab-section">
+           <div class="row"> 
+            <table id="dataTable" class="table tab-table">
+                  <thead>
+                    <tr>
+                      <th>Sr No</th>
+                      <th>Supervisor's Name</th>
+                      <th>Member Count</th>
+                      <th>Action</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in coordiantorList %}
+                    <tr class="tab-row">
+                      <td>{{forloop.counter}}</td>
+                      {%for u in users %}
+                      {%if i.coordiantor == u.id %}
+                      <td>{{u.Firstname}} {{u.Lastname}}</td>
+                      {%endif%}
+                      {%endfor%}
+                      <td>{{i.employeeCount}}</td>
+                     <td>
+                      <a href="employee_task/{{i.coordiantor}}"  class="edit-icon-button"><i class="fa fa-eye"></i></a>
+                    </td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+      
+ 
+   </div>
+
+ 
+</main>
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="{% static 'js/datatable/datatable.js'%}"></script>
+{% endblock %}

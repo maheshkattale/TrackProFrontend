@@ -1,0 +1,419 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Add Employee</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+
+    .select2-container--default .select2-selection--single{
+    border-bottom:1px solid rgb(214, 214, 214) !important;
+    border:none;
+    height:50px;
+    box-shadow:none;
+    border-radius:0px;
+    }
+    .trackproBtn {
+        width: 123px !important;
+        height: 36px !important;
+        {% comment %} margin :0px !important; {% endcomment %}
+    }
+    .success{
+        color:green  !important;
+    }
+</style>
+
+
+<main class="main-wrapper">
+    
+   
+    <div id="snackbar"></div>
+
+
+    <form method="POST" id="addEmployeeForm">
+        {% csrf_token %}
+        <div class="row g-4 mb-2">
+            <div class="col-md-12">
+                <div class="row mb-3">
+                    <div class="col-lg-4 col-md-6">
+                        <label for="addEmpFirstname">First Name<span style="color:red">*</span></label>
+                        <input type="text" class="tabview mb-3" id="addEmpFirstname" placeholder="Enter First Name" name="firstname" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <span id="addEmpFirstname_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label for="addEmpLastname">Last Name<span style="color:red">*</span></label>
+                        <input type="text" class="tabview mb-3" id="addEmpLastname" placeholder="Enter Last Name" name="lastname" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <span id="addEmpLastname_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label for="addEmpMobileNumber">Mobile Number</label>
+                        <input type="text" class="tabview mb-3" id="addEmpMobileNumber" placeholder="Enter 10 Digit Mobile Number" name="MobileNumber" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                        <span id="addEmpMobileNumber_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label for="addEmpEmailId">Official Email Id<span style="color:red">*</span></label>
+                        <input type="text" class="mb-3" id="addEmpEmailId" placeholder="Enter Email Id" name="email">
+                        <span id="addEmpEmailId_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label for="personal_email">Personal/Unofficial Email Id</label>
+                        <input type="text" class="mb-3" id="personal_email" placeholder="Enter Email Id" name="personal_email">
+                        <span id="personal_email_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 position-relative mb-3">
+                        <label for="DateofBirth">Date of Birth</label>
+                        <input type="text" class="tabview" id="DateofBirth" placeholder="Select Date of birth" name="DateofBirth" autocomplete="off" readonly>
+                        <div id="calendarIcon" class="mb-3 cursor-pointer" onclick="toggledate('DateofBirth');"></div>
+                        <span id="DateofBirth_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <label for="addEmpRole" class="tabview">Role<span style="color:red">*</span></label>
+                        <select id='addEmpRole' name="role">
+                              <option value=''>Select Role</option> 
+                              {% for r in rolelist %}
+                              <option value="{{r.id}}" >{{r.RoleName}}</option>
+                              {% endfor %}
+                        </select>
+                        <span id="addEmpRole_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-2">
+                        <label for="addEmpDesignation"  class="tabview">Designation<span style="color:red">*</span></label>
+                        <select id='addEmpDesignation' name="designation">
+                              <option value=''>Select Designation</option> 
+                              {% for i in designationlist %}
+                              <option value="{{i.id}}">{{i.DesignationName}}</option>
+                              {% endfor %}
+                        </select>
+                        <span id="addEmpDesignation_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-2">
+                        <label for="addEmpDepartment" class="tabview">Department<span style="color:red">*</span></label>
+                        <select id='addEmpDepartment' name="DepartmentID">
+                              <option value=''>Select Department</option> 
+                              {% for d in deptlist %}
+                              <option value="{{d.id}}" >{{d.DepartmentName}}</option>
+                              {% endfor %}
+                        </select>
+                        <span id="addEmpDepartment_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <label for="addEmpEmploymentStatus"  class="tabview">Employeement Status<span style="color:red">*</span></label>
+                        <select id='addEmpEmploymentStatus' name="employeeStatus">
+                              <option value=''>Select Employment Status</option>                               
+                              {% for s in statuslist %}
+                                <option value="{{s.statusvalue}}">{{s.statusName}}</option>
+                                {% endfor %}
+                        </select>
+                        <span id="addEmpEmploymentStatus_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 position-relative mb-3">
+                        <label for="addEmpJoinDate">Date of Joining<span style="color:red">*</span></label>
+                        <input type="text" class="tabview" id="addEmpJoinDate" placeholder="Select Date of Joining" name="DateofJoining" autocomplete="off" readonly>
+                        <div id="calendarIcon" class="mb-3 cursor-pointer" onclick="toggledate('addEmpJoinDate');"></div>
+                        <span id="addEmpJoinDate_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-2">
+                        <label for="addEmpLocation"  class="tabview">Work Location<span style="color:red">*</span></label>
+                        <select id='addEmpLocation' name="location">
+                              <option value=''>Select Work Location</option> 
+                              {% for l in locationlist %}
+                                <option value="{{l.id}}">{{l.LocationName}}</option>
+                                {% endfor %}
+                        </select>
+                        <span id="addEmpLocation_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-2">
+                        <label for="addEmpAttendanceId">Attendance Id</label>
+                        <input type="text" class="tabview mb-3" id="addEmpAttendanceId" placeholder="Enter Attendance Id" name="employeeId">
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-6 mb-2">
+                        <label for="addEmpTOW" class="tabview">Type of Work<span style="color:red">*</span></label>
+                         <select id='addEmpTOW' name="typeofwork">
+                            <option value=''>Select Type of Work</option> 
+                            {% for t in typelist %}
+                                <option value="{{t.id}}">{{t.type}}</option>
+                                {% endfor %}
+                      </select>
+                      <span id="addEmpTOW_err" class="error"></span>
+                    </div>
+
+
+                    <div class="col-lg-4  position-relative mb-3">
+                        <label for="addEmpPassword">Password<span style="color:red">*</span></label>
+                        <input class="tabview" type="password" id="addEmpPassword" placeholder="Enter Password" autocomplete="new-password" name="password" oninput="checkPasswordStrength();">
+                        <div id="passwordToggle" class="mb-3"></div>
+                        <span id="addEmpPassword_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-2">
+                        <label for="employeetype" class="tabview">Employee Type<span style="color:red">*</span></label>
+                         <select id='employeetype' name="employeetype">
+                            <option value=''>Select Employee Type</option> 
+
+                        </select>
+                      <span id="employeetype_err" class="error"></span>
+                    </div>
+                    {% comment %} <div class="col-lg-4 col-md-6  position-relative mb-2">
+                        <label for="onboard">Onboarding<span style="color:red">*</span></label>
+                        <input type="text" class="tabview mb-3" id="onboarding" placeholder="onboarding" name="onboarding" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <span id="onboarding_err" class="error"></span>
+                    </div> {% endcomment %}
+                </div>
+                {% comment %} <div class="row mb-3">
+                    margin-bottom: 16px;   input
+                    margin-top: -9px;
+                </div> {% endcomment %}
+                {% comment %} <div class="row mb-3">
+                    
+                </div> {% endcomment %}
+                {% comment %} <div class="row mb-3">
+                    
+                </div> {% endcomment %}
+                {% comment %} <div class="row mb-3">
+                                   
+                </div> {% endcomment %}
+            </div>     
+
+        </div>
+
+            
+        <div class="row justify-content-end">
+          <div class="col-auto">
+             <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
+             <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn mobilerespon">Cancel</a>
+             
+          </div>
+          <div class="col-auto">
+            <button class="trackproBtn submitBtn mobilerespon" onclick="return formValidation();">Submit</button>
+          </div>
+        </div>
+    </form>
+    
+</main>
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="{% static 'admin/master/add_employee.js'%}"></script>
+
+<script>
+     $(document).ready(function() {
+        $("#addEmpRole").select2();
+        $("#employeetype").select2();
+        $("#addEmpDesignation").select2();
+        $("#addEmpDepartment").select2();
+        $("#addEmpEmploymentStatus").select2();
+        $("#addEmpLocation").select2();
+        $("#addEmpTOW").select2();
+        getemployeetypelist()
+        $("#addEmpJoinDate").datepicker({
+            dateFormat: 'dd-mm-yy',
+            minDate: 0,
+            {% comment %} maxDate: 0 , {% endcomment %}
+            changeYear:true,
+            yearRange: "-100:+0",
+            changeMonth: true,
+        
+        });
+
+        $("#DateofBirth").datepicker({
+
+            dateFormat: 'dd-mm-yy',
+            maxDate:"-18Y",
+            changeYear:true,
+            yearRange: "-100:+0",
+            changeMonth: true,
+        
+        });
+
+      
+     });
+     
+
+     $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+    });
+
+
+
+
+    $(".dark-overlay").click(function() {
+        closeExpandedNav();
+    });
+
+    $('#hamburger-icon').click(function() {
+        $(".expanded-nav").addClass("expanded");
+        $(".dark-overlay").show();
+    })
+
+    function closeExpandedNav() {
+        $(".expanded-nav").removeClass("expanded");
+        setTimeout(() => {
+            $(".dark-overlay").hide();
+        }, 480);
+    }
+function toggledate(idvalue){
+    $('#'+idvalue).focus();
+}
+
+function formValidation() {
+     var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+     var passwordpattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+     var addEmpFirstname = $('#addEmpFirstname').val().trim();
+     var addEmpLastname = $('#addEmpLastname').val().trim();
+     var addEmppersonalEmail = $('#personal_email').val().trim();
+     var addEmpEmailId = $('#addEmpEmailId').val().trim();
+     var addEmpDesignation = $('#addEmpDesignation').val();
+     var addEmpEmploymentStatus = $('#addEmpEmploymentStatus').val();
+     var addEmpLocation = $('#addEmpLocation').val();
+     var addEmpRole = $('#addEmpRole').val();
+     var employeetype = $('#employeetype').val();
+     var addEmpDepartment = $('#addEmpDepartment').val();
+     var addEmpJoinDate = $('#addEmpJoinDate').val();
+     var addEmpTOW = $('#addEmpTOW').val();
+     var password = $('#addEmpPassword').val();
+    // var onboard = $('#onboard').val();
+        console.log("addEmpLocation",addEmpLocation)
+     if (IsValid(addEmpFirstname)) {
+      
+         $('#addEmpFirstname_err').show().delay(3000).slideUp();
+         $('#addEmpFirstname_err').html('First Name is required');
+         $('#addEmpFirstname').focus();
+         return false;
+     } 
+     if (IsValid(addEmpLastname)) {
+       
+         $('#addEmpLastname_err').show().delay(3000).slideUp();
+         $('#addEmpLastname_err').html('Last Name is required');
+         $('#addEmpLastname').focus();
+         return false;
+     }
+     {% comment %} if (IsValid(addEmpMobileNumber)) {
+        $('#addEmpMobileNumber_err').show().delay(3000).slideUp();
+        $('#addEmpMobileNumber_err').html('Please provide mobile number');
+        $('#addEmpMobileNumber').focus();
+        return false;
+    } 
+     if (addEmpMobileNumber.length != 10) {
+        $('#addEmpMobileNumber_err').show().delay(3000).slideUp();
+        $('#addEmpMobileNumber_err').html('Mobile Number should be of 10 digits');
+        $('#addEmpMobileNumber').focus();
+        return false;
+    } {% endcomment %}
+      if (!validateEmail(addEmpEmailId)) {
+        
+         $('#addEmpEmailId_err').show().delay(3000).slideUp();
+         $('#addEmpEmailId_err').html('Please enter  valid email');
+         $('#addEmpEmailId').focus();
+         return false;
+     }
+    //if (!validateEmail(addEmpEmail)) {
+    //    $('#personal_email_err').show().delay(3000).slideUp();
+    //    $('#personal_email_err').html('Invalid Email');
+    //    $('#personal_email').focus();
+    //    return false;
+    //}
+     if (IsValid(addEmpRole)) {
+        $('#addEmpRole_err').show().delay(3000).slideUp();
+        $('#addEmpRole_err').html('Please select Role');
+        $('#addEmpRole').focus();
+        return false;
+    }
+     if (IsValid(addEmpDesignation)) {
+         $('#addEmpDesignation_err').show().delay(3000).slideUp();
+         $('#addEmpDesignation_err').html('Designation field is required');
+         $('#addEmpDesignation').focus();
+         return false;
+     } 
+     if (IsValid(addEmpDepartment)) {
+        $('#addEmpDepartment_err').show().delay(3000).slideUp();
+        $('#addEmpDepartment_err').html('Please select Department');
+        $('#addEmpDepartment').focus();
+        return false;
+    } 
+     if (IsValid(addEmpEmploymentStatus)) {
+         $('#addEmpEmploymentStatus_err').show().delay(3000).slideUp();
+         $('#addEmpEmploymentStatus_err').html('Please select Employee Status');
+         $('#addEmpEmploymentStatus').focus();
+         return false;
+     }
+     if (IsValid(addEmpJoinDate)) {
+        $('#addEmpJoinDate_err').show().delay(3000).slideUp();
+        $('#addEmpJoinDate_err').html('Please provide joining date');
+        $('#addEmpJoinDate').focus();
+        return false;
+    } 
+      if (addEmpLocation == '') {
+         $('#addEmpLocation_err').show().delay(3000).slideUp();
+         $('#addEmpLocation_err').html('Please select location');
+         $('#addEmpLocation').focus();
+         return false;
+     } 
+     if (IsValid(addEmpTOW)) {
+         $('#addEmpTOW_err').show().delay(3000).slideUp();
+         $('#addEmpTOW_err').html('Please select type of work');
+         $('#addEmpTOW').focus();
+         return false;
+     }
+     if (!passwordpattern.test(password)) {
+        $('#addEmpPassword_err').show().delay(3000).slideUp();
+        $('#addEmpPassword').focus();
+        $('#addEmpPassword_err').text('Please enter valid password').removeClass('success');
+        return false;
+
+    }
+    if (IsValid(employeetype)) {
+        $('#employeetype_err').show().delay(3000).slideUp();
+        $('#employeetype_err').html('Please select type of employee');
+        $('#employeetype').focus();
+        return false;
+    }
+ }
+
+ function checkPasswordStrength() {
+    var password = $('#addEmpPassword').val();
+
+    // Define the regex pattern for a strong password
+    var pattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // Check if the password matches the pattern
+    if (pattern.test(password)) {
+        $('#addEmpPassword_err').text('Password is strong').addClass('success');
+    } else {
+        $('#addEmpPassword_err').text('Password is not strong').removeClass('success');
+    }
+}
+
+
+
+function getemployeetypelist(){
+    var html=''
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    $.ajax({
+      type: "POST",
+      url: frontendURL+"getemployeetypelist",
+      data: fd,
+      processData: false,
+      contentType: false,
+      
+      success: function(response) {
+        html += `<option value="" >Select Employee Type</option>`
+
+        console.log("respo Employee Type",response,'')
+        $(response.data).each(function(a, b) {
+
+            html += `<option value="` + b.id + `">` + b.employeetype + `</option>`
+        })
+        $("#employeetype").html(html);
+
+      },
+    });
+  }
+</script>
+{% endblock %}

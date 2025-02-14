@@ -1,0 +1,506 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+  Employee Trackpro Report
+</div>
+{% endblock %}
+{% block content %}
+
+<style>
+  .uppercard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  padding :5px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+
+}
+.select2-container--default .select2-selection--single{
+  border-bottom:1px solid #acacac !important;
+  box-shadow:none !important;
+  border-radius: 0 !important;
+
+}
+.gradepoints {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: middle;
+}
+.gradepoints img {
+    width: 17px;
+    height: 17px;
+}
+.heading{
+  color: var(--unnamed-color-888888);
+text-align: left;
+font-size:12px;
+letter-spacing: 0px;
+color: #888888;
+}
+.table-div {
+    background-color: white !important;
+    border-radius: 16px !important;
+    margin: 11px 9px !important;
+    padding: 0 15px 15px 15px !important;
+
+}
+#Weeklydata>tbody>tr>td{
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 12px !important;
+    font-size:13px;    
+
+}
+#Weeklydata>thead>tr>th{
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size:13px;   
+    border-top:1px solid  rgba(0, 0, 0, 0.3);
+}
+#Weeklydata_filter{
+    margin-bottom: 10px;
+}
+
+.dataTables_filter input[type="search"] {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0px !important;
+    margin:0 2px 0 2px !important;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button .active:hover{
+    background-color: #b9f7ff !important;
+    outline-color: #b9f7ff !important;
+    border-color: #b9f7ff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+/* background: white !important;
+border-radius: 6px !important; */
+
+box-sizing: border-box !important;
+display: inline-block !important;
+min-width: 30px !important;
+max-height:30px !important;
+padding: 2px 7px 7px 5px !important;
+margin: 0 0 0 2px !important;
+text-align: center !important;
+text-decoration: none !important;
+cursor: pointer !important;
+color: black !important;
+border: 1px solid rgb(236, 236, 236) !important;
+border-radius: 6px !important;
+background: white !important;
+
+}
+
+.page-link{
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height:30px !important;
+    padding: 5px 7px 7px 4px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+}
+.page-link:hover{
+    color: black !important;
+    background: white !important;
+}
+.page-item.active .page-link {
+
+    color: #9b9b9b !important;
+}
+.previous{
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+}
+.next{
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+}
+#projecttotalhours{
+  font-size:14px;
+}
+#projectmandays{
+  font-size:11px;
+}
+.previous:after {
+    visibility: visible !important;
+    content: '\f053' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-right: 15px;
+
+}
+.next::before {
+    visibility: visible !important;
+    content: '\f054' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-left: 15px;
+
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+.main-wrapper {
+padding-top:3rem !important;
+}
+.datetootip {
+  position: relative;
+  display: inline-block;
+  color:black;
+  cursor:pointer;
+}
+
+.datetootip .tooltiptext {
+  visibility: hidden;
+  width: 145px;
+  background-color: #fff;
+  color: #056b90;
+  text-align: center;
+  border:1px solid #fff;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 10px;
+  /* height:30px; */
+
+  /* Position the datetootip */
+  position: absolute;
+  z-index: 1;
+  top: 95%;
+  left: -30%;
+  box-shadow: 2px 3px 4px #00000029;
+}
+.datetootip:hover{
+  font-size:16px;
+ 
+}
+.tooltiptext a{
+  text-decoration: none;
+}
+.datetootip:hover .tooltiptext {
+  visibility: visible;
+}
+
+
+.datetootip2 {
+  position: relative;
+  display: inline-block;
+  color:black;
+  cursor:pointer;
+}
+
+.datetootip2 .tooltiptext2 {
+  visibility: hidden;
+  width: 145px;
+  background-color: #fff;
+  color: #056b90;
+  text-align: center;
+  border:1px solid #fff;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 10px;
+  /* height:30px; */
+
+  /* Position the datetootip */
+  position: absolute;
+  z-index: 1;
+  top: 95%;
+  left: -30%;
+  box-shadow: 2px 3px 4px #00000029;
+}
+.datetootip2:hover{
+  font-size:16px;
+ 
+}
+.tooltiptext2 a{
+  text-decoration: none;
+}
+.datetootip2:hover .tooltiptext2 {
+  visibility: visible;
+}
+.pageheading{
+  color: var(---282828);
+text-align: left;
+font-size:20px;
+font-weight:bold;
+letter-spacing: 0px;
+color: #282828;
+}
+/* .taskdet{
+  max-width: 20vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+} */
+
+.maindetails{
+  font-weight:500;
+}
+</style>
+
+    
+    <!-- Main page -> Manage Task -->
+    <main class="main-wrapper">
+      <!-- ==================Row1======================= -->
+      <div class="uppercard">
+
+        <div class="row mb-4">
+         
+          <div class="col-md-4">
+            <div class="p-2 pageheading">Employee Trackpro Report</div>
+          </div>
+          <div class="col-md-2">
+           
+          </div>
+          <div class="col-md-3 ">
+            <select class="form-select select2dropdown" aria-label="Default select example" onchange="WeekDetail();" id="year">
+                {% for y in Yearlist %}
+                {% if y.Year == currentyear %}
+               <option value="{{y.Year}}" selected>{{y.Year}}</option>
+               {%else%}
+               <option value="{{y.Year}}">{{y.Year}}</option>
+               {% endif %}
+               {% endfor %}
+               </select>
+          </div>
+         
+          <div class="col-md-3 ">
+            <select class="form-select select2dropdown" aria-label="Default select example" onchange="WeekDetail();" id="empid">
+                <!-- <option value="">All Employees</option> -->
+               {% for u in emplist %}
+               <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
+               {% endfor %}
+              </select>
+          </div>
+          </div>
+          <div class="row m-2 pt-2">
+            <table class="Projectdata">
+              <tbody>
+              <tr>
+                <td>
+                  <div class="heading">Employee:</div>
+                  <div class="maindetails" id="selectedProjectName"></div>
+                </td>
+              <td>
+                <div class="heading">Yearly Trackpro Avg(%):</div>
+                <div class="maindetails" id="projectstartdate"></div>
+              </td>
+
+            <td>
+              <div class="heading">Best Score:</div>
+              <div class="maindetails"id="projectenddate"></div>
+            </td>
+               
+            <td>
+                <div class="heading">Worst Score:</div>
+                <div class="maindetails">
+                  <span id="projecttotalhours"></span> <span id="projectmandays"></span>
+                </div>
+            </td>
+             
+
+            </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+
+       <div class="tablecard">
+        <div class="table-div">
+          <table class="row-border w-100 projecttaskdetails" id="Weeklydata" >
+              <thead>
+                  <th style="width:10%;" class="text-center">
+                    Week
+                  </th>
+                  <th style="width:35%;" class="text-center">
+                     Grades
+                  </th>
+                  <th class="text-center">
+                    Weekly Score
+                  </th>
+                  <th class="text-center">
+                    Total Score(out of)
+                  </th>
+                  <th class="text-center">
+                      Percentage(%)
+                  </th>    
+  
+                  <th class="text-center">
+                     Rank
+                  </th>
+              </thead>
+  
+              <tbody class="weektablebody">
+                
+                      
+             
+  
+              </tbody>
+          </table>
+      </div>
+
+       </div> 
+    </main>
+  {%endblock%}{%block script%}{{block.super}}
+
+
+  <script src="https://rawgit.com/unconditional/jquery-table2excel/master/src/jquery.table2excel.js"></script>
+  <script>
+
+$(document).ready(function () {
+
+ $('.input-feild').on("focus", function () {
+ var label = $('label[for=' + this.id + ']');
+ label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+ });
+ $('#Weeklydata').DataTable();
+ WeekDetail();
+ 
+ });
+     
+    function WeekDetail(){
+         
+        var trHTML = "";
+        var employeeDetail = "";
+        var employeeTask = [];
+        var listHTML = "";
+        Empid = $("#empid").val();
+        year = $("#year").val();
+
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'task/EMPWeeklydata',
+            data: {
+                'empid': Empid,
+                'year':year,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log("responseresponse",response)
+
+            if (response.n==1){
+             
+            
+            $.each(response.data, function(i,o){
+              
+            trHTML+=`<tr>
+                          <td class="taskdet text-center">`+o.strweek+`</td>
+                          <td class="text-center">
+                            <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                          </td>
+                          <td class="text-center">`+o.warscore+`</td>
+                          <td class="text-center">`+o.Totalscore+`</td>
+                          <td class="text-center">`+o.percent+`</td>
+                          <td class="text-center">`+o.Rank+`</td>
+                      </tr>`    
+            }) 
+            initialiseDataTable(trHTML);
+            // $(".projecttbody").html(trHTML);
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl)
+                      })
+            }
+            else{
+              $(".weektablebody").html('');
+              $("#selectedProjectName").html('--');
+              $("#projectstartdate").html('--');
+              $("#projectenddate").html('--');
+              $("#no_ofteams").html('--');
+              $("#No_oftasks").html('--');
+              $("#projecttotalhours").html('--');
+            }
+          }
+            });
+    }
+
+
+    function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('#Weeklydata')) {
+        $('#Weeklydata').DataTable().destroy();
+    }
+    $('#Weeklydata tbody').empty();
+    $(".weektablebody").html(trHTML);
+    var table = $('#Weeklydata').DataTable({
+      // sDom: 'lrtip',
+        //  autoWidth: false
+        "ordering": false,
+        "bLengthChange": false 
+        })
+     
+    }
+
+   
+
+  
+        </script>
+ {%endblock%}

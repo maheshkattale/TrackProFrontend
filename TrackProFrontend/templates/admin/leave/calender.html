@@ -1,0 +1,1188 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+  Leave Calendar
+</div>
+{% endblock %}
+{% block content %}
+
+
+
+
+
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/leave_calender.css' %}">
+
+
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div id="snackbar"></div>
+      
+  
+   
+   
+    
+
+    <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered w-25">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+            <h5 class="modal-title" id="exampleModalLabel"> New Application</h5>
+          </div>
+            <div class="modal-body">
+              <div class="row">
+
+                  <div class="col-12 px-4 pt-2">
+                    <label for="Type">Select Type</label>
+                    <select class="input-feild select2dropdown" id="Type">
+                      <option value="" selected disabled>Select Type</option>
+                      <option value="1">Apply for leave</option>
+                      <option value="2">Apply for Work from home</option>
+                    </select>
+                    <span class="error" id="Type_err"></span>
+                    <input type="text" id="WFH" value="False" hidden/>
+                  </div>
+                
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="Role-btn" onclick="modalopen();" id="addEmployeeBtn" >Submit</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="ApplyLeave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered width-applyleave">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+            <h5 class="modal-title" id="exampleModalLabel"> Apply Leave</h5>
+          </div>
+            <div class="modal-body pb-0">
+              <div class="row p-2">
+                <div class="col-lg-6">
+                  <span class="label-title"> Application Type</span>
+                  <span class="d-flex radio-div py-2">
+                  <input type="radio" id="leave" name="applicationtype" value="leave" checked="checked">
+                  <label for="leave">Leave</label>
+                  <input type="radio" id="optional" name="applicationtype" disabled>
+                  <label for="optional">Optional</label>
+                  </span>
+
+                </div>
+                <div class="col-lg-6">
+                  <span class="label-title"> Leave Type</span>
+                  <span class="d-flex radio-div py-2">
+                  <input type="radio" id="leavetype" name="leavetype" onclick="checkleavetype();" value="Fullday">
+                  <label for="leavetype">Full day</label>
+                  <input type="radio" id="firsthalf" name="leavetype" onclick="checkleavetype();" value="FirstHalf">
+                  <label for="firsthalf">First Half</label>
+                  <input type="radio" id="secondhalf" name="leavetype" onclick="checkleavetype();"value="SecondHalf">
+                  <label for="secondhalf">Second Half</label>
+                  </span>
+                  <span class="error" id="leavetype_error"></span>
+
+                </div>
+
+                <div class="col-lg-6">
+                  <span class="label-title"> Application Status</span>
+                  <span class="d-flex radio-div py-2">
+                  <input type="radio" id="Normal" name="leavestatus"  value="Normal">
+                  <label for="Normal">Normal</label>
+                  <input type="radio" id="Draft" name="leavestatus" value="Draft">
+                  <label for="Draft">Draft</label>
+                  </span>
+                  <span class="error" id="leavestatus_error"></span>
+
+                </div>
+
+                <div class="col-lg-6">
+
+
+
+                </div>
+                <div class="col-lg-6">
+                  <label class="m-0 p-0" for="start_date">From:</label>
+                  <input type="text" placeholder="Enter start date" onchange="applyleavedate();" id="start_date" name="start_date" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                  <div> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('start_date');" /></div>
+                  <span class="error" id="start_date_error"></span>
+                </div>
+                
+                  <div class="col-lg-6">
+                    <label for="end_date" class="m-0 p-0">To:</label>
+                    <input type="text" placeholder="Enter end date" id="end_date" onchange="applyleavedate();" name="end_date" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                    <div> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('end_date');" /></div>
+                  <span class="error" id="end_date_error"></span>
+
+                  </div>
+                  <span  class="error" id="leavefunctionerror"></span>
+                  <div class="col-lg-12 my-3">
+                    <p class="label-title"> I Want To Inform</p>
+                    <div class="d-flex border-bottom">
+                      <div class="my-managers-title">
+                        <span> My Managers</span>
+                      </div>
+                      {%for manager in managerlist%}
+                      <div class="my-auto">
+                        <span class="manager-box" data-bs-toggle="tooltip" title="{{manager.Firstname}} {{manager.Lastname}} ">{{manager.position}} ) {{manager.Firstname}} {{manager.Lastname}}</span>
+                      </div>
+                      {%endfor%}
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+
+                    <label class="m-0 p-0" for="leave_attachment">Attach File</label>
+                    <input type="file" onchange="validateFile(this)" id="leave_attachment" name="leave_attachment" autocomplete="off" class="input-feild">
+                    <span class="error" id="leave_attachment_error"></span>
+  
+  
+                  </div>
+                  <div class="col-lg-12">
+                    <label for="reason">Reason:</label>
+                    <textarea type="text" id="reason" name="reason" autocomplete="off" class="input-feild" placeholder="Please explain the application reason in detail (minimum 150 characters)"></textarea>
+                  <span class="error" id="reason_error"></span>
+
+                  </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="w-50 justify-content-center">
+                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="Role-btn" onclick="validation();"  id="addEmployeeBtn" >Submit</button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="WorkFromHome" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+            <h5 class="modal-title" id="exampleModalLabel"> Apply For WFH</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row p-2">
+              <div class="col-lg-6">
+                <span class="label-title"> Application Status</span>
+                <span class="d-flex radio-div py-2">
+                <input type="radio" id="wfhNormal" name="wfhleavestatus"  value="Normal">
+                <label for="wfhNormal">Normal</label>
+                <input type="radio" id="wfhDraft" name="wfhleavestatus" value="Draft">
+                <label for="wfhDraft">Draft</label>
+                </span>
+                <span class="error" id="wfhleavestatus_error"></span>
+
+              </div>
+              <div class="col-lg-6">
+                <span class="label-title"> WFH Type</span>
+                <span class="d-flex radio-div py-2">
+                <input type="radio" id="WFHFullday" onchange="WFHcheckleavetype();" name="WFHleavetype" value="Fullday">
+                <label for="WFHFullday">Full day</label>
+                <input type="radio" id="WFHfirsthalf" onchange="WFHcheckleavetype();" name="WFHleavetype" value="FirstHalf">
+                <label for="WFHfirsthalf">First Half</label>
+                <input type="radio" id="WFHsecondhalf" onchange="WFHcheckleavetype();" name="WFHleavetype" value="SecondHalf">
+                <label for="WFHsecondhalf">Second Half</label>
+                </span>
+                <span class="error" id="WFHleavetype_err"></span>
+              </div>
+
+
+
+              <div class="col-lg-6">
+                <label class="m-0 p-0" for="WFHsdate">From:</label>
+                <input type="text" id="WFHsdate" onchange="WFHleavedate();" placeholder="Enter start date"  name="WFHsdate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                <div> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('WFHsdate');"/></div>
+                <span class="error" id="WFHsdate_error"></span>
+
+              </div>
+              
+                <div class="col-lg-6">
+                  <label for="WFHedate" class="m-0 p-0">To:</label>
+                  <input type="text" id="WFHedate" onchange="WFHleavedate();" placeholder="Enter end date" name="WFHedate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                  <div> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('WFHedate');"/></div>
+                  <span class="error" id="WFHedate_error"></span>
+
+                </div>
+                <span  class="error" id="WFHleavefunctionerror"></span>
+
+                <div class="col-lg-12 my-3 ">
+                  <p class="label-title"> I Want To Inform</p>
+                  <div class="d-flex border-bottom">
+                    <div class="my-managers-title">
+                      <span> My Managers</span>
+                    </div>
+                    {%for manager in managerlist%}
+                      <div class="my-auto">
+                        <span class="manager-box">{{manager.position}} ) {{manager.Firstname}} {{manager.Lastname}}</span>
+                      </div>
+                    {%endfor%}
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <label class="m-0 p-0" for="wfh_attachment">Attach File</label>
+                  <input type="file" onchange="validateFile(this)" id="wfh_attachment" name="wfh_attachment" autocomplete="off" class="input-feild">
+                  <span class="error" id="wfh_attachment_error"></span>
+                </div>
+                <div class="col-12">
+                  <label for="WFHreason">Reason:</label>
+                  <textarea type="text" id="WFHreason" name="WFHreason" autocomplete="off" class="input-feild" placeholder="Please explain the application reason in detail (minimum 150 characters)"></textarea>
+                  <span class="error" id="WFHreason_error"></span>
+                </div>
+
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-50 justify-content-center">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="Role-btn" onclick="WFHApplyleave();"  id="addEmployeeBtn" >Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="holidaylistmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+            <h5 class="modal-title mb-2" style="color:green;"  id="exampleModalLabel">Holiday List</h5>
+          </div>
+            <div class="modal-body">
+              <table class="table" id="holidaylistable">
+                <thead>
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Date</th>
+                    <th>Festival</th>
+                  </tr>
+                </thead>
+                <tbody class="holidaylisbody">
+    
+                </tbody>
+              </table>
+            
+            </div>
+            <div class="modal-footer mt-3">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  
+
+
+  <div class="leads-div mt-2">
+
+    <div class="py-3 position-relative">
+      <div class="nav">
+          <span id="prevBtn"></span>
+          <h2 id="monthYear"></h2>
+          <span id="nextBtn"></span>
+      </div>
+      <div class="calendar">
+  
+          <table>
+              <thead class="">
+                  <tr class="weekdays">
+  
+                      <td class="header-day weekdaySunday">Sunday</td>
+                      <td class="header-day weekdayMonday">Monday</td>
+                      <td class="header-day weekdayTuesday">Tuesday</td>
+                      <td class="header-day weekdayWednesday">Wednesday</td>
+                      <td class="header-day weekdayThursday">Thursday</td>
+                      <td class="header-day weekdayFriday">Friday</td>
+                      <td class="header-day weekdaySaturday">Saturday</td>
+                  </tr>
+              </thead>
+              <tbody id="calendarBody">
+  
+              </tbody>
+          </table>
+  
+          
+      </div>
+    </div>
+
+    <div class="row mx-1 mt-5 pt-5" id="Allleaves">
+
+
+
+      
+
+      
+
+    </div>
+  </div>
+
+
+
+
+
+
+</main>
+
+
+{% endblock %}
+
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#myModaladd">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Apply Leave"
+  src="{% static 'assets/svg/applyleaveicon.svg' %}">
+</a></li>
+<li><a data-bs-toggle="modal" onclick="holidaylist();" data-bs-target="#holidaylistmodal">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Holiday List"
+  src="{% static 'assets/svg/holidays.svg' %}">
+</a></li>
+
+
+
+ {% endblock %}
+
+{% block script %}
+{{block.super}}
+<script>
+
+
+  function durationfunct(id){
+
+    var startDate = document.getElementById("draftstart_date"+id).value;
+    var endDate = document.getElementById("draftend_date"+id).value;
+
+    if (startDate == endDate){
+      $("#updatedurationdiv"+id).show()
+    } 
+    else{
+      $("#updatedurationdiv"+id).hide()
+    }
+  }
+
+
+  function holidaylist(){
+    var holidaytablehtml ="";
+    var srcounter = 1;
+    $.ajax({
+        type: 'get',
+        url: frontendURL + 'holidaylist',
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+          if (response.response.n == 1) {
+            $.each(response.data, function(i,o){
+              $('.'+o.olddate).addClass('holiday')
+              $('.'+o.olddate).attr('title',o.Festival);
+              if (o.currentmonth == true){
+                holidaytablehtml += `
+                  <tr class="currentmnth">
+                    <td>`+srcounter+`</td>
+                    <td>`+o.Date+`</td>
+                    <td>`+o.Festival+`</td>
+                  </tr>`
+              }
+              else{
+                holidaytablehtml += `
+                  <tr class="">
+                    <td>`+srcounter+`</td>
+                    <td>`+o.Date+`</td>
+                    <td>`+o.Festival+`</td>
+                  </tr>`
+              }
+                
+              srcounter += 1
+
+
+              })
+              $(".holidaylisbody").html(holidaytablehtml)
+          }else {
+              
+          }
+        },
+        error: function(error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+  }
+  function validateFile(input) {
+    const file = input.files[0];
+    const allowedExtensions = /(\.png|\.jpg)$/i;
+    if (!allowedExtensions.test(file.name)) {
+        swal({
+          icon: "info",
+          title: "",
+          text: "Please select a file with a .png or .jpg extension.",
+          buttons: false,
+          
+
+      });
+        input.value = ''; // Clear the file input
+    }
+  }
+
+  function WFHleavedate() {
+    WFHcheckleavetype();
+    var startDate = document.getElementById("WFHsdate").value;
+    var endDate = document.getElementById("WFHedate").value;
+
+    splitdate = startDate.split("-");
+    newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+    splitenddate = endDate.split("-");
+    newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+    var sdate = new Date(newstartdate)
+    var edate = new Date(newenddate)
+
+    if (( edate < sdate)) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "End date should be greater than or equal to Start date",
+            button: "Close",
+        });
+        document.getElementById("WFHedate").value = "";
+    }
+
+    if (startDate === endDate){
+      $(".durationdiv").show()
+    }
+    else{
+      $(".durationdiv").hide()
+    }
+  }
+  function WFHApplyleave(){
+    var start_date = $("#WFHsdate").val();
+    var end_date = $("#WFHedate").val();
+    var reason = $("#WFHreason").val();
+    var leavetype = $('input[name="WFHleavetype"]:checked').val();
+    var leavestatus = $('input[name="wfhleavestatus"]:checked').val();
+    var leaveduration = $("input[name='WFHleavetype']:checked").val();
+    var attachment= $("#wfh_attachment")[0].files[0];
+
+    var WFH=$("#WFH").val();
+
+    WFHcheckleavetype();
+
+    if(IsValid(leavestatus)){
+      $('#wfhleavestatus_error').show().delay(3000).slideUp();
+      $('#wfhleavestatus_error').html('Application status is required');
+      $('#wfhleavestatus_error').focus();
+        return false;
+    }else if(IsValid(leavetype)){
+      $('#WFHleavetype_err').show().delay(3000).slideUp();
+      $('#WFHleavetype_err').html('Application Type is required');
+      $('#WFHleavetype_err').focus();
+        return false;
+        
+    }else if (IsValid(start_date)) {
+      $('#WFHsdate').html('');
+      $('#WFHsdate_error').show().delay(3000).slideUp();
+      $('#WFHsdate_error').html('Application start date is required');
+      $('#WFHsdate').focus();
+        return false;
+    }else if (IsValid(end_date)){
+      $('#WFHedate').html('');
+      $('#WFHedate_error').show().delay(3000).slideUp();
+      $('#WFHedate_error').html('Application end date is required');
+      $('#WFHedate').focus();
+        return false;
+    }else if(IsValid(reason)){
+        $('#WFHreason').html('');
+        $('#WFHreason_error').show().delay(3000).slideUp();
+        $('#WFHreason_error').html('Application reason is required');
+        $('#WFHreason').focus();
+          return false;
+    }else if(!/\S/.test(reason)){
+      $('#WFHreason').html('');
+      $('#WFHreason_error').show().delay(3000).slideUp();
+      $('#WFHreason_error').html('Application reason is required');
+      $('#WFHreason').focus();
+        return false;
+    }else if(reason.length < 150 ){
+        $('#WFHreason_error').html('');
+        $('#WFHreason_error').show().delay(3000).slideUp();
+        $('#WFHreason_error').html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#WFHreason').focus();
+          return false;
+    }
+    var start_datedateParts = start_date.split("-");
+    start_date = start_datedateParts[2] + "-" + start_datedateParts[1] + "-" + start_datedateParts[0];
+
+    var end_datedateParts = end_date.split("-");
+    end_date = end_datedateParts[2] + "-" + end_datedateParts[1] + "-" + end_datedateParts[0];
+    var formData = new FormData();
+    formData.append('start_date',start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('leavetype', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('duration',leaveduration);
+    formData.append('leaveduration',leaveduration);
+    formData.append('attachment', attachment);
+    formData.append('WFH', WFH);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+    $.ajax({
+      url: frontendURL + "leave/",
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      beforeSend: function () {
+          swal({
+              icon: "info",
+              title: "",
+              text: "Loading...",
+              buttons: false,
+          });
+      },
+      success: function (response) {
+          if (response.response.status == 'success') {
+              swal({
+                  icon: response.response.status,
+                  title: "",
+                  text: response.response.msg,
+                  button: "Close",
+              });
+              location.reload();
+          } else {
+              swal({
+                  icon: response.response.status,
+                  title: "",
+                  text: response.response.msg,
+                  button: "Close",
+              });
+          }
+      }
+    });
+    
+  }
+  function WFHcheckleavetype(){
+    var leavetype = $('input[name="WFHleavetype"]:checked').val();
+    var startdate=$("#WFHsdate").val();
+    var enddate=$("#WFHedate").val();
+
+    if(IsValid(leavetype)){
+      $('#WFHleavetype_err').show().delay(3000).slideUp();
+      $('#WFHleavetype_err').html('Application Type is required');
+      $('#WFHleavetype_err').focus();
+      return false;
+    }else{
+      if(leavetype!="Fullday"){
+        if(startdate !="" && enddate!="")  {
+          if(startdate!=enddate){
+            $('#WFHedate').val("");
+            $('#WFHleavefunctionerror').show().delay(3000).slideUp();
+            $('#WFHleavefunctionerror').html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#WFHleavefunctionerror').focus();
+            return false;
+          }
+        }
+      }
+    }
+
+  }
+  function validation() {
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    var reason = $("#reason").val();
+    var leavetype = $('input[name="leavetype"]:checked').val();
+    var leavestatus = $('input[name="leavestatus"]:checked').val();
+    var leaveduration = $("input[name='leavetype']:checked").val();
+    var WFH = $("#WFH").val();
+    var attachment = $("#leave_attachment")[0].files[0];
+
+    checkleavetype();
+
+    if (!leavetype) {
+        $('#leavetype_error').show().delay(3000).slideUp();
+        $('#leavetype_error').html('Application Type is required');
+        $('#leavetype').focus();
+        return false;
+    } else if (!leavestatus) {
+        $('#leavestatus_error').show().delay(3000).slideUp();
+        $('#leavestatus_error').html('Application status is required');
+        $('#leavestatus').focus();
+        return false;
+    } else if (!start_date) {
+        $('#start_date').html('');
+        $('#start_date_error').show().delay(3000).slideUp();
+        $('#start_date_error').html('Application start date is required');
+        $('#start_date').focus();
+        return false;
+    } else if (!end_date) {
+        $('#end_date').html('');
+        $('#end_date_error').show().delay(3000).slideUp();
+        $('#end_date_error').html('Application end date is required');
+        $('#end_date').focus();
+        return false;
+    } else if (!reason || !/\S/.test(reason)) {
+        $('#reason').html('');
+        $('#reason_error').show().delay(3000).slideUp();
+        $('#reason_error').html('Application reason is required');
+        $('#reason').focus();
+        return false;
+    }else if(reason.length < 150 ){
+        $('#reason_error').html('');
+        $('#reason_error').show().delay(3000).slideUp();
+        $('#reason_error').html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#reason').focus();
+        return false;
+    }
+
+    var start_dateParts = start_date.split("-");
+    start_date = start_dateParts[2] + "-" + start_dateParts[1] + "-" + start_dateParts[0];
+
+    var end_dateParts = end_date.split("-");
+    end_date = end_dateParts[2] + "-" + end_dateParts[1] + "-" + end_dateParts[0];
+
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('start_date', start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('leavetype', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('leaveduration', leaveduration);
+    formData.append('duration', leaveduration);
+    formData.append('WFH', WFH);
+    formData.append('attachment', attachment);
+
+    $.ajax({
+        url: frontendURL + "leave/",
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function () {
+            swal({
+                icon: "info",
+                title: "",
+                text: "Loading...",
+                buttons: false,
+            });
+        },
+        success: function (response) {
+            if (response.response.status == 'success') {
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+                location.reload();
+            } else {
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+            }
+        }
+    });
+  }
+
+
+  function applyleavedate() {
+    checkleavetype();
+    var startDate = document.getElementById("start_date").value;
+    var endDate = document.getElementById("end_date").value;
+
+    splitdate = startDate.split("-");
+    newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+    splitenddate = endDate.split("-");
+    newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+    var sdate = new Date(newstartdate)
+    var edate = new Date(newenddate)
+
+    if (( edate < sdate)) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "End date should be greater than or equal to Start date",
+            button: "Close",
+        });
+        document.getElementById("end_date").value = "";
+    }
+
+    if (startDate === endDate){
+      $(".durationdiv").show()
+    }
+    else{
+      $(".durationdiv").hide()
+    }
+  }
+  function checkleavetype(){
+    var leavetype = $('input[name="leavetype"]:checked').val();
+    var startdate=$('#start_date').val();
+    var enddate=$('#end_date').val();
+    if(IsValid(leavetype)){
+      $('#leavetype_error').show().delay(3000).slideUp();
+      $('#leavetype_error').html('Application Type is required');
+      $('#leavetype').focus();
+        return false;
+    }else{
+      if(leavetype!="Fullday"){
+        if(startdate !="" && enddate!="")  {
+
+          if(startdate!=enddate){
+            $('#end_date').val("");
+            $('#leavefunctionerror').show().delay(3000).slideUp();
+            $('#leavefunctionerror').html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#leavefunctionerror').focus();
+            return false;
+            }
+        }
+      }
+    }
+
+  }
+  function modalopen(){
+    var val =$("#Type").val();
+    if(IsValid(val)){
+      $('#Type_err').show().delay(3000).slideUp();
+      $('#Type_err').html('Application Type is required');
+      $('#Type').focus();
+        return false;
+    }else{
+      swal({
+              icon: "info",
+              title: "",
+              text: 'We hope you had a word with your immediate leave manager on call ,if not then please communicate with them.',
+              button: "Ok",
+              }).then(() => {
+                if(val == 1){
+                  $('#WFH').val("False")
+                  $('#ApplyLeave').modal('toggle');
+                  $('#myModaladd').modal('hide');
+                }else if(val==2){
+                  $('#WFH').val("True")
+                  $('#WorkFromHome').modal('toggle');
+                  $('#myModaladd').modal('hide');
+                }
+      });
+    }
+
+
+  }
+
+  
+
+  
+  $( "#start_date" ).datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        minDate: 0,
+        changeYear:true,
+        maxDate: +90,
+        changeMonth: true,
+   });
+  $( "#end_date" ).datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        minDate: 0,
+        changeYear:true,
+        maxDate: +90,
+        changeMonth: true,
+   });
+  $( "#WFHsdate" ).datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        minDate: 0,
+        changeYear:true,
+        maxDate: +90,
+        changeMonth: true,
+   });
+  $( "#WFHedate" ).datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        minDate: 0,
+        changeYear:true,
+        maxDate: +90,
+        changeMonth: true,
+   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script>
+  $(document).ready(function () {
+
+
+    $(".alldatepicker").datepicker({ 
+      dateFormat: 'dd-mm-yy',
+      minDate: 0,
+      changeYear:true,
+      maxDate: +90,
+      changeMonth: true,
+    });
+    $('#start_date').datepicker('option', 'minDate', new Date());
+    $('#end_date').datepicker('option', 'minDate', new Date());
+    $('#WFHsdate').datepicker('option', 'minDate', new Date());
+    $('#WFHedate').datepicker('option','minDate', new Date());
+    $(".durationdiv").hide()
+
+
+      var date = new Date();
+      var currentfulldate =  date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+      var selectdateclass;
+      var currentMonth = date.getMonth();
+      var currentYear = date.getFullYear();
+      var currentday = date.getDay();
+      var currentdate= date.getDate()          // Get the day as a number (1-31)
+      var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      var todayWeekday = weekdays[currentday];
+      $(".weekday"+todayWeekday).addClass("selected-weekday");
+
+      var selectedDate = null;
+
+      // Initialize calendar
+      generateCalendar(currentMonth, currentYear);
+      var changeedmonth;
+      
+      // Navigation button events
+      $("#prevBtn").on("click", function () {
+          currentMonth--;
+          if (currentMonth < 0) {
+              currentMonth = 11;
+              currentYear--;
+          }
+          if(currentMonth<10){
+            changeedmonth="0"+(currentMonth+1)
+          }else{
+            changeedmonth=(currentMonth+1)
+          }
+          var searcdate= String(currentYear+"-"+changeedmonth+"-"+"01")
+          searchajax(searcdate);
+          generateCalendar(currentMonth, currentYear);
+      });
+
+      $("#nextBtn").on("click", function () {
+          currentMonth++;
+          if (currentMonth > 11) {
+              currentMonth = 0;
+              currentYear++;
+          }
+
+          if(currentMonth+1<10){
+            changeedmonth="0"+(currentMonth+1)
+          }else{
+            changeedmonth=(currentMonth+1)
+          }
+          var searcdate=String(currentYear+"-"+changeedmonth+"-"+"01")
+          searchajax(searcdate);
+          generateCalendar(currentMonth, currentYear);
+      });
+
+      // Click event for calendar dates
+      // Click event for calendar dates
+      $(document).on("click", "#calendarBody td", function() {
+          var clickedDate = $(this).text();
+
+
+          // Get the day, month, and year from the clicked date
+          var selectedDay = clickedDate;
+          var selectedMonth = currentMonth + 1; // Adding 1 because JavaScript months are zero-based
+          var selectedYear = currentYear;
+          var selectedDate1 = new Date(currentYear, selectedMonth - 1, selectedDay); // Subtract 1 from the month to make it zero-based
+          var weekday = selectedDate1.getDay();
+
+          selectdateclass= selectedDate1.getFullYear() + "-" + (selectedDate1.getMonth()+1) + "-" + selectedDate1.getDate();
+
+          var currentWeekday = weekdays[weekday];
+          $(".header-day").removeClass("selected-weekday");
+          $(".day").removeClass("selected");
+          $(".weekday"+currentWeekday).addClass("selected-weekday");
+          
+
+          if (selectedDate !== null) {
+              selectedDate.removeClass("selected");
+          }
+          if (selectedDate !== $(this)) {
+              $(this).addClass("selected");
+              selectedDate = $(this);
+              $("#selectedDate").text(clickedDate); // Update selected date in the div
+          } else {
+              selectedDate = null;
+              $("#selectedDate").text(""); // Clear selected date when deselected
+          }
+
+          // Display the selected day, month, and year
+          $("#selectedDay").text(selectedDay);
+          $("#selectedMonth").text(selectedMonth);
+          $("#selectedYear").text(selectedYear);
+          if(selectedMonth<10){
+            selectedMonth="0"+selectedMonth
+          }
+          if(selectedDay<10){
+            selectedDay="0"+selectedDay
+          }
+          var searchdate=selectedYear+'-'+selectedMonth+'-'+selectedDay;            
+          searchdate=searchdate.toString();                
+
+          get_per_date_leaves_count(selectedMonth,selectedYear)
+
+          searchajax(searchdate);
+
+
+      });
+
+      selectdateclass=currentfulldate;
+
+      // Function to generate calendar
+      function generateCalendar(month, year) {
+          var startDate = new Date(year, month, 1);
+          var endDate = new Date(year, month + 1, 0);
+          var calendarBody = $("#calendarBody");
+          calendarBody.empty();
+
+          // Set month and year in the header
+          $("#monthYear").text(startDate.toLocaleDateString("en-US", { month: "long", year: "numeric" }));
+          // Generate calendar days
+          for (var date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+              var day = date.getDate();
+              
+              forloopmonth=date.getMonth()+1
+              if (forloopmonth<10){
+                forloopmonth="0"+forloopmonth
+              }
+              forloopday=date.getDate()
+              if (forloopday<10){
+                forloopday="0"+forloopday
+              }
+
+              var fulldate = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+              var yyyy_mm_dd = date.getFullYear() + "-" + (forloopmonth) + "-" + (forloopday);
+              var dayOfWeek = date.getDay();
+
+              var cell = $("<td>").text(day);
+                  cell.addClass("day"+day)
+                  cell.addClass(yyyy_mm_dd)
+                  cell.addClass(fulldate)
+                  cell.addClass("day")
+              if (dayOfWeek === 0) {
+                  cell.addClass("weekend");
+                  
+              }
+              if (dayOfWeek === 0 || (dayOfWeek === 6 && (Math.floor((day - 1) / 7) === 1 || Math.floor((day - 1) / 7) === 3))) {
+                cell.addClass("weeklyoff");
+                cell.css("color", "red");
+
+
+            }
+              calendarBody.append(cell);
+          }
+
+          $("."+year+"-"+(month+1)+"-1").addClass("selected");
+          
+          month_repeat=month+1
+          if (month_repeat<10){
+            month_repeat="0"+month_repeat
+          }
+          get_per_date_leaves_count(month_repeat,year)
+          $("."+currentfulldate).addClass("today");
+          holidaylist()
+      }
+
+      $(".day").removeClass("selected");
+      $("."+selectdateclass).addClass("selected");
+
+
+      if (currentMonth < 0) {
+          currentMonth = 11;
+      }
+      if(currentMonth<10){
+        changeedmonth="0"+(currentMonth+1)
+      }else{
+        changeedmonth=(currentMonth+1)
+      }
+      searchajax(String(currentYear+"-"+changeedmonth+"-"+currentdate));
+  });
+
+  function searchajax(searchdate){
+    var divhtml;
+    divhtml="";
+    $.ajax( {
+      headers: {"Authorization": "Token {{token}}"},
+      url:frontendURL +"leave/get_filter_leaves",
+      type: 'POST',
+      data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          "searchdate":searchdate,
+          },
+      dataType: 'json',
+      success: function(response){
+
+          if(response.data.length<1)    {
+            divhtml+=`<div class="no-result">No result Found !</div>`
+            $('#Allleaves').html(divhtml)
+          } 
+          $(response.data).each(function(a, b) {
+            divhtml +=  
+            `
+            <div class="col-lg-2 col-md-3 col-sm-4 my-1">
+                <div class="card leave-card">
+                <div class="leave-card-header pb-0">
+                    <div class="leave-status `+b.leave_status+`-leave">
+                    `+b.leave_status+`
+                    </div>
+                </div>
+                <div class="card-body border-bottom mb-0 pb-0">
+                    <p class="leave-date d-flex justify-content-between" ><div class="leave-date py-0 my-0">Applied Date :</div>  <div class="leave-date py-0 my-0">`+b.created_at+`</div></p>
+                    <p class="leave-Employee-name">`+b.Firstname+` `+b.Lastname+` </p>
+                    <p class="leave-Employee-name my-0 py-0">`+b.applicationtype+`</p>
+
+                    <p class="leave-reason" data-bs-html="true" data-bs-toggle="tooltip" data-bs-placement="top" title="`+b.reason+`">`+b.reason+`</p>
+                </div>
+                <div class="leave-card-footer">
+                    <p class="leave-date d-flex justify-content-between">`+b.leavedates+`</p>
+                    <p class="leave-days">`+b.leaveduration+` </p>
+                </div>
+                <div class="leave-manager-footer">
+                    <div class="d-flex justify-content-evenly">
+                    <div class="">              
+                        <p class="leave-Manager-Title">My Managers</p>
+                    </div>
+                    <div class="d-flex manager_tool_tips image-list" id="managersof`+b.id+`">
+
+
+            
+                    </div>
+                    </div>
+                </div>
+        
+                </div>
+            </div>
+            `
+            $('#Allleaves').html(divhtml)
+            
+          })    
+          $(response.data).each(function(a, b) {
+            var divmanager
+            divmanager="";
+            $(b.managerList).each(function(x,y){
+                var managerstatus="-"
+                if(y.approvedBy == true && y.rejectedBy ==false){
+                  managerstatus="✅"
+                }else if(y.approvedBy == false && y.rejectedBy ==false){
+                  managerstatus="⏳"
+                }else if(y.approvedBy == false && y.rejectedBy ==true){
+                  managerstatus="❌"
+                }
+
+                if(y.Photo==null){
+                divmanager+=
+                `
+                <img class="manager-pic manager-profile-picture"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-html="true" data-bs-toggle="tooltip" title="`+managerstatus+` `+y.Firstname+` `+y.Lastname+` "/>
+                `
+                $('#managersof'+b.id).html(divmanager)
+                }else{
+                divmanager+=
+                `
+                <img class="manager-pic manager-profile-picture"  src="{{imageURL}}`+y.Photo+`" data-bs-placement="top" data-bs-html="true" data-bs-toggle="tooltip" title="`+managerstatus +` `+y.Firstname+` `+y.Lastname+`"/>
+                `
+                $('#managersof'+b.id).html(divmanager)
+            }
+            })
+
+
+
+          
+
+          })
+
+
+
+
+
+      }
+    });
+  }
+  function toggledate(idvalue){
+    $('#'+idvalue).focus();
+  }
+  function get_per_date_leaves_count(month,year){
+    $.ajax( {
+      headers: {"Authorization": "Token {{token}}"},
+      url:frontendURL +"leave/get_per_date_leaves_count",
+      type: 'POST',
+      data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          "month":month,
+          "year":year,
+          },
+      dataType: 'json',
+      success: function(response){
+
+        $.each(response.data, function(key, value) {
+          $('.'+key).css("color", "#174fa3");
+          $('.'+key).css("font-weight", "500");
+          $("."+key).attr("data-bs-toggle", "tooltip");
+          $("."+key).attr("data-bs-html", "true");
+          $("."+key).attr("data-bs-placement", "top");
+          var leaveValue = value.leave;
+          var wfhValue = value.workfromhome;
+          var displayString
+
+          if(leaveValue != 0 && wfhValue !=0){
+             displayString =  'Leave ' + leaveValue + ', WFH ' + wfhValue;
+
+          }else if(leaveValue != 0 && wfhValue ==0){
+             displayString =  'Leave ' + leaveValue;
+
+          }else if(leaveValue == 0 && wfhValue !=0){
+            displayString =  'WFH ' + wfhValue;
+
+          }
+           
+          
+          $("."+key).attr("title", displayString );
+
+        });
+
+
+
+          
+
+
+      }
+    });
+  }
+</script>
+{% endblock %}

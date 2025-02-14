@@ -1,0 +1,269 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+ Announcements
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+  .fa-minus-circle{
+    font-size:22px
+  }
+  .savebtn {
+    background: #00a1ff !important;
+    padding: 5px 25px !important;
+    margin: 0px !important;
+    border-radius: 24px !important;
+    font-size: 15px !important;
+    color: white !important;
+    text-align: center;
+    border: none;
+}
+.form-floating .form-control {
+  border: none;
+  border-bottom: 1px solid #c2c2c2;
+  box-shadow:None;
+  border-radius: 0px;
+  outline:none;
+}
+.form-floating>label {
+  
+  padding: 10px 0;
+}
+
+#addEmployeeForm input {
+  width: 100%;
+  font-size: 14px;
+  color: black; 
+
+}
+.modal-body input {
+font-size: 14px;
+margin-bottom: 10px;
+}
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+
+ 
+     
+
+        <div class="table-div">
+            <table id="myTable" class="row-border w-100" >
+              <thead>
+                <tr class="">
+                  <th style="width:10%" class="">Sr. No</th>
+                  <th style="width:10%" class="">Date</th>
+                  <th style="width:70%" class="">Announcement</th>
+                  <th style="width:10%" class="">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {%for i in Annlist %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{i.date}}
+                          
+
+
+                        </td>
+                        <td>{{i.announcementText}}</td>
+                        <td>
+                            <a class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#modal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>   
+                            <a class="px-1" href="{% url 'users:delete_Announcement' i.id %}"><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+                          
+                        </td>
+                    </tr>
+                  {%endfor%}
+              </tbody>                 
+            </table>
+        </div>
+  
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+              <form class="formstyle" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+              <div class="modal-header ps-4">
+                <h5 class="modal-title py-2" id="exampleModalLabel">Add Announcement</h5>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-12 px-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="announcementText" value=""  name="announcementText"  placeholder="Enter Announcement">
+                        <label for="announcementText">Announcement<span style="color:red;">*</span></label>
+                        <span id="announcementTexterror" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-12 px-4">
+                    <div class="form-floating">
+                        <label for="date">Date<span style="color:red;">*</span></label> 
+                        <input class="pt-4" type="text" id="ann_date" placeholder="" name="ann_date" autocomplete="off" readonly>
+                        <div id="calendarIcon"></div>
+                        <span id="announcementDateerror" class="error"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="trackproBtn" id="addEmployeeBtn"  onclick="return formValidation();">Submit</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+
+
+    {% for i in Annlist %}
+    <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Update Announcement</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12 px-4">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="updateannouncementText{{i.id}}" value="{{i.announcementText}}">
+                  <label for="updateannouncementText{{i.id}}">Announcement</label>
+                  <span id="AnnouncementTexterror{{i.id}}" class="error-message"></span>
+                </div>
+              </div>
+              <div class="col-12 px-4">
+                <div class="form-floating">
+                    <!-- <label for="date">Date<span style="color:red;">*</span></label> -->
+                    <input type="text" id="updateann_date{{i.id}}" class="updateann_date" placeholder="Select Date"  value="{{i.date}}" name="updateann_date" autocomplete="off">
+                    <div id="calendarIcon"></div>
+                    <span id="announcementDateerror{{i.id}}" class="error"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="addEmployeeBtn" onclick="updateAnnouncement({{i.id}})">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#modal">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Announcement"
+  src="{% static 'assets/svg/announcement.svg' %}">
+</a></li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+
+        $("#ann_date").datepicker({ 
+          dateFormat: 'yy-mm-dd',
+         minDate: 0,
+        //  maxDate: 0
+
+      });
+
+      
+      $(".updateann_date").datepicker({ 
+          dateFormat: 'dd-mm-yy',
+         minDate: 0,
+        //  maxDate: 0
+      });
+
+
+      
+    });
+
+    function formValidation(){
+
+       
+        var AnnouncementText = $('#announcementText').val().trim();   
+        var AnnouncementDate = $('#ann_date').val().trim();
+      
+        if(IsValid(AnnouncementText)) {
+          $('#announcementText').html('');
+          $('#announcementTexterror').show().delay(3000).slideUp();
+          $('#announcementTexterror').html('Announcement Text is required');
+          $('#announcementText').focus();
+          return false;
+        }
+        if(IsValid(AnnouncementDate)) {
+          $('#AnnouncementDate').html('');
+          $('#announcementDateerror').show().delay(3000).slideUp();
+          $('#announcementDateerror').html('Date of Announcement is required');
+          $('#AnnouncementDate').focus();
+          return false;
+        }
+    }
+
+
+
+    function updateAnnouncement(id) {
+        var AnnouncementText = $('#updateannouncementText'+id).val().trim();   
+        var AnnouncementDate = $('#updateann_date'+id).val().trim();
+      
+        if (IsValid(AnnouncementText)) {
+            $('#updateannouncementText'+id).html('');
+            $('#AnnouncementTexterror'+id).show().delay(3000).slideUp();
+            $('#AnnouncementTexterror'+id).html('Location Name is required');
+            $('#updateannouncementText'+id).focus();
+            return false;
+        }
+        if(IsValid(AnnouncementDate)) {
+          $('#updateann_date'+id).html('');
+          $('#announcementDateerror'+id).show().delay(3000).slideUp();
+          $('#announcementDateerror'+id).html('Date of Announcement is required');
+          $('#updateann_date'+id).focus();
+          return false;
+        }else{
+
+          $.ajax({
+              type: "POST",
+              url: frontendURL + "updateAnnouncement",
+              data: {
+                  'announcementText': AnnouncementText,
+                  'id':id,
+                  'date':AnnouncementDate,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+              },
+              success: function (response) {         
+                  console.log("reps",response.data.n)
+                  if(response.data.n == 1){
+                      window.location = frontendURL + "Announcement";
+                  }else{
+                      window.location = frontendURL + "Announcement";
+                  }
+                  
+              }
+          });
+        }
+    }
+</script>
+{% endblock %}

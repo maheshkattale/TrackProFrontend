@@ -1,0 +1,190 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Announcement</div>
+
+{% endblock %}
+{% block content %}
+<style>
+    .modal-header{
+      justify-content: center;
+    }
+  </style>
+<main class="main-wrapper">
+    {% if messages %}
+                        <div class="row" style="justify-content: center;">
+                          <div class="col-sm-6 col-sm-offset-3">
+                            {% for message in messages %}
+                            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              <p style="margin-bottom: 0px;">{{ message }}</p>
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        {% endif %}
+    <div id="snackbar"></div>
+    <form class="formstyle" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    <div class="row my-4 px-3 align-items-center">
+        <div class="col-lg-6">
+            <label for="LocationName">Announcement Text</label>
+            <input type="text" id="announcement" placeholder="Enter Announcement Text" name="announcement" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+
+        </div>
+       <div class="col-lg-3">
+        <label for="LocationName">Date</label>
+                <input type="date" id="date" placeholder="Enter location name" name="date">
+       </div>
+       <div class="col-lg-3 text-center">
+        <button type="submit" id="addEmployeeBtn" onclick="return formValidation();">Add Announcement</button>
+       </div>
+      </div>
+      </form>
+    <div class="row g-3 mb-3">
+    <div class="col-12">
+        <div class="card-height-xl card-defaults datatableCard datatable_padding" style="height: auto; padding:2rem;">
+
+            <table id="example" class="table table-striped datatable" style="width:100%">
+            <thead>
+            <tr class="tableHeadings roleTableheadings">
+              <th class="text-center">Sr. No</th>
+              <th class="text-center">Announcement</th>
+              <th class="text-center">Announcement Date</th>
+              <th class="d-none d-lg-table-cell text-center">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for i in announcementlist %}
+            <tr>
+                <td class="text-center">{{forloop.counter}}</td>
+                <td>{{i.announcementText}}</td>
+                <td>{{i.date}}</td>
+                <td >
+                    <a class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#modal{{i.id}}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 22px;"></i>
+                    </a>   
+                    <a href="{% url 'company:deleteanouncement' i.id %}" class="viewEmpDeetsBtn"><i class="fa fa-trash" aria-hidden="true" style="font-size: 22px;"></i>
+                    </a>   
+                </td>
+            </tr>
+           
+            {%endfor%}
+        </tbody>                 
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+    {% for i in announcementlist %}
+    <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title" id="exampleModalLabel">Location Details</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12 px-4">
+                <label for="updateannouncement{{i.id}}">Announcement Text</label>
+                <input type="text" id="updateannouncement{{i.id}}" value="{{i.announcementText}}" >
+                <span id="updateannouncementerror{{i.id}}" class="error-message"></span>
+              </div>
+              <div class="col-6 px-4">
+                <label for="updateannouncementdate{{i.id}}">Announcement Date</label>
+                <input type="date" id="updateannouncementdate{{i.id}}" value="{{i.date}}" >
+                <span id="updateannouncementdateerror{{i.id}}" class="error-message"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button onclick="updateannouncement('{{i.id}}');" class="trackproBtn" id="editEmployeeDetails" >Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+
+    function formValidation(){
+
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      
+        var announcement = $('#announcement').val().trim();   
+        var date = $('#date').val().trim();
+        if (IsValid(announcement)) {
+          $('#snackbar').html('');
+          $('#snackbar').html('Announcement field is required');
+          $('#announcement').focus();
+          return false;
+         
+      }else if(IsValid(date)) {
+          $('#snackbar').html('');
+          $('#snackbar').html('Date field is required');
+          $('#date').focus();
+          return false;
+         
+      }
+      else{
+        $('#snackbar').addClass('validationBox')
+      }
+      }
+
+      function updateannouncement(id) {
+        var updateannouncement = $('#updateannouncement'+id).val().trim();
+        var updateannouncementdate = $('#updateannouncementdate'+id).val().trim();
+        
+
+
+        if (IsValid(updateannouncement)) {
+            $('#updateannouncementerror'+id).html('');
+            $('#updateannouncementerror'+id).show().delay(3000).slideUp();
+            $('#updateannouncementerror'+id).html('This field is required');
+            $('#updateannouncement'+id).focus();
+            return false;
+        }
+        else if(IsValid(updateannouncementdate)) {
+            $('#updateannouncementdateerror'+id).html('');
+            $('#updateannouncementdateerror'+id).show().delay(3000).slideUp();
+            $('#updateannouncementdateerror'+id).html('This field is required');
+            $('#updateannouncementdate'+id).focus();
+            return false;
+        }else{
+
+        $.ajax({
+            type: "POST",
+            url: backendURL + "rules/updateannouncement",
+            headers: {"Authorization": "Token {{token}}"},
+            data: {
+                'announcementText': updateannouncement,
+                'date':updateannouncementdate,
+                'id':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response.data.n)
+                if(response.data.n == 1){
+                    window.location = frontendURL + "company/anouncement";
+                }else{
+                    window.location = frontendURL + "company/anouncement";
+                }
+                
+            }
+        });
+        }
+    }
+</script>
+{% endblock %}

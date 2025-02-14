@@ -1,0 +1,898 @@
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Company list
+</div>
+{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css' %}">
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+
+<style>
+    #myTable>tbody>tr>td {
+
+        padding: 15px !important;
+    }
+    .select2-container--default .select2-selection--single {
+        height: 35px !important;
+      }
+      .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-left: 0px;
+        padding-top: 0px;
+        font-size: var(--f-lg);
+        color: var(--fc-md-dark);
+      }
+      .error{
+        font-size: 12px;
+      }
+</style>
+
+
+
+
+
+
+{% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css"> {% endcomment %}
+
+
+
+
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="companylist-div">
+        <div>
+    
+    
+            <!-- Add Company start-->
+            <div class="title-div">
+                <!-- <span class="company-title">Company Master</span>
+                <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add Company</span> -->
+                <!-- Button trigger modal -->
+        
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Company</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post" enctype="multipart/form-data">
+                                {%csrf_token%}
+                            <div class="modal-body">
+        
+                                    <div class="row pt-3">
+                                        <div class="col-lg-6">
+                                            <label for="companyname">Company Name</label>
+                                            <input type="text" id="companyname" name="companyname" placeholder="Company Name"
+                                                class="input-feild">
+                                                <p id="companyname_e" class="error"></p>
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="gstNumber">GST-IN Number</label>
+                                            <input type="text"  id="gstNumber" name="gstNumber" placeholder="GST-IN Number" maxlength="15" class="input-feild" oninput="this.value = this.value.toUpperCase()">
+                                                <p id="gstNumber_e" class="error"></p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="memberadmin">Company Admin Email Id </label>
+        
+                                            <input type="text" id="memberadmin" name="memberadmin"
+                                                placeholder="Company Admin Email Id " class="input-feild">
+                                                <p id="memberadmin_e" class="error"></p>
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="aadhaar">Aadhar Number </label>
+        
+                                            <input type="text" id="aadhaar" name="adhaarNumber"
+                                                placeholder="Aadhar Number" maxlength="12" class="input-feild" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                                <p id="aadhaar_e" class="error"></p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="companyType">Company Type </label>
+        
+                                            <select  onclick="this.setAttribute('value', this.value);" class="input-feild select2dropdown" placeholder="Company Type " id="companyType" name="companyType">
+                                                <option value="">Select Type</option>
+                                                {% for p in companytypelist %}
+                                                <option value="{{p.companyType}}">{{p.companyType}}</option>
+                                                {%endfor%}
+                                            </select>
+                                            <p id="companyType_e" class="error"></p>
+        
+        
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="panNumber">Pan-Card Number </label>
+        
+                                            <input type="text" id="panNumber" name="panNumber"
+                                                placeholder="Pan-Card Number" maxlength="10" class="input-feild" oninput="this.value = this.value.toUpperCase()">
+                                                <p id="panNumber_e" class="error"></p>
+        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label for="caddress">Company Address </label>
+        
+                                            <input type="text" id="caddress" name="caddress"
+                                                placeholder="Company Address " class="input-feild">
+                                                <p id="caddress_e" class="error"></p>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label for="gstcertificate" class="Documents col-lg-12 m-0 p-0">
+                                                <p class="m-0 p-0">Upload GST Document</p>
+                                                <div class="col-lg-12 m-0 p-0 d-flex justify-content-between">
+                                                    <span class="text-primary file-input-text">Only Image File</span>
+                                                    <span class="text-primary"><img src="{% static 'assets/icons/upload_icon-24px.svg' %}" class="upload_icon" alt="upload icon"/></span>
+        
+                                                </div>
+                                                <input type="file" onchange="imagePreview(this);" name="gstcertificate" id="gstcertificate" class="form-control-file" onchange="document.getElementById('gstcertificatePreview').src = window.URL.createObjectURL(this.files[0])" data-file_types="jpg|jpeg|png|ico|bmp" hidden="hidden">
+                                            </label>
+                                            <p id="gstcertificate_e" class="error"></p> 
+        
+        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <img  class="preview-img" id="preview_gstcertificate" width="100px" height="100px" src=""  alt="Add gstcertificate">
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label for="companylogos" class="Documents col-lg-12 m-0 p-0 mt-2">
+                                                <p class="m-0 p-0">Upload Company Logo</p>
+                                                <div class="col-lg-12 m-0 p-0 d-flex justify-content-between">
+                                                    <span class="text-primary file-input-text">Only Image File</span>
+                                                    <span class="text-primary"><img src="{% static 'assets/icons/upload_icon-24px.svg' %}" class="upload_icon" alt="upload icon"/></span>
+                                                </div>
+                                                <input type="file" onchange="imagePreview(this);"  name="companylogos" id="companylogos" class="form-control-file" onchange="document.getElementById('companylogosPreview').src = window.URL.createObjectURL(this.files[0])" data-file_types="jpg|jpeg|png|ico|bmp" hidden="hidden" >
+                                            </label>
+                                            <p id="companylogos_e" class="error"></p> 
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <img class="preview-img" id="preview_companylogos" width="100px" height="100px" src="" alt="Add companylogos">
+                                        </div>
+                                    </div>
+        
+                            </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Company Plan</h5>
+                            </div>
+                            <div class="modal-body">
+        
+                                <div class="row py-3">
+                                    <div class="col-lg-6">
+                                        <label for="period">Plan Period</label>
+                                        <select  id="period" onchange="getamountbyperiod();" name="period" onclick="this.setAttribute('value', this.value);" class="input-feild select2dropdown">
+                                            <option value="">Select Your Plan</option>
+                                            {%for p in periodlist%}
+                                            <option value="{{p.period}}">{{p.period}}</option>
+                                            {%endfor%}
+                                        </select>
+                                        <p id="period_e" class="error"></p> 
+        
+        
+        
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="payment">Payment</label>
+        
+                                        <input type="text"  id="payment" name="payment" placeholder="Payment"
+                                            class="input-feild" readonly>
+                                    </div>
+        
+                                </div>
+                               
+                            </div>
+                            <div class="modal-footer row justify-content-center">
+                                <div class="col-lg-4">
+                                    
+                                <button type="button" class="btn btn-outline-danger rounded-pill w-100" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                                <div class="col-lg-4">
+                                    <button onclick="return formValidation();" type="submit" class="add-btn w-100">+ Add</button>
+
+                                </div>
+
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Company End-->
+        
+            <!-- Update Company start-->
+            <div class="">
+                <!-- Button trigger modal -->
+        
+                <!-- Modal -->
+                <div class="modal fade" id="UpdateexampleModal" tabindex="-1" role="dialog" aria-labelledby="UpdateexampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="UpdateexampleModalLabel">Update Company</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="post">
+                                    <div class="row pt-3">
+                                        <div class="col-lg-6">
+                                            <label for="Update_Company_Name">Company Name</label>
+                                            <input type="text" id="Update_Company_Name" name="Update_Company_Name" placeholder="Company Name"
+                                                class="input-feild">
+        
+                                                <p id="Update_Company_Name_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="Update_GST-IN">GST-IN</label>
+        
+                                            <input type="text" id="Update_GST-IN" name="Update_GST-IN" placeholder="GST-IN Number"
+                                                class="input-feild" maxlength="15" oninput="this.value = this.value.toUpperCase()">
+                                                <p id="Update_GST-IN_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="Update_CompanyAdminEmailId">Company Admin Email Id </label>
+        
+                                            <input type="text" id="Update_CompanyAdminEmailId" name="Update_CompanyAdminEmailId"
+                                                placeholder="Company Admin Email Id " class="input-feild">
+                                                <p id="Update_CompanyAdminEmailId_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="Update_AadharNumber">Aadhar Number </label>
+        
+                                            <input type="text" id="Update_AadharNumber" name="Update_AadharNumber"
+                                                placeholder="Aadhar Number " class="input-feild" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                                <p id="Update_AadharNumber_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="Update_CompanyType">Company Type </label>
+        
+                                            <select id="Update_CompanyType" name="Update_CompanyType" placeholder="Company Type "
+                                                class="input-feild select2dropdown">
+                                                {% for p in companytypelist %}
+                                                <option value="{{p.companyType}}">{{p.companyType}}</option>
+                                                {%endfor%}
+                                            </select>
+                                            <p id="Update_CompanyType_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="Update_Pan-CardNumber">Pan-Card Number </label>
+        
+                                            <input type="text" id="Update_Pan-CardNumber" name="Update_Pan-CardNumber"
+                                                placeholder="Pan-Card Number " class="input-feild" maxlength="10" oninput="this.value = this.value.toUpperCase()">
+                                                <p id="Update_Pan-CardNumber_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label for="Update_CompanyAddress">Company Address </label>
+        
+                                            <input type="text" id="Update_CompanyAddress" name="Update_CompanyAddress"
+                                                placeholder="Company Address " class="input-feild">
+                                                <p id="Update_CompanyAddress_e" class="error"></p> 
+        
+                                        </div>
+        
+        
+                                        <div class="col-lg-12">
+                                            <label for="Update_gstcertificate" class="Documents col-lg-12 m-0 p-0">
+                                                <p class="m-0 p-0">Upload GST Document</p>
+                                                <div class="col-lg-12 m-0 p-0 d-flex justify-content-between">
+                                                    <span class="text-primary file-input-text">Only Image File</span>
+                                                    <span class="text-primary"><img src="{% static 'assets/icons/upload_icon-24px.svg' %}" class="upload_icon" alt="upload icon"/></span>
+        
+                                                </div>
+                                                <input type="file" onchange="imagePreview(this);" name="Update_gstcertificate" id="Update_gstcertificate" class="form-control-file"  hidden="hidden">
+                                            </label>
+                                            <p id="Update_gstcertificate_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <img id="preview_Update_gstcertificate" width="100px" height="100px" src=""  alt="Update gstcertificate">
+                                        </div>  
+                                        <div class="col-lg-12">
+                                            <label for="Update_companylogos" class="Documents col-lg-12 m-0 p-0 mt-2">
+                                                <p class="m-0 p-0">Upload Company Logo</p>
+                                                <div class="col-lg-12 m-0 p-0 d-flex justify-content-between">
+                                                    <span class="text-primary file-input-text">Only Image File</span>
+                                                    <span class="text-primary"><img src="{% static 'assets/icons/upload_icon-24px.svg' %}" class="upload_icon" alt="upload icon"/></span>
+                                                </div>
+                                                <input type="file" onchange="imagePreview(this);" name="Update_companylogos" id="Update_companylogos" class="form-control-file"  hidden="hidden" >
+                                            </label>
+                                            <p id="Update_companylogos_e" class="error"></p> 
+        
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <img id="preview_Update_companylogos" width="100px" height="100px" src="" alt="Update companylogos">
+                                        </div>  
+                                    </div>
+        
+                            </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Update Company Plan</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row py-3">
+                                    <div class="col-lg-6">
+                                        <label for="Update_Plan_Period">Plan Period</label>
+                                        <select type="text" id="Update_Plan_Period" name="Update_Plan_Period" placeholder="Plan Period"
+                                        onchange="updategetamountbyperiod();" onclick="this.setAttribute('value', this.value);"
+                                            class="input-feild select2dropdown">
+                                            <option value="">Select Your Plan</option>
+                                            
+                                            {%for p in periodlist%}
+                                                <option value="{{p.period}}">{{p.period}}</option>
+                                            {%endfor%}
+                                        </select>
+        
+                                        <p id="Update_Plan_Period_e" class="error"></p> 
+        
+        
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="Update_Payment">Payment</label>
+        
+                                        <input type="text" id="Update_Payment" name="Update_Payment" placeholder="Payment"
+                                            class="input-feild">
+                                            <p id="Update_Payment_e" class="error"></p> 
+                                            <input type="text" id="Update_companyid" name="Update_companyid" hidden>
+                                    </div>
+        
+                                </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer row justify-content-center">
+                                <div class="col-lg-4">
+                                    <button type="button" class="btn btn-outline-danger rounded-pill w-100"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                                
+                                <div class="col-lg-4">
+                                <button type="button" onclick="UpdateformValidation();" class="add-btn w-100">+ Update</button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Update Company end-->
+        
+            <div class="table-div">
+                <table class="row-border w-100" id="myTable">
+                    <thead>
+                        <th>
+                            Sr.No
+                        </th>
+                        <th>
+                            Company Name
+                        </th>
+                        <th>
+                            Admin
+                        </th>
+                        <th>
+                            Company Code
+                        </th>
+                        <th>
+                            Address
+                        </th>    
+        
+                        <th>
+                            Action
+                        </th>
+                    </thead>
+        
+                    <tbody>
+                        {% for i in companylistdata %}
+                            <tr>
+                                <td>{{forloop.counter}}.</td>
+                                <td>{{i.companyName}}</td>
+                                <td>{{i.memberadmin}}</td>
+                                <td>{{i.companycode}}</td>
+                                <td style="width: 30%;">{{i.companyAddress}}</td>
+                                <td>
+                                    <a class="px-1" id="{{i.id}}" data-bs-toggle="modal" onclick="getcompany(this.id);" data-bs-target="#UpdateexampleModal"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>
+                                    {% comment %} <a class="px-1" href="{% url 'company:delete_company' i.id %}"><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a> {% endcomment %}
+                                </td>
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+    </div>  
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Company"
+  src="{% static 'assets/svg/departmentmastericon.svg' %}">
+</a></li>
+ {% endblock %}
+{%block script%}{{block.super}}
+  <!-- ==================================================================================================================================================== -->
+<script src="{% static 'assets/js/validation/validations.js'%}"></script>
+
+
+<script>
+    $( document ).ready(function() {
+        $(".usermapping-form-button").hide()
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+    });
+
+    const realFileBtn = document.getElementById("gstcertificate");
+    const customBtn = document.getElementById("fileName");
+    const customTxt = document.getElementById("custom-text");
+    
+    customBtn.addEventListener("click", function() {
+        realFileBtn.click();
+    });
+
+    realFileBtn.addEventListener("change", function() {
+        if (realFileBtn.value) {
+            $("#custom-text").show();
+        customTxt.innerHTML = realFileBtn.value.match(
+            /[\/\\]([\w\d\s\.\-\(\)]+)$/
+        )[1];
+        } else {
+        customTxt.innerHTML = "No file chosen, yet.";
+        }
+    });
+    $('#gstcertificate').bind('change', function () {
+    var filename = $("#gstcertificate").val();
+    if (/^\s*$/.test(filename)) {
+        $(".file-upload").removeClass('active');
+        $("#noFile").text("No file chosen..."); 
+    }
+    else {
+        $(".file-upload").addClass('active');
+        $("#noFile").text(filename.replace("C:\\fakepath\\", "")); 
+    }
+    });
+
+    function getamountbyperiod() {
+        
+        var period = $('#period').val();
+        var html;
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "company/billingPeriodbyid",
+            data: {
+                'period': period,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                $("#payment").val(response.data.data.amount)
+                
+            }
+        });
+    }
+
+    function updategetamountbyperiod() {
+        
+        var period = $('#Update_Plan_Period').val();
+        var html;
+        $.ajax({
+            type: "POST",
+            
+            url: frontendURL + "company/billingPeriodbyid",
+            data: {
+                'period': period,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                $("#Update_Payment").val(response.data.data.amount)
+                
+            }
+        });
+    }
+    function imagePreview(input){
+        validateFile(input.id) 
+
+        //Check if there is a file that has been selected
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+             
+            reader.onload = function(e) {
+                
+              $('#preview_'+input.id).attr('src', e.target.result);
+              $('#preview_'+input.id).css('display','block');
+            }
+            console.log("input.id",input.id)
+            reader.readAsDataURL(input.files[0]); 
+         }
+    }
+
+    //for company logo 
+    const reallogoFileBtn = document.getElementById("companylogos");
+    const customlogoBtn = document.getElementById("logofileName");
+    const logocustomTxt = document.getElementById("logocustom-text");
+
+    customlogoBtn.addEventListener("click", function() {
+        reallogoFileBtn.click();
+    });
+
+    reallogoFileBtn.addEventListener("change", function() {
+        if (reallogoFileBtn.value) {
+            $("#logocustom-text").show();
+        logocustomTxt.innerHTML = reallogoFileBtn.value.match(
+            /[\/\\]([\w\d\s\.\-\(\)]+)$/
+        )[1];
+        } else {
+            logocustomTxt.innerHTML = "No file chosen, yet.";
+        }
+    });
+
+
+    $('#companylogos').bind('change', function () {
+    var filename = $("#companylogos").val();
+    if (/^\s*$/.test(filename)) {
+        $(".file-upload").removeClass('active');
+        $("#noFile").text("No file chosen..."); 
+    }
+    else {
+        $(".file-upload").addClass('active');
+        $("#noFile").text(filename.replace("C:\\fakepath\\", "")); 
+    }
+    });
+
+
+
+
+
+    function formValidation(){
+        
+        //var x = document.getElementById("snackbar");
+        // x.className = "show";
+        // setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000); 
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var adharregexp=/(^[0-9]{4}[0-9]{4}[0-9]{4}$)|(^[0-9]{4}\s[0-9]{4}\s[0-9]{4}$)|(^[0-9]{4}-[0-9]{4}-[0-9]{4}$)/;
+        var companyname = $('#companyname').val().trim();   
+        var memberadmin = $('#memberadmin').val().trim();   
+        var caddress = $('#caddress').val().trim();   
+        var companyType = $('#companyType').val();   
+        var gstNumber = $('#gstNumber').val();  
+        var panNumber = $('#panNumber').val().trim();  
+        var aadhaar = $('#aadhaar').val();  
+        var gstcertificate = $('#gstcertificate').val();  
+        var companylogos = $('#companylogos').val();  
+        var Plan_Period = $('#period').val();   
+        var panregex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+        if (IsValid(companyname)) {
+        $('#companyname').html('');
+        $('#companyname_e').show().delay(3000).slideUp();
+        $('#companyname_e').html('company name is required');
+        $('#companyname').focus();
+        return false;
+        }
+        else if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(gstNumber)){
+            $('#gstNumber_e').show().delay(3000).slideUp();
+            $('#gstNumber_e').html('Valid Gst Number Required');
+            $('#gstNumber').focus();
+            return false;
+
+
+        }
+        else if (gstNumber != ""){
+            if (IsValid(gstNumber)){
+            $('#gstNumber').html('');
+            $('#gstNumber_e').show().delay(3000).slideUp();
+            $('#gstNumber_e').html('Gst Number field is required');
+            $('#gstNumber').focus();
+            return false;
+        }else if(gstNumber.length != 15){
+            $('#gstNumber').html('');
+            $('#gstNumber_e').show().delay(3000).slideUp();
+            $('#gstNumber_e').html('GST Number should be of 15 digits');
+            $('#gstNumber').focus();
+            return false;
+        }else if (!validateGstNumber(gstNumber)) {
+            $('#gstNumber').html('');
+            $('#gstNumber_e').show().delay(3000).slideUp();
+            $('#gstNumber_e').html('Invalid gstNumber');
+            $('#gstNumber').focus();
+            return false;
+        }
+        
+        
+        else if (IsValid(memberadmin)) {
+            $('#memberadmin').html('');
+            $('#memberadmin_e').show().delay(3000).slideUp();
+            $('#memberadmin_e').html('email is required');
+            $('#memberadmin').focus();
+            return false;
+        }else if (!validateEmail(memberadmin)) {
+            $('#memberadmin').html('');
+            $('#memberadmin_e').show().delay(3000).slideUp();
+            $('#memberadmin_e').html('Please enter valid email');
+            $('#memberadmin').focus();
+            return false;
+        }
+        else if (!adharregexp.test(aadhaar)) {
+            $('#aadhaar').html('');
+            $('#aadhaar_e').show().delay(3000).slideUp();
+            $('#aadhaar_e').html('Please Enter Valid Aadhar Number');
+            $('#aadhaar').focus();
+            return false;
+        }else if (IsValid(companyType)) {
+            $('#companyType_e').show().delay(3000).slideUp();
+            $('#companyType_e').html('Please select company type');
+            $('#companyType').focus();
+            return false;
+        }else if (IsValid(panNumber)) {
+            $('#panNumber').html('');
+            $('#panNumber_e').show().delay(3000).slideUp();
+            $('#panNumber_e').html('Please provide Pan card number');
+            $('#panNumber').focus();
+            return false;
+        }else if (!panregex.test(panNumber)) {
+            $('#panNumber').html('');
+            $('#panNumber_e').show().delay(3000).slideUp();
+            $('#panNumber_e').html('Please Enter Valid Pan Number');
+            $('#panNumber').focus();
+            return false;
+        }else if (IsValid(caddress)) {
+            $('#aadhaar_e').text(' ');
+            $('#caddress').html('');
+            $('#caddress_e').show().delay(3000).slideUp();
+            $('#caddress_e').html('Address field is required');
+            $('#caddress').focus();
+            return false;
+        }        
+        else if (!/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(gstcertificate)) {
+            $('#gstcertificate').html('');
+            $('#gstcertificate_e').show().delay(3000).slideUp();
+            $('#gstcertificate_e').html('Valid Gst Certificate is required');
+            $('#gstcertificate').focus();
+            return false;
+        }
+        else if (!/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(companylogos)) {
+            $('#companylogos').html('');
+            $('#companylogos_e').show().delay(3000).slideUp();
+            $('#companylogos_e').html('Valid Company Logo is required');
+            $('#companylogos').focus();
+            return false;
+        }
+        /*else if (IsValid(Plan_Period)) {
+            $('#period_e').show().delay(3000).slideUp();
+            $('#period_e').html('Please select plan period');
+            $('#period').focus();
+            return false;
+        }*/
+        else{
+            $('#snackbar').addClass('validationBox')
+        }
+            }
+        
+        else{
+            $('#snackbar').addClass('validationBox')
+        }
+    } 
+    function getcompany(val){
+        var companyid=val;
+        $.ajax({
+            type: 'POST',
+            url: backendURL+'company/api/companybyid',
+            headers: {"Authorization": "Token {{token}}"},
+            dataType: 'json',
+            data: {
+                id: companyid,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function (response) {
+                console.log("success response",response)
+                $("#Update_Company_Name").val(response.data.companyName);
+                $("#Update_GST-IN").val(response.data.gstNumber);
+                $("#Update_CompanyAdminEmailId").val(response.data.memberadmin);
+                $("#Update_AadharNumber").val(response.data.adhaarNumber);
+                $("#Update_CompanyType").val(response.data.companyType);
+                $("#Update_Pan-CardNumber").val(response.data.panNumber);
+                $("#Update_CompanyAddress").val(response.data.companyAddress);
+                if(response.data.period != "null"){
+                    $("#Update_Plan_Period option[value="+response.data.period+"]").prop("selected",true)
+                
+                }
+                $("#Update_Payment").val(response.data.payment);
+                $('#Update_companyid').val(response.data.id);  
+                $('#preview_Update_companylogos').attr('src', response.data.companylogos);
+                $('#preview_Update_gstcertificate').attr('src', response.data.gstcertificate);
+
+            }
+        })
+    }
+    function UpdateformValidation(){
+         
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var adharregexp=/(^[0-9]{4}[0-9]{4}[0-9]{4}$)|(^[0-9]{4}\s[0-9]{4}\s[0-9]{4}$)|(^[0-9]{4}-[0-9]{4}-[0-9]{4}$)/;
+        var companyname = $('#Update_Company_Name').val().trim();   
+        var memberadmin = $('#Update_CompanyAdminEmailId').val().trim();   
+        var caddress = $('#Update_CompanyAddress').val().trim();   
+        var companyType = $('#Update_CompanyType').val();   
+        var gstNumber = $('#Update_GST-IN').val();  
+        var panNumber = $('#Update_Pan-CardNumber').val().trim();  
+        var aadhaar = $('#Update_AadharNumber').val();  
+        var gstcertificate = $('#Update_gstcertificate')[0].files[0];
+        var companylogos = $('#Update_companylogos')[0].files[0];
+        var Plan_Period = $('#Update_Plan_Period').val();   
+        var Update_Payment = $('#Update_Payment').val();  
+        var Update_companyid = $('#Update_companyid').val();   
+        var panregex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    
+        if (IsValid(companyname)) {
+        $('#Update_Company_Name').html('');
+        $('#Update_Company_Name_e').show().delay(3000).slideUp();
+        $('#Update_Company_Name_e').html('company name is required');
+        $('#Update_Company_Name').focus();
+        return false;
+        }else if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(gstNumber)){
+            $('#Update_GST-IN_e').show().delay(3000).slideUp();
+            $('#Update_GST-IN_e').html('Valid Gst Number Required');
+            $('#Update_GST-IN').focus();
+            return false;
+
+
+        }else if (gstNumber != ""){
+            if (IsValid(gstNumber)){
+            $('#Update_GST-IN').html('');
+            $('#Update_GST-IN_e').show().delay(3000).slideUp();
+            $('#Update_GST-IN_e').html('Gst Number field is required');
+            $('#Update_GST-IN').focus();
+            return false;
+        }else if(gstNumber.length != 15){
+            $('#Update_GST-IN').html('');
+            $('#Update_GST-IN_e').show().delay(3000).slideUp();
+            $('#Update_GST-IN_e').html('GST Number should be of 15 digits');
+            $('#Update_GST-IN').focus();
+            return false;
+        }else if (!validateGstNumber(gstNumber)) {
+            $('#Update_GST-IN').html('');
+            $('#Update_GST-IN_e').show().delay(3000).slideUp();
+            $('#Update_GST-IN_e').html('Invalid GST-IN');
+            $('#Update_GST-IN').focus();
+            return false;
+        }else if (IsValid(memberadmin)) {
+            $('#Update_CompanyAdminEmailId').html('');
+            $('#Update_CompanyAdminEmailId_e').show().delay(3000).slideUp();
+            $('#Update_CompanyAdminEmailId_e').html('email is required');
+            $('#Update_CompanyAdminEmailId').focus();
+            return false;
+        }else if (!validateEmail(memberadmin)) {
+            $('#Update_CompanyAdminEmailId').html('');
+            $('#Update_CompanyAdminEmailId_e').show().delay(3000).slideUp();
+            $('#Update_CompanyAdminEmailId_e').html('Please enter correct email');
+            $('#Update_CompanyAdminEmailId').focus();
+            return false;
+        }else if (!adharregexp.test(aadhaar)) {
+            $('#Update_AadharNumber').html('');
+            $('#Update_AadharNumber_e').show().delay(3000).slideUp();
+            $('#Update_AadharNumber_e').html('Please Enter Valid Aadhar Number');
+            $('#Update_AadharNumber').focus();
+            return false;
+        }else if (IsValid(companyType)) {
+            $('#Update_CompanyType_e').show().delay(3000).slideUp();
+            $('#Update_CompanyType_e').html('Please select company type');
+            $('#Update_CompanyType').focus();
+            return false;
+        }else if (IsValid(panNumber)) {
+            $('#Update_Pan-CardNumber').html('');
+            $('#Update_Pan-CardNumber_e').show().delay(3000).slideUp();
+            $('#Update_Pan-CardNumber_e').html('Please provide Pancard number');
+            $('#Update_Pan-CardNumber').focus();
+            return false;
+        }else if (!panregex.test(panNumber)) {
+            $('#Update_Pan-CardNumber').html('');
+            $('#Update_Pan-CardNumber_e').show().delay(3000).slideUp();
+            $('#Update_Pan-CardNumber_e').html('Please provide valid Pancard number');
+            $('#Update_Pan-CardNumber').focus();
+            return false;
+        }else if (IsValid(caddress)) {
+            $('#Update_Pan-CardNumber_e').text(' ');
+            $('#Update_CompanyAddress').html('');
+            $('#Update_CompanyAddress_e').show().delay(3000).slideUp();
+            $('#Update_CompanyAddress_e').html('Address field is required');
+            $('#Update_CompanyAddress').focus();
+            return false;
+        }/*else if (IsValid(Plan_Period)) {
+            $('#Update_Plan_Period_e').show().delay(3000).slideUp();
+            $('#Update_Plan_Period_e').html('Please select plan Period');
+            $('#Update_Plan_Period').focus();
+            return false;
+        }*/else{
+            
+
+            let fd = new FormData();
+            fd.append('companyname',companyname)
+            fd.append('memberadmin',memberadmin)
+            fd.append('caddress',caddress)
+            fd.append('companyType',companyType)
+            fd.append('gstNumber',gstNumber)
+            fd.append('panNumber',panNumber)
+            fd.append('adhaarNumber',aadhaar)
+            fd.append('gstcertificate',gstcertificate)
+            fd.append('period',Plan_Period)
+            fd.append('payment',Update_Payment)
+            fd.append('id',Update_companyid)
+            fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+            fd.append('companylogos',companylogos)
+
+
+            $.ajax({
+                type: 'POST',
+                url: frontendURL+'company/update/'+Update_companyid,
+                headers: {"Authorization": "Token {{token}}"},
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("success update response",response)
+                    window.location.reload();
+                }
+            })
+            $('#snackbar').addClass('validationBox')
+        }
+        }else{
+        $('#snackbar').addClass('validationBox')
+        }
+    } 
+
+
+    function validateFile(id) {
+        
+        var allowedExtension = ['jpeg', 'jpg', 'png', 'svg','gif','tiff','png','webp','bmp'];
+        var fileExtension = document.getElementById(id).value.split('.').pop().toLowerCase();
+        var isValidFile = false;
+
+            for(var index in allowedExtension) {
+
+                if(fileExtension === allowedExtension[index]) {
+                    isValidFile = true; 
+                    break;
+                }
+            }
+
+            if(!isValidFile) {
+                $('#'+id).val('');
+                $('#'+id+'_e').show().delay(3000).slideUp();
+                $('#'+id+'_e').html('Please add valid file <br> Allowed Extensions are : *.'+ allowedExtension.join(', *.'));
+                $('#'+id).focus();
+                $('#preview_'+id).css('display','none');
+
+            }
+
+            return isValidFile;
+    }
+</script>
+    
+{%endblock%}

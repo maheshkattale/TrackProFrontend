@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_19289" data-name="Group 19289" transform="translate(-9968 -6796)">
+    <g id="Rectangle_10295" data-name="Rectangle 10295" transform="translate(9968 6796)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="calendar_month_FILL0_wght300_GRAD0_opsz48" d="M15.971,18.209V16.167h2.059v2.042Zm-4.706,0V16.167h2.059v2.042Zm9.412,0V16.167h2.059v2.042Zm-4.706,4.515V20.682h2.059v2.042Zm-4.706,0V20.682h2.059v2.042Zm9.412,0V20.682h2.059v2.042ZM7,26.75V6.763h3.882V4.75h1.471V6.763h9.353V4.75h1.441V6.763H27V26.75Zm1.324-1.294H25.676V13.665H8.324Zm0-13.085H25.676V8.086H8.324Zm0,0v0Z" transform="translate(9963 6792.25)" fill="#888"/>
+  </g>
+</svg>

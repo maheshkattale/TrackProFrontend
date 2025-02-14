@@ -1,0 +1,616 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+    Apply CompOff
+</div>
+
+
+
+
+
+{% endblock %}
+{% block content %}
+
+
+
+
+
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/apply_leave.css' %}">
+<style>
+    .managers-imgs {
+        padding: 0px;
+    }
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+                class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                    style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+
+
+    <div class="leads-div">
+        <ul class="nav nav-pills mb-3 overflow-auto" id="pills-tab" role="tablist">
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link active" id="pills-available-tab" onclick="get_compoffs('available');"
+                    data-bs-toggle="pill" data-bs-target="#pills-available" type="button" role="tab"
+                    aria-controls="pills-available" aria-selected="true">Available CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-pending-tab" onclick="get_compoffs('pending');" data-bs-toggle="pill"
+                    data-bs-target="#pills-pending" type="button" role="tab" aria-controls="pills-pending"
+                    aria-selected="false">Pending
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-approved-tab" onclick="get_compoffs('approved');"
+                    data-bs-toggle="pill" data-bs-target="#pills-approved" type="button" role="tab"
+                    aria-controls="pills-approved" aria-selected="false">Approved
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-rejected-tab" onclick="get_compoffs('rejected');"
+                    data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab"
+                    aria-controls="pills-rejected" aria-selected="false">Rejected
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-expired-tab" onclick="get_compoffs('expired');" data-bs-toggle="pill"
+                    data-bs-target="#pills-expired" type="button" role="tab" aria-controls="pills-expired"
+                    aria-selected="false">Expired
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-withdraw-tab" onclick="get_compoffs('withdraw');" data-bs-toggle="pill"
+                    data-bs-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw"
+                    aria-selected="false">Withdraw
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-reschedule-tab" onclick="get_compoffs('reschedule');" data-bs-toggle="pill"
+                    data-bs-target="#pills-reschedule" type="button" role="tab" aria-controls="pills-reschedule"
+                    aria-selected="false">Reschedule
+                    CompOff</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+
+
+            <div class="tab-pane fade show active" id="pills-available" role="tabpanel"
+                aria-labelledby="pills-available-tab" tabindex="0">
+                <div class="row" id="available-compoffs">
+
+
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab"
+                tabindex="0">
+                <div class="row" id="pending-compoffs">
+
+
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab"
+                tabindex="0">
+                <div class="row" id="approved-compoffs">
+
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab"
+                tabindex="0">
+                <div class="row" id="rejected-compoffs">
+
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-expired" role="tabpanel" aria-labelledby="pills-expired-tab"
+                tabindex="0">
+                <div class="row" id="expired-compoffs">
+
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-withdraw" role="tabpanel" aria-labelledby="pills-withdraw-tab"
+                tabindex="0">
+                <div class="row" id="withdraw-compoffs">
+
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-reschedule" role="tabpanel" aria-labelledby="pills-reschedule-tab"
+                tabindex="0">
+                <div class="row" id="reschedule-compoffs">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+
+{% endblock %}
+{% block indexaddbuttons %}
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        get_compoffs('available')
+    });
+    
+    function get_compoffs(status) {
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('status', status);
+
+        $.ajax({
+            url: frontendURL + "get_compoffs",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function () {
+                swal({
+                    icon: "info",
+                    title: "",
+                    text: "Loading...",
+                    buttons: false,
+                });
+            },
+            success: function (response) {
+                swal.close();
+                console.log("response", response)
+                var col_div = ''
+
+                if (response.response.n == 1) {
+
+                    $(response.data).each(function (a, b) {
+                        col_div += ` 
+                    
+
+                        <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                            <div id="card" class="card text-start h-100">
+
+
+
+
+                                <div class="card-header head d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <span class="card-header-txt">Comp-Off</span><br>
+                                        <span class="card-header-txt">`+ status + ` </span>
+                                    </span>
+                                    <span class="d-flex justify-content-end">
+                                        <span class="text-left">
+                                            <span class="card-header-txt">Comp-Off Date </span><br>
+                                            <span class="card-header-txt" title="`+ b.created_at + `">` + b.created_at + `</span>
+                                        </span>
+                                        <span>
+                                            ${status == 'pending'||status == 'approved' ?`
+                                            <div class="dropdown">
+                                                <span class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none">
+                                                        <path d="M13.9955 23.8334C13.6093 23.8334 13.2802 23.6959 13.0079 23.4209C12.7357 23.146 12.5996 22.8154 12.5996 22.4293C12.5996 22.0431 12.7371 21.714 13.0121 21.4417C13.287 21.1695 13.6176 21.0334 14.0038 21.0334C14.3899 21.0334 14.7191 21.1709 14.9913 21.4459C15.2635 21.7209 15.3996 22.0514 15.3996 22.4376C15.3996 22.8237 15.2621 23.1529 14.9871 23.4251C14.7122 23.6973 14.3816 23.8334 13.9955 23.8334ZM13.9955 15.9001C13.6093 15.9001 13.2802 15.7626 13.0079 15.4876C12.7357 15.2126 12.5996 14.8821 12.5996 14.4959C12.5996 14.1098 12.7371 13.7806 13.0121 13.5084C13.287 13.2362 13.6176 13.1001 14.0038 13.1001C14.3899 13.1001 14.7191 13.2376 14.9913 13.5126C15.2635 13.7875 15.3996 14.1181 15.3996 14.5042C15.3996 14.8904 15.2621 15.2195 14.9871 15.4917C14.7122 15.764 14.3816 15.9001 13.9955 15.9001ZM13.9955 7.96675C13.6093 7.96675 13.2802 7.82926 13.0079 7.55427C12.7357 7.27931 12.5996 6.94875 12.5996 6.56261C12.5996 6.17648 12.7371 5.8473 13.0121 5.57508C13.287 5.30286 13.6176 5.16675 14.0038 5.16675C14.3899 5.16675 14.7191 5.30424 14.9913 5.57922C15.2635 5.85419 15.3996 6.18474 15.3996 6.57089C15.3996 6.95702 15.2621 7.28619 14.9871 7.55841C14.7122 7.83064 14.3816 7.96675 13.9955 7.96675Z" fill="#8F9597"/>
+                                                    </svg>
+                                                </span>
+                                                <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton1">
+                                            
+                                            
+                                                    ${status == 'pending'?`
+                                                    <li>
+                                                        ${b.editable == true ?`
+                                                            <a class="dropdown-item" data-bs-toggle="tooltip" title="Edit Date" onclick="change_compoff_date(`+b.id+`);"><i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> </a>
+                                                            `:`
+                                                            <span class="dropdown-item"  data-bs-toggle="tooltip" title="Unable to edit"><i class="fa fa-pencil-square-o text-primary disabled-icon"  aria-hidden="true"></i> </span> 
+                                                        `}
+                                                    </li>
+                                                    `:``}
+
+                                                    ${b.withdrawable == true ?`
+                                                    
+                                                        <li>
+                                                            <a class="dropdown-item" onclick="withdraw_compoff(`+b.id+`)" title="Withdraw Compoff"><i class="fa fa-solid fa-rotate-left text-warning" aria-hidden="true"></i></a>
+                                                        </li>
+                                                        `:`
+                                                        <li>
+                                                            <a class="dropdown-item" title="Withdraw Compoff"><i class="fa fa-solid fa-rotate-left text-secondary" aria-hidden="true"></i></a>
+                                                        </li>
+                                                    `}
+
+                                                </ul>
+                                            </div>
+                                                    `:``}
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <div class="card-body py-3">
+
+                                    <div class="row">
+
+
+
+
+                                        <div class="col-lg-12">
+                                            <div class="card-header head d-flex justify-content-between p-0">
+                                                <span>
+                                                    <span class="card-header-txt">Valid From</span><br>
+                                                    <span class="card-header-blue-txt">`+ b.date + `</span>
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <span>
+                                                  
+                                                        <span class="card-header-txt">Valid Till</span><br>
+                                                        <span class="card-header-blue-txt">`+ b.valid_date + `</span>
+                                              
+                                                        
+                                                    </span>
+
+
+                                                </span>
+                                                <span>
+                                                    ${status != 'available' ?`
+                                                        <span class="card-header-txt">Claimed Date</span><br>
+                                                        <span class="card-header-blue-txt">${b.claim_date != undefined ?  b.claim_date  : `Non-Claim`}</span>
+                                                    `:``}
+                                                </span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                                ${status === 'rejected'||status === 'reschedule' ?
+                                `
+                                            <div class="card-header p-0">
+
+                                                <span class="card-header-txt">Reason :</span><br>
+
+                                                <span class="my-3 card-body-reason-text addReadMore showlesscontent "
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                    title="not available">`+ b.reason + `.</span>
+                                            </div>
+                                                                
+                                                                `
+                                : `
+                                                        
+                                                            `}
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer cardfooter mt-auto">
+                                    <div class="row">
+
+                                        <div class="col-lg-12 conclusion-box my-2">
+                                            <div class="py-2 d-flex justify-content-between">
+                                                <span class="image-list card-header-txt py-1 col-lg-8 col-md-6 col-sm-12"
+                                                    style="display: flex; align-items: center;">
+                                                        ${b.managers ?`
+
+
+                                                       
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.status === null ?
+                                        `
+                                                                <img class="manager-pic manager-pic-Pending  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="⏳ ${l.manager_name}" />                                                            
+                                                                `
+                                        : `
+                                                        
+                                                            `}
+                                                        `).join("\n")}
+                                                        `:``}
+                                                    <span class="ps-1">This comp-off is `+ status + `.</span>
+                                                </span>
+
+                                                <span
+                                                    class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+${b.managers ?`
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.status === true ?
+                                                `
+                                                                <img class="manager-pic manager-pic-Approved  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="✅ ${l.manager_name}" />                                                            
+                                                                `
+                                                : ``}
+
+                                                        `).join("\n")}
+                                                            
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.status === false ?
+                                                        `
+                                                                <img class="manager-pic manager-pic-Rejected  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="❌ ${l.manager_name}" />                                                          
+                                                                `
+                                                        : ``}
+
+                                                        `).join("\n")}
+`:``}
+                                                        ${status === 'available' ? `<button class="btn py-0 btn-outline-success" onclick="claim_compoff(`+b.id+`)">Claim Now</button> ` : ``}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    `
+                    });
+                    $('#' + status + '-compoffs').html(col_div)
+                }
+                else {
+                    col_div += ` 
+                    <div class="noappdiv">
+                        <div class="text-center py-4 ">No Compoff Found!</div>
+                    </div>`
+                    $('#' + status + '-compoffs').html(col_div)
+
+
+
+                }
+
+            }
+        });
+    }
+    
+    function mm_dd_yyyy_to_yyyy_mm_dd(dateString) {
+        var parts = dateString.split("-");
+        return parts[2] + "-" + parts[0]+ "-" + parts[1] ;
+    }
+    
+    function claim_compoff(compoff_id) {
+        const showSwal = () => {
+            swal("Select date to apply comp-off", {
+                content: {
+                    element: 'input',
+                    attributes: {
+                        type: 'date',
+                        id: 'datePicker',
+                        className: 'swal-content__input',
+                    },
+                },
+                buttons: true,
+                dangerMode: true,
+            }).then((value) => {
+                    if (value != null) {
+
+
+                        var formData = new FormData();
+                        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                        formData.append('id', compoff_id);
+                        formData.append('claim_date', value);
+
+                        $.ajax({
+                            url: frontendURL + "claim_compoff",
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            beforeSend: function() {
+                                swal({
+                                    icon: "info",
+                                    title: "",
+                                    text: "Loading...",
+                                    buttons: false,
+                                });
+                            },
+                            success: function(response) {
+                                swal.close();
+                                console.log("response", response);
+                                if (response.response.n == 1) {
+                                    swal({
+                                        icon: "success",
+                                        title: "",
+                                        text: response.response.msg,
+                                        button: "Close",
+                                    }).then(() => {
+                                        location.reload(); // Reload the page
+                                    });
+                                } else {
+                                    swal({
+                                        icon: "error",
+                                        title: "",
+                                        text: response.response.msg,
+                                        buttons: true,
+                                        dangerMode: true
+                                    }).then((willDelete) => {
+                                            if (willDelete) {
+                                                claim_compoff(compoff_id)
+                                            }
+                                    });
+                                }
+
+                                
+                            }
+                        });
+
+                    } 
+                });
+        };
+        showSwal();
+
+
+    }
+    
+    function change_compoff_date(compoff_id) {
+        const showSwal = () => {
+            swal("Select date to apply comp-off", {
+                content: {
+                    element: 'input',
+                    attributes: {
+                        type: 'date',
+                        id: 'datePicker1',
+                        className: 'swal-content__input',
+                    },
+                },
+                buttons: true,
+                dangerMode: true,
+            }).then((value) => {
+                    if (value != null) {
+
+
+                        var formData = new FormData();
+                        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                        formData.append('id', compoff_id);
+                        formData.append('claim_date', value);
+
+                        $.ajax({
+                            url: frontendURL + "change_claim_compoff_date",
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            beforeSend: function() {
+                                swal({
+                                    icon: "info",
+                                    title: "",
+                                    text: "Loading...",
+                                    buttons: false,
+                                });
+                            },
+
+                            success: function(response) {
+                                swal.close();
+                                console.log("response", response);
+                                if (response.response.n == 1) {
+                                    swal({
+                                        icon: "success",
+                                        title: "",
+                                        text: response.response.msg,
+                                        button: "Close",
+                                    }).then(() => {
+                                        location.reload(); // Reload the page
+                                    });
+                                } else {
+                                    swal({
+                                        icon: "error",
+                                        title: "",
+                                        text: response.response.msg,
+                                        buttons: true,
+                                        dangerMode: true
+                                    }).then((willDelete) => {
+                                            if (willDelete) {
+                                                change_compoff_date(compoff_id)
+                                            }
+                                    });
+                                }
+
+                                
+                            }
+                        });
+
+                    } 
+                });
+        };
+        showSwal();
+
+
+    }
+
+    function withdraw_compoff(compoff_id){
+        swal({title: "Are you sure?",
+            text: "you want to withdraw comp-off ",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then((willDelete) => {
+                if (willDelete){
+                    var formData = new FormData();
+                    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                    formData.append('id', compoff_id);
+
+                    $.ajax({
+                        url: frontendURL + "withdraw_compoff",
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        beforeSend: function() {
+                            swal({
+                                icon: "info",
+                                title: "",
+                                text: "Loading...",
+                                buttons: false,
+                            });
+                        },
+                        success: function(response) {
+                            swal.close();
+                            console.log("response", response);
+                            if (response.response.n == 1) {
+                                swal({
+                                    icon: "success",
+                                    title: "",
+                                    text: response.response.msg,
+                                    button: "Close",
+                                }).then(() => {
+                                    location.reload(); // Reload the page
+                                });
+                            } else {
+                                swal({
+                                    icon: "error",
+                                    title: "",
+                                    text: response.response.msg,
+                                    button: "Close",
+                                });
+                            }
+                        }
+                    });
+                }else { 
+                    swal("withdrawn incomplete!",    
+                        { 
+                            icon: "error", 
+                        }
+                    );
+                } 
+                }
+            );
+            
+
+
+    }
+</script>
+
+{% endblock %}

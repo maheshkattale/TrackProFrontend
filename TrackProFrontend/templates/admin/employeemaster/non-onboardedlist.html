@@ -1,0 +1,1025 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+{% load encryption_filters %}
+
+<div class="nav-item newheading">
+Onboarding List</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+  .cursor-pointer{
+    cursor: pointer;
+
+  }
+  .viewdt {
+    cursor: pointer;
+
+    background: transparent ;
+    padding: 9px ;
+    border-radius: 24px ;
+    color: #174fa3  ;
+    min-width: 100px ;
+    text-align: center;
+    border: none;
+  }
+  .read-only-input {
+    pointer-events: none;
+  }
+  .progressbar {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 1rem 5rem;
+}
+  .imagepre{
+    width:40%;
+   
+  }
+  .profile-pic{
+    width: 100px !important;
+    height: 100px !important;
+    border: 2px solid #174fa3;
+    border-radius: 50%;
+  }
+  .fa-minus-circle{
+    font-size:22px
+  }
+  .form-floating .form-control {
+    border: none;
+    border-bottom: 1px solid #c2c2c2;
+    box-shadow:None;
+    border-radius: 0px;
+    outline:none;
+}
+.form-floating>label {
+    padding: 10px 0;
+}
+
+#addEmployeeForm input {
+    width: 100%;
+    font-size: 14px;
+    color: black; 
+
+}
+.modal-body input {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.onboard-btn {
+  background: #174fa3 !important;
+  padding: 9px !important;
+  margin: 0px !important;
+  border-radius: 24px !important;
+  /* font-size: 12px !important; */
+  color: white !important;
+  min-width: 100px !important;
+  text-align: center;
+  border: none;
+}
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: 0px;
+  background-color: transparent;
+  margin-left: 3px;
+  border: none;
+  border-bottom: 1px solid #b3b3b3;
+  outline: none;
+}
+.user-profile-pic{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+
+.row-border tbody td .email span {
+  display: block;
+}
+.row-border tbody td .email span:last-child {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.3);
+}
+.row-border tbody td.status .active {
+  background: #cff6dd;
+  color: #1fa750;
+}
+
+.row-border tbody td.status span {
+  position: relative;
+  border-radius: 30px;
+  padding: 4px 10px 4px 25px;
+}
+.row-border tbody td.status .active:after {
+  background: #23bd5a;
+}
+
+.row-border tbody td.status span:after {
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  content: '';
+  border-radius: 50%;
+}
+.row-border tbody td.status .active {
+  background: #cff6dd;
+  color: #1fa750;
+}
+
+
+.row-border tbody td.status .waiting {
+  background: #fdf5dd;
+  color: #cfa00c;
+}
+.row-border tbody td.status .waiting:after {
+  background: #f2be1d;
+}
+.row-border tbody td.status .verify {
+  background: #174fa3;
+  color: #ffffff;
+}
+.row-border tbody td.status .verify:after {
+  background: #ffffff;
+}
+
+.row-border tbody td.status .danger {
+  background: #f21717a2;
+  color: #ffffff;
+}
+.row-border tbody td.status .danger:after {
+  background: #ffffff;
+}
+.row-border tbody td.status span:after {
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  content: '';
+  border-radius: 50%;
+}
+.btn-blue{
+  background: #174fa3;
+  color: white;
+  text-align: center;
+  padding: 5px 16px;
+  font-weight: 500 ;
+
+  border-radius: 15px;
+}
+.btn-white {
+  background: #ffffff;
+  color: #174fa3;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 1px solid #174fa3;
+  font-weight: 500 ;
+
+}
+.btn-green {
+  background: #02ad08;
+  color: #ffffff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: 500 ;
+}
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+    <div class="title-div py-3">
+      <span class="company-title d-none">Onboarding List</span>
+
+    </div>
+
+
+    <div class="table-div">
+      <table id="onboardingtable" class="row-border" style="width:100%">
+        <thead>
+          <tr class="tableHeadings roleTableheadings">
+            <th style="width:10%;text-align: center;">Sr. No</th>
+            <th style="width:30%;text-align: left;">Employee</th>
+            <th style="text-align: left;">Documents Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            
+
+          {%for i in onboardinglist %}
+          <tr>
+              <td style="text-align: center;">{{forloop.counter}}</td>
+
+              <td class="d-flex align-items-center"> 
+                <div>
+                  {%if i.Photo != None %}
+                  <img class="user-profile-pic" src="{{imageURL}}{{i.Photo}}" />
+
+                  {%else%}
+                  <img class="user-profile-pic" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" >
+
+                  {%endif%}
+                </div>
+                <div class="ps-3 email">
+                  <span>{{i.Firstname}} {{i.Lastname}}</span>
+                  <span>Joining Date {{i.joiningdate}}</span>
+                </div>
+              </td>
+
+              {% if i.documentverified == True%}
+                <td style="text-align: left;" class="status"><span class="active">Verified Successfully</span></td>
+                {%else%}
+                <td style="text-align: left;" class="status"><span class="waiting">{{i.reasonofnonverification}}</span></td>
+              {% endif %}
+
+
+              {% if i.documentverified == True%}  
+                <td class=" cursor-pointer">
+                  <span class="btn-green" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}">
+                    Onboard
+                  </span>
+
+                </td>
+                
+              {%else%}
+
+                <td class="cursor-pointer">
+                  <a href="/document-verification/{{ i.id|encrypt_parameter }}">
+                  <span class="btn-blue">
+                    Verify 
+                  </span>
+                </a>
+
+                {%if i.onboarding_get_mail == False %}
+                  <a class="px-1" href="/send_onboarding_form/{{ i.id|encrypt_parameter }}">
+                    <span class="btn-white">
+                      send link 
+                    </span>
+                  </a>
+                {%endif%}
+
+                </td>
+              {%endif%}
+
+          </tr>
+
+          <div class="modal fade" id="exampleModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered w-25">
+              <div class="modal-content">
+                <div class="modal-header ps-4">
+                  <h5 class="modal-title my-3" id="exampleModalLabel">login Credentials</h5>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-12 px-4">
+                      <div class="form-floating">
+                        <input type="text"  class="form-control"  id="email{{i.id}}" placeholder="Enter email" name="email" value="{{i.email|default_if_none:""}}">
+                        <label for="email">Email<span style="color:red">*</span></label>
+                        <span id="emailerror{{i.id}}" class="error"></span>
+                      </div>
+                      <!--
+                      <div class="form-floating">
+                        <input type="text"  class="form-control"  id="password{{i.id}}" placeholder="Enter password" name="password" value="{{i.Password|default_if_none:""}}">
+                        <label for="password">Password<span style="color:red">*</span></label>
+                        <span id="passworderror{{i.id}}" class="error"></span>
+                      </div>
+                      -->
+  
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                  <button class="trackproBtn Role-btn" id="editEmployeeDetails"  onclick="return formValidation({{i.id}});">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+          {%endfor%}
+
+
+
+        </tbody>                 
+      </table>
+    </div>
+
+    {% for i in designationlist %}
+
+    
+      <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+          <div class="modal-content">
+            <div class="modal-header ps-4 ">
+              <h5 class="modal-title my-3" id="exampleModalLabel">Onboarding Details</h5>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12 px-4">
+                  <div class="form-floating">
+                    <input type="text" id="updatedesignation{{i.id}}" value="{{i.DesignationName}}" class="form-control" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                    <label for="updatedesignation{{i.id}}">Designation Name</label>
+                    <span id="designationnameerror{{i.id}}" class="error-message"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="updateDesignation({{i.id}})">Update</button>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="modal" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title py-2" id="exampleModalToggleLabel"> Documents Verification</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+           
+              <div class="common-box-section">
+
+                <div id="snackbar"></div>
+
+                  
+                <div class="row">
+
+                  <div class="col-md-12">
+                    <div class="circle d-flex justify-content-center">
+                      <div id="user_profile_pic">
+                       
+                      </div>
+                    </div>
+                    
+                  </div>
+                    <h5 class="my-3">Personal Details</h5>
+
+                        <div class="col-md-4">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control read-only-input" id="personalfirstname"  placeholder="name@example.com" value=""  oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                            <label for="personalfirstname"  class="form-content">First Name</label>
+                            <span id="personalfirstname_err" class="error"></span>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control read-only-input" id="personallastname" placeholder="name@example.com"  value=""  oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                            <label for="personallastname"  class="form-content">Last Name</label>
+                            <span id="personallastname_err" class="error"></span>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control read-only-input" id="personalmobno" placeholder="name@example.com" value=""  maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          <label for="personalmobno"  class="form-content">Mobile No</label>
+                          <span id="personalmobno_err" class="error"></span>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+
+                        <div class="form-floating mb-3">
+                          <input type="email" class="form-control read-only-input" id="personalemail" placeholder="name@example.com" value=""  name="email">
+                          <label for="personalemail"  class="form-content">Email Address</label>
+                          <span id="personalemail_err"  class="error"></span>
+                        </div>
+                        </div>
+
+                  
+
+                  <div class="col-md-4">
+
+                    <div class="form-floating mb-3">
+                      <input type="date" class="form-control read-only-input" id="personalbirthyear" placeholder="name@example.com"  value="">
+                      <label for="personalbirthyear"  class="form-content">Birth Date</label>
+                      <span id="personalbirthyear_err" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="bloodgroup" name="bloodgroup"  placeholder="name@example.com" value="">
+                      <label for="bloodgroup"  class="form-content">Blood Group</label>
+                      <span id="bloodgroup_err" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="permanantadd" name="permanentaddress"  placeholder="name@example.com" value="">
+                      <label for="permanantadd"  class="form-content">Permanant Address</label>
+                      <span id="permanantadd_err" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="residentialadd" placeholder="name@example.com"  value="">
+                      <label for="residentialadd"  class="form-content">Residential Address</label>
+                      <span id="residentialadd_err" class="error"></span>
+                    </div>
+                  </div>
+                </div>
+                <h5 class="my-3">Emergency Contact Details</h5>
+                <div class="row">
+
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="relation" name="relation1" placeholder="name@example.com" value="" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <label for="relation"  class="form-content">Relation</label>
+                      <span id="relation_err" class="error"></span>
+                    </div>
+                  </div>
+
+                  
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="relationmobno" name="relation1number" placeholder="name@example.com" value="" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                      <label for="relationmobno"  class="form-content">Mobile No</label>
+                      <span class="error" id="relationmobno_err"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="relation2" name="relation2" placeholder="name@example.com" value="" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <label for="relation2"  class="form-content">Relation</label>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="relation2mobno" name="relation2number" placeholder="name@example.com" value="" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                      <label for="relation2mobno"  class="form-content">Mobile No</label>
+                    </div>
+               
+                  </div>
+
+                </div>
+          
+                 <div class="row">
+                  <h5 class="my-3">Reference Details</h5>
+
+                  <div class="col-md-4">
+                     <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="refname1"  name="refname1" placeholder="name@example.com" value="">
+                        <label for="refname1"  class="form-content">Reference Name 1</label>
+                        <!-- <span class="error" id="refname1_err"></span> -->
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="refnumber1" name="refnumber1" placeholder="name@example.com"  value="">
+                        <label for="refmob1"  class="form-content">Mobile No</label>
+                        <!-- <span class="error" id="refmob1_err"></span> -->
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="refdesg1" name="refdesg1"  placeholder="name@example.com" value="">
+                        <label for="refdesignation1"  class="form-content">Designation</label>
+                        <!-- <span class="error" id="refdesignation1_err"></span> -->
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="refemail1" name="refemail1"  placeholder="name@example.com" value="">
+                        <label for="refemail1"  class="form-content">Email Address</label>
+                        <!-- <span class="error" id="refemail1_err"></span> -->
+                      </div>
+                 
+                    </div>
+                    <div class="col-md-12">
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                         <input type="text" class="form-control read-only-input" id="refname2" name="refname2"  placeholder="name@example.com" value="">
+                         <label for="refname2"  class="form-content">Reference Name 2</label>
+                       </div>
+                      </div>
+                    <div class="col-md-4">
+
+                       <div class="form-floating mb-3">
+                         <input type="text" class="form-control read-only-input" id="refnumber2" name="refnumber2"  placeholder="name@example.com" value="">
+                         <label for="refmob2"  class="form-content">Mobile No</label>
+                       </div>
+                     </div>
+                     <div class="col-md-4">
+                       <div class="form-floating mb-3">
+                         <input type="text" class="form-control read-only-input" id="refdesg2"  name="refdesg2" placeholder="name@example.com" value="">
+                         <label for="refdesignation2"  class="form-content">Designation</label>
+                       </div>
+                      </div>
+                     <div class="col-md-4">
+
+                       <div class="form-floating mb-3">
+                         <input type="text" class="form-control read-only-input" id="refemail2"  name="refemail2" placeholder="name@example.com" value="">
+                         <label for="refemail2"  class="form-content">Email Address</label>
+                       </div>
+                  
+                     </div>
+
+                     <div class="col-md-12">
+                      <h5 class="my-3">Previous Company Details</h5>
+                    </div>
+                     <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                         <input type="text" class="form-control read-only-input"  id="comapanyname" name="comapanyname" placeholder="name@example.com" value="">
+                         <label for="prevcmpname"  class="form-content">Company Name</label>
+                       </div>
+                    
+                     </div>
+                     <div class="col-md-6">
+                       <div class="form-floating mb-3">
+                         <input type="text" class="form-control read-only-input" id="companyaddress" name="companyaddress"  placeholder="name@example.com" value="">
+                         <label for="relationmobno"  class="form-content">Company Address</label>
+                       </div>
+                    </div>
+                 </div>
+
+
+                 <div class="row">
+                  <h5 class="my-3">Bank Details and Documents</h5>
+
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="bankname"  name="bankname" placeholder="name@example.com" value="" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <label for="bankname"  class="form-content">Bank Name</label>
+                      <span id="bankname_err" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control read-only-input" id="accountno"  name="accountnumber" placeholder="name@example.com" value="" >
+                      <label for="accountno"  class="form-content">Account Number</label>
+                      <span id="accountno_err" class="error"></span>
+                    </div>
+                  </div>
+
+
+                    <div class="col-md-4">
+
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="confirmaccountno" name="confirmaccountnumber"  placeholder="name@example.com" value="">
+                        <label for="confirmaccountno"  class="form-content">Confirm Account Number</label>
+                        <span id="confirmaccountno_err" class="error"></span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="ifsccode" name="ifsccode"  placeholder="name@example.com" value="">
+                        <label for="ifsc"  class="form-content">IFSC</label>
+                        <span id="ifsc_err" class="error"></span> 
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-floating mb-3">
+                          <input type="text"  value="" class="form-control read-only-input" id="pancard" name="pancard"  placeholder="name@example.com">
+                          <label for="pancard"  class="form-content">Pan Card</label>
+                          <span id="pancard_err" class="error"></span>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4">
+
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control read-only-input" id="adhaarcard"  name="adhaarcard" placeholder="name@example.com" value=""  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                        <label for="adhaarcard"  class="form-content">Adhaar Card</label>
+                        <span id="adhaarcard_err" class="error"></span>
+                      </div>
+                    </div>
+                  <div class="row">
+                    <div class="col-md-6">
+
+                      <div class="my-3">
+                        <div class="image-preview1 d-flex justify-content-center" id="pancardimagePreview">
+
+                        </div>
+                        <p id="pancardimage_err" class="error ms-5">Pancard</p>
+                      
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+
+                      <div class="my-3">
+                          <div class="image-preview d-flex justify-content-center"   id="adharimagePreview" >
+  
+                          </div>
+                        <p id="adhaarcardimage_err" class="error ms-5">Adhar Card</p>
+                      </div>
+                    
+                    </div>
+                   </div>
+                </div>
+          
+              </div>
+
+
+
+            </div>
+          </div>
+          
+          <div class="modal-footer" id="model-footer">
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="RejectModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="formstyle">
+          <div class="modal-content">           
+            <div class="modal-header ps-4">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Rejected Reason</h5>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row">
+                <div class="col-12 px-4">
+                  <div class="form-floating">
+                      <textarea  id="resone" class="form-control" placeholder="Enter Resone" name="Resone" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');"></textarea>
+                      <label for="resone">Reason<span style="color:red;">*</span></label>
+                      <span id="resoneerror" class="error"></span>
+                  </div>
+                </div>
+  
+            
+              </div>
+            
+            </div>
+            <div class="modal-footer mt-3" id="reject-footer">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  function rejectedDocument(id){
+    var resone = $('#resone').val();
+    if (IsValid(resone)) {
+        $('#resone').html();
+        $('#resoneerror').show().delay(3000).slideUp();
+        $('#resoneerror').html('Please enter reason');
+        $('#resone').focus();
+        return false;
+    }else{
+        $.ajax({ 
+            type: "POST",
+            url: frontendURL + "rejected-Document",
+            headers:{
+              'Authorization': 'Token '+ '{{token}}'
+            },
+            data: {
+                'UserId':id,
+                'resone':resone,
+                'csrfmiddlewaretoken':'{{csrf_token}}'
+            },
+            
+            success: function(response) {
+              console.log("res", response)
+            if(response.status != 1){
+              console.log("hiiii")
+                swal({
+                  icon: "warning",
+                  title: "",
+                  text: response.Msg,
+                  button: "Close",
+                  timer:2000,
+                });
+              }else{
+                swal({
+                icon: "success",
+                title: "",
+                text: response.Msg,
+                buttons: false,
+                timer:2000,
+              });
+              window.location.href = window.location.href
+               
+              } 
+             
+            }
+          });
+    }
+}
+
+
+  function acceptDocument(id){
+
+    $.ajax({ 
+        type: "POST",
+        url: frontendURL + "accept-document",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        
+        data: {
+            'UserId':id,
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+          console.log("res", response)
+        if(response.status != 1){
+          console.log("hiiii")
+            swal({
+              icon: "warning",
+              title: "",
+              text: response.Msg,
+              button: "Close",
+              timer:2000,
+            });
+          }else{
+            swal({
+            icon: "success",
+            title: "",
+            text: response.Msg,
+            buttons: false,
+            timer:2000,
+          });
+          
+            window.location.href = window.location.href
+          
+          
+           
+          } 
+         
+        }
+      });
+
+
+}
+  function getuserinfo(id){    
+      var inputs = document.querySelectorAll('.read-only-input');
+      inputs.forEach(function(input) {
+          input.classList.add('read-only');
+      });
+        $.ajax({
+          type: "GET",
+          url: frontendURL + "secondary-info-ajax",
+          data: {  
+              'id': id,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {   
+              console.log("reps",response)
+
+            if(response.users.data.Photo != null && response.users.data.Photo != "" ){
+              $("#user_profile_pic").html(`<img id="idProofPreview" class="profile-pic" src="`+response.hostUrl+response.users.data.Photo+`">`)
+            }else{
+              $("#user_profile_pic").html(`<img id="idProofPreview" class="profile-pic" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" >`)
+            }
+            
+            if(response.secondaryInfo.adhaarcardimage != null && response.secondaryInfo.adhaarcardimage != "" ){
+              $("#adharimagePreview").html(`<img id="idProofPreview" class="imagepre" src="`+response.hostUrl+response.secondaryInfo.adhaarcardimage+`">`)
+            }else{
+
+              $("#adharimagePreview").html(`<img id="idProofPreview" class="imagepre" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" >`)
+            }
+
+            if(response.secondaryInfo.pancardimage != null && response.secondaryInfo.pancardimage != "" ){
+              $("#pancardimagePreview").html(`<img id="idProofPreview" class="imagepre" src="`+response.hostUrl+response.secondaryInfo.pancardimage+`">`)
+            }else{
+
+              $("#pancardimagePreview").html(`<img id="idProofPreview" class="imagepre" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" >`)
+            }
+            if(response.users.data.documentverified == false){
+              $("#model-footer").html(`
+              <a href="javascript:void(0)" class="wizardbtn btn-next" onclick="acceptDocument(`+response.secondaryInfo.userId+`);">Accept</a>
+              <a href="javascript:void(0)" class="wizardbtn btn-next mx-5" data-bs-toggle="modal" data-bs-target="#RejectModal">Reject</a>
+              `)
+            }else{
+              $("#model-footer").html("")
+            }
+
+            $("#reject-footer").html(`
+            <button type="button" class="trackproBtn modalClose w-25" data-bs-dismiss="modal">Close</button>
+            <button onclick="return rejectedDocument(`+response.secondaryInfo.userId+`);" class="trackproBtn w-25" id="">Submit</button>
+            `)
+
+            $("#personalfirstname").val(response.users.data.Firstname)
+            $("#personallastname").val(response.users.data.Lastname)
+
+            $("#personalmobno").val(response.users.data.Phone)
+            $("#personalemail").val(response.users.data.personal_email)
+            $("#residentialadd").val(response.users.data.Address)
+            $("#personalbirthyear").val(response.users.data.BirthDate)
+            $("#bloodgroup").val(response.secondaryInfo.bloodgroup)
+            $("#permanantadd").val(response.secondaryInfo.permanentaddress)
+            $("#refname1").val(response.secondaryInfo.refname1)
+            $("#refnumber1").val(response.secondaryInfo.refnumber1)
+            $("#refdesg1").val(response.secondaryInfo.refdesg1)
+            $("#refemail1").val(response.secondaryInfo.refemail1)
+            $("#refname2").val(response.secondaryInfo.refname2)
+            $("#refnumber2").val(response.secondaryInfo.refnumber2)
+            $("#refdesg2").val(response.secondaryInfo.refdesg2)
+            $("#refemail2").val(response.secondaryInfo.refemail2)
+            $("#comapanyname").val(response.secondaryInfo.comapanyname)
+            $("#companyaddress").val(response.secondaryInfo.companyaddress)
+            $("#bankname").val(response.secondaryInfo.bankname)
+            $("#ifsccode").val(response.secondaryInfo.ifsccode)
+            $("#accountno").val(response.secondaryInfo.accountnumber)
+            $("#confirmaccountno").val(response.secondaryInfo.confirmaccountnumber)
+            $("#adhaarcard").val(response.secondaryInfo.adhaarcard)
+            $("#pancard").val(response.secondaryInfo.pancard)
+            $("#relation").val(response.secondaryInfo.relation1)
+            $("#relation2").val(response.secondaryInfo.relation2)
+            $("#relationmobno").val(response.secondaryInfo.relation1number)
+            $("#relation2mobno").val(response.secondaryInfo.relation2number)
+        
+        
+          }
+      });
+              
+  }
+    $(document).ready(function () {
+        $('#onboardingtable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+
+
+
+    function formValidation(id){
+
+        var email = $('#email'+id).val().trim();   
+        //var Password = $('#password'+id).val().trim();   
+      
+        if (!validateEmail(email)) {
+          $('#emailerror'+id).show().delay(3000).slideUp();
+          $('#emailerror'+id).html('Please enter valid email');
+          $('#email'+id).focus();
+          return false;
+      }else{
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "onboard-login-password/"+id,
+            data: {
+                'id': id,
+                'email':email,
+                //'Password':Password,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {   
+                console.log("reps",response)
+                if(response.n == 1){
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                        timer:2000,
+                      });
+                    window.location = frontendURL + "onboarding-list";
+                }else{
+                    swal({
+                        icon: "error",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                        timer:2000,
+                      });
+                    window.location = frontendURL + "onboarding-list";
+                }
+                
+            }
+        });
+    }
+      
+    }
+{% comment %} ------------------------------------------------------------------ {% endcomment %}
+      function updateDesignation(id) {
+        var updatedesignation = $('#updatedesignation'+id).val().trim();
+
+        if (IsValid(updatedesignation)) {
+          $('#designationnameerror'+id).html('');
+          $('#designationnameerror'+id).show().delay(3000).slideUp();
+          $('#designationnameerror'+id).html('Designation Name is required');
+          $('#updatedesignation'+id).focus();
+            return false;
+        }else{
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "updatedesignation",
+            data: {
+                'DesignationName': updatedesignation,
+                'designationId':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response.data.n)
+                if(response.data.n == 1){
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                        timer:2000,
+                      });
+                    window.location = frontendURL + "designation";
+                }else{
+                    swal({
+                        icon: "error",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                        timer:2000,
+                      });
+                    window.location = frontendURL + "designation";
+                }
+                
+            }
+        });
+        }
+    }
+</script>
+<script>
+  function firststepvalidation() {                
+  $(".progress").css({"width": "50%"});
+  $("#employeemaster").addClass('progress-step-active');
+  $("#form-personal").removeClass('form-step-active');
+  $("#form-employee").addClass('form-step-active'); 
+      
+  }
+  function returnfirststepvalidation(){ 
+
+    $(".progress").css({"width": "0%"});
+    $("#employeemaster").removeClass('progress-step-active');
+    $("#form-personal").addClass('form-step-active');
+    $("#form-employee").removeClass('form-step-active');          
+
+  }
+
+  function returnsecondstepvalidation(){ 
+    $(".progress").css({"width": "50%"});
+    $("#employeemaster").addClass('progress-step-active');
+    $("#form-personal").removeClass('form-step-active');
+    $("#form-employee").addClass('form-step-active');  
+    $("#bankmaster").removeClass('progress-step-active');
+    $("#form-bank").removeClass('form-step-active');
+    $("#form-doc").removeClass('form-step-active');
+    $("#docmaster").removeClass('progress-step-active');
+
+  }
+  function secondstepvalidation(){         
+    $(".progress").css({"width": "100%"});
+    $("#bankmaster").addClass('progress-step-active');
+    $("#form-personal").removeClass('form-step-active');
+    $("#form-employee").removeClass('form-step-active');   
+    $("#form-bank").addClass('form-step-active');
+          
+    }
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,399 @@
+.select2-container--default .select2-selection--single{
+    border-bottom:1px solid rgb(214, 214, 214) !important;
+    border:none;
+    height:58px;
+    box-shadow:none;
+    border-radius:0px;
+    }
+    .add-icon-education>.fa-plus {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .trackproBtn {
+        width: 150px !important;
+        height: 38px !important;
+        margin :0px !important;
+    }
+  
+    .add-icon-education{
+      border: 2px solid red;
+      border-radius: 50%;
+      padding: 0px 3px;
+    }
+  
+    .label-heading{
+      font-weight:500;
+      font-size:18px
+    }
+    .label-text{
+      font-size:12px
+    }
+    .card-body-reason-text{
+      font-size: 11px;
+      color: #9b9b9b;
+      /* height: 50px; */
+      padding-bottom: 10px 0px;
+  
+      }
+      .editpreviousCompanyBtn{
+        cursor:pointer;
+      }
+      .text-primary{
+        color: #174fa3 !important;
+      }
+        .form-content {
+          color: #5ecff8 !important;
+          font-weight: 500;
+          font-size: 16px;
+        }
+        .error{
+          text-transform: capitalize;
+  
+        }
+        #profileimage_err{
+          text-align:center;
+          padding:10px;
+        }
+        .circle{
+          display: flex;
+          justify-content: center;
+          height: 110px;
+          margin-top: -20px;
+          position: relative;
+        }
+        .file-upload {
+          display: none;
+      }
+  
+      .upload-button{
+      position: absolute;
+      top: 80px;
+      left: 54%;
+      cursor: pointer;
+      font-size: 25px;
+      }
+      .cursor-pointer{
+        cursor:pointer;
+      }
+  
+      .profile-pic {
+        width: 80px !important;
+        height: 80px !important;
+        border: 2px solid #174fa3;
+        border-radius: 50%;
+      }
+  
+      .preview-img{
+        width: 120px !important;
+        height: 120px !important;
+        border: 2px solid #174fa3;
+        border-radius: 50%;
+      }
+      .imagepre{
+        width:100%;
+        border:2px dotted #174fa3;
+        min-height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        color: lightgray;
+        padding:3px;
+  
+  
+  
+      }
+      .image-preview {
+         margin-top: 0px; 
+  
+    }
+    .read-only-input {
+      pointer-events: none;
+    }
+  
+    table {
+        width: 100%;
+    }
+  
+  
+    table, th, tr {
+      border-bottom: 1px solid #b6b6b6;
+      }
+  
+    th, td {
+        padding: 8px;
+        text-align: left;
+        color:#174fa3;
+        font-weight: 500;
+  
+    }
+  
+    .table-input-text{
+      outline:none;
+      border:none;
+    }
+  
+  
+    .card {
+      border-radius: 6px;
+      background: #FFF;
+      box-shadow: 0px 4px 8px #00000029;
+    }
+    .card-header-name-txt {
+      color: #403f3f;
+      font-size: 18px;
+      padding-bottom: 16px;
+    }
+    .card-header {
+      padding: 0.5rem 1rem;
+      margin-bottom: 0;
+      background-color: white;
+      border-bottom: none;
+      color: #403f3f;
+    }
+    .card-body {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+    .card-header-txt {
+      font-size: 12px;
+    }
+    .card-header-blue-txt {
+      color: #00AEEF;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .cardfooter {
+      background: white;
+      border: none;
+    }
+    .view-image-txt{
+      font-size: 12px;
+      color: #174fa3;
+      font-weight:500;
+      cursor:pointer;
+    }
+  
+  
+    label {
+  
+      display: block;
+  
+      font-size: 16px;
+  
+      font-weight: 500;
+  
+      padding: 1rem 0 !important;
+      opacity:1 !important;
+  
+    }
+    .form-content {
+      color: #174fa3 !important;
+    }
+    input {
+      width: 100%;
+      font-size: 16px;
+      color: #5f5b5b;
+      border: none;
+      border-bottom: 1px solid rgb(214, 214, 214);
+      background: transparent;
+      height: 30px;
+      transition: border 0.4s ease;
+      box-shadow: none !important;
+      border-radius: 0px !important;
+    }
+  
+    select {
+      width: 100%;
+      font-size: 16px;
+      color: #5f5b5b;
+      border: none;
+      border-bottom: 1px solid rgb(214, 214, 214);
+      background: transparent;
+      height: 30px;
+      transition: border 0.4s ease;
+      box-shadow: none !important;
+      border-radius: 0px !important;
+    }
+    .marksheetimage{
+      display:none;
+    }
+  
+    .btn-primary {
+      --bs-btn-color: #fff;
+      --bs-btn-bg: #00AEEF;
+      --bs-btn-border-color: #00AEEF;
+      --bs-btn-hover-color: #fff;
+      --bs-btn-hover-bg: #0b5ed7;
+      --bs-btn-hover-border-color: #174fa3;
+      --bs-btn-focus-shadow-rgb: 49,132,253;
+      --bs-btn-active-color: #fff;
+      --bs-btn-active-bg: #174fa3;
+      --bs-btn-active-border-color: #0a53be;
+      --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+      --bs-btn-disabled-color: #fff;
+      --bs-btn-disabled-bg: #00AEEF;
+      --bs-btn-disabled-border-color: #00AEEF;
+    }
+    .label-div >span{
+      display:block;
+    }
+    .profile-upload-label{
+      color: white !important;
+      background: #174fa3;
+      border-radius: 25px;
+      padding: 10px 17px!important;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .i1mage-div-preview{
+      border:1px solid #174fa3;
+    }
+  
+  
+    .contain {
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .item {
+      align-items: center;
+      background-color: tomato;
+      color: white;
+      display: flex;
+      height: 300px;
+      justify-content: center;
+    }
+    .prodwrapper{
+      position: relative;
+    }
+    .emhead{
+        font-size: 18px;
+        margin: 12px 0px;
+        font-weight: 500;
+    }
+    
+    .prodwrapper .prodsearch {
+      background: #fff;
+      width: 100%;
+      border-radius: 5px;
+      position: absolute;
+      z-index: 5;
+      box-shadow: none;
+    }
+    .prodsearch input {
+      height: 36px;
+      width: 100%;
+      outline: none;
+      border-radius: 5px;
+      box-shadow: none;
+    }
+    form.user .form-control-user {
+      padding: 1rem 0.4rem;
+    }
+    
+    .prodsearch.active input {
+      border-radius: 5px;
+    }
+  
+    .table-bordered td{
+        font-size: 12px;
+    }
+    form.user.cust-details{
+      padding-top: 25px;
+    }
+    .prodsearch .autocomp-box {
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid lightgrey;
+    }
+    .prodsearch.active .autocomp-box {
+      padding: 10px 8px;
+      opacity: 1;
+      pointer-events: auto;
+      border: 1px solid lightgrey;
+    }
+    .autocomp-box li {
+      list-style: none;
+      padding: 5px 6px;
+      font-size: 14px;
+      display: none;
+      width: 100%;
+      cursor: default;
+      border-radius: 3px;
+    }
+    .prodsearch.active .autocomp-box li {
+      display: block;
+    }
+    .autocomp-box li:hover {
+      background: #efefef;
+      cursor: pointer;
+    }
+    
+    .digit-group input {
+        background-color: white;
+        height: 45px;
+        width: 42px;
+        border-radius: 6px;
+        outline: none;
+        font-size: 1.125rem;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+  
+    .digit-group	.splitter {
+      padding: 0 5px;
+      color: white;
+      font-size: 24px;
+    }
+    .educational-input{
+      box-shadow: 2px 3px 4px #00000029 !important;
+      border-radius: 6px !important;
+      outline: none;
+      padding: 0px 10px;
+    }
+    .select2-container--default .select2-selection--single,.form-floating .form-control {
+      border-bottom: 1px solid #b6b6b6 !important;
+  
+    }
+    .select2-container--default .select2-selection--single 
+  
+  
+    .text-right{
+      text-align:right;
+    }
+    .table td, .table th {
+      padding: 1.3rem 0.4rem;
+    }
+    .heading-company{
+      font-weight: 400;
+      font-size: 14px;
+      white-space: nowrap; 
+      width: 150px; 
+      overflow: hidden;
+      text-overflow: ellipsis; 
+    
+    }
+    .heading-parameters  {
+      color: #979797;
+      white-space: nowrap; 
+      width: 150px; 
+      overflow: hidden;
+      text-overflow: ellipsis; 
+    }
+    .select2-selection__rendered{
+      font-size: 14px !important;
+      padding: 25px !important;
+      color:black;
+    }
+    td>label~div{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100px; 
+      color: #00cf00;
+  
+    }

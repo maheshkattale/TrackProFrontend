@@ -1,0 +1,639 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Weekly Report
+</div>
+{% endblock %}
+{% block content %}
+
+
+<style>
+  .activeicons{
+    width:24px;
+    height:26px;
+  }
+   .select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #acacac !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background-color: transparent;
+    border:0;
+}
+.pagehead{
+    font-size: 20px;
+    font-weight: 500;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+.chartlabels{
+  font-size:12px;
+}
+.chartlabels p{
+  margin-bottom:10px;
+}
+.chartdivclass {
+      width: 100%;
+      height: 170px;
+    }
+.detailsdiv{
+  color:#00aeef;
+  font-size:14px;
+}
+.profile-pic{
+  width:100%;
+  border-radius: 50%;
+}
+.imagediv{
+  width:45px;
+  height:45px;
+}
+.card {
+    border: none !important;
+}
+.accordion-button{
+  padding:15px 10px 15px 7px !important;
+  background-color: #e8e8e8 !important;
+}
+.accordion-item{
+  margin-bottom:10px !important;
+}
+.weeklabel {
+    margin-left: auto;
+    background-color: #3DAB45;
+    color: white;
+    padding:6px 6px 6px 12px;
+    height: 30px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 20px 0px 0px 20px;
+    font-size: 13px;
+}
+.empname{
+font-size:15px;
+font-weight:500;
+}
+
+.empid{
+  font-size:12px;
+font-weight:500;
+color:rgb(149, 149, 149);
+}
+.employeedetails{
+  margin-top:2px;
+}
+.card-header{
+  padding:7px 0px 7px 15px;
+  background-color: #fff;
+}
+.mdcontent{
+  height:500px;
+}
+.myTable>tbody>tr>td{
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 4px !important;
+    font-size:13px;   
+    border-bottom: 1px solid #00000063; 
+
+}
+.myTable>thead>tr>th{
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size:14px;    
+    color:black !important;
+    border-bottom: 1px solid black !important;
+}
+.accordion-body {
+    padding: 2px 10px;
+}
+.greenmarks{
+  color:#3DAB45;
+}
+.redmarks{
+  color:red;
+}
+.Graysquare{
+  color: #D3D3D3;
+}
+.Bluesquare{
+  color: #00aeef;
+}
+.fa-square{
+  font-size: 15px;
+    margin-right: 6px;
+}
+.fa-clock-o{
+  font-size: 15px;
+}
+.mainchartdiv{
+  margin-top:28px;
+}
+.card-body{
+  padding:2px 10px;
+}
+.datetootip {
+  position: relative;
+  display: inline-block;
+  color:black;
+  cursor:pointer;
+  font-size:12px;
+  padding-left:10px;
+}
+.datetootip .tooltiptext {
+  visibility: hidden;
+  width: 145px;
+  background-color: #fff;
+  color: #056b90;
+  text-align: center;
+  border:1px solid #fff;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 10px;
+  /* height:30px; */
+
+  /* Position the datetootip */
+  position: absolute;
+  z-index: 1;
+  top: 95%;
+  left: -12%;
+  box-shadow: 2px 3px 4px #00000029;
+}
+.datetootip:hover{
+  font-size:12px;
+ 
+}
+.tooltiptext a{
+  text-decoration: none;
+}
+.datetootip:hover .tooltiptext {
+  visibility: visible;
+}
+.amount{
+    display: flex;
+    justify-content: flex-end;
+
+}
+.hrsdetails{
+  color:black;
+  font-weight:500;
+}
+.fa-arrow-down{
+  margin-right:2px;
+}
+.fa-arrow-up{
+  margin-right:2px;
+}
+.finalsbmtbtn {
+    background-color: #174fa3;
+    color: white;
+    border: 1px solid #174fa3;
+    border-radius: 25px;
+    padding: 4px 8px;
+}
+</style>
+
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+<div id="snackbar"></div>
+
+<div class="innercontainer mx-3">
+    <div class="row">
+       <div class="col-3 p-2">
+           <div class="pagehead d-none">Weekly Report</div>
+       </div>
+       <div class="col-3 p-2">
+       </div>
+       <div class="col-2 p-2">
+           <select class="form-select select2dropdown" aria-label="Default select example" onchange="getweeklyinfo();" id="Employee">
+               {% for u in employeelist %}
+               <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
+               {% endfor %}
+               <option value="">All Employees</option>
+
+              </select>
+       </div>
+       <div class="col-2 p-2">
+        <select class="form-select select2dropdown" aria-label="Default select example" onchange="getOnChangeWeek();" id="Year">
+            {% for y in Yearlist %}
+              {% if y.Year == currentyear %}
+              <option value="{{y.Year}}" selected>{{y.Year}}</option>
+              {%else%}
+              <option value="{{y.Year}}">{{y.Year}}</option>
+              {% endif %}
+            {% endfor %}
+           </select>
+    </div>
+    <div class="col-2 p-2">
+        <select class="form-select select2dropdown" aria-label="Default select example" onchange="getweeklyinfo();" id="Week">
+            <option value="All">All</option>
+            {% for y in weeklist %}
+              {% if y.Week == prevweek %}
+              <option value="{{y.Week}}" selected>{{y.Week}}</option>
+              {%else%}
+              <option value="{{y.Week}}">{{y.Week}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+    </div>
+    </div>
+
+
+    <div class="mt-4 cardcontainer">
+      
+    
+        
+    </div>
+
+</div>
+
+<!--modal-------------------------view details---------------->
+<div class="modal" tabindex="-1" id="viewdetails">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content mdcontent">
+      <div class="modal-header">
+        <h5 class="modal-title">Task Details</h5>
+        <span>
+
+        <button type="button" class="finalsbmtbtn mx-3" id="exportBtn">Excel <i class="mx-1 fa fa-solid fa-download"></i></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </span>
+      </div>
+      <div class="modal-body" id="viewdetailsbody">
+        <div class="accordion" id="accordionExample">
+
+
+
+
+
+
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<script>
+  
+$(document).ready(function(){
+  getweeklyinfo();
+});
+
+function getOnChangeWeek() {
+     
+    var year = $('#Year').val()
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/TrackProResultWeek',
+        data: {
+            'year': year,
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+        },
+        dataType: 'json',
+        success: function(response) {
+            $('#Week').empty()
+            $.each(response, function(i, o) {
+                $('#Week').append(`<option value="${o.Week}" >${o.Week} </option>`)
+            });
+            $('#Week').append(`<option value="All">All Weeks</option>`)
+            //populateTable();
+            getweeklyinfo();
+        },
+        error: function(error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+
+
+
+function getweeklyinfo(){
+   
+  var year = $("#Year").val();
+  var week = $("#Week").val();
+  var Employee = $("#Employee").val();
+  var exists = $("#Week option[value='All']").length > 0;
+
+  if (Employee == ""){
+    $('#Week option[value="All"]').remove();
+  }else{
+   if (exists == false){
+    $('#Week').prepend(`<option value="All">
+                                       All
+                                  </option>`);
+   }
+  }
+ 
+  weeklist=[]
+  if (week == "All"){
+    $("#Week").children().each(function(){
+      weeklist.push($(this).attr('value'))
+    })
+    var filteredArrayweek = weeklist.filter(function(e) { return e !== 'All' })
+    week = filteredArrayweek
+  }else{
+    var userweek = weeklist.push($("#Week").val());
+    week = weeklist
+  }
+  $.ajax({
+    type: 'post',
+    url: frontendURL + 'task/weeklyreportdata',
+    data: {
+        'year':year,
+        'week':JSON.stringify(week),
+        'Employee':Employee,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+    },
+    dataType: 'json',
+    beforeSend: function() {
+      $('.taskcontent').html(
+          '<i class="fa fa-spin fa-spinner"></i> Please Wait...'
+      );
+    },
+    success: function(response) {
+      var taskdetail ="" ; 
+      $.each(response.data, function(i,o){
+       
+
+       taskdetail += `
+       <div class="col-md-4">
+          <div class="card h-100 d-flex flex-column">
+            <div class="card-header">
+              <div class="d-flex">
+                <div class="imagediv"> 
+                  <img src="`+o.Userimage+`" class="profile-pic">
+                </div>
+                <div class="employeedetails ms-2">
+                  <div class="empname">`+o.Empname+` </div>
+                  <div class="empid">Employee Id : `+o.EmployeeId+` </div>
+                </div>
+                <span class="weeklabel">Week `+o.week+`</span>
+                </div>
+            </div>
+            <div class="card-body">
+             <div class="row">
+              <div class="col-md-6 piechartdiv">
+                <div class="chartdivclass" id="chartdiv`+o.piechartid+`"></div>
+              </div>
+              <div class="col-md-6 chartlabels p-0">
+                    <div class="mainchartdiv">
+                      <p class="hrsdetails"><span class=""><i class="fa fa-square Graysquare"></i></span><span></span>Total Hrs :<span> `+o.Totalweekhours+`</span></p>
+                      <p class="hrsdetails"><span class=""><i class="fa fa-square Bluesquare"></i></span><span></span>Worked Hrs :<span> `+o.TotalWorkedHours+`</span></p>
+                      <p class="hrsdetails"><i class="fa fa-clock-o"></i> Difference : `+o.Diffstring+`</p>
+                      <div class="text-center me-3 pt-2">
+                      <button class="finalsbmtbtn" data-bs-toggle="modal" data-bs-target="#viewdetails" onclick = "viewprojectdetails(`+o.userid+`,`+o.week+`,`+o.year+`);">View Details </button>
+                      </div>
+                    </div>
+              </div>
+             </div>
+            </div>
+          </div>
+        </div>
+          `
+      })
+    var taskcontenthtml = `<div class="row g-3 col-md-12" id="multipletask">`+taskdetail+`</div>`
+    $('.cardcontainer').html(taskcontenthtml);
+
+    $.each(response.data, function(i,o){
+      piechartid = "chartdiv"+(o.piechartid)
+      piedataset = o.Piechartdata
+      makepiechart(piechartid,piedataset)
+    })
+
+    },
+    error: function(error){
+        console.log('error; ' + JSON.stringify(error));
+    }
+});
+}
+
+
+
+function makepiechart(piechartid,dataset){
+
+      am4core.useTheme(am4themes_animated);
+      am4core.addLicense("ch-custom-attribution");
+        var chart = am4core.create(piechartid, am4charts.PieChart3D);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+        chart.data = dataset
+
+        chart.depth = 15;
+        
+        // chart.legend = new am4charts.Legend();
+        // chart.legend.position = "right";
+
+        var series = chart.series.push(new am4charts.PieSeries3D());
+        series.dataFields.value = "value";
+        series.labels.template.text = "[font-size: 10px]{tooltipvalue}% [/]";
+       
+        series.slices.template.tooltipText = "{tooltipvalue}%";
+        series.dataFields.radiusValue = "sliceradius";
+        series.dataFields.depthValue = "sliceradius";
+        series.dataFields.category = "country";
+        series.slices.template.cornerRadius = 5;
+        series.ticks.template.disabled = true;
+        series.alignLabels = false;
+        // series.labels.template.radius = am4core.percent(-5);
+        series.labels.template.disabled = true;
+        series.colors.list = [
+        am4core.color("#00aeef"),
+        am4core.color("#D3D3D3"),
+        
+        ];
+        am4core.percent(-40);
+
+}
+
+
+
+
+
+  // Utility function to convert string to ArrayBuffer
+  function s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
+
+  var empname=''
+  var exceldata = []
+   // Function to create and download Excel file
+function downloadExcel() {
+    // Create a worksheet
+    var ws = XLSX.utils.json_to_sheet(exceldata);
+    // Create a workbook
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Tasks');
+
+    // Create a Blob from the workbook with specific content type
+    // var blob = XLSX.write(wb, { bookType: 'xlsx', type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    var blob = new Blob([s2ab(XLSX.write(wb, { bookType: 'xlsx', type: 'binary' }))], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    // Create a download link and trigger a click to download the file
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = empname +' tasks.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+
+  }
+
+
+
+
+
+
+    $("#exportBtn").on("click", downloadExcel);
+
+
+
+function viewprojectdetails(userid,week,year){
+  var year = year
+  var week = week
+  var Employee = userid
+  $.ajax({
+    type: 'post',
+    url: frontendURL + 'task/weeklyprojectreportdata',
+    data: {
+        'year':year,
+        'week': week,
+        'Employee':Employee,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+    },
+    dataType: 'json',
+    beforeSend: function() {
+      $('.taskcontent').html(
+          '<i class="fa fa-spin fa-spinner"></i> Please Wait...'
+      );
+    },
+    success: function(response) {
+      exceldata = []
+
+      $.each(response.data, function(i,o){
+
+        $.each(o.userprojecttaskdata, function(a,b){
+          console.log("b.grade",b.grade)
+            if(b.grade == "undefined" || b.grade=='' || b.grade==undefined || b.grade==null){
+              b.grade="NA"
+            }
+
+            empname=b.CreatedBy
+            dict={
+              'Project':b.ProjectName,
+              'Task start Date':b.AssignDate,
+              'Task Details':b.TaskTitle,
+              'Assign By':b.AssignByStr,
+              'Grade':b.grade,
+              'Task Hour':b.taskhours,
+            }
+            exceldata.push(dict)
+        })
+      })
+      console.log("resmodal",exceldata)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      var taskdetail ="" ; 
+      $.each(response.data, function(i,o){
+       
+
+       taskdetail += `
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading`+o.Project+``+o.AssignTo+``+o.Week+`">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#modal`+o.Project+``+o.AssignTo+``+o.Week+`" aria-expanded="false" aria-controls="modal`+o.Project+``+o.AssignTo+``+o.Week+`">
+                <span class="col-md-6">Project : `+o.ProjectName+`</span> 
+                <span class="col-md-5 amount">`+o.projecthourstring+`</span>
+              </button>
+            </h2>
+            <div id="modal`+o.Project+``+o.AssignTo+``+o.Week+`" class="accordion-collapse collapse" aria-labelledby="heading`+o.Project+``+o.AssignTo+``+o.Week+`" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+
+                <table class="table myTable table-hover">
+                  <thead>
+                    <th>Task Date</th>
+                    <th>Task Detail</th>
+                    <th>Assign By</th>
+                    <th>Grade</th>
+                    <th class="">Task Hours</th>
+                  </thead>
+
+                  <tbody>
+                    ${o.userprojecttaskdata.map(l => `
+                      
+                    <tr>
+                        <td>${l.AssignDate}</td>
+                        <td style="width:45%;" ><div class="px-2">${l.TaskTitle}</div></td>
+                        <td>${l.AssignByStr}</td>
+                        <td>${o.grade}</td>
+                        <td  style="width:19%;" class="ps-2"><p class="datetootip">` + l.taskhours + ` <span class="tooltiptext">
+                                  ${l.daywisetime.map(k => `
+                                      <span> ${k.date} : ${k.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                    </tr>
+                    `).join("\n")}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+       
+        `
+      })
+  
+    $('#accordionExample').html(taskdetail);
+    }
+  })
+  
+}
+</script>
+
+
+
+{% endblock %}

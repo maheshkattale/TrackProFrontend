@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="more_menu" transform="translate(-896 -515)">
+    <rect id="icon_frame" width="24" height="24" transform="translate(896 515)" fill="none"/>
+    <g id="three_dot_menu" transform="translate(28 2)">
+      <circle id="icon_placeholder" cx="2" cy="2" r="2" transform="translate(886 523)" fill="#222"/>
+      <circle id="icon_placeholder-2" data-name="icon_placeholder" cx="2" cy="2" r="2" transform="translate(878 523)" fill="#222"/>
+      <circle id="icon_placeholder-3" data-name="icon_placeholder" cx="2" cy="2" r="2" transform="translate(870 523)" fill="#222"/>
+    </g>
+  </g>
+</svg>

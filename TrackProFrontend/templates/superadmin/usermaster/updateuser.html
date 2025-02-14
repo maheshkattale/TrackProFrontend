@@ -1,0 +1,155 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+
+{% endblock %}
+{% block content %}
+<style>
+    .updateform label{
+        padding-bottom:4px;
+    }
+.ui-datepicker-calendar{
+    opacity:1;
+}
+</style>
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<main class="main-wrapper">
+
+<div>
+    <h5 class="mb-4">
+        Update User
+    </h5>
+</div>
+   
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <div id="snackbar"></div>
+                    <form class="updateform" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                        <div class="col-md-6">                   
+                            <div class="position-relative form-group">
+                                <label for="firstName" class="">First Name</label>
+                                <input name="firstName" id="firstName" placeholder="Enter First name" type="text" class="form-control" value="{{userinfo.Firstname}}">
+                                <span id="firstName_err" class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">                   
+                            <div class="position-relative form-group">
+                                <label for="lastName" class="">Last Name</label>
+                                <input name="lastName" id="lastName" placeholder="Enter Last name" type="text" class="form-control" value="{{userinfo.Lastname}}">
+                                <span id="lastName_err" class="error"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">                   
+                            <div class="position-relative form-group">
+                                <label for="email" class="">Email</label>
+                                <input name="email" id="email" placeholder="Enter Email" type="email" class="form-control" value="{{userinfo.email}}">
+                                <span id="email_err" class="error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">                   
+                            <div class="position-relative form-group">
+                                <label for="mobileNumber" class="">Mobile Number</label>
+                                <input name="mobileNumber" id="mobileNumber" placeholder="Enter Mobile Number" type="text" class="form-control" maxlength="10" value="{{userinfo.Phone}}">
+                                <span id="mobileNumber_err" class="error"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="role" class="">Role </label>
+                                <select id="role" class="form-control text-capitalize" name="role">
+                                    <option value="">Select Role </option>
+                                    {% for p in rolelist %}
+                                    {%if p.RoleName == userinfo.RoleID %}
+                                    <option class="text-capitalize" value="{{p.id}}" selected>{{p.RoleName}}</option>
+                                    {%else%}
+                                    <option class="text-capitalize" value="{{p.id}}">{{p.RoleName}}</option>
+                                    {%endif%}
+                                    {%endfor%}
+                                </select>
+                                <span id="role_err" class="error"></span>
+                            </div>
+                        </div>
+                       
+
+                    </div>
+                
+               
+                <div class="d-flex btndiv my-3">
+                    <a href="{% url 'role:superuserlist' %}" class="btn cancelbtn mt-3">Cancel</a>
+                    <button class="btn submitbtn mt-3" onclick="return formValidation();" type="submit">Submit</button>
+                </div>
+                      
+                    </form>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+<script>
+    function formValidation(){
+        var firstName = $('#firstName').val().trim();   
+        var lastName = $('#lastName').val().trim();   
+        var email = $('#email').val().trim();   
+        var mobileNumber = $('#mobileNumber').val().trim();   
+        var role = $('#role').val(); 
+      
+        if (IsValid(firstName)) {
+            $('#firstName_err').show().delay(3000).slideUp();
+            $('#firstName_err').html('First Name is required');
+          $('#firstName').focus();
+          return false;
+        }else if (IsValid(lastName)) {
+            $('#lastName_err').show().delay(3000).slideUp();
+            $('#lastName_err').html('Last Name is required');
+            $('#lastName').focus();
+            return false;
+        }else if (IsValid(email)) {
+            $('#email_err').show().delay(3000).slideUp();
+            $('#email_err').html('Email is required');
+            $('#email').focus();
+            return false;
+        }else if (!validateEmail(email)) {
+            $('#email_err').show().delay(3000).slideUp();
+            $('#email_err').html('Invalid Email');
+            $('#email').focus();
+            return false;
+        }else if (IsValid(mobileNumber)) {
+            $('#mobileNumber_err').show().delay(3000).slideUp();
+            $('#mobileNumber_err').html('Mobile Number field is required');
+            $('#mobileNumber').focus();
+            return false;
+        }else if(mobileNumber.length != 10){
+            $('#mobileNumber_err').show().delay(3000).slideUp();
+            $('#mobileNumber_err').html('Mobile Number should be of 10 digits');
+            $('#mobileNumber').focus();
+            return false;
+        }else if (IsValid(role)) {
+            $('#role_err').show().delay(3000).slideUp();
+            $('#role_err').html('Role field is required');
+            $('#role').focus();
+            return false;
+        }
+      
+     
+      } 
+</script>
+
+{% endblock %}

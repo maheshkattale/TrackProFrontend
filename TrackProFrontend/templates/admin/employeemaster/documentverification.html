@@ -1,0 +1,1898 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Documents Verification</div>
+{% endblock %}
+{% block content %}
+<link src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+<link src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css"/>
+<style>
+  .nav-pills-custom .nav-link.active {
+    color: #174fa3;
+    background: #fff;
+    box-shadow: 0px 4px 8px #0000001F;
+  }
+  .nav-pills-custom .nav-link.active img{
+    filter: invert(17%) sepia(94%) saturate(1178%) hue-rotate(185deg) brightness(91%) contrast(101%);
+  }
+  .nav-pills-custom .nav-link {
+    color: grey;
+    position: relative;
+  }
+  .leftheading{
+    font-weight:500;
+    margin-left:5px;
+   
+  }
+  .read-only-input {
+    pointer-events: none;
+    outline:none;
+  }
+  .modal-body {
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+  .leftheading{
+    font-weight:500;
+    margin-left:5px;
+  }
+
+  .dochead{
+    font-size:20px;
+    font-weight:500;
+    padding:0px 0px 10px 0px;
+  }
+  .slideshow-container {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+  }
+  .veryactive{
+    display:block;
+  }
+
+  /* Hide the images by default */
+  .mySlides {
+    display: none;
+  }
+
+  /* Next & previous buttons */
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    font-weight: bold;
+    font-size: 22px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+  }
+
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+
+  /* Caption text */
+  .text {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+  }
+  .doc_container{
+    width:100%;
+  }
+
+  /* Number text (1/3 etc) */
+  .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+  }
+
+  /* The dots/bullets/indicators */
+  .dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+
+  .active, .dot:hover {
+    background-color: #717171;
+  }
+
+  .secheadings{
+    font-weight:500;
+    font-size:18px;
+  }
+  /* Fading animation */
+  .imagefade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+
+  @keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+  }
+
+  .contain {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .item {
+    align-items: center;
+    background-color: tomato;
+    color: white;
+    display: flex;
+    height: 300px;
+    justify-content: center;
+  }
+    .prodwrapper{
+    position: relative;
+  }
+  .emhead{
+      font-size: 18px;
+      margin: 12px 0px;
+      font-weight: 500;
+  }
+
+  .prodwrapper .prodsearch {
+    background: #fff;
+    width: 100%;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 5;
+    box-shadow: none;
+  }
+  .prodsearch input {
+    height: 36px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    box-shadow: none;
+  }
+  form.user .form-control-user {
+    padding: 1rem 0.4rem;
+  }
+
+  .prodsearch.active input {
+    border-radius: 5px;
+  }
+
+  .table-bordered td{
+      font-size: 12px;
+  }
+
+  table, th, td {
+    border-bottom: 1px solid black;
+}
+
+
+
+table {
+  width: 100%;
+}
+
+table, th, td {
+border-bottom: 1px solid black;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  font-weight: 500;
+
+}
+.table thead tr th {
+  font-size: 14px;
+  background-color: transparent; 
+  text-align: left;
+  font-weight: 500;
+  padding: 5px 0px !important;
+  color: #174fa3;
+}
+.table-input-text{
+outline:none;
+border:none;
+}
+.table td, .table th {
+  padding: 1.3rem 0.4rem;
+}
+.table-bordered td{
+font-size: 12px;
+}
+  form.user.cust-details{
+    padding-top: 25px;
+  }
+  .prodsearch .autocomp-box {
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    max-height: 280px;
+    overflow-y: auto;
+    border: 1px solid lightgrey;
+  }
+  .prodsearch.active .autocomp-box {
+    padding: 10px 8px;
+    opacity: 1;
+    pointer-events: auto;
+    border: 1px solid lightgrey;
+  }
+  .autocomp-box li {
+    list-style: none;
+    padding: 5px 6px;
+    font-size: 14px;
+    display: none;
+    width: 100%;
+    cursor: default;
+    border-radius: 3px;
+  }
+  .prodsearch.active .autocomp-box li {
+    display: block;
+  }
+  .autocomp-box li:hover {
+    background: #efefef;
+    cursor: pointer;
+  }
+
+  .digit-group input {
+      background-color: white;
+      height: 45px;
+      width: 42px;
+      border-radius: 6px;
+      outline: none;
+      font-size: 1.125rem;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .digit-group	.splitter {
+      padding: 0 5px;
+      color: white;
+      font-size: 24px;
+    }
+
+  .profile-pic{
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 50% !important;
+    /* border: 1px solid #174fa3;
+    border-image-outset: 10px; */
+  }
+  .otpmodalhead{
+      font-size: 20px;
+      color: #174fa3;
+      font-weight: 500;
+  }
+  .otptexthead{
+    font-size:12px;
+  }
+  .courseheading{
+    color:#174fa3;
+  }
+  .rounded-circle {
+      border-radius: 50% !important;
+  }
+
+
+  .card-header{
+    background-color: white;
+  }
+
+  .main-card{
+    padding:1rem;
+    min-height:440px;
+  }
+
+  .main-cardheading{
+    font-weight: 500;
+    padding-bottom:1rem;
+    font-size:18px;
+  }
+
+  .card{
+      background: #FFFFFF 0% 0% no-repeat padding-box;
+      box-shadow: 0px 4px 8px #0000001F;
+      border-radius: 6px;
+      border: none;
+  }
+
+  .nav-pills-custom .nav-link.active {
+      color: #174fa3;
+      background: #fff;
+      box-shadow: 0px 4px 8px #0000001F;
+  }
+  .lefticons{
+    width:20px;
+    height:20px;
+  }
+  .imagepre{
+    width:100%;
+  }
+  .cameraicon{
+    margin-top:-20px;
+  }
+  .upload-button {
+      position: absolute;
+      left: 15%;
+      cursor: pointer;
+      font-size: 18px;
+      top: 39%;
+  }
+  .file-upload {
+      display: none;
+  }
+  label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #174fa3;
+  }
+  input {
+      width: 100%;
+      font-size: 16px;
+      color: #5f5b5b;
+      border: none;
+      border-bottom: 1px solid rgb(214, 214, 214);
+      background: transparent;
+      height: 30px;
+      transition: border 0.4s ease;
+  }
+  .profilecard{
+    background-color: #174fa310;
+    padding:10px;
+  }
+  .proheading{
+      font-weight: 500;
+      font-size: 18px;
+      margin-bottom:10px;
+  }
+  .username{
+    color:black;
+    font-weight:500;
+    text-transform:capitalize;
+  }
+
+
+  .select2-container--default .select2-selection--single{
+      border-bottom:1px solid rgb(214, 214, 214) !important;
+      border:none;
+      height:30px;
+      box-shadow:none;
+      border-radius:0px;
+      }
+      .select2-container .select2-selection--single .select2-selection__rendered {
+      padding-left: 0px;
+      padding-top: 0px;
+      }
+  /* Add indicator arrow for the active tab */
+  @media (min-width: 992px) {
+      .nav-pills-custom .nav-link::before {
+          content: '';
+          display: block;
+          border-top: 8px solid transparent;
+          border-left: 10px solid #fff;
+          border-bottom: 8px solid transparent;
+          position: absolute;
+          top: 50%;
+          right: -10px;
+          transform: translateY(-50%);
+          opacity: 0;
+      }
+  }
+
+  .nav-pills-custom .nav-link.active::before {
+      opacity: 1;
+  }
+
+
+
+.card {
+border-radius: 6px;
+background: #FFF;
+box-shadow: 0px 4px 8px #00000029;
+}
+.card-header-name-txt {
+color: #403f3f;
+font-size: 18px;
+padding-bottom: 16px;
+}
+.card-header {
+padding: 0.5rem 1rem;
+margin-bottom: 0;
+background-color: white;
+border-bottom: none;
+color: #403f3f;
+}
+.card-body {
+padding-top: 0px;
+padding-bottom: 0px;
+}
+.card-header-txt {
+font-size: 12px;
+}
+.card-header-blue-txt {
+color: #00AEEF;
+font-size: 16px;
+font-weight: 500;
+}
+.cardfooter {
+background: white;
+border: none;
+}
+.view-image-txt{
+font-size: 12px;
+color: #174fa3;
+font-weight:500;
+cursor:pointer;
+}
+
+
+
+.form-content {
+color: #174fa3 !important;
+}
+
+
+select {
+width: 100%;
+font-size: 16px;
+color: #5f5b5b;
+border: none;
+border-bottom: 1px solid rgb(214, 214, 214);
+background: transparent;
+height: 30px;
+transition: border 0.4s ease;
+box-shadow: none !important;
+border-radius: 0px !important;
+}
+.marksheetimage{
+display:none;
+}
+
+.btn-primary {
+--bs-btn-color: #fff;
+--bs-btn-bg: #00AEEF;
+--bs-btn-border-color: #00AEEF;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0b5ed7;
+--bs-btn-hover-border-color: #174fa3;
+--bs-btn-focus-shadow-rgb: 49,132,253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #174fa3;
+--bs-btn-active-border-color: #0a53be;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #fff;
+--bs-btn-disabled-bg: #00AEEF;
+--bs-btn-disabled-border-color: #00AEEF;
+}
+.label-div >span{
+display:block;
+}
+.profile-upload-label{
+color: white !important;
+background: #174fa3;
+border-radius: 25px;
+padding: 10px 17px!important;
+margin: 10px;
+cursor: pointer;
+}
+.i1mage-div-preview{
+border:1px solid #174fa3;
+}
+
+
+.contain {
+margin: 0 auto;
+width: 100%;
+}
+
+.item {
+align-items: center;
+background-color: tomato;
+color: white;
+display: flex;
+height: 300px;
+justify-content: center;
+}
+.prodwrapper{
+position: relative;
+}
+.emhead{
+font-size: 18px;
+margin: 12px 0px;
+font-weight: 500;
+}
+
+.prodwrapper .prodsearch {
+background: #fff;
+width: 100%;
+border-radius: 5px;
+position: absolute;
+z-index: 5;
+box-shadow: none;
+}
+.prodsearch input {
+height: 36px;
+width: 100%;
+outline: none;
+border-radius: 5px;
+box-shadow: none;
+}
+form.user .form-control-user {
+padding: 1rem 0.4rem;
+}
+
+.prodsearch.active input {
+border-radius: 5px;
+}
+
+form.user.cust-details{
+padding-top: 25px;
+}
+.prodsearch .autocomp-box {
+padding: 0;
+opacity: 0;
+pointer-events: none;
+max-height: 280px;
+overflow-y: auto;
+border: 1px solid lightgrey;
+}
+.prodsearch.active .autocomp-box {
+padding: 10px 8px;
+opacity: 1;
+pointer-events: auto;
+border: 1px solid lightgrey;
+}
+.autocomp-box li {
+list-style: none;
+padding: 5px 6px;
+font-size: 14px;
+display: none;
+width: 100%;
+cursor: default;
+border-radius: 3px;
+}
+.prodsearch.active .autocomp-box li {
+display: block;
+}
+.autocomp-box li:hover {
+background: #efefef;
+cursor: pointer;
+}
+
+.digit-group input {
+background-color: white;
+height: 45px;
+width: 42px;
+border-radius: 6px;
+outline: none;
+font-size: 1.125rem;
+text-align: center;
+border: 1px solid #ddd;
+}
+
+.digit-group	.splitter {
+padding: 0 5px;
+color: white;
+font-size: 24px;
+}
+.educational-input{
+box-shadow: 2px 3px 4px #00000029 !important;
+border-radius: 6px !important;
+outline: none;
+padding: 0px 10px;
+}
+
+.add-icon-education{
+  border: 2px solid red;
+  border-radius: 50%;
+  padding: 0px 3px;
+}
+td>label>span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #00cf00;
+}
+.label-heading{
+  font-weight:500;
+  font-size:18px
+}
+.label-text{
+  font-size:12px
+}
+.card-body-reason-text{
+  font-size: 11px;
+  color: #9b9b9b;
+  /* height: 50px; */
+  padding-bottom: 10px 0px;
+
+  }
+  .editpreviousCompanyBtn{
+    cursor:pointer;
+  }
+  .text-primary{
+    color: #174fa3 !important;
+  }
+    .form-content {
+      color: #5ecff8 !important;
+      font-weight: 500;
+      font-size: 16px;
+    }
+    .error{
+      text-transform: capitalize;
+
+    }
+    #profileimage_err{
+      text-align:center;
+      padding:10px;
+    }
+    .circle{
+      display: flex;
+      justify-content: center;
+      height: 110px;
+      margin-top: -20px;
+      position: relative;
+    }
+    .file-upload {
+      display: none;
+  }
+
+  .upload-button{
+  position: absolute;
+  top: 80px;
+  left: 54%;
+  cursor: pointer;
+  font-size: 25px;
+  }
+  .cursor-pointer{
+    cursor:pointer;
+  }
+
+  .profile-pic {
+    width: 80px !important;
+    height: 80px !important;
+    border: 2px solid #174fa3;
+    border-radius: 50%;
+  }
+
+  .preview-img{
+    width: 120px !important;
+    height: 120px !important;
+    border: 2px solid #174fa3;
+    border-radius: 50%;
+  }
+  .imagepre{
+    width:100%;
+    border:2px dotted #174fa3;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: lightgray;
+    padding:3px;
+
+
+
+  }
+  .image-preview {
+     margin-top: 0px; 
+
+}
+#resone{
+  height:100px;
+}
+
+.heading-company{
+  font-weight: 400;
+  font-size: 14px;
+  white-space: nowrap; 
+  width: 150px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+
+}
+.heading-parameters  {
+  color: #979797;
+  white-space: nowrap; 
+  width: 100px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+</style>
+    
+   
+     <!-- Main page -> Manage Task -->
+   <main class="main-wrapper">
+      <!-- ==================Row1======================= -->
+
+      <div class="title-div pt-1">
+        <span class="first-container">
+          <div class="main-cardheading py-2 d-none">Employee Verification Details</div>
+
+        </span>
+      </div>
+      <div class="common-box-section">
+    
+      <div id="snackbar"></div>
+
+      <div class="row pt-3">
+        <div class="col-xl-3">
+          <!-- Profile picture card-->
+          <div class="profilecard mb-1 ">
+              <div class="proheading"></div>
+              <div class="py-2 text-center">
+                <div class="mb-2"> 
+                    {% if users.Photo %}
+                    <img id="idProofPreview" class="profile-pic"  src="{{hostUrl}}{{users.Photo}}" alt="" >
+                    {%else%}
+                    <img id="idProofPreview" class="profile-pic"  src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="" >
+                    {%endif%}
+                 
+                </div>
+                <div class="p-image">
+                </div>
+                
+                  <div class="mb-1 username">{{users.Firstname|default_if_none:''}} {{users.Lastname|default_if_none:''}}</div>
+                  <div class="small font-italic text-muted mb-2">{{users.DesignationId|default_if_none:''}}</div>
+          
+              </div>
+          </div>
+
+
+          <div class="nav mt-2 flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link p-2 mb-2  active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+               <img class="lefticons" src="{% static 'assets/svg/Perosnal information.svg' %}" alt="" >
+                <span class="small leftheading">Personal information</span></a>
+
+            <a class="nav-link p-2 mb-2 " id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+              <img class="lefticons" src="{% static 'assets/svg/educational details.svg' %}">
+                <span class=" small leftheading">Educational Details</span></a>
+
+            <a class="nav-link p-2 mb-2 " id="v-pills-messages-tab" data-bs-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+              <img class="lefticons" src="{% static 'assets/svg/employee details.svg' %}">
+                <span class=" small leftheading">Experience & Reference</span></a>
+
+            <a class="nav-link p-2 mb-2" id="v-pills-settings-tab" data-bs-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+              <img class="lefticons" src="{% static 'assets/svg/Document.svg' %}">
+                <span class="small leftheading">Documents</span></a>
+            </div>
+         
+        </div>
+        <!-- style="overflow-y:scroll; max-height:550px"-->
+        <div class="col-xl-9 " >
+            <!-- Account details card-->
+            <div class="tab-content" id="v-pills-tabContent">
+              <div class="tab-pane fade shadow rounded bg-white show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <div class="main-card">
+                  <div class="main-cardheading">Personal Information</div>
+                  <div class="">
+                    <div class="row mb-3">
+                      <div class="col-md-4 px-3">
+                          <label for="personalfirstname"  class="">First Name</label>
+                          <input type="text" readonly class="read-only-input" id="personalfirstname"   value="{{users.Firstname|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      </div>
+                      <div class="col-md-4 px-3">
+                          <label for="personallastname"  class="">Last Name</label>
+                          <input type="text" readonly class="read-only-input" id="personallastname"  value="{{users.Lastname|default_if_none:''}}"  oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      </div>
+                      <div class="col-md-4 px-3">
+                        <label for="personalmobno"  class="">Mobile No</label>
+                          <input type="text" readonly class="read-only-input" id="personalmobno"  value="{{users.Phone|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                      </div>
+                      </div>
+
+                      <div class="row mb-3">
+
+                        <div class="col-md-4 px-3">
+                          <label for="personalbirthyear"  class="">Birth Date</label>
+                          <input type="date" readonly class="read-only-input" id="personalbirthyear"  value="{{users.BirthDate|default_if_none:''}}">
+                        </div>
+                        <div class="col-md-4 px-3">
+                          <label for="personalemail"  class="">Email</label>
+                          <input type="text" readonly class="read-only-input" id="personalemail"   value="{{users.personal_email|default_if_none:''}}" >
+                      </div>
+                      <div class="col-md-4 px-3">
+                          <label for="personalalternateemail"  class="">Alternate Email</label>
+                          <input type="text" readonly class="read-only-input" id="personalalternateemail"  value="{{secondaryInfo.alternatemail|default_if_none:''}}"  oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      </div>
+                      </div>
+
+          
+
+
+                        <div class="row mb-3">
+                          <div class="col-md-6 px-3">
+                            <div class="col-md-12 mb-2">
+                              <label for="residentialadd"  class="pb-1">Residential Address</label>
+                              <div class="mb-2">
+                                <label for="residentialaddline1"  class="text-muted" >Address Line 1 :</label>
+                                <input type="text" readonly class="read-only-input" id="residentialaddline1"   value="{{users.Address|default_if_none:''}}">
+                              </div>
+                              <div class="">
+                                <label for="residentialaddline2"  class="text-muted" >Address Line 2 :</label>
+                                <input type="text" readonly class="read-only-input" id="residentialaddline2"   value="{{users.Addressline2|default_if_none:''}}">
+                              </div>
+                             
+                            </div>
+                            
+                            <div class="row mb-2">
+                              <div class="col-md-6">
+                                <label for="residentialaddcity"   class="text-muted">City</label>
+
+                                <div class="prodwrapper">
+                                  <div class="prodsearch" id="prodsearchdiv">
+                                    <input name = "residentialadd" type="text" readonly class="read-only-input" oninput="searchresidentialcities();" id="residentialaddcity"  value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                    <div class="autocomp-box" id="residentialcitylist">
+                              
+                                    </div>
+                                  </div>
+                                </div>
+                               
+                              </div>
+
+                              <div class="col-md-6">
+                                <label for="residentialaddpincode" class="text-muted">Pincode</label>
+                                <input type="text" readonly class="read-only-input" id="residentialaddpincode"  value="{{secondaryInfo.residentialaddresspincode|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" maxlength="6">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label for="residentialaddstate"   class="text-muted">State</label>
+                                <!-- <input type="" name="residentialadd" class="" id="residentialaddstate"  value="{{secondaryInfo.residentialaddresscountry|default_if_none:''}}"> -->
+                                <select readonly class="read-only-input"  id="residentialaddstate" name="residentialadd">
+                                  <option value="">-- Select State --</option>
+                                </select>
+                              </div>
+                              <div class="col-md-6">
+                                <label for="residentialaddcountry"   class="text-muted">Country</label>
+                                <!-- <input type="" class="" id="residentialaddcountry"  value="{{secondaryInfo.residentialaddresscountry|default_if_none:''}}"> -->
+                                <select readonly class="read-only-input"  id="residentialaddcountry" name="residentialaddcountry">
+                                  <option value="">-- Select Country --</option>
+                                </select>
+                              </div>
+                            </div>
+                          
+                          </div>
+
+                          <div class="col-md-6 mb-3 px-3">
+                            <div class="col-md-12 mb-2">
+                              <label for="permanantadd"  class="pb-1">Permanant Address</label>
+                              <div class="mb-2">
+                                <label for="permanentaddressline1"   class="text-muted">Address Line 1:</label>
+                                <input type="text" readonly class="read-only-input" id="permanentaddressline1" name="permanentaddressline1"  value="{{secondaryInfo.permanentaddress|default_if_none:''}}">
+                              </div>
+                              <div class="">
+                                <label for="permanentaddressline2"   class="text-muted">Address Line 2:</label>
+                                <input type="text" readonly class="read-only-input" id="permanentaddressline2" name="permanentaddressline2"  value="{{secondaryInfo.permanentaddressLine2|default_if_none:''}}">
+                              </div>
+                             
+                            </div> 
+                            <div class="row mb-2">
+                              <div class="col-md-6">
+                                <label for="permanentaddcity"  class="text-muted">City</label>
+                                <div class="prodwrapper">
+                                  <div class="prodsearch" id="prodpermanentsearchdiv">
+                                    <input name = "permamnentaddcity" type="text" readonly class="read-only-input" oninput="searchpermanentcities();" id="permamnentaddcity"  value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                    <div class="autocomp-box" id="permanentcitylist">
+                              
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label for="permanentaddpincode"  class="text-muted">Pincode</label>
+                                <input type="text" readonly class="read-only-input" id="permanentaddpincode"  value="{{secondaryInfo.permanantaddresspincode|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" maxlength="6">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label for="permanentaddstate"   class="text-muted">State</label>
+                                <!-- <input type="" name="permanentaddstate" class="" id="permanentaddstate"  value="{{secondaryInfo.residentialaddresscountry|default_if_none:''}}"> -->
+                                <select readonly class="read-only-input"  id="permanentaddstate" name="permanentaddstate">
+                                  <option value="">-- Select State --</option>
+                                </select>
+                              </div>
+                              <div class="col-md-6">
+                                <label for="permamnentaddcountry"  class="text-muted">Country</label>
+                                <!-- <input type="" class="" id="permamnentaddcountry"  value="{{secondaryInfo.residentialaddresscountry|default_if_none:''}}"> -->
+                                <select readonly class="read-only-input"  id="permamnentaddcountry" name="permamnentaddcountry">
+                                  <option value="">-- Select Country --</option>
+                                </select>
+                              </div>
+                            </div>
+                           
+                          </div>
+                        </div>
+                      
+                        <div class="row mb-3">
+                          <div class="col-md-6 px-3">
+                            <label for="bloodgroup"  class="">Blood Group</label>
+                            <input type="text" readonly class="read-only-input" name="bloodgroup" id="bloodgroup"   value="{{secondaryInfo.bloodgroup}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          </div>
+                          <div class="col-md-6 px-3">
+                            <label for="maritalstatus"  class="">Marital Status</label>
+                            <select readonly class="read-only-input"  id="maritalstatus" name="maritalstatus">
+                              <option value="">{{secondaryInfo.maritalstatus}}</option>
+                     
+
+
+                          </select>
+                          </div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <div class="col-md-6 px-3">
+                              <label for="adhaarcard"  class="">Aadhaar Card</label>
+                              <input type="text" readonly class="read-only-input" id="adhaarcard" name="adhaarcard"  value="{{secondaryInfo.adhaarcard|default_if_none:''}}"  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          </div>
+                          <div class="col-md-6 px-3">
+                            <label for="pancard"  class="">Pan Card</label>
+                            <input type="text"  value="{{secondaryInfo.pancard|default_if_none:''}}" readonly class="read-only-input" id="pancard" name="pancard">
+                          </div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <div class="col-md-4 px-3 text-center">
+                            <label for="adhaarFile" onclick="activeowlcaraouse('{{secondaryInfo.adhaardocid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal" class="cursor-pointer"> AadharCard Photo Copy </label>
+                          
+                          </div>
+                          
+                           
+                          <div class="col-md-4 px-3 text-center">
+                            <label for="panFile"  onclick="activeowlcaraouse('{{secondaryInfo.pandocid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal" class="cursor-pointer"> PanCard Photo Copy </label>
+          
+                          </div>
+                          {% if secondaryInfo.passportimage %}
+                            <div class="col-md-4 px-3 text-center">
+                              <label for="passportFile"  onclick="activeowlcaraouse('{{secondaryInfo.passportdocid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal"  class="cursor-pointer"> Passport Photo Copy </label>
+                            </div>
+                           
+                          {% endif %}
+                        </div>
+
+
+
+
+                        <div class="row mb-3">
+                          <div  class="col-md-12 px-3 emhead">Emergency Contact Details </div>
+                          <div class="col-md-4 px-3">
+                            <label for="relationname1"  class="">Name</label>
+                            <input type="text" readonly class="read-only-input" id="relationname1" name="relationname1"  value="{{secondaryInfo.relationname1|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                         
+                          </div>
+                          <div class="col-md-4 px-3">
+                            <label for="relation"  class="">Relation</label>
+                            <input type="text" readonly class="read-only-input" id="relation" name="relation1"  value="{{secondaryInfo.relation1|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          </div>
+                          <div class="col-md-4 px-3">
+                            <label for="relationmobno"  class="">Mobile No</label>
+                            <input type="text" readonly class="read-only-input" id="relationmobno" name="relation1number"  value="{{secondaryInfo.relation1number|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                         
+                          </div>
+                        </div>
+
+                        {% if secondaryInfo.relation2 != '' %}
+                        <div class="row mb-3">
+                          <div class="col-md-4 px-3">
+                            <label for="relationname2"  class="">Name</label>
+                            <input type="text"readonly class="read-only-input" id="relationname2" name="relationname2"  value="{{secondaryInfo.relationname2|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                         
+                          </div>
+                          <div class="col-md-4 px-3">
+                            <label for="relation2"  class="">Relation</label>
+                            <input type="text" readonly class="read-only-input" id="relation2" name="relation2"  value="{{secondaryInfo.relation2|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          </div>
+                          <div class="col-md-4 px-3">
+                            <label for="relation2mobno"  class="">Mobile No</label>
+                            <input type="text" readonly class="read-only-input" id="relation2mobno" name="relation2number"  value="{{secondaryInfo.relation2number|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          </div>
+                        </div>
+                        {%endif%}
+
+                        <div class="row">
+
+
+                        </div>
+                       
+
+                    </div>
+                  </div>
+                 
+              </div>
+            
+              
+              <div class="tab-pane fade shadow rounded bg-white " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                <div class="main-card">
+                  <div class="main-cardheading">Educational Details</div>
+                  <div class="">
+                   
+                    {% if ssc_qualification %}
+                      <table class="table" id="qualificationTable">
+                        <thead>
+                          <th>Qualification</th>
+                          <th>School/college/University</th>
+                          <th>Obtained Marks</th>
+                          <th>From</th>
+                          <th>To</th>
+                          <th>Photocopy</th>
+                        </thead>
+                      
+                        <tbody>
+
+                          {% if ssc_qualification %}
+                          <tr>
+                            <td><div class="courseheading">SSC</div></td>
+                            <td style="overflow:ellipsis" data-bs-toggle="tooltip" title="{{ssc_qualification.university}}">{{ssc_qualification.university}}</td>
+                            <td><div>{{ssc_qualification.obtain_marks}}</div></td>
+                            <td><div>{{ssc_qualification.formatedfromdate}}</div></td>
+                            <td><div>{{ssc_qualification.formatedtodate}}</div></td>
+                            <td><div> <label for="ssc_qualification"  onclick="activeowlcaraouse('{{ssc_qualification.docid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal"  class="cursor-pointer"> view Marksheet </label></div></td>
+                          </tr>
+                          {% endif %}
+                          {%if HSC_qualification%}
+                            <tr>
+                              <td><div  class="courseheading">HSC</div></td>
+                              <td style="overflow:ellipsis" data-bs-toggle="tooltip" title="{{HSC_qualification.university}}">{{HSC_qualification.university}}</td>
+                              <td><div>{{HSC_qualification.obtain_marks}}</div></td>
+                              <td><div>{{HSC_qualification.formatedfromdate}}</div></td>
+                              <td><div>{{HSC_qualification.formatedtodate}}</div></td>
+                              <td><div><label for="ssc_qualification"  onclick="activeowlcaraouse('{{HSC_qualification.docid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal"  class="cursor-pointer"> view Marksheet </label></div></td>
+                            </tr>
+                            {% endif %}
+                            {%if gaduation%}
+                            <tr>
+                              <td><div  class="courseheading">Graduation/Degree</div></td>
+                              <td style="overflow:ellipsis" data-bs-toggle="tooltip" title="{{gaduation.university}}">{{gaduation.university}}</td>
+                              <td><div>{{gaduation.obtain_marks}}</div></td>
+                              <td><div>{{gaduation.formatedfromdate}}</div></td>
+                              <td><div>{{gaduation.formatedtodate}}</div></td>
+                              <td><div><label for="ssc_qualification"  onclick="activeowlcaraouse('{{gaduation.docid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal"  class="cursor-pointer"> view Marksheet </label></div></td>
+                            </tr>
+                            {% endif %}
+                            {%if POSTGraduation%}
+                            <tr>
+                              <td><div  class="courseheading">POSTGraduation</div></td>
+                              <td style="overflow:ellipsis" data-bs-toggle="tooltip" title="{{POSTGraduation.university}}">{{POSTGraduation.university}}</td>
+                              <td><div>{{POSTGraduation.obtain_marks}}</div></td>
+                              <td><div>{{POSTGraduation.formatedfromdate}}</div></td>
+                              <td><div>{{POSTGraduation.formatedtodate}}</div></td>
+                              <td><div><label for="ssc_qualification"  onclick="activeowlcaraouse('{{POSTGraduation.docid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal"  class="cursor-pointer"> view Marksheet </label></div></td>
+                            </tr>
+                            {% endif %}
+                            {%for q in qualifications %}
+                                {% if q.qualification_name != "SSC" and q.qualification_name != "HSC" and q.qualification_name != "Graduation/Degree" and q.qualification_name != "POST Graduation"%}
+                                <tr>
+                                      <td class="courseheading"><div>{{q.qualification_name}}</div></td>
+                                      <td style="overflow:ellipsis" data-bs-toggle="tooltip" title="{{q.university}}">{{q.university}}</td>
+                                      <td><div>{{q.obtain_marks}}</div></td>
+                                      <td><div>{{q.formatedfromdate}}</div></td>
+                                      <td><div>{{q.formatedtodate}}</div></td>
+                                      <td><div><label for="ssc_qualification"  onclick="activeowlcaraouse('{{q.docid}}')" data-bs-toggle="modal" data-bs-target="#documentmodal"  class="cursor-pointer"> view Marksheet </label></div></td>
+                                    </tr>
+                                {%endif%}
+                            {%endfor%}
+                        </tbody>
+                      </table>
+                    {% endif %}
+
+                   
+                       
+
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="tab-pane fade shadow rounded bg-white" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                <div class="main-card">
+                  <div class="main-cardheading">Experience & Reference</div>
+                  
+                  {% if previouscompanys %}
+                  <div>
+                    <div class="secheadings">Company Details</div>
+                  
+                    <div class="row" id="previouscompanylist">
+                      {%for i in previouscompanys%}
+                      <div class="cardcolumn col-lg-4 col-md-6 col-sm-12 mt-4 basecard{{i.id}}">
+                        <div id="card" class="card text-start h-100 cardno{{i.id}}">
+            
+                          <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+
+            
+                          </div>
+            
+            
+                          <div class="card-body">
+            
+                              <div class="row">
+            
+            
+            
+            
+                                <div class="col-lg-12">
+
+                                  <div class="card-header head d-flex justify-content-between p-0">
+                                    <div>
+                                      <div class="card-header-blue-txt  heading-company">Company Name : </div>
+                                      <div class="card-header-blue-txt heading-parameters" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.companyname}}"> {{i.companyname}}</div> 
+                                    </div>
+                                    <div>
+                                      <div class="card-header-blue-txt  heading-company">Designation : </div>
+                                      <div class="card-header-blue-txt heading-parameters" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.designation}}"> {{i.designation}}</div> 
+                                    </div>
+                                  </div>
+      
+
+            
+                                </div>
+            
+                                <div class="col-lg-12 py-2">
+                                  <div class="card-header p-0">
+            
+            
+                                    <span  class="my-3 card-body-reason-text addReadMore company_address showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="Address">{{i.companyaddress}}</span>
+                                  </div>
+                                </div>
+                                <div class="col-lg-12">
+                                  <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-blue-txt  heading-company">From</span><br>
+                                        <span class="card-header-blue-txt heading-parameters">{{i.formatedjoinDate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-blue-txt  heading-company">To</span><br>
+                                          <span class="card-header-blue-txt heading-parameters">{{i.formatedleaveDate}}</span> 
+                                        </span>
+          
+          
+                                    </span>
+                                    
+                                    <span class="d-none">                                   
+                                      <span class="card-header-txt">Designation</span><br>
+                                      <span class="card-header-blue-txt designation">{{i.designation}}</span> 
+                                    </span>
+                                </div>
+                                </div>
+            
+            
+            
+                              </div>
+            
+                          </div>
+                          <div class="card-footer cardfooter mt-auto">
+                            <div class="row">
+            
+            
+                              <div class="col-lg-12 conclusion-box d-flex justify-content-between my-2">
+                
+                                <span class="view-image-txt" data-bs-toggle="modal" 
+                                data-bs-target="#viewsalaryslip{{i.id}}"
+                                >View Salary Slip</span>
+            
+            
+                                <span class="view-image-txt"  data-bs-toggle="modal" 
+                                data-bs-target="#viewrelieving{{i.id}}">View Relieving Letter</span>
+                              </div>
+                            </div>
+            
+                            
+            
+                          </div>
+            
+                          <div class="modal fade" id="viewsalaryslip{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                            
+                              <div class="modal-content">           
+                                <div class="modal-header">
+                                  <h5 class="modal-title py-2" id="exampleModalLabel">Salary Slip</h5>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="row py-1">
+                                    <div>
+                                      <img src="{{hostUrl}}{{i.salaryslip}}" class="salary img-thumbnail" style="max-width: 100%; max-height: 100%" />
+                
+                
+                                    </div>
+                                  </div>            
+                                </div>
+                                <div class="modal-footer d-flex">
+                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                
+                          <div class="modal fade" id="viewrelieving{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                            
+                              <div class="modal-content">           
+                                <div class="modal-header">
+                                  <h5 class="modal-title py-2" id="exampleModalLabel">Relieving Letter</h5>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="row py-1">
+                                    <div>
+                                      <img src="{{hostUrl}}{{i.relieving}}" class="relieving img-thumbnail" style="max-width: 100%; max-height: 100%" />
+                
+                
+                                    </div>
+                                  </div>            
+                                </div>
+                                <div class="modal-footer d-flex">
+                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+            
+                        </div>
+            
+            
+            
+                      </div>
+                      {%endfor%}
+                    </div>
+                  </div>
+                  {%endif%}
+
+
+                  <div> 
+                      {% if secondaryInfo.refname1 %}
+                      <div class="secheadings my-3">Reference Details</div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="refname1"  class="">Reference Name 1</label>
+                          <input type="text" readonly class="read-only-input" id="refname1" name="refname1"  value="{{secondaryInfo.refname1|default_if_none:''}}">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="refmob1"  class="">Mobile No</label>
+                          <input type="text" readonly class="read-only-input" id="refnumber1" name="refnumber1"  value="{{secondaryInfo.refnumber1|default_if_none:''}}">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="refdesignation1"  class="">Designation</label>
+                          <input type="text" readonly class="read-only-input" id="refdesg1" name="refdesg1"  value="{{secondaryInfo.refdesg1|default_if_none:''}}">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="refemail1"  class="">Email Address</label>
+                          <input type="text" readonly class="read-only-input" id="refemail1" name="refemail1"  value="{{secondaryInfo.refemail1|default_if_none:''}}">
+                        </div>
+                      </div>
+                      {% endif %}
+                      
+                      {% if secondaryInfo.refname2 %}
+                      <div class="row mt-4">
+                        <div class="col-md-6">
+                          <label for="refname2"  class="">Reference Name 2</label>
+                          <input type="text" readonly class="read-only-input" id="refname2" name="refname2"  value="{{secondaryInfo.refname2|default_if_none:''}}">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="refmob2"  class="">Mobile No</label>
+                          <input type="text" readonly class="read-only-input" id="refnumber2" name="refnumber2"  value="{{secondaryInfo.refnumber2|default_if_none:''}}">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="refdesignation2"  class="">Designation</label>
+                          <input type="text" readonly class="read-only-input" id="refdesg2" name="refdesg2"  value="{{secondaryInfo.refdesg2|default_if_none:''}}">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="refemail2"  class="">Email Address</label>
+                          <input type="text" readonly class="read-only-input" id="refemail2" name="refemail2"  value="{{secondaryInfo.refemail2|default_if_none:''}}">
+                        </div>
+                      </div>
+                      {% endif %}
+                      
+
+                  </div>
+
+                </div>
+              </div>
+              
+              <div class="tab-pane fade shadow rounded bg-white " id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+
+               
+                <div class="main-card">
+                  <div class="main-cardheading">Document</div>
+                 <div class="row mb-3">
+                  <div class="col-md-6 px-3">
+                    <label for="accountholdername"  class="">Account Holder Name</label>
+                    <input type="text" readonly class="read-only-input" id="accountholdername" name="accountholdername"  value="{{secondaryInfo.accountholdername|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                  </div>
+                  <div class="col-md-6 px-3">
+                    <label for="ifsc"  class="">IFSC Code</label>
+                    <input type="text" readonly class="read-only-input" id="ifsc" name="ifsccode"  value="{{secondaryInfo.ifsccode|default_if_none:''}}">
+                  </div>
+                 </div>
+                 <div class="row mb-3">
+                  <div class="col-md-6 px-3">
+                    <label for="accountno"  class="">Account Number</label>
+                    <input type="text" readonly class="read-only-input" id="accountno" name="accountnumber"  value="{{secondaryInfo.accountnumber|default_if_none:''}}">
+                  </div>
+                  <div class="col-md-6 px-3">
+                    <label for="bankname"  class="">Bank Name</label>
+                    <input type="text" readonly class="read-only-input" id="bankname" name="bankname"  value="{{secondaryInfo.bankname|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                  </div>
+                 </div>
+                 <div class="row mb-5">
+                  <div class="col-md-6 px-3">
+                    <label for="confirmaccountno"  class="">Confirm Account Number</label>
+                    <input type="text" readonly class="read-only-input" id="confirmaccountno" name="confirmaccountnumber"  value="{{secondaryInfo.confirmaccountnumber|default_if_none:''}}">
+                  </div>
+
+                  <div class="col-md-6 px-3">
+                    <label for="branchname"  class="">Branch Name</label>
+                    <input type="text" readonly class="read-only-input" id="branchname" name="branchname"  value="{{secondaryInfo.branchname|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                  </div>
+                 </div>
+
+                 <div class="row mb-3">
+                  <div class="col-md-12 px-3 mb-3 secheadings">Other Details</div>
+                  <div class="col-md-6 px-3">
+                    <label for="previouspfaccountno"  class="">Previous PF Account </label>
+                    <input type="text" readonly class="read-only-input" id="previouspfaccountno" name="previouspfaccountno"  value="{{secondaryInfo.previous_pf_accountno|default_if_none:''}}">
+                  </div>
+                  <div class="col-md-6 px-3">
+                    <label for="esic"  class="">ESIC Number</label>
+                    <input type="text" readonly class="read-only-input" id="esic" name="esic"  value="{{secondaryInfo.esic_number|default_if_none:''}}">
+                  </div>
+                 </div>
+                 </div>
+
+              </div>
+          </div>
+          <div class="d-flex justify-content-center my-3">
+            {%if users.documentverified == False %}
+              {%if secondaryInfo.finalsubmit %}
+                <a href="javascript:void(0)" class="wizardbtn btn-next" onclick="acceptDocument({{secondaryInfo.userId}});">Accept</a>
+                <a href="javascript:void(0)" class="wizardbtn btn-next mx-5" data-bs-toggle="modal" data-bs-target="#RejectModal">Reject</a>
+              {%endif%}
+            {%endif%}
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <!-----------------------------modal pop up--------------------------------------------------->
+<!-- {{document}} -->
+
+<div class="modal fade" id="RejectModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="formstyle">
+      <div class="modal-content">           
+        <div class="modal-header ps-4">
+          <h5 class="modal-title py-2" id="exampleModalLabel">Rejected Reason</h5>
+        </div>
+        <div class="modal-body">
+          
+          <div class="row">
+            <div class="col-12 px-4">
+              <div class="form-floating">
+                  <textarea id="resone" class="form-control"  name="Resone" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');"></textarea>
+                  <label for="resone">Reason<span style="color:red;">*</span></label>
+                  <span id="resoneerror" class="error"></span>
+              </div>
+            </div>
+
+        
+          </div>
+        
+        </div>
+        <div class="modal-footer mt-3 justify-content-center">
+          <button type="button" class="trackproBtn modalClose w-25" data-bs-dismiss="modal">Close</button>
+          <button onclick="return rejectedDocument({{secondaryInfo.userId}});" class="trackproBtn w-25" id="">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="modal fade" id="documentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg ">
+          <div class="modal-content">
+              <div class="modal-header py-1 ps-4">
+                  <h5 class="modal-title py-2" id="exampleModalLabel"> 
+                    Documents(Photocopies)
+                  </h5>
+                  {{ documents|json_script:"documents" }}
+              </div>
+              <div class="modal-body p-4">
+                <div class="doc_container">
+                  <div class="slideshow-container">
+
+                    <!-- Full-width images with number and caption text -->
+                    {%for i in documents %}
+                      {%if i.document is not None and i.document != ""%}
+                      <div class="mySlides imagefade" id="{{i.docid}}">
+                        <!-- <div class="numbertext">1 / 3</div> -->
+                        <div class="dochead">{{i.documentname}} </div>
+                        <img src="{{hostUrl}}{{i.document}}" style="width:100%;height:300px;">
+                        
+                      </div>
+                      {%endif%}
+                    {%endfor%}
+  
+  
+                    <!-- Next and previous buttons -->
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                  </div>
+                </div>
+                <!-- Slideshow container -->
+                
+<!--                
+                <div style="text-align:center">
+                  {%for i in documents %}
+                  {%if i.document is not None and i.document != ""%}
+                  <span class="dot" onclick="currentSlide()"></span>
+                  {%endif%}
+                  {%endfor%} 
+
+                 
+                </div> -->
+              
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </div>
+        
+    </div>
+</main>
+{%endblock%}
+{% block script%}
+{{block.super}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+<script>
+
+  $(document).ready(function() {
+    residentialcitydata({{secondaryInfo.residentialaddresscity|default_if_none:''}})
+    permanentcitydata({{secondaryInfo.permanantaddresscity|default_if_none:''}})
+
+    $("#maritalstatus").select2();
+    $("#residentialaddstate").select2();
+    $("#residentialaddcountry").select2();
+
+    $("#permanentaddstate").select2();
+    $("#permamnentaddcountry").select2();
+    
+    $(".upload-button").on('click', function() {
+       $(".file-upload").click();
+    });
+
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+            }
+    
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    $('#owl-carousel').owlCarousel({
+    loop: true,
+    margin: 30,
+    dots: false,
+    nav: true,
+    items: 1,
+    })
+
+  });
+
+
+  let slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  // let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  // for (i = 0; i < dots.length; i++) {
+  //   dots[i].className = dots[i].className.replace(" active", "");
+  // }
+  slides[slideIndex-1].style.display = "block";
+  // dots[slideIndex-1].className += " active";
+}
+
+
+
+    function activeowlcaraouse(imageId) {
+            var images = document.getElementsByClassName("mySlides");
+            for (var i = 0; i < images.length; i++) {
+                images[i].style.display = "none";
+            }
+
+            // Show the image with the specified ID
+            var selectedImage = document.getElementById(imageId);
+            if (selectedImage) {
+                selectedImage.style.display = "block";
+            }
+    }
+
+  $('.digit-group').find('input').each(function() {
+	$(this).attr('maxlength', 1);
+	$(this).on('keyup', function(e) {
+		var parent = $($(this).parent());
+		
+		if(e.keyCode === 8 || e.keyCode === 37) {
+			var prev = parent.find('input#' + $(this).data('previous'));
+			
+			if(prev.length) {
+				$(prev).select();
+			}
+		} else if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+			var next = parent.find('input#' + $(this).data('next'));
+			
+			if(next.length) {
+				$(next).select();
+			} else {
+				if(parent.data('autosubmit')) {
+					parent.submit();
+				}
+			}
+		}
+	});
+});
+
+      $(function(){
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;// jan=0; feb=1 .......
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear() - 18;
+        if(month < 10)
+            month = '0' + month.toString();
+        if(day < 10)
+            day = '0' + day.toString();
+        var minDate = year + '-' + month + '-' + day;
+        var maxDate = year + '-' + month + '-' + day;
+      $('#personalbirthyear').attr('max', maxDate);
+    });
+   
+   
+
+
+    function checkupdatedetails(){
+      var digit1 = $('#digit-1').val();
+      var digit2 = $('#digit-2').val();
+      var digit3 = $('#digit-3').val();
+      var digit4 = $('#digit-4').val();
+      var digit5 = $('#digit-5').val();
+      var digit6 = $('#digit-6').val();
+      if (digit1 == "" || digit2 == "" || digit3 == "" || digit4 == "" || digit5 == "" || digit6 == ""){
+        $('#wrongotperror').show().delay(3000).slideUp();
+        $('#wrongotperror').html('Please enter 6 digits OTP code');
+        return false;
+      }else{
+
+      var otpnumber = digit1 + digit2 + digit3 + digit4 + digit5 + digit6
+      var mobilenumber =  $('#personalmobno').val();
+      var maritalstatus =  $('#maritalstatus').val();
+
+      var residentialaddressline1 =  $('#residentialaddline1').val();
+      var residentialaddressline2 =  $('#residentialaddline2').val();
+      var residentialcity =  $('#residentialaddcity').attr('cityid');
+      var residentialcountry =  $('#residentialaddcountry').val();
+      var residentialstate =  $('#residentialaddstate').val();
+      var residentialpincode = $('#residentialaddpincode').val();
+
+      var permanentaddressline1 =  $('#permanentaddressline1').val();
+      var permanentaddressline2 =  $('#permanentaddressline2').val();
+      var permanentcity =  $('#permamnentaddcity').attr('cityid');
+      var permanentcountry =  $('#permamnentaddcountry').val();
+      var permanentstate =  $('#permanentaddstate').val();
+      var permanentpincode = $('#permanentaddpincode').val();
+     
+      var formData = new FormData();
+      formData.append("otpnumber",otpnumber,);
+      formData.append("mobilenumber",mobilenumber);
+      formData.append("maritalstatus",maritalstatus);
+      formData.append("residentialaddressline1",residentialaddressline1);
+      formData.append("residentialaddressline2",residentialaddressline2);
+      formData.append("residentialcity",residentialcity);
+      formData.append("residentialcountry",residentialcountry);
+      formData.append("residentialstate",residentialstate);
+      formData.append("residentialpincode",residentialpincode);
+      formData.append("permanentaddressline1",permanentaddressline1);
+      formData.append("permanentaddressline2",permanentaddressline2);
+      formData.append("permanentcity",permanentcity);
+      formData.append("permanentcountry",permanentcountry);
+      formData.append("permanentstate",permanentstate);
+      formData.append("permanentpincode",permanentpincode);
+      formData.append("csrfmiddlewaretoken","{{csrf_token}}")
+
+      $.ajax({ 
+        type: "POST",
+        url: frontendURL + "Updateprofile",
+        dataType: 'json',
+        data:formData,
+        processData: false,
+        contentType: false,
+         success: function(response) {
+          if(response.response.n == 1){
+             swal({
+               icon: "success",
+               title: "",
+               text: response.response.Msg,
+               button: "Close",
+               timer:2000,
+             });
+           }else{
+             swal({
+             icon: "warning",
+             title: "",
+             text: response.response.Msg,
+             buttons: false,
+             timer:2000,
+           });
+          
+           } 
+          
+         }
+       });
+
+    }
+  }
+
+
+  function searchresidentialcities(){
+  var trhtml ="";
+  var cityname = $("#residentialaddcity").val().trim();
+ 
+  var fd = new FormData();    
+  fd.append("cityname",cityname);
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"searchcities",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+    
+      $("#prodsearchdiv").addClass('active');
+      $.each(response.data,function(i,o){
+        trhtml += `
+        <li class="searchlistli" value="`+o.id+`" onclick="residentialcitydata('`+o.id+`');">`+o.name+`</li>
+        `
+      })
+     $("#residentialcitylist").html(trhtml);
+
+    },
+  });
+}
+
+
+function residentialcitydata(cityid){
+ 
+  var cityid = cityid
+  var fd = new FormData();    
+  fd.append("cityid",cityid);
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"searchstatecountry",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+      $("#prodsearchdiv").removeClass('active');
+      var sthtml = `<option value="`+response.data.state+`">`+response.data.statename+`</option>`
+      var countryhtml = `<option value="`+response.data.country+`">`+response.data.countryname+`</option>`
+      $("#residentialaddcity").val(response.data.name);
+      $("#residentialaddcity").attr('cityid',response.data.id);
+      $("#residentialaddstate").html(sthtml);
+      $("#residentialaddcountry").html(countryhtml);
+    },
+  });
+}
+
+//permanent address /////////////////////////////////////////////////////////////////
+
+function searchpermanentcities(){
+  var trhtml ="";
+  var cityname = $("#permamnentaddcity").val().trim();
+ 
+  var fd = new FormData();    
+  fd.append("cityname",cityname);
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"searchcities",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+    
+      $("#prodpermanentsearchdiv").addClass('active');
+      $.each(response.data,function(i,o){
+        trhtml += `
+        <li class="searchlistli" value="`+o.id+`" onclick="permanentcitydata('`+o.id+`');">`+o.name+`</li>
+        `
+      })
+     $("#permanentcitylist").html(trhtml);
+
+    },
+  });
+}
+
+
+function permanentcitydata(cityid){
+ 
+ var cityid = cityid
+ var fd = new FormData();    
+ fd.append("cityid",cityid);
+ fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+
+ $.ajax({
+   type: "POST",
+   url: frontendURL+"searchstatecountry",
+   data: fd,
+   processData: false,
+   contentType: false,
+   
+   success: function(response) {
+     $("#prodpermanentsearchdiv").removeClass('active');
+     var sthtml = `<option value="`+response.data.state+`">`+response.data.statename+`</option>`
+     var countryhtml = `<option value="`+response.data.country+`">`+response.data.countryname+`</option>`
+     $("#permamnentaddcity").val(response.data.name);
+     $("#permamnentaddcity").attr('cityid',response.data.id);
+     $("#permanentaddstate").html(sthtml);
+     $("#permamnentaddcountry").html(countryhtml);
+   },
+ });
+}
+function acceptDocument(id){
+
+  $.ajax({ 
+      type: "POST",
+      url: frontendURL + "accept-document",
+      headers:{
+        'Authorization': 'Token '+ '{{token}}'
+      },
+      
+      data: {
+          'UserId':id,
+          'csrfmiddlewaretoken':'{{csrf_token}}'
+      },
+      
+      success: function(response) {
+      if(response.status != 1){
+          swal({
+            icon: "warning",
+            title: "",
+            text: response.Msg,
+            button: "Close",
+            timer:2000,
+          });
+        }else{
+          swal({
+          icon: "success",
+          title: "",
+          text: response.Msg,
+          buttons: false,
+          timer:2000,
+        }).then(() => {
+          window.location.href = frontendURL + "onboarding-list"
+
+          });
+        
+         
+        } 
+       
+      }
+    });
+
+
+}
+
+function rejectedDocument(id){
+  var resone = $('#resone').val();
+  if (IsValid(resone)) {
+      $('#resone').html();
+      $('#resoneerror').show().delay(3000).slideUp();
+      $('#resoneerror').html('Please enter reason');
+      $('#resone').focus();
+      return false;
+  }else{
+    $('#RejectModal').modal('hide');
+
+      $.ajax({ 
+          type: "POST",
+          url: frontendURL + "rejected-Document",
+          headers:{
+            'Authorization': 'Token '+ '{{token}}'
+          },
+          data: {
+              'UserId':id,
+              'resone':resone,
+              'csrfmiddlewaretoken':'{{csrf_token}}'
+          },
+          
+          success: function(response) {
+          if(response.status != 1){
+              swal({
+                icon: "warning",
+                title: "",
+                text: response.Msg,
+                button: "Close",
+                timer:2000,
+              });
+            }else{
+              swal({
+              icon: "success",
+              title: "",
+              text: response.Msg,
+              buttons: false,
+              timer:2000,
+            }).then(() => {
+              window.location.href = frontendURL + "onboarding-list"
+
+              });
+             
+            } 
+           
+          }
+        });
+  }
+}
+  
+</script>
+  {%endblock%}

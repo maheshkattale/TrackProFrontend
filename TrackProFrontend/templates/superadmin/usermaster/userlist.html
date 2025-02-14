@@ -1,0 +1,445 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Users list
+</div>
+{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 35px !important;
+      }
+      .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-left: 0px;
+        padding-top: 0px;
+        font-size: var(--f-lg);
+        color: var(--fc-md-dark);
+      }
+      .error{
+        font-size: 12px;
+      }
+</style>
+<main class="main-wrapper">
+ <!-- NavBar -->
+ {% if messages %}
+ <div class="row" style="justify-content: center;">
+     <div class="col-sm-6 col-sm-offset-3">
+     {% for message in messages %}
+     <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+         <span aria-hidden="true">&times;</span>
+         </button>
+         <p style="margin-bottom: 0px;">{{ message }}</p>
+     </div>
+     {% endfor %}
+     </div>
+ </div>
+ {% endif %}
+        
+ <div class="title-div">
+        
+    <!-- <span class="company-title">User Master</span>
+    <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModaladd">+ Add User</span> -->
+    
+    <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content py-2">
+          <div class="modal-header py-3">
+            <h5 class="modal-title" id="exampleModalLabel"> Add User</h5>
+          </div>
+          <form class="mt-2" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                            <label for="firstName">Enter First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" class="input-feild"  onkeydown="return /[a-z]/i.test(event.key)"/>
+                            <span id="firstName_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-6 mt-3">
+                            <label for="lastName">Enter last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter last Name " class="input-feild"  onkeydown="return /[a-z]/i.test(event.key)"/>
+                            <span id="lastName_err" class="error"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                        <label for="email">Enter Email ID</label>
+                        <input type="email" id="email" name="email" placeholder="Enter Email" class="input-feild"/>
+                        <span id="email_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-6 mt-3">
+                        <label for="mobileNumber">Enter Mobile Number</label>
+
+                            <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number" class="input-feild" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  maxlength="10"/>
+                            <span id="mobileNumber_err" class="error"></span>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                            <label for="role">Role</label>
+                            <select  onclick="this.setAttribute('value', this.value);" placeholder=" " id="role" name="role" class="input-feild select2dropdown">
+                                <option value="">Select Role</option>
+                                {% for p in rolelist %}
+                                <option class="text-capitalize" value="{{p.id}}">{{p.RoleName}}</option>
+                                {%endfor%}
+                            </select>
+                            <span id="role_err" class="error"></span>
+                    </div>
+                    <div class="col-lg-6 mt-3">
+                            <label for="password">Enter Password</label>
+
+                            <input type="password" id="password" name="password" placeholder=" Enter Password" class="input-feild"/>
+                            <span id="password_err" class="error"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="trackproBtn w-25"  type="submit" id="editEmployeeDetails" onclick="return formValidation();">Submit</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+          
+<div class="table-div">
+    <table class="row-border w-100" id="myTable">
+        <thead>
+            <th>Sr. no</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile Number</th>
+            <th>Role</th>
+            <th>Action</th>
+        </thead>
+
+        <tbody>
+            {%for i in userlist %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.Firstname}} {{i.Lastname}}</td>
+                <td>{{i.email}}</td>
+                <td>{{i.Phone}}</td>
+                <td>{{i.RoleID}}</td>
+                <td>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#myModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" aria-hidden="true"></a>
+                    <a class="px-1" href="{% url 'company:userblock' i.id %}"><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+
+                </td>
+            </tr>
+            {%endfor%}
+
+
+        </tbody>
+    </table>
+</div>  
+
+
+{% for i in userlist %} 
+<div class="modal fade" id="myModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel"> Update User</h5>
+        </div>
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="col-lg-6 mt-3">
+                        <label for="firstName{{i.id}}">Enter First Name</label>
+                        <input type="text" id="firstName{{i.id}}" name="firstName" placeholder="Enter First Name" class="input-feild" value="{{i.Firstname}}" onkeydown="return /[a-z]/i.test(event.key)"//>
+                        <span id="firstName_err{{i.id}}" class="error"></span>
+                </div>
+                <div class="col-lg-6 mt-3">
+                        <label for="lastName{{i.id}}">Enter last Name</label>
+                        <input type="text" id="lastName{{i.id}}" name="lastName" placeholder="Enter last Name " class="input-feild" value="{{i.Lastname}}" onkeydown="return /[a-z]/i.test(event.key)"//>
+                        <span id="lastName_err{{i.id}}" class="error"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 mt-3">
+                    <label for="email{{i.id}}">Enter Email ID</label>
+                    <input type="email" id="email{{i.id}}" name="email" placeholder="Enter Email" class="input-feild" value="{{i.email}}"/>
+                    <span id="email_err{{i.id}}" class="error"></span>
+                </div>
+                <div class="col-lg-6 mt-3">
+                    <label for="mobileNumber{{i.id}}">Enter Mobile Number</label>
+
+                        <input type="text" id="mobileNumber{{i.id}}" name="mobileNumber" placeholder="Enter Mobile Number" class="input-feild" value="{{i.Phone}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  maxlength="10"/>
+                        <span id="mobileNumber_err{{i.id}}" class="error"></span>
+                </div>
+            
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mt-3">
+                        <label for="role{{i.id}}">Role</label>
+                        <select  onclick="this.setAttribute('value', this.value);" placeholder=" " id="role{{i.id}}" name="role" class="input-feild select2dropdown">
+                            <option value="{{i.RoleID}}" selected>{{i.RoleID}}</option>
+                            {% for p in rolelist %}
+                                {%if p.RoleName == i.RoleID %}
+                                    <option class="text-capitalize" value="{{p.id}}" selected>{{p.RoleName}}</option>
+                                {%else%}
+                                    <option class="text-capitalize" value="{{p.id}}">{{p.RoleName}}</option>
+                                {%endif%}
+                            {%endfor%}
+
+                        </select>
+                        <span id="role_err{{i.id}}" class="error"></span>
+                </div>
+                <div class="col-lg-6 mt-3">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Close</button>
+          <button class="trackproBtn w-25" id="editEmployeeDetails" onclick="updateuser({{i.id}});">Submit</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#myModaladd">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add User"
+  src="{% static 'assets/svg/addemployeeicon.svg' %}">
+</a></li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $( document ).ready(function() {
+        $(".usermapping-form-button").hide()
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+    });
+
+    // first name--------------------------------------------------------------------
+    const firstName = document.getElementById("firstName");
+    firstName.addEventListener("focus", function () {
+        firstName.setAttribute("placeholder", "Enter First Name");
+    });
+    firstName.addEventListener("blur", function () {
+        firstName.removeAttribute("placeholder");
+    });
+
+    // last name --------------------------------------------------------------------
+    const lastName = document.getElementById("lastName");
+    lastName.addEventListener("focus", function () {
+        lastName.setAttribute("placeholder", "Enter Last Name");
+    });
+    lastName.addEventListener("blur", function () {
+        lastName.removeAttribute("placeholder");
+    });
+
+    // email--------------------------------------------------------------------
+    const email = document.getElementById("email");
+    email.addEventListener("focus", function () {
+        email.setAttribute("placeholder", "Enter Email");
+    });
+    email.addEventListener("blur", function () {
+        email.removeAttribute("placeholder");
+    });
+
+    //Mobile number--------------------------------------------------------------------
+    const mobileNumber = document.getElementById("mobileNumber");
+    mobileNumber.addEventListener("focus", function () {
+        mobileNumber.setAttribute("placeholder", "Enter Mobile Number");
+    });
+    mobileNumber.addEventListener("blur", function () {
+        mobileNumber.removeAttribute("placeholder");
+    });
+
+    //password----------------------------------------------------------------------
+    const password = document.getElementById("password");
+    password.addEventListener("focus", function () {
+        password.setAttribute("placeholder", "Enter Password");
+    });
+    password.addEventListener("blur", function () {
+        password.removeAttribute("placeholder");
+    });
+
+
+
+
+    function formValidation(){
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var firstName = $('#firstName').val().trim();   
+        var lastName = $('#lastName').val().trim();   
+        var email = $('#email').val().trim();   
+        var mobileNumber = $('#mobileNumber').val().trim();   
+        var role = $('#role').val().trim();   
+        var password = $('#password').val().trim();   
+      
+        if (IsValid(firstName)) {
+            $('#firstName_err').show().delay(3000).slideUp();
+            $('#firstName_err').html('First Name is required');
+          $('#firstName').focus();
+          return false;
+        }else if (IsValid(lastName)) {
+            $('#lastName_err').show().delay(3000).slideUp();
+            $('#lastName_err').html('Last Name is required');
+            $('#lastName').focus();
+            return false;
+        }else if (IsValid(email)) {
+            $('#email_err').show().delay(3000).slideUp();
+            $('#email_err').html('Email is required');
+            $('#email').focus();
+            return false;
+        }else if (!validateEmail(email)) {
+            $('#email_err').show().delay(3000).slideUp();
+            $('#email_err').html('Invalid Email');
+            $('#email').focus();
+            return false;
+        }else if (IsValid(mobileNumber)) {
+            $('#mobileNumber_err').show().delay(3000).slideUp();
+            $('#mobileNumber_err').html('Mobile Number is required');
+            $('#mobileNumber').focus();
+            return false;
+        }else if(mobileNumber.length != 10){
+            $('#mobileNumber_err').show().delay(3000).slideUp();
+            $('#mobileNumber_err').html('Mobile Number should be of 10 digits');
+            $('#mobileNumber').focus();
+            return false;
+        }else if (IsValid(role)) {
+            $('#role_err').show().delay(3000).slideUp();
+            $('#role_err').html('Role field is required');
+            $('#role').focus();
+            return false;
+        }else if (IsValid(password)) {
+            $('#password_err').show().delay(3000).slideUp();
+            $('#password_err').html('Password field is required');
+            $('#password').focus();
+            return false;
+        }else if (password.length < 5) {
+            $('#password_err').show().delay(3000).slideUp();
+            $('#password_err').html('Password length should be upto 5 character');
+            $('#password').focus();
+            return false;
+        } else if (!regex.test(password)) {
+            $('#password_err').show().delay(3000).slideUp();
+            $('#password_err').html('Password should contian numbers and characters');
+            $('#password').focus();
+            return false;
+        }
+      
+     
+    } 
+    function updateuser(id) {
+        
+        var id = id
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var firstName = $('#firstName'+id).val().trim();   
+        var lastName = $('#lastName'+id).val().trim();   
+        var email = $('#email'+id).val().trim();   
+        var mobileNumber = $('#mobileNumber'+id).val().trim();   
+        var role = $('#role'+id).val().trim();   
+
+
+        if (IsValid(firstName)) {
+            $('#firstName_err'+id).show().delay(3000).slideUp();
+            $('#firstName_err'+id).html('First Name is required');
+          $('#firstName'+id).focus();
+          return false;
+        }else if (IsValid(lastName)) {
+            $('#lastName_err'+id).show().delay(3000).slideUp();
+            $('#lastName_err'+id).html('Last Name is required');
+            $('#lastName'+id).focus();
+            return false;
+        }else if (IsValid(email)) {
+            $('#email_err'+id).show().delay(3000).slideUp();
+            $('#email_err'+id).html('Email is required');
+            $('#email'+id).focus();
+            return false;
+        }else if (!validateEmail(email)) {
+            $('#email_err'+id).show().delay(3000).slideUp();
+            $('#email_err'+id).html('Invalid Email');
+            $('#email'+id).focus();
+            return false;
+        }else if (IsValid(mobileNumber)) {
+            $('#mobileNumber_err'+id).show().delay(3000).slideUp();
+            $('#mobileNumber_err'+id).html('Mobile Number field is required');
+            $('#mobileNumber'+id).focus();
+            return false;
+        }else if(mobileNumber.length != 10){
+            $('#mobileNumber_err'+id).show().delay(3000).slideUp();
+            $('#mobileNumber_err'+id).html('Mobile Number should be of 10 digits');
+            $('#mobileNumber'+id).focus();
+            return false;
+        }else if (IsValid(role)) {
+            $('#role_err'+id).show().delay(3000).slideUp();
+            $('#role_err'+id).html('Role field is required');
+            $('#role'+id).focus();
+            return false;
+        }else{
+            
+        $.ajax({
+            type: "POST",
+            url: backendURL + "users/api/userupdate",
+            headers: {"Authorization": "Token {{token}}"},
+            data: {
+                'id': id,
+                'Firstname':firstName,
+                'Lastname':lastName,
+                'email':email,
+                'Phone':mobileNumber,
+                'RoleID':role,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response)
+                if(response.n == 1){
+                    window.location = frontendURL + "role/userlist";
+                }else{
+                    window.location = frontendURL + "role/userlist";
+                }
+                
+            }
+        });
+        }
+    }
+    function deleteuser(id) {
+        $.ajax({
+            type: "GET",
+            url: backendURL + "users/api/userdelete",
+            headers: {"Authorization": "Token {{token}}"},
+            data: {
+                'userID': id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response)
+                if(response.n == 1){
+                    window.location = frontendURL + "role/userlist";
+                }else{
+                    window.location = frontendURL + "role/userlist";
+                }
+                
+            }
+        });
+    }
+    
+</script>
+{% endblock %}

@@ -1,0 +1,452 @@
+
+
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Employee Type Rules 
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
+<style>
+ 
+
+
+</style>
+
+
+<main class="main-wrapper">
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+    <form  method="post" class="formstyle" enctype="multipart/form-data">
+     {%csrf_token%}
+      <div class="row mx-1 mt-2">
+        <div class="col-3">
+          <label for="emptype">Employee Type</label>
+          <select id='emptype' name="emptype" class="input-feild select2dropdown">
+                <option value=''>Select type</option> 
+                {% for i in emptype %}
+                <option value="{{i.id}}">{{i.employeetype}}</option>
+                {% endfor %}
+          </select>
+          <p id="emptypeerror" class="error"></p>
+        </div>
+        <div class="col-3">
+          <label for="compoff">CompOff</label>
+          <select id='compoff' name="compoff" class="input-feild select2dropdown" onchange="fieldsvisiblity();">
+          <option value="Yes">Yes</option>
+          <option value="No" selected>No</option>
+          </select>
+          <p id="compofferror" class="error"></p>
+      </div>
+        <div class="col-3">
+          <label for="shifttype">Select Shifts</label>
+          <select id='shifttype' name="shifttype" class="input-feild select2dropdown" data-placeholder="Select shifts " multiple >
+            <option value="">Select shift</option>
+                {% for i in shifttypes %}
+                <option value="{{i.id}}">{{i.shiftname}}</option>
+                {% endfor %}
+          </select>
+          <p id="shifttypeerror" class="error"></p>
+        </div>
+
+        <div class="col-3 d-flex justify-content-center m-auto">
+          <div><button type="submit" class="add-btn" onclick="return formValidation();">+ Add Rules</button></div>
+        </div>
+    
+      </div>
+
+      <div class="row mx-1" id="compoffdetailsfileds" style="display: none;">
+        <div class="col-3">
+          <label for="compofftime">CompOff Time</label>
+          <input type="text" id='compofftime' name="compofftime" class="input-feild"  placeholder="In hours" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+        
+          <p id="compofftimeerror" class="error"></p>
+        </div>
+        <div class="col-3">
+          <label for="compoffvalidity">CompOff validity</label>
+          <input type="text" id='compoffvalidity' name="compoffvalidity" class="input-feild" placeholder="In days" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+          <p id="compoffvalidityerror" class="error"></p>
+
+
+        </div>
+      </div>
+    </form>
+
+    <div class="table-div">
+      <table class="row-border w-100" id="myTable">
+          <thead>
+              <th>
+                  Sr.No
+              </th>
+              <th>
+                  Employee Type
+              </th>
+              <th>
+                  Shifts
+              </th>
+              <th>
+                  CompOff
+              </th>
+              <th>
+                CompOff Time
+            </th>
+            <th>
+              CompOff Validity
+          </th>
+              <th class="text-center">
+                  Action
+              </th>
+          </thead>
+
+          <tbody id="projectbody">
+            {% for i in typeruleslist %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.Typename}}</td>
+                <td>{{i.shiftlist|join:", "}}</td>
+                <td class="">
+                  
+                  {% if i.CompOff == True %}
+                    <img width="16px" height="16px" src="{% static '/assets/images/success.png'%}">
+                  {%else%}
+                  <img width="16px" height="16px" src="{% static '/assets/images/error.png'%}">
+
+                  {%endif%} 
+                
+                </td>
+                <td>{{i.CompOffTime|default_if_none:'NA'}}</td>
+                <td>{{i.CompOffValidity|default_if_none:'NA'}}</td>
+                <td>
+                    <a class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#edittypemodal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon">
+                    </a>   
+                    <a class="px-1 deleteholbtn" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#deletetypemodal{{i.id}}"><img class="del-icon" src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      <div class="d-flex justify-content-end m-3" id="secondpagination-demo2">
+        <ul id="pagination-demo2" class="pagination-sm"></ul>
+       </div>
+    </div>
+
+
+
+
+
+    {% for i in typeruleslist %}
+    <div class="modal fade" id="edittypemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title" id="exampleModalLabel">Type Details</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-6 px-4">
+                    <label for="emptype{{i.id}}">Employee Type</label>
+                    <select id='emptype{{i.id}}' name="emptype{{i.id}}" class="input-feild select2dropdown">
+                        {% for e in emptype %}
+                        {% if e.employeetype == i.Typename %}
+                        <option value="{{e.id}}" selected>{{e.employeetype}}</option>
+                      
+                        {%endif%}
+                        {% endfor %}
+                    </select>
+                    <p id="emptypeerror{{i.id}}" class="error"></p>
+                  </div>
+                  <div class="col-6 px-4">
+                    <label for="compoff{{i.id}}">Comp Off</label>
+                    <select id='compoff{{i.id}}' name="compoff{{i.id}}" class="select2dropdown" style="bottom: 100%;"  onchange="updatefieldsvisiblity({{i.id}});">
+                          {% if i.CompOff == True %}
+                          <option value="Yes" selected>Yes</option>
+                          <option value="No">No</option>
+                            {%elif i.CompOff == False%}
+                              <option value="Yes" >Yes</option>
+                            <option value="No" selected>No</option>
+                            {%else%}
+                            <option value="Yes" >Yes</option>
+                            <option value="No" selected>No</option>
+                          {%endif%} 
+                          
+                        
+                    </select>
+                    <span id="compofferror{{i.id}}" class="error-message"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="row" id="compoffdetailsfileds{{i.id}}"  style="{% if i.CompOff == True %} display:flex; {%else%} display:none; {%endif%}">
+                
+                  <div class="col-lg-6 px-4">
+                    <label for="compofftime{{i.id}}">CompOff Time</label>
+                    <input type="text" id='compofftime{{i.id}}' name="compofftime{{i.id}}" class="input-feild" value="{{i.CompOffTime|default_if_none:''}}" placeholder="In hours" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+     
+                          
+                        
+                    <span id="compofftimeerror{{i.id}}" class="error-message"></span>
+                  </div>
+                  <div class="col-lg-6 px-4">
+                    <label for="compoffvalidity{{i.id}}">CompOff Validity</label>
+                    <input type="text" id='compoffvalidity{{i.id}}' name="compoffvalidity{{i.id}}" class="input-feild" value="{{i.CompOffValidity|default_if_none:''}}" placeholder="In days" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                    <span id="compoffvalidityerror{{i.id}}" class="error-message"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="row">
+                
+                  <div class="col-lg-6 px-4">
+                    <label for="shifttype{{i.id}}">Shifts</label>
+                    <select id='shifttype{{i.id}}' name="shifttype{{i.id}}" class="input-feild select2dropdown"             data-placeholder="Select shifts" multiple >
+                      <option value="">Select shift</option>
+                      {% for s in shifttypes %}
+                      {% if s.shiftname in i.shiftlist  %}
+                      <option value="{{s.id}}"  selected>{{s.shiftname}}</option>
+                      {%else%}
+                      <option value="{{s.id}}">{{s.shiftname}}</option>
+                      {%endif%}
+                      {% endfor %}
+                      </select>
+                    <span id="shifttypeerror{{i.id}}" class="error-message"></span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="editEmployeeDetails" onclick="validateupdateform({{i.id}})">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="deletetypemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Rule</h5>
+          </div>
+          <div class="modal-body ps-4">
+            <span>Are you sure ,you want to delete this?</span>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="editEmployeeDetails" onclick="deletetype({{i.id}})">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+<script>
+
+  function formValidation(){
+     
+    var emptype = $('#emptype').val();  
+    var shifttype = $('#shifttype').val(); 
+    var compoff = $('#compoff').val();   
+    var compofftime = $('#compofftime').val();   
+    var compoffvalidity = $('#compoffvalidity').val();   
+  
+    if (IsValid(emptype)) {
+      $('#emptypeerror').show().delay(3000).slideUp();
+      $('#emptypeerror').html('Employee Type is required');
+      $('#emptype').focus();
+      return false;
+    }if (IsValid(compoff)) {
+      $('#compofferror').show().delay(3000).slideUp();
+      $('#compofferror').html('Please Select Comp Off');
+      $('#compoff').focus();
+      return false;
+    }if (IsValid(shifttype)) {
+      $('#shifttypeerror').show().delay(3000).slideUp();
+      $('#shifttypeerror').html('Please Select Shift Types');
+      $('#shifttype').focus();
+      return false;
+    }if (compoff == "Yes") {
+      if (IsValid(compofftime)){
+        $('#compofftimeerror').show().delay(3000).slideUp();
+        $('#compofftimeerror').html('Please Add Comp Off Time');
+        $('#compofftime').focus();
+        return false;
+      }
+      if (IsValid(compoffvalidity)){
+        $('#compoffvalidityerror').show().delay(3000).slideUp();
+        $('#compoffvalidityerror').html('Please Add Comp Off validity');
+        $('#compoffvalidity').focus();
+        return false;
+      }
+
+    }
+  }
+
+ 
+  function fieldsvisiblity(){
+    var compoff=$("#compoff").val();
+    if (compoff == "Yes"){
+      $("#compoffdetailsfileds").fadeIn();
+    }else{
+      $("#compoffdetailsfileds").fadeOut();
+    }
+
+  }
+  function validateupdateform(typeid){
+    var emptype = $('#emptype'+typeid).val();  
+    var shifttype = $('#shifttype'+typeid).val(); 
+    var compoff = $('#compoff'+typeid).val();   
+    var compofftime = $('#compofftime'+typeid).val();   
+    var compoffvalidity = $('#compoffvalidity'+typeid).val();   
+  
+    if (IsValid(emptype)) {
+      $('#emptypeerror'+typeid).show().delay(3000).slideUp();
+      $('#emptypeerror'+typeid).html('Employee Type is required');
+      $('#emptype'+typeid).focus();
+      return false;
+    }if (IsValid(compoff)) {
+      $('#compofferror'+typeid).show().delay(3000).slideUp();
+      $('#compofferror'+typeid).html('Please Select Comp Off');
+      $('#compoff'+typeid).focus();
+      return false;
+    }if (compoff == "Yes") {
+      if (IsValid(compofftime)){
+        $('#compofftimeerror'+typeid).show().delay(3000).slideUp();
+        $('#compofftimeerror'+typeid).html('Please Add Comp Off Time');
+        $('#compofftime'+typeid).focus();
+        return false;
+      }
+      if (IsValid(compoffvalidity)){
+        $('#compoffvalidityerror'+typeid).show().delay(3000).slideUp();
+        $('#compoffvalidityerror'+typeid).html('Please Add Comp Off validity');
+        $('#compoffvalidity'+typeid).focus();
+        return false;
+      }
+      updaterule(typeid)
+
+
+    }if (IsValid(shifttype)) {
+      $('#shifttypeerror'+typeid).show().delay(3000).slideUp();
+      $('#shifttypeerror'+typeid).html('Please Select Shift Types');
+      $('#shifttype'+typeid).focus();
+      return false;
+    }
+    updaterule(typeid)
+
+  }
+  function updaterule(ruleid){
+
+    var TypeId = $('#emptype'+ruleid).val();  
+    var Shifts = $('#shifttype'+ruleid).val(); 
+    var CompOff = $('#compoff'+ruleid).val();   
+    var compofftime = $('#compofftime'+ruleid).val();   
+    var compoffvalidity = $('#compoffvalidity'+ruleid).val();
+    if (CompOff == "No"){
+      compofftime=''
+      compoffvalidity=''
+    }
+    $.ajax({
+      url: frontendURL + "update_employee_type_rules",
+      data: {
+        'id':ruleid,
+        'TypeId': TypeId,
+        'Shifts': JSON.stringify(Shifts),
+        'CompOff': CompOff,
+        'compoffvalidity': compoffvalidity,
+        'compofftime': compofftime,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+      },
+      type: "POST",
+      dataType: "json",
+      success: function (response) {
+        if (response['n'] == 1){
+           swal({
+            icon: "success",
+            title: "",
+            text: response['msg'],
+            button: "Close",
+            })
+            window.location.reload();
+          }
+        else{
+          swal({
+            icon: "error",
+            title: "",
+            text: response['msg'],
+            button: "Close",
+            })
+        }
+      }
+    })
+  }
+  function updatefieldsvisiblity(id){
+    var compoff=$("#compoff"+id).val();
+    if (compoff == "Yes"){
+      $("#compoffdetailsfileds"+id).fadeIn();
+    }else{
+      $("#compoffdetailsfileds"+id).fadeOut();
+    }
+
+  }
+
+  function deletetype(ruleid){
+
+
+    $.ajax({
+      url: frontendURL + "delete_employee_type_rules",
+      data: {
+        'id':ruleid,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+      },
+      type: "POST",
+      dataType: "json",
+      success: function (response) {
+        if (response['n'] == 1){
+           swal({
+            icon: "success",
+            title: "",
+            text: response['msg'],
+            button: "Close",
+            })
+            window.location.reload();
+          }
+        else{
+          swal({
+            icon: "error",
+            title: "",
+            text: response['msg'],
+            button: "Close",
+            })
+        }
+      }
+    })
+  }
+</script>
+
+{% endblock %}

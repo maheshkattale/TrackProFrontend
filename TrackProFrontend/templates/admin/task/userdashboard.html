@@ -1,0 +1,1207 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+User Dashboard
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+  .toast-body{
+    width: 100%;
+  }
+  .table-div {
+    margin: 10px 14px !important;
+}
+.green_status{
+  color:#228B22
+}
+.offline_status{
+  color: grey;
+}
+.present_status{
+  color:#174fa3;
+}
+.leave_status{
+  color:#d90000;
+}
+.activeremark{
+  color:#174fa3;
+}
+.searchbar{
+  padding:2px;
+  border:none;
+  width:200px;
+  border-radius:0 !important;
+  font-size:14px;
+  border-bottom:1px solid black;
+}
+.select2-container--default .select2-selection--single {
+    height: 40px;
+}
+.select2-container--default .select2-selection--single {
+    height: 30px;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-top: 0px;
+    font-size: 13px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 1px;
+}
+thead th{
+  font-size:12px;
+  font-weight:500;
+  color:#000000;
+  padding:3px 3px;
+}
+.tasklistitem tr{
+  background-color: rgb(230 230 230 / 55%);
+}
+.tasklist>tr>td{
+  padding:10px;
+
+}
+.tasklistitem td{
+  font-size:11px !important;
+  padding:4px;
+}
+.tasktable {
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    table-layout: fixed;
+}
+.task_text{
+  text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.usertaskrow{
+  cursor: pointer;
+}
+.sticky_project_name{
+  font-weight: 500;
+  margin: 0 !important;
+}
+.sticky_task_detail{
+  margin-top: 0 !important;
+}
+.bottomicons img{
+  width:100%;
+  height:20px;
+}
+.statustext{
+  margin-bottom: 0% !important;
+  font-size: 10px;
+}
+.taskzoneimage{
+  cursor: pointer;
+}
+.send_icon{
+  height: 40px;
+}
+.chat-log_item {
+	background: #eaeaea;
+	padding: 3px 10px;
+	margin: 0 auto 10px;
+	max-width: 95%;
+	min-width: 25%;
+	float: left;
+	font-size: 13px;
+	border-radius: 0 20px 20px 20px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+	clear: both;
+}
+
+.chat-log_item.chat-log_item-own {
+	float: right;
+	background: #D5F4E7;
+	text-align: right;
+	margin-right: 0.7rem;
+  border-radius: 20px 0 20px 20px;
+}
+
+.chat-form {
+	background: #DDDDDD;
+	padding: 40px 0;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+.chat-log_author {
+	margin: 0 auto 0em;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.chat-log_time {
+	margin: 0 auto .5em;
+	direction: rtl;
+	font-size: 12px;
+	opacity: 0.5;
+}
+
+
+.tooltiptext a{
+    text-decoration: none;
+  }
+  .datetootip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .datetootip .tooltiptext {
+    visibility: hidden;
+    width: 145px;
+    background-color: #fff;
+    color: #056b90;
+    text-align: center;
+    border:1px solid #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size: 10px;
+    /* height:30px; */
+
+    /* Position the datetootip */
+    position: absolute;
+    z-index: 1;
+    top: 95%;
+    left: 0%;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .datetootip {
+    position: relative;
+    display: inline-block;
+    color:black;
+    cursor:pointer;
+    font-size:12px;
+  }
+  .datetootip:hover{
+    font-size:13px;
+  }
+  .assignbypr{
+    font-weight:500;
+  }
+
+  .datetootip:hover .tooltiptext {
+    visibility: visible;
+  }
+  #weeklytaskmodal >.modal-dialog{
+    margin-left: 5% ;
+  }
+</style>
+
+<main class="main-wrapper">
+  <!-- ==================Row1======================= -->
+<div class="main-box">
+  <div class="table-div">
+    <div class="d-flex justify-content-between">
+      <div>
+        <input type="text" id="searchboxquery"  class="searchbar" placeholder="Search by Employee Name" oninput="get_user_dashboard();">
+      </div>
+      <div class="me-3">
+        <span class="blue-text">Employee Count :</span>  <span class="blue-number"><span id="activeemployeecount">0</span> /<span id="totalemployeecount">0</span></span>
+      </div>
+    </div>
+    <div class="row mt-3 d-flex align-items-center">
+      <div class="col deptcol">
+        <label class="filterlabel">Dept</label>
+        <select class="input-feild select2dropdown" id="filter_department" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+        </select>
+      </div>
+      <div class="col managercol">
+        <label class="filterlabel">Manager</label>
+        <select class="input-feild select2dropdown" id="filter_taskmanager" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+         
+        </select>
+      </div>
+      <div class="col projectcol">
+        <label class="filterlabel">Project</label>
+        <select class="input-feild select2dropdown" id="filter_project" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+        
+        </select>
+      </div>
+      <div class="col pmngcol">
+        <label class="filterlabel">Project Manager</label>
+        <select class="input-feild select2dropdown" id="filter_projectmanager" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+          
+        </select>
+      </div>
+      <div class="col clientsidecol">
+        <label class="filterlabel">Client Side</label>
+        <select class="input-feild select2dropdown" id="filter_clientside" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+          
+        </select>
+      </div>
+      <div class="col ToWcol">
+        <label class="filterlabel">Type of Work</label>
+        <select class="input-feild select2dropdown" id="filter_typeofwork" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+          <option value="1">Work from home</option>
+          <option value="2">Work from Office</option>
+          <option value="3">Outdoor</option>
+          <option value="4">Hybrid</option>
+        </select>
+      </div>
+      <div class="col statuscol">
+        <label class="filterlabel">Status</label>
+        <select class="input-feild select2dropdown" id="filter_status" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+          <option value="idle">Idle</option>
+          <option value="sixhours">More than 6 hours</option>
+        </select>
+      </div>
+      <div class="col locationcol">
+        <label class="filterlabel">Location</label>
+        <select class="input-feild select2dropdown" id="filter_location" onchange="get_user_dashboard();">
+          <option value="" selected>All</option>
+          
+        </select>
+      </div>
+      <div class="col">
+        <button class="form-btn d-flex" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reset" onclick="resetfilter();"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <!-- <p>
+      <button type="button" id="button-show-info" class="btn btn-info">Show a complex toast with header and buttons
+      </button>
+  </p> -->
+    <div class="row mt-4" id="">
+      <div class="col-md-6">
+        <table class="tasktable w-100"> 
+          <thead class="px-1">
+            <th style="width:2%;"></th>
+            <th style="width:20%;">Employee Name</th>
+            <th style="width:18%;" class="task_text">Project</th>
+            <th style="width:35%;" class="task_text">Task</th>
+            <th style="width:15%;">Time</th>
+            <th style="width:10%;"></th>
+          </thead>
+          <tbody class="tasklistitem" id="firstsectiondiv">
+           
+           
+          </tbody>
+        </table>
+       
+      </div>
+      <div class="col-md-6">
+        <table class="tasktable w-100"> 
+          <thead class="px-1 ">
+            <th style="width:2%;"></th>
+            <th style="width:20%;">Employee Name</th>
+            <th style="width:18%;" class="task_text">Project</th>
+            <th style="width:35%;" class="task_text">Task</th>
+            <th style="width:15%;">Time</th>
+            <th style="width:10%;"></th>
+          </thead>
+          <tbody class="tasklistitem" id="secondsectiondiv">
+            
+          </tbody>
+        </table>
+       
+      </div>
+    </div>
+  </div>
+ 
+  
+   
+</div>
+
+<div class="modal" id="remarkmodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Remarks</h5>
+        <input type="hidden" id="remark_user_id">
+        <input type="hidden" id="remark_task_id">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-2">
+        <div class="container-fluid" id="remark_details">
+         
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <div class="row col-12">
+          <span class="col-11 pe-0">
+            <input type="text" class="form-control form-control-custom ps-4" id="remark_comment" placeholder="Add Remark"
+            name="target_title">
+            <span id="remark_comment_required"></span>
+          </span>
+          <span class="col-1 p-0">
+            <img src="{% static 'assets/svg/send-icon.svg'%}" class="send_icon" onclick="addremark(document.getElementById('remark_user_id').value,document.getElementById('remark_task_id').value);">
+          </span>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+   
+<div class="modal" id="weeklytaskmodal" aria-hidden="true" tabindex="1" aria-labelledby="exampleModalToggleLabel">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Weekly Tasks</h5>
+        <input type="hidden" id="weeklytasksid">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-2">
+        <div class="p-2">
+
+
+
+
+                    <table class="weekly_tasktable w-100"> 
+                      <thead class="px-1">
+                        <th style="width:10%">Sr.No</th>
+                        <th style="width:20%">Assignby</th>
+                        <th style="width:20%">Assign Date</th>
+                        <th style="width:30%" class="task_text">Task</th>
+                        <th style="width:20%">Time</th>
+                      </thead>
+                      <tbody class="tasklist" id="weeklytasks_list">
+                        
+                      </tbody>
+                    </table>
+          
+                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      
+      <div class="modal-footer mt-3">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="{% static 'js/bootstrap-show-toast.js' %}"></script>
+
+<script>
+  $(document).ready(function(){
+    $(".absinfo").hide();
+
+    get_user_dashboard();
+        
+ 
+    setTimeout( function(){ 
+      // Do something after 1 second 
+      projectlist();
+   
+    }  , 1000 );
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  })
+
+  var timer = 0;
+  timer  = setInterval(get_user_dashboard, 60 * 1000);
+
+
+
+  function aftertaskzoneassign(id){
+
+    var fd = new FormData();    
+    fd.append("Taskid",id)
+    fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+    $.ajax({
+      type: 'POST',
+      url: frontendURL+'task/get_taskdetail',
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+
+        var trhtml =""
+        trhtml = `
+            <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,1)">
+              <div class="text-center">`+response.data.greenstatusstr+`</div>
+              <p class="statustext">Green</p>
+            </div>
+
+            <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,2)">
+              <div class="text-center">`+response.data.yellowstatusstr+`</div>
+              <p class="statustext">Yellow</p>
+            </div>
+
+            <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,3)">
+              <div class="text-center">`+response.data.redstatusstr+`</div>
+              <p class="statustext">Red</p>
+            </div>
+
+            <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,4)">
+              <div class="text-center">`+response.data.notdonestr+`</div>
+              <p class="statustext">Not Done</p>
+            </div>
+
+            <div class="taskzoneimage d-none">
+              <div class="text-center">`+response.data.rejectedstr+`</div>
+              <p class="statustext">Help</p>
+            </div>
+
+            <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,6)">
+              <div class="text-center">`+response.data.rejectedstr+`</div>
+              <p class="statustext">Reject</p>
+            </div>
+
+            <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,5)">
+              <div class="text-center">`+response.data.cancelledstr+`</div>
+              <p class="statustext">Cancel</p>
+            </div>
+
+            <div class="taskzoneimage" onclick="taskbonus(`+response.data.id+`)">
+              <div class="text-center">`+response.data.Bonus+`</div>
+              <p class="statustext">Bonus</p>
+            </div>
+        `
+
+        $("#taskapplied"+id).html(trhtml);
+        $("#bonushidden"+id).html(response.data.bonushiddenstr)
+        
+
+      },
+    })
+
+  }
+
+  var getuserlist = []
+
+  function gettaskdata(id){
+    
+    if (id != undefined){
+      if(jQuery.inArray(id, getuserlist) !== -1){
+        console.log("yess",getuserlist)
+      }else{
+        getuserlist.push(id)
+        console.log("no",getuserlist)
+      
+      
+      var fd = new FormData();    
+      fd.append("Taskid",id)
+      fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+      $.ajax({
+        type: 'POST',
+        url: frontendURL+'task/get_taskdetail',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          console.log("task res",response)
+            var bodyhtml = `
+                      <p class='sticky_project_name'>`+response.data.ProjectName+`</p> 
+                      <p class='sticky_task_detail'>`+response.data.TaskTitle+`</p> 
+                      <span class="d-none" id = "bonushidden`+response.data.id+`">`+response.data.bonushiddenstr+`</span>                     
+                      <div class="d-flex justify-content-around bottomicons" id="taskapplied`+response.data.id+`">
+
+                        <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,1)">
+                          <div class="text-center">`+response.data.greenstatusstr+`</div>
+                          <p class="statustext">Green</p>
+                        </div>
+  
+                        <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,2)">
+                          <div class="text-center">`+response.data.yellowstatusstr+`</div>
+                          <p class="statustext">Yellow</p>
+                        </div>
+  
+                        <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,3)">
+                          <div class="text-center">`+response.data.redstatusstr+`</div>
+                          <p class="statustext">Red</p>
+                        </div>
+  
+                        <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,4)">
+                          <div class="text-center">`+response.data.notdonestr+`</div>
+                          <p class="statustext">Not Done</p>
+                        </div>
+  
+                        <div class="taskzoneimage d-none">
+                          <div class="text-center">`+response.data.rejectedstr+`</div>
+                          <p class="statustext">Help</p>
+                        </div>
+  
+                        <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,6)">
+                          <div class="text-center">`+response.data.rejectedstr+`</div>
+                          <p class="statustext">Reject</p>
+                        </div>
+  
+                        <div class="taskzoneimage" onclick="taskzoneupdate(`+response.data.id+`,5)">
+                          <div class="text-center">`+response.data.cancelledstr+`</div>
+                          <p class="statustext">Cancel</p>
+                        </div>
+
+                        <div class="taskzoneimage" onclick="taskbonus(`+response.data.id+`)">
+                          <div class="text-center">`+response.data.Bonus+`</div>
+                          <p class="statustext">Bonus</p>
+                        </div>
+                       
+                      </div>
+                  `
+                  const toast = bootstrap.showToast({
+                    header: response.data.user_name,
+                    headerSmall: response.data.task_time,
+                    getuserid:response.data.id,
+                    body: bodyhtml,
+                    delay: Infinity
+                })
+                
+        }, error: function(error) {
+          swal({
+            icon: "warning",
+            title: "",
+            text: "No Task found",
+            button: false,
+            timer: 500
+          });
+        }
+  
+      })
+    }
+  
+    }else{
+      swal({
+        icon: "warning",
+        title: "",
+        text: "No Task found",
+        button: false,
+        timer: 500
+      });
+    }
+  }
+
+
+  function getusertaskdetails(empid){
+    var fd = new FormData();    
+      fd.append("empid",empid)
+      fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+      $.ajax({
+        type: 'POST',
+        url: frontendURL+'task/getweeklytask',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          console.log("response week",response)
+          count=1
+          var trhtml='';
+          $.each(response.data,function(i,o){
+
+                  trhtml += `
+
+                  
+                  <tr class='border-top border-bottom'>
+                  <td>`+count+`</td>  
+
+                  <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                  <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+
+                  <td class="projectdesc" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom' id="taskdes`+ o.id + `">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                              </td>
+                                
+                  <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + `(`+o.daywisetime.length+`)<span class="tooltiptext">
+                    ${o.daywisetime.map(l => `
+                        <span> ${l.date} : ${l.time}</span>
+                    `).join("\n")}
+                    </span></p> </td>
+                                 
+                                 
+                  </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  `
+                  count+=1
+                })
+
+          $('#weeklytasks_list').html(trhtml);
+
+
+
+      }
+    })
+  }
+
+
+
+  function removegetuserlist(id){
+    getuserlist.splice(getuserlist.indexOf(id),1);
+  }
+
+  function taskzoneupdate(taskid,Zone){
+    var id = taskid
+
+
+      var fd = new FormData();
+        fd.append("Taskid", taskid);
+        fd.append("Zone", Zone);
+        fd.append('csrfmiddlewaretoken', '{{csrf_token}}');
+  
+        swal({title: "Are you sure?",
+              text: "You want to Assign the Zone!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }) 
+        .then((willDelete) => {if (willDelete) {
+          $.ajax({
+            type: "POST",
+            url: frontendURL + "task/updateParticularTaskZone",
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              if (response.n == 1){
+               
+                swal({
+                  icon: "success",
+                  title: "",
+                  text: "Marks Updated Successfully.",
+                  button: false,
+                  timer: 500
+                  });  
+              }
+              else{
+                swal({
+                  icon: "error",
+                  title: "Marks Not Added",
+                  text: response.Msg,
+                  button: false,
+                  timer: 500
+                  }); 
+              }
+              aftertaskzoneassign(taskid)
+                
+            }
+        })
+      } else { swal("Marks not given!", { icon: "error", }); } });
+     }
+
+     function taskbonus(taskid){
+      var id = taskid
+      var bonushiddenstr = $("#bonushidden"+taskid).text();
+      console.log("bonushiddenstr",bonushiddenstr)
+      if(bonushiddenstr == "False") {
+          var bonus = true
+        } else {
+          var bonus = false
+        }
+      
+  
+        var fd = new FormData();
+          fd.append("taskid", taskid);
+          fd.append("bonus",bonus)
+  
+          fd.append('csrfmiddlewaretoken', '{{csrf_token}}');
+    
+          swal({title: "Are you sure?",
+                text: "You want to Give Bonus!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+              }) 
+          .then((willDelete) => {if (willDelete) {
+            $.ajax({
+              type: "POST",
+              url: frontendURL + "task/taskbonusbymanager",
+              data: fd,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                if (response.n == 1){
+                 
+                  swal({
+                    icon: "success",
+                    title: "",
+                    text: "Bonus Updated Successfully.",
+                    button: false,
+                    timer: 500
+                    });  
+                }
+                else{
+                  swal({
+                    icon: "error",
+                    title: "Bonus Not Added",
+                    text: response.Msg,
+                    button: false,
+                    timer: 500
+                    }); 
+                }
+                aftertaskzoneassign(taskid)
+                  
+              }
+          })
+        } else { swal("Bonus not given!", { icon: "error", }); } });
+       }
+
+//function toasterclick(id,username,projectname,taskdetail,taskhours){
+//  const toast = bootstrap.showToast({
+//    header: username,
+//    headerSmall: taskhours,
+//    body: "<p class='sticky_project_name'>"+projectname+"</p> <p class='sticky_task_detail'>"+taskdetail+"</p><div><button class='btn btn-primary //me-1 btn-sm'>Click me</button><button class='btn btn-secondary btn-sm' data-bs-dismiss='toast'>Close</button></div>",
+//    delay: Infinity
+//})
+//toast.element.querySelector(".btn-primary").addEventListener("click", () => {
+//    bootstrap.showToast({
+//        body: "Thank you for clicking", direction: "append",
+//        toastClass: "text-bg-success", closeButtonClass: "btn-close-white"
+//    })
+//})
+//}
+
+
+
+
+    var backendImageURL = "{{ImageURL}}"    
+  
+    function projectlist(){
+      $.ajax({
+              type: 'GET',
+              url: frontendURL + 'project/userdashboardlisting',
+              
+              processData: false,
+              contentType: false,
+    
+              success: function(response){
+                
+                var opthtml = "<option value=''>All</option>"
+                var depthtml = "<option value=''>All</option>"
+                var tmthtml = "<option value=''>All</option>"
+                var pmthtml = "<option value=''>All</option>"
+                var csthtml = "<option value=''>All</option>"
+                var lchtml = "<option value=''>All</option>"
+                $.each(response.data.project_data,function(i,o){
+                  opthtml += `
+                  <option value="`+o.id+`">`+o.ProjectName+`</option>
+                  `
+                })
+                $("#filter_project").html(opthtml);
+
+                $.each(response.data.department_data,function(i,o){
+                  depthtml += `
+                  <option value="`+o.id+`">`+o.DepartmentName+`</option>
+                  `
+                })
+                $("#filter_department").html(depthtml);
+
+                $.each(response.data.taskmanager_data,function(i,o){
+                  tmthtml += `
+                  <option value="`+o.manager_id+`">`+o.manager_name+`</option>
+                  `
+                })
+                $("#filter_taskmanager").html(tmthtml);
+
+                $.each(response.data.projectmanagerdata,function(i,o){
+                  pmthtml += `
+                  <option value="`+o.id+`">`+o.Firstname+` `+o.Lastname+`</option>
+                  `
+                })
+                $("#filter_projectmanager").html(pmthtml);
+
+                $.each(response.data.clientside_data,function(i,o){
+                  csthtml += `
+                  <option value="`+o.user_id+`">`+o.Firstname+` `+o.Lastname+`</option>
+                  `
+                })
+                $("#filter_clientside").html(csthtml);
+
+                $.each(response.data.location_data,function(i,o){
+                  lchtml += `
+                  <option value="`+o.id+`">`+o.LocationName+`</option>
+                  `
+                })
+                $("#filter_location").html(lchtml);
+                
+              }
+            })
+    }
+
+    function resetfilter(){
+      $("#filter_project").val('').trigger('change');
+      $("#filter_project").val('').trigger('change');
+      $("#filter_department").val('').trigger('change');
+      $("#filter_typeofwork").val('').trigger('change');
+      $("#filter_projectmanager").val('').trigger('change');
+      $("#searchboxquery").val('');
+      $("#filter_taskmanager").val('').trigger('change');
+      $("#filter_clientside").val('').trigger('change');
+      $("#filter_status").val('').trigger('change');
+      get_user_dashboard();
+    }
+
+    function get_user_dashboard(){
+
+      var filter_project = $("#filter_project").val();
+      var filter_location = $("#filter_location").val();
+      var filter_department = $("#filter_department").val();
+      var filter_typeofwork = $("#filter_typeofwork").val();
+      var filter_projectmanager = $("#filter_projectmanager").val();
+      var searchboxquery = $("#searchboxquery").val();
+      var taskmanager = $("#filter_taskmanager").val();
+      var clientside = $("#filter_clientside").val();
+      var filter_status = $("#filter_status").val();
+   
+      var trhtml = '';
+
+        var fd = new FormData();    
+        fd.append("searchboxquery",searchboxquery);
+        fd.append("department",filter_department);
+        fd.append("projectmanager",filter_projectmanager);
+        fd.append("location",filter_location);
+        fd.append("empworkstatus",filter_typeofwork);
+        fd.append("project",filter_project);
+        fd.append("clientside",clientside);
+        fd.append("taskmanager",taskmanager);
+        fd.append("tasktime",filter_status);
+        fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+        $.ajax({
+          type: 'POST',
+          url: frontendURL+'get_user_dashboard',
+          data: fd,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            console.log("respt",response)
+            $("#activeemployeecount").html(response.totalemployeeworking);
+            $("#totalemployeecount").html(response.totalemployeecount);
+            var fhtml = "";
+            var shtml = "";
+            $(response.firsthalf).each(function(i,o){
+              var username = o.Firstname+ " " +o.Lastname
+              var taskzone = o.allzonestr
+              fhtml += `
+              <tr class="usertaskrow" id="taskshowinfo`+o.id+`" onclick="gettaskdata(`+o.taskid+`)">
+                <td>`+o.user_status+`</td>
+                <td>`+o.Firstname+` `+o.Lastname+` `+o.working_from+`</td>
+
+                <td class="task_text">`+o.project_name+`</td>
+                ${ o.leave_detail != '' ? `
+                  <td class="task_text">`+o.leave_detail+`</td>
+                  `:
+                  `
+                  <td class="task_text">`+o.task_detail+`</td>
+                  `}
+                <td>`+o.task_time+`</td>
+
+                <td class="d-flex justify-content-end">
+                 `+o.exceed_time+` ${ o.task_detail != '--' ? `
+
+
+                  <span class="ms-1" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.id+`,`+o.taskid+`)">
+                    ${ o.taskremark == true ? `
+                    <i class="fa fa-comments" aria-hidden="true"></i>
+                    `:
+                    `
+                    <i class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                    `}
+                  </span>
+
+
+
+                  <span class="ms-1" data-bs-toggle="modal" data-bs-target="#weeklytaskmodal" onclick="getusertaskdetails(`+o.id+`)"><i class="fa fa-list" aria-hidden="true"></i></span>
+                  `:
+                  ``}
+                </td>
+
+
+
+              </tr>
+                
+                `
+            })
+
+            $("#firstsectiondiv").html(fhtml)
+
+            $(response.secondhalf).each(function(i,o){
+              var username = o.Firstname+ " " +o.Lastname
+              var taskzone = o.allzonestr
+              shtml += `
+
+              <tr class="usertaskrow" id="taskshowinfo`+o.id+`" onclick="gettaskdata(`+o.taskid+`)">
+                <td>`+o.user_status+`</td>
+                <td>`+o.Firstname+` `+o.Lastname+` `+o.working_from+`</td>
+                <td class="task_text">`+o.project_name+`</td>
+                ${ o.leave_detail != '' ? `
+                <td class="task_text">`+o.leave_detail+`</td>
+                  `:
+                  `
+                  <td class="task_text">`+o.task_detail+`</td>
+                  `}
+                
+                <td>`+o.task_time+` </td>
+                <td class="d-flex justify-content-end">
+                  `+o.exceed_time+` 
+                  ${ o.task_detail != '--' ? `
+                  <span class="ms-1" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.id+`,`+o.taskid+`)">  ${ o.taskremark == true ? `
+                    <i class="fa fa-comments" aria-hidden="true"></i>
+                    `:
+                    `
+                    <i class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                    `}</span>
+                  <span class="ms-1" data-bs-toggle="modal" data-bs-target="#weeklytaskmodal" onclick="getusertaskdetails(`+o.id+`)"><i class="fa fa-list" aria-hidden="true"></i></span>
+                     `:
+                  ``}
+                </td>
+                  
+              </tr>
+                
+                `
+
+
+            })
+
+            $("#secondsectiondiv").html(shtml)
+
+          }
+        })
+
+    }
+
+    function addremark(user_id,task_id){
+      var remark_comment = $("#remark_comment").val().trim();
+      if(remark_comment == "" || remark_comment == undefined){
+
+        $('#remark_comment').html('');
+        $("#remark_comment_required").show().delay(3000).slideUp();
+        $('#remark_comment_required').html('Please add remark!').css('color', 'red');
+        $('#remark_comment').focus();
+        return false;
+
+      }else{
+        var trhtml = ""
+        var fd = new FormData();    
+        fd.append("task_id",task_id);
+        fd.append("remark_comment",remark_comment);
+        fd.append("user_id",user_id);
+        fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+  
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "task/addmanagertaskremark",
+          data: fd,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            console.log("resss task",response)
+            if (response.n == 1){
+              swal({
+                icon: "success",
+                title: "",
+                text: "Remark Added Successfully.",
+                button: false,
+                timer: 500
+                });  
+                $('#remark_comment').val('');
+                remarklist(user_id,task_id)
+            
+            }
+            else{
+              swal({
+                icon: "error",                
+                text: response.Msg,
+                button: false,
+                timer: 1000
+                }); 
+           
+            }
+           
+              
+          }
+      })
+      }
+     
+
+    }
+
+    function remarklist(userid,taskid){
+      $("#remark_user_id").val(userid);
+      $("#remark_task_id").val(taskid);
+      $("#activemark"+userid).removeClass("activeremark");
+
+      var trhtml = ""
+      var fd = new FormData();    
+      fd.append("task_id",taskid);
+      fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "task/dashboardtaskremarklist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          console.log("resss task",response)
+          if (response.n == 1){
+            $(response.data).each(function(i,o){
+
+              if (o.ismanager == true){
+                trhtml +=`
+              <div class="chat-log_item chat-log_item z-depth-0">
+                <div class="row justify-content-start mx-1 d-flex">
+                  <div class="col-auto px-0">
+                    <span class="chat-log_author">
+                      @`+o.created_by_str+`
+                    </span>
+                  </div>
+                  <div class="col-auto px-0">
+                  </div>
+                </div>
+                <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+                <div class="chat-log_message">
+                  <p class="m-0">`+o.remark_comment+`
+                  </p>
+                </div>
+                <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+                <div class="row chat-log_time m-0 p-0 justify-content-end">
+                  `+o.created_date+`
+                </div>
+              </div>
+              `
+
+              }else{
+                trhtml += `
+                <div class="chat-log_item chat-log_item-own z-depth-0">
+                  <div class="row justify-content-start mx-1 d-flex">
+                    <div class="col-auto px-0">
+                      <span class="chat-log_author">
+                        @`+o.created_by_str+`
+                      </span>
+                    </div>
+                    <div class="col-auto px-0">
+                    </div>
+                  </div>
+                  <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+                  <div class="chat-log_message">
+                    <p class="m-0">`+o.remark_comment+`
+                    </p>
+                  </div>
+                  <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+                  <div class="row chat-log_time m-0 p-0 justify-content-end">
+                    `+o.created_date+`
+                  </div>
+                </div>
+                `
+              }
+
+              
+
+            })
+
+           $("#remark_details").html(trhtml)
+          }
+          else{
+         
+          }
+         
+            
+        }
+      })
+
+    }
+
+   
+    function AddReadMore() {
+            //This limit you can set after how much characters you want to show Read More.
+            var carLmt = 90;
+            // Text to show when text is collapsed
+            var readMoreTxt = " ... Read More";
+            // Text to show when text is expanded
+            var readLessTxt = " Read Less";
+        
+        
+            //Traverse all selectors with this class and manupulate HTML part to show Read More
+            $(".addReadMore").each(function() {
+                if ($(this).find(".firstSec").length)
+                    return;
+        
+                var allstr = $(this).text();
+                if (allstr.length > carLmt) {
+                    var firstSet = allstr.substring(0, carLmt);
+                    var secdHalf = allstr.substring(carLmt, allstr.length);
+                    var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+                    $(this).html(strtoadd);
+                }
+        
+            });
+            //Read More and Read Less Click Event binding
+            
+    }
+
+    $(document).on("click", ".readMore,.readLess", function() {
+        $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+    });
+
+    
+
+    
+   
+</script>
+
+{% endblock %}

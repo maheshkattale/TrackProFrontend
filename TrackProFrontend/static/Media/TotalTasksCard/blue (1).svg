@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="210" height="276" viewBox="0 0 210 276">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.966" y1="0.016" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#2b80d6"/>
+      <stop offset="1" stop-color="#409fff" stop-opacity="0.122"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" y1="0.698" x2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#2c81d7"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="blue" transform="translate(-968 -492)">
+    <path id="tile_bg" d="M178,276H0S68.965,171.333,178,0c8.837,0,16,7.433,16,16.6V259.4C194,268.567,186.837,276,178,276Z" transform="translate(984 492)" opacity="0.32" fill="url(#linear-gradient)"/>
+    <path id="tile_bg-2" data-name="tile_bg" d="M16,0H194C161.941,52.016,128.427,105.889,16,276c-8.837,0-16-7.433-16-16.6V16.6C0,7.433,7.163,0,16,0Z" transform="translate(968 492)" opacity="0.32" fill="url(#linear-gradient-2)"/>
+  </g>
+</svg>

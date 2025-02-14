@@ -1,0 +1,389 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+Late Attendance Report
+</div>
+{% endblock %}
+{% block content %}
+
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript">
+    jQuery.noConflict()
+  </script>
+  
+
+  <link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+
+
+  <link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+  .leads-div {
+    margin:0;
+    
+  }
+  thead th{
+    font-weight:500 !important;
+  }
+
+
+
+      .input-feild {
+
+          height: 48px;
+      }
+      .table-div {
+
+          padding: 16px 15px 15px 15px !important;
+      }
+      .select2-dropdown {
+        z-index: 111111 !important;
+    }
+    .fa-minus-circle{
+      font-size:22px
+    }
+    .dataTables_filter{
+      display:none;
+    }
+    tr{
+      border-bottom: 1px solid lightgrey;
+    }
+
+
+    table td {
+      font-size: 14px !important;
+      font-weight: 400 !important;
+      padding: 10px 0;
+  }
+</style>
+  <!-- Include jQuery UI Datepicker library -->
+
+  <main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    
+    <div class="mt-2 d-flex justify-content-end">
+        
+      
+
+
+        <span class="col-lg-8 d-flex justify-content-end">
+            <span class="mx-3 selectdrop w-25">
+                <select class="form-control select2dropdown" id="EmployeeId" name="EmployeeId" onchange="Pagination();">
+                    <option value="">All</option>
+
+                {% for i in employees %}
+
+                    <option value="{{i.employeeId}}">{{i.Firstname}} {{i.Lastname}}</option>
+
+                {% endfor %}
+                </select>
+            </span>
+
+            <span style="display:flex;">
+                <span id="daterange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                <span id="spandatechange"></span> <i class="fa fa-caret-down"></i>
+                </span>
+            </span>
+
+            <span>
+                <span  class="btn btn-primary mx-1 my-auto" onclick="downloadexcelreport()" id="exportButton">Excel</span>
+            </span>
+        </span>
+        
+  </div>
+  <div class="table-div">
+
+
+    <div class="leads-div">
+
+          <table class="w-100 row-border" id="latemarktable">
+            <thead class="border-bottom">
+                <th>Sr No.</th>
+                <th>Employee Name</th>
+                <th>Date</th>
+                <th style="width:20%;">In Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+            </thead>
+            <tbody class="" id="late_employees">
+              {%for i in data.data.Employees%}
+              <tr class="border-bottom">
+                <td>{{forloop.counter}}</td>
+                <td>{{i.empname}}</td>
+                <td>{{i.date}}</td>
+                <td>{{i.intime}}</td>
+
+              </tr>
+              {%endfor%}
+            </tbody>
+          </table>
+          <div class=" d-flex justify-content-end m-3" id="secondpagination-demo2">
+            <ul id="pagination-demo2" class="pagination-sm"></ul>
+           </div>
+    </div>
+</div>
+</main>
+{% endblock %}
+
+{% block script %}
+{{block.super}}
+<!-- Include jQuery first -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<script>
+    let datename
+
+    $(document).ready(function () {
+
+      range_calender()
+      Pagination()
+    });
+
+    function range_calender(){
+      
+
+
+        var start = moment().subtract(0, 'days')
+        var end = moment()
+      
+        function cb(start, end) {
+          $('#daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        }
+      
+        $('#daterange').daterangepicker(
+          {
+            startDate: start,
+            endDate: end,
+            ranges: {
+              Today: [moment(), moment()],
+              Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+              'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+              'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+              'This Month': [moment().startOf('month'), moment().endOf('month')],
+              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+          },
+          cb
+        )
+      
+        cb(start, end)
+  
+        // Use jQuery UI Datepicker for DOB input
+        $('#spandatechange').on('DOMSubtreeModified', function () {
+          Pagination()
+        })
+
+    }
+
+    function GetMonthName(monthname) {
+      var months = {
+        January: 1,
+        February: 2,
+        March: 3,
+        April: 4,
+        May: 5,
+        June: 6,
+        July: 7,
+        August: 8,
+        September: 9,
+        October: 10,
+        November: 11,
+        December: 12
+      }
+      var monthNumber = months[monthname]
+    
+      return monthNumber
+    }
+    function getlatemarks(p) {
+      var datevalue = $('#spandatechange').html()
+      datename=datevalue
+      var empId = $('#EmployeeId').val()
+    
+      if (datevalue != '' && datevalue != null) {
+        var start_datestr = datevalue.split(' - ')[0]
+        var end_datestr = datevalue.split(' - ')[1]
+    
+        var smonthstr = start_datestr.split(' ')[0]
+        var smonth = GetMonthName(smonthstr)
+    
+        var emonthstr = end_datestr.split(' ')[0]
+        var emonth = GetMonthName(emonthstr)
+    
+        var sdate = start_datestr.split(' ')[1].split(',')[0]
+        var edate = end_datestr.split(' ')[1].split(',')[0]
+    
+        var syear = start_datestr.split(',')[1].split(' ')[1]
+        var eyear = end_datestr.split(',')[1].split(' ')[1]
+    
+        var start_date = syear + '-' + smonth + '-' + sdate
+        var end_date = eyear + '-' + emonth + '-' + edate
+    
+    
+        var fd = new FormData()
+        fd.append('start_date', start_date)
+        fd.append('end_date', end_date)
+        fd.append('empId', empId)
+        fd.append('p', p)
+        
+        fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+        $.ajax({
+            url: frontendURL + "late_attendance",
+            data: fd,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                swal({
+                  icon: "info",
+                  title: "",
+                  text: "Loading...",
+                  buttons: false,
+        
+              });
+              },
+          success: function (response) {
+            var infohtml = ''
+
+            console.log('response d', response)
+            if (response.n == 1){
+                var counter = 0
+
+                $.each(response.data,function(i,o){
+                    if(o.get_ontime == false){
+                      counter += 1
+                      infohtml += `<tr class="border-bottom">
+                          <td>`+counter+`</td>
+                          <td>`+o.user_name+`</td>
+                          <td>`+o.date+`</td>
+                          <td>`+o.time+`</td>
+                      </tr>
+                      `
+                    }
+                  });
+                  $('#late_employees').html(infohtml);
+                  var totalfilter = Math.ceil(parseInt(response.count)/10);
+                  $('#pagination-demo2').twbsPagination({
+                      totalPages: totalfilter,
+                      visiblePages: 3,
+                      next: 'Next',
+                      prev: 'Prev',
+                      onPageClick: function (event, page) {
+                        var testflag=true;
+                        //fetch content and render here
+                        filternamepageno = page
+                        if (testflag==true){
+                          testflag=false;
+                          getlatemarks(page)
+                        }
+                        $('#page-content').text('Page ' + page) + ' content here';
+                      }
+                    })
+
+
+
+                  swal({
+                    icon: "success",
+                    title: "",
+                    text: "Data fetched successfully !",
+                    button: "Close",
+                });
+            }else{
+                infohtml = `
+                <tr class="border-bottom text-center">
+                        <td colspan="4">No late marks found</td>
+                    </tr>
+                `
+                $('#late_employees').html(infohtml);
+
+                swal({
+                    icon: "error",
+                    title: "",
+                    text: "No late marks found !",
+                    button: "Close",
+                });
+            }
+
+          }
+        })
+      }
+    }
+    function Pagination(){
+      var testflag =true;
+      $('#secondpagination-demo2').html('<ul id="pagination-demo2" class="pagination-sm"></ul>');
+      getlatemarks(1);
+      
+    }
+
+
+    function downloadexcelreport() {
+    console.log("hit")
+    var datevalue = $('#spandatechange').html()
+    datename = datevalue
+    var empId = $('#EmployeeId').val()
+
+    if (datevalue != '' && datevalue != null) {
+      var start_datestr = datevalue.split(' - ')[0]
+      var end_datestr = datevalue.split(' - ')[1]
+
+      var smonthstr = start_datestr.split(' ')[0]
+      var smonth = GetMonthName(smonthstr)
+
+      var emonthstr = end_datestr.split(' ')[0]
+      var emonth = GetMonthName(emonthstr)
+
+      var sdate = start_datestr.split(' ')[1].split(',')[0]
+      var edate = end_datestr.split(' ')[1].split(',')[0]
+
+      var syear = start_datestr.split(',')[1].split(' ')[1]
+      var eyear = end_datestr.split(',')[1].split(' ')[1]
+
+      var start_date = syear + '-' + smonth + '-' + sdate
+      var end_date = eyear + '-' + emonth + '-' + edate
+
+
+      var fd = new FormData()
+      fd.append('start_date', start_date)
+      fd.append('end_date', end_date)
+      fd.append('empId', empId)
+
+      fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+      $.ajax({
+        type: "post",
+        url: frontendURL + "excellatemarkreport",
+        data: fd,
+        processData: false,
+        contentType: false,
+        beforeSend: function () { },
+        success: function (response) {
+
+          urlpath = response.downloadurl
+          window.location.href = urlpath;
+
+        },
+      })
+    }
+  }
+
+</script>
+{% endblock %}

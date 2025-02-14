@@ -1,0 +1,618 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+ Permissions
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
+
+<style>
+  .flexitembox {
+    display: flex;
+    width:100%;
+    overflow-x:auto;
+    flex-wrap: nowrap;
+  }
+
+  .roledetails {
+    height: 60px;
+    padding: 0px 14px 0px 16px;
+    width:150px;
+  }
+
+  .menuhead {
+    height: 60px;
+    border-bottom: 2px solid lightgray;
+    text-align: start;
+    padding-top: 12px;
+    font-size: 17px;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .dropdwn.show {
+    display: flex;
+  }
+
+  .rolecol {
+    flex:20em;
+  }
+
+  .mainitem {
+    background-color: #add8e666;
+    padding: 10px 0px 10px 15px;
+
+  }
+  .submenuitem{
+    padding: 10px 0px 10px 15px;
+    background: #f5f5f569;
+  }
+
+  .roletext {
+    font-size: 11px;
+    color: #d6d6d6c5;
+  }
+
+  .roleoptions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .menuitemcol {
+    border-right: 2px solid lightgray;
+  }
+
+  .dropdwn li {
+    padding: 0px 5px 0px 5px;
+  }
+  .menulinkname{
+    font-size:13px;
+    color:#00aeef;
+  }
+  .modal-body input {
+    margin-top:2px;
+    margin-bottom: 2px;
+  }
+  .role_name{
+    font-size:13px;
+    }
+  .headcont{
+    justify-content: space-between;
+  }
+  .form-btn{
+  border-radius:20px;
+  padding: 4px 30px;
+  cursor:pointer;
+  }
+  .opadel{
+    opacity:0.5;
+    
+  }
+  .dropdown-menu li{
+    cursor:pointer;
+  }
+  .fa-ellipsis-h{
+    color:black;
+  }
+  .allmenuitems{
+    box-shadow: 10px 0 5px -2px #888;
+  } 
+  .roledropdown {
+  position: relative;
+  display: inline-block;
+  }
+
+  .roledropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 104px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 100%;
+    top: 10%;
+  }
+
+  .roledropdown:hover .roledropdown-content {
+    display: block;
+    -moz-transition: all 1000ms ease;
+    -webkit-transition: all 1000ms ease;
+    -o-transition: all 1000ms ease;
+    -ms-transition: all 1000ms ease;
+    transition: all 1000ms ease;
+  }
+</style>
+
+
+<main class="main-wrapper smallHeightPage">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div
+        style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+        class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+          style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div id="snackbar"></div>
+ 
+  <div class="maincard mt-4">
+    <div class="row mx-1">
+      <div class="col-md-3 p-0 menuitemcol">
+        <div class="firsttable">
+          <div class="menuhead">Menuitems  <span type="" class="form-btn me-2 ms-4" onclick="updatemultiplerole();">Update</span></div>
+
+          <div class="allmenuitems">
+
+            {% for i in menuList %}
+            {% if i.ParentID == 0 %}
+            <div data-bs-toggle="collapse" data-bs-target="#demo{{i.MenuID}}" onclick="arrowitems({{i.MenuID}});"  class="accordion-toggle mainitem">
+              {{i.MenuName}} <span><i id="droparrow{{i.MenuID}}" class="fa fa-caret-up" aria-hidden="true"></i></span></div>
+
+            <div class="accordian-body collapse show" id="demo{{i.MenuID}}">
+              {% for j in menuList %} {% if i.MenuID == j.ParentID %}
+              <div class="submenuitem"> <a href="#" class="menulinkname">{{j.MenuName}}</a></div>
+              {% endif%}{% endfor %}
+            </div>
+
+            {%endif%}
+            {%endfor%}
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-md-9 p-0">
+        <div class="flexitembox">
+          {% for k in permissionlist%}
+          <div class="rolecol">
+            <div class="roledetails ">
+              <div class="roleoptions">
+                <div class="roletext">Role</div>
+                <div class=" eddropdwn roledropdown">
+                  <i class="fa fa-ellipsis-h fa-rotate-90 " aria-hidden="true"></i>
+                
+                  <div class="roledropdown-content py-1">
+                    <a href="javascript:void(0)" class="p-2" data-bs-toggle="modal" data-bs-target="#myeditModal{{k.RoleID}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    {% if k.roleused == "True" %}
+                    <a href="javascript:void(0)"  data-bs-toggle="tooltip" title="This role is used" class="p-2 opadel"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                    {%else%}
+                    <a href="javascript:void(0)" class="p-2" onclick="deleterole({{k.RoleID}});"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                    {% endif %}
+                    <a href="javascript:void(0)" class="p-2" onclick="addduplicaterole({{k.RoleID}});"><i class="fa fa-clone" aria-hidden="true"></i></a>
+                  </div>
+              </div>
+              
+              </div>
+              <span class="role_name role{{k.RoleID}}" roleattr="{{k.rolename}}" roleidattr="{{k.RoleID}}">{{k.rolename}}</span>
+            </div>
+
+            {{ menuList|json_script:"menuList" }}
+            <div>
+              {% for m in menuList %}
+              {% if m.ParentID == 0 %}
+              {% if m.MenuID in k.MenuID%}
+              <div class=" mainitem">
+                <input type="checkbox" name="check" value="{{m.MenuID}}" id="check{{m.MenuID}}"
+                  class="check{{k.RoleID}}{{m.MenuID}} multiplecheck{{k.RoleID}}{{m.MenuID}}" checkattr="{{k.RoleID}}{{m.MenuID}}" style="height:15px;" checked onclick="multiplecheck({{k.RoleID}}{{m.MenuID}})">
+              </div>
+              {%else%}
+              <div class=" mainitem">
+                <input type="checkbox" name="check" value="{{m.MenuID}}" id="check{{m.MenuID}}"
+                  class="check{{k.RoleID}}{{m.MenuID}} multiplecheck{{k.RoleID}}{{m.MenuID}}" checkattr="{{k.RoleID}}{{m.MenuID}}" style="height:15px;" onclick="multiplecheck({{k.RoleID}}{{m.MenuID}})">
+              </div>
+              {%endif%}
+              <div class="accordian-body collapse show" id="demo{{m.MenuID}}">
+                {% for j in menuList %} {% if m.MenuID == j.ParentID %}
+                {% if j.MenuID in k.MenuID%}
+                <div class="submenuitem">
+                  <input type="checkbox" name="check" value="{{j.MenuID}}" id="check{{m.MenuID}}"
+                    class="check{{k.RoleID}}{{j.MenuID}} multiplecheckchild{{k.RoleID}}{{j.ParentID}}" checkattr="{{k.RoleID}}{{j.MenuID}}" style="height:15px;" onclick="multiplechildcheck({{k.RoleID}}{{j.ParentID}})" checked >
+                </div>
+                {%else%}
+                <div class="submenuitem">
+                  <input type="checkbox" name="check" value="{{j.MenuID}}" id="check{{m.MenuID}}"
+                    class="check{{k.RoleID}}{{j.MenuID}} multiplecheckchild{{k.RoleID}}{{j.ParentID}} " checkattr="{{k.RoleID}}{{j.MenuID}}" style="height:15px;" onclick="multiplechildcheck({{k.RoleID}}{{j.ParentID}})">
+                </div>
+                {%endif%}
+                {%endif%}
+                {%endfor%}
+              </div>
+              {%endif%}
+              {% endfor %}
+            </div>
+          </div>
+
+          {% endfor %}
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Modal -->
+  {% for j in permissionlist%}
+<div class="modal" id="myeditModal{{j.RoleID}}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+
+      <!-- Modal body -->
+      <div class="modal-body">
+      <div class="row">
+        <div class="col-12">
+          <label for="RoleName">Role Name</label>
+          <input type="text" value="{{j.rolename}}" id="RoleName{{j.RoleID}}" placeholder="Enter Role Name" name="RoleName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+          <span class="error" id="RoleName_err{{j.RoleID}}"></span>
+      </div>
+      </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
+        <span class="modal-add-btn" id="savebutton" onclick="editrole({{j.RoleID}});">Add</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endfor %}
+</main>
+{% endblock %}
+
+
+<!-- Script Files -->
+
+{% block script%}{{block.super}}
+<script>
+  $(document).ready(function () {
+    $('#table_id').DataTable();
+    // getrolepermissionlist();
+  });
+
+  $(".dark-overlay").click(function () {
+    closeExpandedNav();
+  });
+
+  $('#hamburger-icon').click(function () {
+    $(".expanded-nav").addClass("expanded");
+    $(".dark-overlay").show();
+  })
+
+  function closeExpandedNav() {
+    $(".expanded-nav").removeClass("expanded");
+    setTimeout(() => {
+      $(".dark-overlay").hide();
+    }, 480);
+  }
+ function arrowitems(id){
+  console.log("hello")
+    if($('#droparrow'+id).hasClass('fa-caret-up'))
+    {
+        $('#droparrow'+id).removeClass('fa-caret-up')
+        $('#droparrow'+id).addClass('fa-caret-down')
+    }
+    else
+    {      
+      $('#droparrow'+id).removeClass('fa-caret-down')
+        $('#droparrow'+id).addClass('fa-caret-up')
+    }
+}
+  const mouseWheel = document.querySelector('.flexitembox');
+
+mouseWheel.addEventListener('wheel', function(e) {
+    const race = 15; // How many pixels to scroll
+
+    if (e.deltaY > 0) // Scroll right
+        mouseWheel.scrollLeft += race;
+    else // Scroll left
+        mouseWheel.scrollLeft -= race;
+		e.preventDefault();
+});
+
+  function deleterole(roleid){
+    swal({title: "Are you sure?",
+            text: "you want to delete role ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }) 
+          .then((isConfirm) => {
+              $.ajax({
+                type: "POST",
+                url: frontendURL + "deleterole",
+                data: {
+                  'RoleID': roleid,
+                  'csrfmiddlewaretoken': '{{csrf_token}}',
+                },
+                dataType: 'json',
+                success: function (response) {
+                  console.log("response", response)
+                  if (response.n == 1) {
+                    swal({
+                      icon: "success",
+                      title: "",
+                      text: "Role Deleted Successfully.",
+                      button: "Close",
+                    });
+                    location.reload();
+                  } else {
+                    swal({
+                      icon: "Failed",
+                      title: "",
+                      text: "Could Not delete role!",
+                      button: "Close",
+                    });
+                  }
+                }
+            })
+      });
+  }
+  
+
+function editrole(roleid){
+rolename = $("#RoleName"+roleid).val();
+if (IsValid(rolename)) {
+      $('#RoleName_err'+roleid).show().delay(3000).slideUp();
+      $('#RoleName_err'+roleid).html('Role name is required');
+      $('#RoleName'+roleid).focus();
+      return false;
+}
+else{
+  $.ajax({
+      type: "POST",
+      url: frontendURL + "Editrolename",
+      data: {
+        'RoleID': roleid,
+        'Rolename':rolename,
+        'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+        console.log("response", response)
+        if (response.n == 1) {
+          swal({
+            icon: "success",
+            title: "",
+            text: "Role Name Edited Successfully.",
+            button: "Close",
+          });
+          location.reload();
+        } else {
+          swal({
+            icon: "warning",
+            title: "",
+            text: response.msg,
+            button: "Close",
+          })
+          .then((isConfirm) => {
+            if (isConfirm) {
+              $('#myeditModal'+roleid).modal('toggle');
+            }
+          });
+        }
+      }
+    })
+  }
+}
+ 
+function updatemultiplerole(){
+    var menuitemlist = JSON.parse(document.getElementById('menuList').textContent);
+    var rolename = $(".role_name");
+   
+    var roleIDarray = []
+    for(var i = 0; i < rolename.length; i++){
+      roleIDarray.push($(rolename[i]).attr('roleidattr'));
+    }
+    
+    var allrolelist = []
+    $.each(roleIDarray,function(a,b){
+      $.each(menuitemlist,function(m,n){
+        var po = b + n.MenuID
+        allrolelist.push({
+          "role":b,
+          "menuId":po
+        })
+      })
+    })
+
+   
+    var selectedlist = []
+    $.each(allrolelist,function(i,o){
+      console.log("as.",o.menuId)
+      $(".check"+o.menuId+":checked").each(function(){
+        selectedlist.push({
+          "roleID":o.role,
+          "menuid":$(this).val()
+        }
+          
+          );
+      })
+    })
+
+    var output = [];
+
+    selectedlist.forEach(function(item) {
+      var existing = output.filter(function(v, i) {
+        return v.roleID == item.roleID;
+      });
+      if (existing.length) {
+        var existingIndex = output.indexOf(existing[0]);
+        output[existingIndex].menuid = output[existingIndex].menuid.concat(item.menuid);
+      } else {
+        if (typeof item.menuid == 'string')
+          item.menuid = [item.menuid];
+        output.push(item);
+      }
+    });
+
+    console.log("ou",output);
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "updatemultiplerole",
+      data: {
+        'permissionlist': JSON.stringify(output),
+        'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+        console.log("response", response)
+        if (response.n == 1) {
+          swal({
+            icon: "success",
+            title: "",
+            text: "permissions updated Successfully.",
+            button: "Close",
+          });
+          location.reload();
+        } else {
+          swal({
+            icon: "Failed",
+            title: "",
+            text: "Could Not update permissions!",
+            button: "Close",
+          });
+        }
+
+      }
+    })
+
+    
+  }
+
+
+  function addduplicaterole(roleid) {
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "addduplicaterole",
+      data: {
+        'RoleID': roleid,
+        'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+        console.log("response", response)
+        if (response.n == 1) {
+          swal({
+            icon: "success",
+            title: "",
+            text: "Role Added Successfully.",
+            button: "Close",
+          });
+          location.reload();
+        } else {
+          swal({
+            icon: "Failed",
+            title: "",
+            text: "Could Not Add Role!",
+            button: "Close",
+          });
+        }
+
+      }
+    })
+  }
+
+
+  function permissionValidate() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function () {
+      x.className = x.className.replace("show", "");
+    }, 3000);
+
+    var role = $("#roleID").val();
+    var totalCheckboxes = $('.check:checked').length;
+    console.log("sds", role)       
+
+    if (IsValid(role)) {
+      $('#roleIDerror').show().delay(3000).slideUp();
+      $('#roleIDerror').html('Role fielddd is required');
+      $('#roleID').focus();
+      return false;
+    } else if (totalCheckboxes < 1) {
+      $('#snackbar').html('');
+      $('#snackbar').html('Please Select Fields');
+      $('.check').focus();
+      return false;
+
+    } else {
+      $('#snackbar').addClass('validationBox')
+    }
+  }
+
+  function getpermissionbyrole() {
+    $('.check').prop('checked', false)
+    var roleID = $('#roleID').val();
+    console.log('role', roleID)
+    var html;
+    $.ajax({
+      type: "GET",
+      url: backendURL + "users/api/getPermission",
+      headers: {
+        "Authorization": "Token {{token}}"
+      },
+      data: {
+        'RoleID': roleID,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      success: function (response) {
+        $(response[0].MenuID).each(function (i, o) {
+          $('#check' + o).prop('checked', true)
+        })
+
+
+      }
+    });
+  }
+
+
+  function multiplecheck(id){
+
+if ($(".multiplecheck"+id).is(":checked")) {
+  console.log("red zone if checked")
+  $(".multiplecheckchild"+id).prop('checked',true);
+} else {
+  console.log("red zone if unchecked")
+    $(".multiplecheckchild"+id).prop('checked',false);
+}
+
+}
+
+function multiplechildcheck(id){
+
+if ($(".multiplecheckchild"+id).is(":checked")) {
+  console.log("red zone if checked")
+  $(".multiplecheck"+id).prop('checked',true);
+} else {
+  console.log("red zone if unchecked")
+    $(".multiplecheck"+id).prop('checked',false);
+}
+
+}
+
+</script>
+{%endblock%}
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+{% load static %} 
+{% load encryption_filters %}
+
+{% block headercontent %}
+<div class="nav-item newheading">
+Attendance Update
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+
+</style>
+  <!-- Include jQuery UI Datepicker library -->
+
+  <main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    
+    
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script type="text/javascript">
+
+</script>
+{% endblock %}

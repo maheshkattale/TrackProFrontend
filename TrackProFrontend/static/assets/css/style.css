@@ -1,0 +1,395 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+}
+
+.tab_heading {
+    font-size: large;
+}
+
+.scrollbar-sidebar {
+    background-color: #d7cbff !important;
+}
+
+.header-shadow {
+    background-color: #d7cbff !important;
+}
+
+.app-page-title {
+    background-image: linear-gradient(-20deg, #2b5876 0%, #4E4374 100%) !important;
+    color: #fff;
+}
+
+.list-btn {
+    background-color: #fff;
+    color: #4E4374 !important;
+    font-size: 16px;
+}
+
+.modal-backdrop.show,
+.show.blockOverlay {
+    opacity: .5;
+    display: none !important;
+}
+
+.modal-content {
+    margin: 100px 0px;
+}
+
+.app-page-title .page-title-wrapper {
+    justify-content: space-between !important;
+}
+
+.alert-error {
+    background-color: #ffdede !important;
+    color: #ff0000 !important;
+}
+
+.form-group label {
+    font-size: 18px;
+    font-weight: 600;
+    font-family: Times, "Times New Roman", Georgia, serif;
+}
+
+.preview-img {
+    margin-top: 0px;
+    max-width: 150px;
+}
+
+.submit-btn {
+    color: #fff;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: #4E4374;
+}
+
+.cancel-btn {
+    color: #4E4374;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 1px solid #4E4374;
+    text-decoration: none;
+    padding: 13px 18px!important;
+}
+
+.role-sub {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-sub button:hover {
+    background-color: #fff;
+    color: #4E4374;
+    cursor: pointer;
+}
+
+.btn-sub a:hover {
+    background-color: #4E4374;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+img.logoimg {
+    width: 50%;
+}
+
+.nav-header {
+    display: flex;
+}
+
+.app-page-title {
+    padding: 10px !important;
+}
+
+#main {
+    margin: 50px 0;
+}
+
+#main #faq .card {
+    margin-bottom: 30px;
+    border: 0;
+}
+
+#main #faq .card .card-header {
+    border: 0;
+    -webkit-box-shadow: 0 0 20px 0 rgba(213, 213, 213, 0.5);
+    box-shadow: 0 0 20px 0 rgba(213, 213, 213, 0.5);
+    border-radius: 2px;
+    padding: 0;
+}
+
+#main #faq .card .card-header .btn-header-link {
+    color: #fff;
+    display: block;
+    text-align: left;
+    background: #FFE472;
+    color: #222;
+    padding: 20px;
+    width: 100% !important;
+}
+
+#main #faq .card .card-header .btn-header-link:after {
+    content: "\f107";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    float: right;
+}
+
+#main #faq .card .card-header .btn-header-link.collapsed {
+    background: #4E4374;
+    color: #fff;
+    width: 100%;
+}
+
+#main #faq .card .card-header .btn-header-link.collapsed:after {
+    content: "\f106";
+}
+
+#main #faq .card .collapsing {
+    background: #fff;
+    line-height: 30px;
+}
+
+#main #faq .card .collapse {
+    border: 0;
+}
+
+#main #faq .card .collapse.show {
+    background: #fff;
+    line-height: 30px;
+    color: #222;
+}
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #ffdede;
+    color: #ff0000;
+    text-align: center;
+    border-radius: 3px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 60%;
+    top: 70px;
+    font-size: 17px;
+}
+
+.alert-error {
+    background-color: #ffdede !important;
+    color: #ff0000 !important;
+}
+
+#snackbar.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.widget-content .widget-content-right {
+    margin: 0 auto !important;
+}
+
+.dropdown-menu-header {
+    margin-bottom: -11px !important;
+}
+
+.validationBox {
+    background-color: transparent !important;
+    opacity: 0 !important;
+    color: transparent !important;
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+    to {
+        top: 70px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: 70px;
+        opacity: 1;
+    }
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+.vertical-nav-menu li a {
+    font-size: 15px !important;
+}
+
+.vertical-timeline {
+    padding: 0px 0px !important;
+}
+
+.dropdown-menu.dropdown-menu-xl {
+    will-change: auto !important;
+}
+
+.dropdown-menu .dropdown-menu-header {
+    margin-bottom: 10px !important;
+}
+
+.bg-sidemenu {
+    background-color: #a678ff !important;
+}
+
+
+/* calender css */
+
+.attendance-cards {
+    padding-right: 0;
+}
+
+.attendance {
+    display: flex;
+}
+
+.attendance-icon {
+    height: 48px;
+    width: 48px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 16px;
+    margin-top: 5px;
+}
+
+#present-icon {
+    background-image: url(./Media/AttendanceCards/present_icon.svg);
+}
+
+#on-leave-icon {
+    background-image: url(./Media/AttendanceCards/leave_icon.svg);
+}
+
+#wfh-icon {
+    background-image: url(./Media/AttendanceCards/wfh_icon.svg);
+}
+
+.attendance-text p {
+    font-size: var(--f-sm);
+    color: var(--fc-md-dark);
+    margin-bottom: 0;
+}
+
+.attendance-text b {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+#presentNum,
+#presentTotal {
+    color: #3dab45;
+}
+
+#leaveNum,
+#leaveTotal {
+    color: #f24b59;
+}
+
+#wfhNum,
+#wfhTotal {
+    color: #ff9900;
+}
+
+@media screen and (max-width: 1400px) {
+    .attendance-icon {
+        height: 40px;
+        width: 40px;
+    }
+    .attendance-text b {
+        font-size: 18px;
+    }
+}
+
+
+/* ================================== Check In & Out Card Styling ================================== */
+
+.checkIO {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.todayDate {
+    font-size: var(--f-lg);
+    color: var(--fc-dark);
+    font-weight: 500;
+    margin-bottom: 32px;
+}
+
+.IOtimes {
+    width: 100%;
+    display: flex;
+    margin-bottom: 24px;
+}
+
+.Itime,
+.Otime {
+    width: 50%;
+    text-align: center;
+}
+
+.Itime p,
+.Otime p {
+    font-size: var(--f-sm);
+    color: var(--fc-md-dark);
+}
+
+.Itime b,
+.Otime b {
+    font-size: 28px;
+    color: #dfdfdf;
+}
+
+.totalHours {
+    font-size: var(--f-sm);
+    color: var(--fc-dark);
+    margin-bottom: 32px;
+    font-weight: 500;
+}
+
+.IOButtons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.manageAttendance,
+.IOBtn {
+    width: 47%;
+    height: 48px;
+    border-radius: 48px;
+    border: none;
+    background-color: transparent;
+}
+
+.manageAttendance {
+    border: 1px solid var(--fc-main);
+    line-height: 16px;
+}
+
+.manageAttendance a {
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: var(--fc-main);
+    font-size: var(--f-sm);
+}
+
+.IOBtn {
+    background-color: #3dab45;
+    color: #fdfdfd;
+    font-size: var(--f-sm);
+    transition: background 0.5s ease;
+}

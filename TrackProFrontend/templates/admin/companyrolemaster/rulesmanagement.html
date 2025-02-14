@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {%load static %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrackPro-Managetask</title>
+    <!-- 1.Owl carousel min.js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+      integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- 2.Owl carousel Theme min.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+      integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'admin/dashboard/dashboard.css' %}" />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/style2.css'%}" />
+    <link rel="stylesheet" href="{% static 'admin/sweetalert.css'%}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
+  </head>
+  <style>
+    .distext{
+      font-size:13px;
+      color:grey;
+    }
+    
+  </style>
+
+  <body>
+    <!-- ==================Overlay Element and Expanded Navbar======================= -->
+    <div class="dark-overlay d-xxl-none"></div>
+    <div class="expanded-nav d-xxl-none">
+      <div class="tabletView d-none d-md-block">
+        <div class="row justify-content-between expNavHeader">
+          <div class="col-auto">
+            <div class="expNavLogo"></div>
+          </div>
+
+          <div class="col-auto">
+            <div class="expNavIcon expNavCloseIcon"></div>
+          </div>
+        </div>
+
+        <div class="row"></div>
+      </div>
+    </div>
+
+    <!-- ==================Navbar(Header)======================= -->
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark gradient-custom fixed-top">
+        <div class="container-fluid">
+          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button> -->
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+             
+              <li class="nav-item">
+                {%if companylogo is None %}
+                <img class="img" src="{% static 'assets\images\zentro_logo.jpeg'%}" alt="">
+                {%else%}
+                <img class="img" src="{{ImageURL}}/media/{{companylogo}}" alt="No logo">
+                {%endif%}
+              </li>
+            </ul>
+            <div class="me-2 navdropdown" >
+             
+              <div class="dropdown dropleft">
+              <a class="dropdown-toggle"  data-bs-toggle="dropdown">
+                <i class="fa fa-user" style="color:#00aeef;"></i></a>
+                   
+              <ul class="dropdown-menu index-dropdown" >
+                <li><a class="dropdown-item" href="{% url 'users:logout' %}">
+                  <img id="icon" class="drpdwnimg" width="15%" src="{% static 'assets/icons/logout.png' %}">Logout</a>
+                  <div class="text-center ">({{Firstname}} {{Lastname}})</div>
+                </li>
+              </ul>
+             
+            </div>
+          </div>
+          </div>
+        </div>
+      </nav>
+  
+      
+      <!-- Navbar -->
+     
+    </header>
+
+
+
+    
+    <!-- Main page -> Manage Task -->
+    <main class="main-wrapper">
+
+      <!-- ==================Row1======================= -->
+      <div class="common-box-section">
+        <!-- <div class="wizard-form-section" >
+       
+            <div class="wizard-form-progress-bar ">
+                <div class="wizard-form-step">
+                   <p>
+                     Personal Information
+                   </p>
+                   <div class="wizard-form-bullet">
+                      <span><i class="fa-solid fa-person"></i></span>
+                   </div>
+                   <div class="check fas fa-check"></div>
+                </div>
+                <div class="wizard-form-step">
+                   <p>
+                     Employeement Details
+                   </p>
+                   <div class="wizard-form-bullet">
+                      <span><i class="fa-solid fa-file"></i></span>
+                   </div>
+                   <div class="check fas fa-check"></div>
+                </div>
+                <div class="wizard-form-step">
+                   <p>
+                      Bank Details
+                   </p>
+                   <div class="wizard-form-bullet">
+                      <span><i class="fa-solid fa-building-columns"></i></span>
+                   </div>
+                   <div class="check fas fa-check"></div>
+                </div>
+                <div class="wizard-form-step">
+                   <p>
+                     Upload Document
+                   </p>
+                   <div class="wizard-form-bullet">
+                      <span><i class="fa-solid fa-image"></i></span>
+                   </div>
+                   <div class="check fas fa-check"></div>
+                </div>
+             </div>
+        
+            
+
+      </div> -->
+        <form method="post" class="form">
+          {%csrf_token %}
+          <!-- Progress bar -->
+          <div class="progressbar">
+            <div class="progress" id="progress"></div>
+
+            <div class="progress-step progress-step-active" data-title="Leave Rules">
+              <i class="fa-solid fa-list"></i>
+            </div>
+            <div class="progress-step" data-title="Attendance Rules" id="attendancerule">
+              <i class="fa-solid fa-list"></i>
+            </div>
+            <div class="progress-step" data-title="TrackPro Rules" id="trackprorule">
+              <i class="fa-solid fa-list"></i>
+            </div>
+          </div>
+
+          <!-- Steps -->
+          <div class="form-step form-step-active" id="form-leave">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-floating my-3">
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    id="leaveperiod"
+                  >
+                  {%if leaverules.Periodof_L == "Monthly"%}
+                    <option value="Monthly" selected>Monthly</option>
+                    <option value="Quaterly">Quaterly</option>
+                    <option value="Half Yearly">Half Yearly</option>
+                    <option value="Yearly">Yearly</option>
+                    {%elif leaverules.Periodof_L == "Quaterly"%}
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quaterly" selected>Quaterly</option>
+                    <option value="Half Yearly">Half Yearly</option>
+                    <option value="Yearly">Yearly</option>
+                    {%elif leaverules.Periodof_L == "Half Yearly"%}
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quaterly">Quaterly</option>
+                    <option value="Half Yearly" selected>Half Yearly</option>
+                    <option value="Yearly">Yearly</option>
+                    {%elif leaverules.Periodof_L == "Yearly"%}
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quaterly">Quaterly</option>
+                    <option value="Half Yearly">Half Yearly</option>
+                    <option value="Yearly" selected>Yearly</option>
+                    {%else%}
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quaterly">Quaterly</option>
+                    <option value="Half Yearly">Half Yearly</option>
+                    <option value="Yearly">Yearly</option>
+                    {%endif%}
+                  </select>
+                  <label for="periodofleave" class="form-content"
+                    >Period of Leaves</label
+                  >
+
+                  <span id="leaveperiod_err" class="error"></span>
+                </div>
+                
+                <div class="form-floating my-3">
+                  <input type="text" class="form-control" id="setlimitleaves" placeholder="name@example.com" value="{{leaverules.maxleaves}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="setlimitleaves" class="form-content">Set Limit on maximum leaves</label>
+                  <span id="setlimitleaves_err" class="error"></span>
+                </div>
+                <div class="form-floating my-3">
+                  <input type="text" class="form-control" id="leaveassigned" placeholder="name@example.com" value="{{leaverules.Assignedleaves}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="leaveassigned" class="form-content">Leave Assigned</label>
+                  <span id="leaveassigned_err" class="error"></span>
+                </div>
+              
+              </div>
+              <div class="col-md-6">
+                <div class="mt-3 my-3">
+                  <span class="leave-lapse-text me-2">Leave Lapse Status:</span>
+                  <div class="form-check form-check-inline">
+                    {%if leaverules.lapsestatus == "Lapse"%}
+                    <input class="form-check-input" type="radio" name="lapseRadioOptions" id="lapse" value="Lapse" onchange="checklapstatus();" checked>
+                    {%else%}
+                    <input class="form-check-input" type="radio" name="lapseRadioOptions" id="lapse" value="Lapse" onchange="checklapstatus();">
+                    {%endif%}
+                    <label class="form-check-label" for="lapse" onchange="checklapstatus();">Lapse</label>
+                  </div>
+                
+                  <div class="form-check form-check-inline">
+                    {%if leaverules.lapsestatus == "CarryForward"%}
+                    <input class="form-check-input" type="radio" name="lapseRadioOptions" id="carryforward" value="CarryForward" onchange="checklapstatus();" checked/>
+                    {%else%}
+                    <input class="form-check-input" type="radio" name="lapseRadioOptions" id="carryforward" value="CarryForward" onchange="checklapstatus();"/>
+                    {%endif%}
+                    <label class="form-check-label" for="carryforward" onchange="checklapstatus();">Carry Forward</label>
+                  </div>  
+                </div>
+                  <p id="lapse_err" class="error"></p>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="carriedforward" placeholder="name@example.com" value="{{leaverules.carryforward}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="carriedforward" class="form-content">Leave % to be carried forward?</label>
+                  <span id="carriedforward_err" class="error"></span>
+                </div>
+                <div class="mt-2">
+                  <span class="leave-lapse-text me-2">Leave Encashment:</span>
+                  <div class="form-check form-check-inline">
+                    {%if leaverules.encashment == 'yes' %}
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="leaveyes" value="yes" checked/>
+                    {%else%}
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="leaveyes" value="yes"/>
+                    {%endif%}
+                    <label class="form-check-label" for="leaveyes">Yes</label>
+                  </div>
+                  <!-- <p id="Encashment_err" class="error"></p> -->
+                  <div class="form-check form-check-inline">
+                    {%if leaverules.encashment == 'no' %}
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="leaveno" value="no" checked/>
+                    {%else%}
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="leaveno" value="no"/>
+                    {%endif%}
+                    <label class="form-check-label" for="leaveno">No</label>
+                  </div>
+                
+                </div>
+                <p id="Encashment_err" class="error"></p>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end my-3">
+             
+              <a onclick="return uploadleaverules();" href="javascript:void(0)" class="wizardbtn btn-next">Save and continue</a>
+            </div>
+          </div>
+          <div class="form-step" id="form-attendance"> 
+            <div class="row">
+              <div class="col-md-6 my-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="fulldayhr" placeholder="name@example.com" value="{{attrules.Fulldayhrs}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="fulldayhr" class="form-content">Full Day (hrs)</label>
+                  <span id="fulldayhr_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="intimehr" placeholder="name@example.com" value="{{attrules.In_timehrs}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="intimehr" class="form-content">In Time (hrs)</label>
+                  <span id="intimehr_err" class="error"></span>
+                </div>
+                <div class="form-floating mt-3">
+                  <select class="form-select" aria-label="Default select example" id="leaveranges">
+                    {% if attrules.leverages == 1%}
+                    <option value="1" selected>One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                    {% elif attrules.leverages == 2%}
+                    <option value="1">One</option>
+                    <option value="2" selected>Two</option>
+                    <option value="3">Three</option>
+                    {%else%}
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3" selected>Three</option>
+                    {%endif%}
+                  </select>
+                  <label for="periodofleave" class="form-content">Leaveranges</label>
+                </div>
+                <span id="leaveranges_err" class="error"></span>
+              </div>
+              <div class="col-md-6 my-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="halfdayhr" placeholder="name@example.com" value="{{attrules.Halfdayhrs}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="halfdayhr" class="form-content">Half Day (hrs)</label>
+                  <span id="halfdayhr_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="timeextension" placeholder="name@example.com" value="{{attrules.time_extension}}" oninput="this.value = this.value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                  <label for="timeextension" class="form-content">Time Extension (min)</label>
+                  <span id="timeextension_err" class="error"></span>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between my-3">
+              <a onclick="previous(1);" href="javascript:void(0)" class="wizardbtn btn-next">Previous</a>
+
+              <a onclick="updateAttendancerule();" href="#" class="wizardbtn btn-next">Save and continue</a>
+            </div>
+          </div>
+          <div class="form-step" id="form-trackpro">
+            <div class="row">
+            
+              <div class="col-md-6 my-3">
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="greenstatus"  value="{{trackprorules.green}}"/>
+                  <label for="greenstatus" class="form-content">Green</label>
+                  <span id="greenstatus_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="redstatus"  value="{{trackprorules.red}}"/>
+                  <label for="redstatus" class="form-content">Red</label>
+                  <span id="redstatus_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="Cancelstatus"  value="{{trackprorules.cancel}}"/>
+                  <label for="Cancelstatus" class="form-content">Cancel</label>
+                  <span id="Cancelstatus_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="Rejectstatus"  value="{{trackprorules.reject}}"/>
+                  <label for="Rejectstatus" class="form-content">Reject</label>
+                  <span id="Rejectstatus_err" class="error"></span>
+                </div>
+              </div>
+              <div class="col-md-6 my-3">
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="yellowstatus" value="{{trackprorules.yellow}}"/>
+                  <label for="yellowstatus" class="form-content">Yellow</label>
+                  <span id="yellowstatus_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="notdonestatus"  value="{{trackprorules.notdone}}"/>
+                  <label for="notdonestatus" class="form-content">Not Done</label>
+                  <span id="notdonestatus_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="Helpstatus"  value="{{trackprorules.help}}"/>
+                  <label for="Helpstatus" class="form-content">Help</label>
+                  <span id="Helpstatus_err" class="error"></span>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="number" class="form-control" id="Bonus"  value="{{trackprorules.bonus}}"/>
+                  <label for="Bonus" class="form-content">Bonus</label>
+                  <span id="Bonus_err" class="error"></span>
+                </div>
+              </div>
+
+            </div>
+            <div class="d-flex justify-content-between mb-3">
+              <a onclick="previous(2);" href="javascript:void(0)" class="wizardbtn btn-next">Previous</a>
+
+              <span onclick="updatetrackprorule();" class="wizardbtn">Save</span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+    
+   
+    <script src="{% static 'js/jquerry/jquery.js'%}"></script>
+    <script src="{% static 'js/jquerry/jquery.min.js'%}"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'js/sweetalert.js'%}"></script>
+    <script>
+
+      var frontendURL = '{{basefrontendUrl}}'
+
+      function IsValid(value) {
+        if (value == "" || value == null || value == undefined) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+      function checklapstatus(){
+        var lapsestatus = $('input[name="lapseRadioOptions"]:checked').val();
+        console.log("lapsestatus",lapsestatus)
+        if (lapsestatus == "Lapse"){
+          $("#carriedforward").prop("disabled",true);
+          $("#carriedforward").val();
+        }else if(lapsestatus == "CarryForward"){
+          $("#carriedforward").prop("disabled",false);
+        }
+      }
+      
+
+
+      //const prevBtns = document.querySelectorAll(".btn-prev");
+      //const nextBtns = document.querySelectorAll(".btn-next");
+      //const progress = document.getElementById("progress");
+      //const formSteps = document.querySelectorAll(".form-step");
+      //const progressSteps = document.querySelectorAll(".progress-step");
+//
+      //let formStepsNum = 0;
+      //var validation=0;
+      //
+      //nextBtns.forEach((wizardbtn) => {
+      //  console.log("wizardbtn1",wizardbtn)
+      //  wizardbtn.addEventListener("click", () => {
+      //    formStepsNum++;
+      //    updateFormSteps();
+      //    updateProgressbar();
+      //  });
+      //});
+    //
+      //prevBtns.forEach((wizardbtn) => {
+      //  wizardbtn.addEventListener("click", () => {
+      //    formStepsNum--;
+      //    updateFormSteps();
+      //    updateProgressbar();
+      //  });
+      //});
+//
+      //function updateFormSteps() {
+      //  formSteps.forEach((formStep) => {
+      //    formStep.classList.contains("form-step-active") &&
+      //      formStep.classList.remove("form-step-active");
+      //  });
+//
+      //  formSteps[formStepsNum].classList.add("form-step-active");
+      //}
+//
+      //function updateProgressbar() {
+      //  progressSteps.forEach((progressStep, idx) => {
+      //    if (idx < formStepsNum + 1) {
+      //      progressStep.classList.add("progress-step-active");
+      //    } else {
+      //      progressStep.classList.remove("progress-step-active");
+      //    }
+      //  });
+//
+      //  const progressActive = document.querySelectorAll(
+      //    ".progress-step-active"
+      //  );
+//
+      //  progress.style.width =
+      //    ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 +
+      //    "%";
+      //}
+
+      function uploadleaverules(){
+        var leaveperiod = $('#leaveperiod').val();
+        var leaveassigned = $('#leaveassigned').val();
+        var setlimitleaves = $('#setlimitleaves').val();
+        var lapse_status = $('input[name="lapseRadioOptions"]:checked').val();
+        var encashment = $('input[name="inlineRadioOptions"]:checked').val();
+        var carriedforward = $('#carriedforward').val();
+       
+        if (IsValid(leaveperiod)) {
+          $("#leaveperiod").html();
+          $("#leaveperiod_err").show().delay(3000).slideUp();
+          $("#leaveperiod_err").html("Please enter period for leave");
+          $("#leaveperiod").focus();
+          return false;
+        }
+        if (IsValid(setlimitleaves)) {
+          $("#setlimitleaves").html();
+          $("#setlimitleaves_err").show().delay(3000).slideUp();
+          $("#setlimitleaves_err").html("Set max limit of Leave");
+          $("#setlimitleaves").focus();
+          return false;
+        }
+        if (IsValid(leaveassigned)) {
+          $("#leaveassigned").html();
+          $("#leaveassigned_err").show().delay(3000).slideUp();
+          $("#leaveassigned_err").html("Please enter Leaves to be assigned");
+          $("#leaveassigned").focus();
+          return false;
+        }
+        
+        if (IsValid(lapse_status)) {
+          $("#lapse_status").html();
+          $("#lapse_err").show().delay(3000).slideUp();
+          $("#lapse_err").html("Please Select lapse status for leave");
+          $("#lapse_status").focus();
+          return false;
+        }
+        if (lapse_status =="CarryForward"){
+          if (IsValid(carriedforward)) {
+          $("#carriedforward").html();
+          $("#carriedforward_err").show().delay(3000).slideUp();
+          $("#carriedforward_err").html("Please Select percentage for carried forward");
+          $("#carriedforward").focus();
+          return false;
+          }
+        }
+        if (IsValid(encashment)) {
+          $("#encashment").html();
+          $("#Encashment_err").show().delay(3000).slideUp();
+          $("#Encashment_err").html("Please Select Encashment for Leave");
+          $("#encashment").focus();
+          return false;
+        }
+        else{
+          $('#snackbar').addClass('validationBox');
+          var fd = new FormData();
+          fd.append("leaveperiod", $('#leaveperiod').val());
+          fd.append("assignedleaves", $('#leaveassigned').val());
+          fd.append("maxlimit", $('#setlimitleaves').val());
+          fd.append("lapse_status", $('input[name="lapseRadioOptions"]:checked').val());
+          fd.append("carryforward", $('#carriedforward').val());
+          fd.append("encashment", $('input[name="inlineRadioOptions"]:checked').val());
+          fd.append("userid", '{{userID}}');
+          fd.append("csrfmiddlewaretoken", '{{csrf_token}}');
+  
+          $.ajax({
+                  type: "POST",
+                  url:  frontendURL+"company/leaverule",
+                  data: fd,
+                  processData: false,
+                  contentType: false,
+                  success: function (response) {
+                    console.log("leave res", response);
+                    swal({
+                      icon: "success",
+                      title: "",
+                      text: "Leave rules updated Successfully",
+                      button: "Close",
+                      });
+                    $(".progress").css({"width": "50%"});
+                    $("#attendancerule").addClass('progress-step-active');
+                    $("#form-leave").removeClass('form-step-active');
+                    $("#form-attendance").addClass('form-step-active'); 
+                              
+                  },
+                });
+        }
+      }
+
+      function updateAttendancerule(){
+
+        var fulldayhr = $('#fulldayhr').val();
+        var halfdayhrs = $('#halfdayhr').val();
+        var intimehrs = $('#intimehr').val();
+        var extension = $('#timeextension').val();
+        var leverages = $('#leaveranges').val();
+
+        if (IsValid(fulldayhr)) {
+          $("#fulldayhr").html();
+          $("#fulldayhr_err").show().delay(3000).slideUp();
+          $("#fulldayhr_err").html("Please enter period for Full Day");
+          $("#fulldayhr").focus();
+          return false;
+        }
+        if (IsValid(halfdayhrs)) {
+          $("#halfdayhr").html();
+          $("#halfdayhr_err").show().delay(3000).slideUp();
+          $("#halfdayhr_err").html("Please enter period for half Day");
+          $("#halfdayhr").focus();
+          return false;
+        }
+        if (IsValid(intimehrs)) {
+          $("#intimehr").html();
+          $("#intimehr_err").show().delay(3000).slideUp();
+          $("#intimehr_err").html("Please enter In time to be assigned");
+          $("#intimehr").focus();
+          return false;
+        }
+        if (IsValid(extension)) {
+          $("#timeextension").html();
+          $("#timeextension_err").show().delay(3000).slideUp();
+          $("#timeextension_err").html("Please enter time to be extended");
+          $("#timeextension").focus();
+          return false;
+        }
+        
+        if (IsValid(leverages)) {
+          $("#leaveranges").html();
+          $("#leaveranges_err").show().delay(3000).slideUp();
+          $("#leaveranges_err").html("Please Select leaverages to be assigned");
+          $("#leaveranges").focus();
+          return false;
+        }
+        else{
+          $('#snackbar').addClass('validationBox');
+          var fd = new FormData();
+          fd.append("fulldayhrs", $('#fulldayhr').val())
+          fd.append("halfdayhrs", $('#halfdayhr').val())
+          fd.append("intimehrs", $('#intimehr').val())
+          fd.append("extension", $('#timeextension').val())
+          fd.append("leverages", $('#leaveranges').val())
+          fd.append("userid", '{{userID}}')
+          fd.append("csrfmiddlewaretoken", '{{csrf_token}}')
+  
+          $.ajax({
+              type: "POST",
+              url: frontendURL+"company/attrule",
+              data: fd,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                console.log("res", response);
+                swal({
+                      icon: "success",
+                      title: "",
+                      text: "Attendance rules updated Successfully",
+                      button: "Close",
+                      });
+                $(".progress").css({"width": "100%"});
+                $("#trackprorule").addClass('progress-step-active');
+                $("#form-leave").removeClass('form-step-active');
+                $("#form-attendance").removeClass('form-step-active');
+                $("#form-trackpro").addClass('form-step-active'); 
+                
+              },
+            });
+        }
+
+      
+      }
+
+      function updatetrackprorule(){
+        var greenstatus =  $('#greenstatus').val()
+        var yellowstatus =  $('#yellowstatus').val()
+        var redstatus =  $('#redstatus').val()
+        var notdonestatus =  $('#notdonestatus').val()
+        var Cancelstatus = $('#Cancelstatus').val()
+        var Rejectstatus = $('#Rejectstatus').val()
+        var Helpstatus = $('#Helpstatus').val()
+        var Bonus = $('#Bonus').val()
+
+        if (IsValid(greenstatus)) {
+          $("#greenstatus").html();
+          $("#greenstatus_err").show().delay(3000).slideUp();
+          $("#greenstatus_err").html("Please enter points for Green task");
+          $("#greenstatus").focus();
+          return false;
+        }
+        if (IsValid(yellowstatus)) {
+          $("#yellowstatus").html();
+          $("#yellowstatus_err").show().delay(3000).slideUp();
+          $("#yellowstatus_err").html("Please enter points for Yellow task");
+          $("#yellowstatus").focus();
+          return false;
+        }
+        if (IsValid(redstatus)) {
+          $("#redstatus").html();
+          $("#redstatus_err").show().delay(3000).slideUp();
+          $("#redstatus_err").html("Please enter points for Red task");
+          $("#redstatus").focus();
+          return false;
+        }
+        if (IsValid(notdonestatus)) {
+          $("#notdonestatus").html();
+          $("#notdonestatus_err").show().delay(3000).slideUp();
+          $("#notdonestatus_err").html("Please enter points for Not Done task");
+          $("#notdonestatus").focus();
+          return false;
+        }
+        if (IsValid(Cancelstatus)) {
+          $("#Cancelstatus").html();
+          $("#Cancelstatus_err").show().delay(3000).slideUp();
+          $("#Cancelstatus_err").html("Please enter points for Cancelled task");
+          $("#Cancelstatus").focus();
+          return false;
+        }
+        if (IsValid(Rejectstatus)) {
+          $("#Rejectstatus").html();
+          $("#Rejectstatus_err").show().delay(3000).slideUp();
+          $("#Rejectstatus_err").html("Please enter points for Rejected task");
+          $("#Rejectstatus").focus();
+          return false;
+        }
+        if (IsValid(Helpstatus)) {
+          $("#Helpstatus").html();
+          $("#Helpstatus_err").show().delay(3000).slideUp();
+          $("#Helpstatus_err").html("Please enter points for Help ");
+          $("#Helpstatus").focus();
+          return false;
+        }
+        if (IsValid(Bonus)) {
+          $("#Bonus").html();
+          $("#Bonus_err").show().delay(3000).slideUp();
+          $("#Bonus_err").html("Please enter points for Bonus");
+          $("#Bonus").focus();
+          return false;
+        }
+        else{
+          
+          list=[{
+            "color":"green",
+            "points":greenstatus
+          },{
+            "color":"yellow",
+            "points":yellowstatus
+          },{
+            "color":"red",
+            "points":redstatus
+          },{
+            "color":"notdone",
+            "points":notdonestatus
+          },{
+            "color":"cancel",
+            "points":Cancelstatus
+          },{
+            "color":"reject",
+            "points":Rejectstatus
+          },{
+            "color":"help",
+            "points":Helpstatus
+          },{
+            "color":"bonus",
+            "points":Bonus
+          }
+          ]
+          var fd = new FormData();
+          fd.append("pointlist", JSON.stringify(list))
+          fd.append("userid", '{{userID}}')
+          fd.append("csrfmiddlewaretoken", '{{csrf_token}}')
+  
+          $.ajax({
+                type: "POST",
+                url: frontendURL+"company/trackprorule",
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                  swal({
+                      icon: "success",
+                      title: "",
+                      text: "TrackPro rules updated Successfully",
+                      button: "Close",
+                      });
+                  window.location.href = frontendURL +"dashboard";
+                },
+              });
+        }
+
+     
+      }
+      function previous(tabid){
+        
+        if(tabid == 1){
+            $(".progress").css({"width": "0%"});
+            $("#form-leave").addClass('form-step-active');
+            $("#attendancerule").removeClass('form-step-active');
+            $("#form-attendance").removeClass('form-step-active'); 
+            $("#attendancerule").removeClass('progress-step-active');
+
+        }else if(tabid == 2){
+            $(".progress").css({"width": "50%"});
+
+            $("#form-leave").removeClass('form-step-active');
+
+            $("#trackprorule").removeClass('progress-step-active');
+            $("#form-attendance").addClass('form-step-active');
+            $("#form-trackpro").removeClass('form-step-active'); 
+
+        }
+
+    }
+      
+    </script>
+  </body>
+</html>

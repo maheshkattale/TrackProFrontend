@@ -1,0 +1,2806 @@
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Attendance calendar
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<!-- Bootstrap CSS -->
+
+<!-- Bootstrap JavaScript Bundle (Bootstrap JS and Popper.js) -->
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+  table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: 400; 
+}
+.fa-spin{
+  font-size: 40px;
+  color: #00A0EF;
+  
+}
+.spiner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  z-index: 100;
+}
+</style>
+
+<link rel="stylesheet" href="{% static 'assets/css/attendance_calender.css' %}">
+
+
+<main class="main-wrapper">
+    {% if messages %}
+        <div class="row" style="justify-content: center;">
+            <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+      
+    <div id="snackbar"></div>
+        
+      <div class="title-div pt-1">
+          <span class="first-container">
+            <div class="company-title pe-2  d-none">Attendance Calender</div>
+    
+
+          </span>
+
+
+
+          <span>
+            
+            <div class="row d-flex justify-content-between align-items-center h-100">
+              <div class="col-md-12 taskcontent textpadding">
+                
+              </div>
+            </div>
+          </span>
+
+
+        <div class="d-flex">
+
+          <div class="generate-excel-report my-auto  d-none">
+            <span>
+              <button onclick="shiftexcelreport()" type="button" class="btn-round-blue usermapping-form-button">Generate Report</button>      
+            </span>
+          
+          </div>
+
+
+          <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered w-25">
+              <div class="modal-content">
+                <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+                  <h5 class="modal-title" id="exampleModalLabel"> New Application</h5>
+                </div>
+                  <div class="modal-body">
+                    <div class="row">
+      
+                        <div class="col-12 px-4 pt-2">
+                          <label for="Type">Select Type</label>
+                          <select class="input-feild select2dropdown" id="Type">
+                            <option value="" selected disabled>Select Type</option>
+                            <option value="1">Apply for leave</option>
+                            <option value="2">Apply for Work from home</option>
+                          </select>
+                          <span class="error" id="Type_err"></span>
+                          <input type="text" id="WFH" value="False" hidden/>
+                        </div>
+                      
+      
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    <button class="Role-btn" onclick="modalopen();" id="addEmployeeBtn" >Submit</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="ApplyLeave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered width-applyleave">
+              <div class="modal-content">
+                <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+                  <h5 class="modal-title" id="exampleModalLabel"> Apply Leave</h5>
+                </div>
+                  <div class="modal-body pb-0">
+                    <div class="row p-2">
+                      <div class="col-lg-6">
+                        <span class="label-title"> Application Type</span>
+                        <span class="d-flex radio-div py-2">
+                        <input type="radio" id="leave" name="applicationtype" value="leave" checked="checked">
+                        <label for="leave">Leave</label>
+                        <input type="radio" id="optional" name="applicationtype" disabled>
+                        <label for="optional">Optional</label>
+                        </span>
+      
+                      </div>
+                      <div class="col-lg-6">
+                        <span class="label-title"> Leave Type</span>
+                        <span class="d-flex radio-div py-2">
+                        <input type="radio" id="leavetype" name="leavetype" onclick="checkleavetype();" value="Fullday">
+                        <label for="leavetype">Full day</label>
+                        <input type="radio" id="firsthalf" name="leavetype" onclick="checkleavetype();" value="FirstHalf">
+                        <label for="firsthalf">First Half</label>
+                        <input type="radio" id="secondhalf" name="leavetype" onclick="checkleavetype();"value="SecondHalf">
+                        <label for="secondhalf">Second Half</label>
+                        </span>
+                        <span class="error" id="leavetype_error"></span>
+      
+                      </div>
+      
+                      <div class="col-lg-6">
+                        <span class="label-title"> Application Status</span>
+                        <span class="d-flex radio-div py-2">
+                        <input type="radio" id="Normal" name="leavestatus"  value="Normal">
+                        <label for="Normal">Normal</label>
+                        <input type="radio" id="Draft" name="leavestatus" value="Draft">
+                        <label for="Draft">Draft</label>
+                        </span>
+                        <span class="error" id="leavestatus_error"></span>
+      
+                      </div>
+      
+                      <div class="col-lg-6">
+      
+      
+      
+                      </div>
+                      <div class="col-lg-6">
+                        <label class="m-0 p-0" for="start_date">From:</label>
+                        <input type="text" placeholder="Enter start date" onchange="applyleavedate();" id="start_date" name="start_date" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                        <div style="height: 0px;"> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('start_date');" /></div>
+                        <span class="error" id="start_date_error"></span>
+                      </div>
+                      
+                        <div class="col-lg-6">
+                          <label for="end_date" class="m-0 p-0">To:</label>
+                          <input type="text" placeholder="Enter end date" id="end_date" onchange="applyleavedate();" name="end_date" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                          <div style="height: 0px;"> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('end_date');" /></div>
+                        <span class="error" id="end_date_error"></span>
+      
+                        </div>
+                        <span  class="error" id="leavefunctionerror"></span>
+                        <div class="col-lg-12 my-3">
+                          <p class="label-title"> I Want To Inform</p>
+                          <div class="d-flex border-bottom">
+                            <div class="my-managers-title">
+                              <span> My Managers</span>
+                            </div>
+                            {%for manager in managerlist%}
+                            <div class="my-auto">
+                              <span class="manager-box" data-bs-toggle="tooltip" title="{{manager.Firstname}} {{manager.Lastname}} ">{{manager.position}} ) {{manager.Firstname}} {{manager.Lastname}}</span>
+                            </div>
+                            {%endfor%}
+                          </div>
+                        </div>
+                        <div class="col-lg-12">
+      
+                          <label class="m-0 p-0" for="leave_attachment">Attach File</label>
+                          <input type="file" onchange="validateFile(this)" id="leave_attachment" name="leave_attachment" autocomplete="off" class="input-feild">
+                          <span class="error" id="leave_attachment_error"></span>
+        
+        
+                        </div>
+                        <div class="col-lg-12">
+                          <label for="reason">Reason:</label>
+                          <textarea type="text" id="reason" name="reason" autocomplete="off" class="input-feild" placeholder="Please explain the application reason in detail (minimum 150 characters)"></textarea>
+                        <span class="error" id="reason_error"></span>
+      
+                        </div>
+      
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="w-50 justify-content-center">
+                      <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                      <button class="Role-btn" onclick="validation();"  id="addEmployeeBtn" >Submit</button>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+      
+          <div class="modal fade" id="WorkFromHome" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+                  <h5 class="modal-title" id="exampleModalLabel"> Apply For WFH</h5>
+                </div>
+                <div class="modal-body">
+                  <div class="row p-2">
+                    <div class="col-lg-6">
+                      <span class="label-title"> Application Status</span>
+                      <span class="d-flex radio-div py-2">
+                      <input type="radio" id="wfhNormal" name="wfhleavestatus"  value="Normal">
+                      <label for="wfhNormal">Normal</label>
+                      <input type="radio" id="wfhDraft" name="wfhleavestatus" value="Draft">
+                      <label for="wfhDraft">Draft</label>
+                      </span>
+                      <span class="error" id="wfhleavestatus_error"></span>
+      
+                    </div>
+                    <div class="col-lg-6">
+                      <span class="label-title"> WFH Type</span>
+                      <span class="d-flex radio-div py-2">
+                      <input type="radio" id="WFHFullday" onchange="WFHcheckleavetype();" name="WFHleavetype" value="Fullday">
+                      <label for="WFHFullday">Full day</label>
+                      <input type="radio" id="WFHfirsthalf" onchange="WFHcheckleavetype();" name="WFHleavetype" value="FirstHalf">
+                      <label for="WFHfirsthalf">First Half</label>
+                      <input type="radio" id="WFHsecondhalf" onchange="WFHcheckleavetype();" name="WFHleavetype" value="SecondHalf">
+                      <label for="WFHsecondhalf">Second Half</label>
+                      </span>
+                      <span class="error" id="WFHleavetype_err"></span>
+                    </div>
+      
+      
+      
+                    <div class="col-lg-6">
+                      <label class="m-0 p-0" for="WFHsdate">From:</label>
+                      <input type="text" id="WFHsdate" onchange="WFHleavedate();" placeholder="Enter start date"  name="WFHsdate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                      <div style="height: 0px;"> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('WFHsdate');"/></div>
+                      <span class="error" id="WFHsdate_error"></span>
+      
+                    </div>
+                    
+                      <div class="col-lg-6">
+                        <label for="WFHedate" class="m-0 p-0">To:</label>
+                        <input type="text" id="WFHedate" onchange="WFHleavedate();" placeholder="Enter end date" name="WFHedate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                        <div style="height: 0px;"> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('WFHedate');"/></div>
+                        <span class="error" id="WFHedate_error"></span>
+      
+                      </div>
+                      <span  class="error" id="WFHleavefunctionerror"></span>
+      
+                      <div class="col-lg-12 my-3 ">
+                        <p class="label-title"> I Want To Inform</p>
+                        <div class="d-flex border-bottom">
+                          <div class="my-managers-title">
+                            <span> My Managers</span>
+                          </div>
+                          {%for manager in managerlist%}
+                            <div class="my-auto">
+                              <span class="manager-box">{{manager.position}} ) {{manager.Firstname}} {{manager.Lastname}}</span>
+                            </div>
+                          {%endfor%}
+                        </div>
+                      </div>
+                      <div class="col-lg-12">
+                        <label class="m-0 p-0" for="wfh_attachment">Attach File</label>
+                        <input type="file" onchange="validateFile(this)" id="wfh_attachment" name="wfh_attachment" autocomplete="off" class="input-feild">
+                        <span class="error" id="wfh_attachment_error"></span>
+                      </div>
+                      <div class="col-12">
+                        <label for="WFHreason">Reason:</label>
+                        <textarea type="text" id="WFHreason" name="WFHreason" autocomplete="off" class="input-feild" placeholder="Please explain the application reason in detail (minimum 150 characters)"></textarea>
+                        <span class="error" id="WFHreason_error"></span>
+                      </div>
+      
+      
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <div class="w-50 justify-content-center">
+                    <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    <button class="Role-btn" onclick="WFHApplyleave();"  id="addEmployeeBtn" >Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="daytarget" tabindex="-1" aria-labelledby="daytarget" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title py-2" >Check Attendance</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="dailytarget_modal" class="modal-body"></div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="modelsdiv">
+
+          </div>
+          <div class="modal fade" id="getleaveandlatemarks" tabindex="-1" aria-labelledby="getleaveandlatemarks" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title py-2">Overview</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div  id="" class="p-3 modal-body">
+                  <div class="row">
+      
+                    <div class="col-lg-3">
+                      <label class="m-0 p-0" for="getlatemarkandleave_startdate">From:</label>
+                      <input type="text" id="getlatemarkandleave_startdate"  placeholder="Enter start date"  name="getlatemarkandleave_startdate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                      <div> <img class="calendarIcon-img" onclick="toggledate('getlatemarkandleave_startdate');" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}"/></div>
+                      <span class="error" id="getlatemarkandleave_startdate_error"></span>
+      
+                    </div>
+                    
+                    <div class="col-lg-3">
+                      <label for="getlatemarkandleave_enddate" class="m-0 p-0">To:</label>
+                      <input type="text" id="getlatemarkandleave_enddate" placeholder="Enter end date" name="getlatemarkandleave_enddate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                      <div> <img class="calendarIcon-img" onclick="toggledate('getlatemarkandleave_enddate');" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}"/></div>
+                      <span class="error" id="getlatemarkandleave_enddate_error"></span>
+    
+                    </div>
+
+
+                    <div class="col-lg d-flex justify-content-end">
+                      <span>
+                        <button onclick="search_latemark_and_leaves();" class="leave-btn" type="button" > Apply</button>
+                      </span>
+                    </div>
+                  </div>
+                  <div  id="showleaveandlatemarks" class="modal-body">
+                  
+
+                  
+                  </div>
+                </div>
+
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="modal fade" id="holidaylistmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+                  <h5 class="modal-title mb-2" style="color:green;"  id="exampleModalLabel">Holiday List</h5>
+                </div>
+                  <div class="modal-body">
+                    <table class="table" id="holidaylistable">
+                      <thead>
+                        <tr>
+                          <th>Sr No</th>
+                          <th>Date</th>
+                          <th>Festival</th>
+                        </tr>
+                      </thead>
+                      <tbody class="holidaylisbody">
+          
+                      </tbody>
+                    </table>
+                  
+                  </div>
+                  <div class="modal-footer mt-3">
+                    <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    <div class="leads-div">
+
+
+        <div class="bar-div py-2 mt-2">
+          <div class="row attandance_heading_bar mx-0">
+            <div class="col-lg-12">
+              <div class="row attandance_score_bar">
+
+
+                <div class="col-lg-3 bg-acblue  col-md-12 col-sm-12  px-0 height_100px">
+                  <span class="profile_section">
+
+
+
+                    <div class="row height_100px">
+                      <div class="col-3 height_100px">
+                        <img src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}" alt="img" class="attandance_calender_profile_img"> 
+                      </div>
+                      <div class="col-9 height_100px">
+    
+                        <div class="m-2 mx-3">
+                        <div>
+                          <span  class="user_name_atcal">Employee Name</span>
+                        </div>
+                        <div>
+                          <span class="" style="font-size:12px">Designation</span>
+                        </div>
+                        <div>
+                          <span class="" style="font-size:12px">Employee ID - 0000</span>
+                        </div>
+                        </div>
+    
+    
+                      </div>
+                    </div>
+
+
+
+                  </span>
+                </div>
+
+
+
+                <div class="col-lg-9  col-md-12 col-sm-12  px-0 height_100px">
+                  <div class="d-flex justify-content-evenly m-1">
+    
+    
+    
+    
+                    <div class="emp-dropdown d-none">
+                      <span class="mx-3 selectdrop">
+                        <select class="input-feild select2dropdown" onchange="calcal();" id="EmployeeId" name="EmployeeId" >
+                          <option value="{{UserId}}" selected>{{username}}</option>
+                        </select>
+                      </span>
+                    </div>
+
+
+                    <div class="team-div d-none">
+                      <span>
+                        <div class="image-container">
+                          <span class="score-title me-1">Team : <span class="teamcount"></span></span>
+                          <div class="image-list" id="image-list">
+    
+                          </div>
+                        </div>
+                      </span>
+                    </div>
+
+    
+
+
+
+
+
+    
+                    <div class="leaves_section d-none">
+                      <span class="score-title">April-September Leaves</span>
+                      <div>
+                        <span  id="year_total_hours_title" class="score-points">0</span>
+                      </div>
+                      <span class="progress-section">
+                        <progress  id="year_total_hours_count" class="progress-range progress1" min="1" max="2352" value="0"></progress>
+                      </span>
+                    </div>
+
+
+
+    
+                    <div class="average_day_hours_section d-none">
+                      <span class="score-title">Average Day Hours</span>
+                      <div>
+                        <span id="year_average_hour_title" class="score-points">0 Hrs</span>
+                      </div>
+                      <span class="progress-section">
+                        <progress id="year_average_hour_count" class="progress-range progress1" min="1" max="9" value="`+response.avghour+`"></progress>
+                      </span>
+      
+                    </div>
+
+
+                    <div class="monthly_latemarks_section d-none">
+
+
+                      <span class="score-title">Monthly Latemarks</span>
+                      <div>
+                        <span id="day_longest_hour_title" class="score-points">0</span>
+                        <span>0 day </span>
+                      </div>
+                      <span class="progress-section">
+                        <progress id="year_average_hour_count" class="progress-range progress1" min="1" max="9" value="9"></progress>
+                      </span>
+    
+    
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="total_employee_section d-none">
+                      <span class="score-title">Total Employees</span>
+                      <div>
+                        <span class="score-points" id="year_total_days_title">0</span>
+                      </div>
+                      <span class="progress-section">
+
+                        <progress  id="year_total_days_count" class="progress-range progress1" min="1" max="0" value="0"></progress>
+                    
+                      </span>
+
+                    </div>
+
+
+
+
+
+
+                    <div class="presentempdiv present_employee_section d-none" data-bs-toggle="modal" data-bs-target="#presentempmodal">
+                      <span class="score-title">Present Employees</span>
+                      <div>
+                        <span id="presentemp" class="score-points">0</span>
+                      </div>
+                      
+                      <span class="progress-section">
+                        <progress  id="year_total_hours_count" class="progress-range progress1" min="1" max="0" value="0"></progress>
+                      </span>
+                    </div>
+
+
+
+
+
+
+
+                    <div  class="yettojoindiv yettocheckin_employee_section d-none" data-bs-toggle="modal" data-bs-target="#yettojoinmodal">
+                      <span class="score-title">Yet To CheckIn</span>
+                      <div>
+                        <span id="" class="score-points">0</span>
+                      </div>
+                      <span class="progress-section">
+                        <progress id="" class="progress-range progress1" min="1" max="0" value="0"></progress>
+                      </span>
+
+
+                    </div>
+
+                    <div class="onleaveempdiv onleave_employee_section d-none" data-bs-toggle="modal" data-bs-target="#onleavemodal">
+                      <span class="score-title">On Leave</span>
+                      <div>
+                        <span  id="emponleave" class="score-points"></span>
+                      </div>
+                      <span class="progress-section">
+                        <progress id="year_total_leaves_count" class="progress-range progress1" min="1" max="0" value=""></progress>
+                      </span>
+                    </div>
+
+                    <div class="onwfhempdiv workfromhome_employee_section d-none" data-bs-toggle="modal" data-bs-target="#onwfhmodal">
+                      <span class="score-title">Work From Home</span>
+                      <div>
+                        <span id="wfhleaves" class="score-points">0</span>
+                      </div>
+                      <span class="progress-section">
+                        <progress id="year_average_hour_count" class="progress-range progress1" min="1" max="`+response.context.Total_count+`" value="0"></progress>
+                      </span>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+                  </div>
+                </div>
+
+
+
+
+              </div>
+            </div>
+
+
+
+
+
+
+          </div>
+
+        </div>
+
+        <div class="p-2">
+          <div class="row m-1">
+
+            <div class="col-lg-8 col-md-12 col-sm-12 px-0">
+              <div class="preview-month">
+                <div class="p-2"  style="overflow-x:auto;" >
+                  <div id="popupContainer"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-12 col-md-12 py-3">
+
+              <div class="row mb-3">
+
+                <div class="col d-flex justify-content-center">
+                  <div class="week_off_colorbox"></div> <div class="inner-text-font-size">Week Off</div>
+                  <div class="Half_Day_colorbox"></div> <div class="inner-text-font-size">Half Day</div>
+                  <div class="Wfh_day_colorbox  "></div> <div class="inner-text-font-size">WFH</div>
+                  <div class="Leave_colorbox"></div> <div class="inner-text-font-size">Leave</div>
+                  <div class="Holiday_colorbox"></div> <div class="inner-text-font-size">Holidays</div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center py-2">
+                  <span id="prev-year" class="px-4"></span>
+                  <span class="text-center px-4 currentYear"></span>
+                  <span id="next-year" class="px-4"></span>
+              </div>
+
+
+              <div id="calendar" class="overflow-auto" style="max-height: 700px;"></div>
+
+            </div>
+          </div>
+        </div>
+    </div>
+            
+        
+    
+
+</main>
+{% endblock %}
+
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#myModaladd">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Apply Leave"
+  src="{% static 'assets/svg/applyleaveicon.svg' %}">
+</a></li>
+<li><a data-bs-toggle="modal" onclick="holidaylist();" data-bs-target="#holidaylistmodal">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Holiday List"
+  src="{% static 'assets/svg/holidays.svg' %}">
+</a></li>
+<li>
+  
+  <a href="{% url 'users:Employeerequest' %}">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Attendance Request"
+  src="{% static 'assets/svg/Empatt_request.svg' %}">
+
+
+</a>
+
+</li>
+
+
+
+
+ {% endblock %}
+
+{%block script%}{{block.super}}
+  <!-- ==================================================================================================================================================== -->
+  
+  
+<script>
+
+  function closeAllTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        var tooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+        if (tooltip) {
+            tooltip.hide();
+        }
+    });
+  }
+  function holidaylist(){
+    var holidaytablehtml ="";
+    var srcounter = 1;
+    $.ajax({
+          type: 'get',
+          url: frontendURL + 'holidaylist',
+          data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          processData: false,
+          contentType: false,
+          dataType: 'json',
+          success: function(response) {
+            if (response.response.n == 1) {
+              $.each(response.data, function(i,o){
+                if (o.currentmonth == true){
+                  holidaytablehtml += `
+                    <tr class="currentmnth">
+                      <td>`+srcounter+`</td>
+                      <td>`+o.Date+`</td>
+                      <td>`+o.Festival+`</td>
+                    </tr>`
+                }
+                else{
+                  holidaytablehtml += `
+                    <tr class="">
+                      <td>`+srcounter+`</td>
+                      <td>`+o.Date+`</td>
+                      <td>`+o.Festival+`</td>
+                    </tr>`
+                }
+                  
+                    srcounter += 1
+                    })
+                    $(".holidaylisbody").html(holidaytablehtml)
+            }else {
+                
+            }
+          },
+          error: function(error) {
+              console.log('error; ' + JSON.stringify(error));
+          }
+      });
+  }
+  function WFHleavedate() {
+    WFHcheckleavetype();
+    var startDate = document.getElementById("WFHsdate").value;
+    var endDate = document.getElementById("WFHedate").value;
+
+    splitdate = startDate.split("-");
+    newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+    splitenddate = endDate.split("-");
+    newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+    var sdate = new Date(newstartdate)
+    var edate = new Date(newenddate)
+
+    if (( edate < sdate)) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "End date should be greater than or equal to Start date",
+            button: "Close",
+        });
+        document.getElementById("WFHedate").value = "";
+    }
+
+    if (startDate === endDate){
+      $(".durationdiv").show()
+    }
+    else{
+      $(".durationdiv").hide()
+    }
+  }
+  function WFHApplyleave(){
+    var start_date = $("#WFHsdate").val();
+    var end_date = $("#WFHedate").val();
+    var reason = $("#WFHreason").val();
+    var leavetype = $('input[name="WFHleavetype"]:checked').val();
+    var leavestatus = $('input[name="wfhleavestatus"]:checked').val();
+    var leaveduration = $("input[name='WFHleavetype']:checked").val();
+    var attachment= $("#wfh_attachment")[0].files[0];
+
+    var WFH=$("#WFH").val();
+
+    WFHcheckleavetype();
+
+    if(IsValid(leavestatus)){
+      $('#wfhleavestatus_error').show().delay(3000).slideUp();
+      $('#wfhleavestatus_error').html('Application status is required');
+      $('#wfhleavestatus_error').focus();
+        return false;
+    }else if(IsValid(leavetype)){
+      $('#WFHleavetype_err').show().delay(3000).slideUp();
+      $('#WFHleavetype_err').html('Application Type is required');
+      $('#WFHleavetype_err').focus();
+        return false;
+        
+    }else if (IsValid(start_date)) {
+      $('#WFHsdate').html('');
+      $('#WFHsdate_error').show().delay(3000).slideUp();
+      $('#WFHsdate_error').html('Application start date is required');
+      $('#WFHsdate').focus();
+        return false;
+    }else if (IsValid(end_date)){
+      $('#WFHedate').html('');
+      $('#WFHedate_error').show().delay(3000).slideUp();
+      $('#WFHedate_error').html('Application end date is required');
+      $('#WFHedate').focus();
+        return false;
+    }else if(IsValid(reason)){
+        $('#WFHreason').html('');
+        $('#WFHreason_error').show().delay(3000).slideUp();
+        $('#WFHreason_error').html('Application reason is required');
+        $('#WFHreason').focus();
+          return false;
+    }else if(!/\S/.test(reason)){
+      $('#WFHreason').html('');
+      $('#WFHreason_error').show().delay(3000).slideUp();
+      $('#WFHreason_error').html('Application reason is required');
+      $('#WFHreason').focus();
+        return false;
+    }else if(reason.length < 150 ){
+        $('#WFHreason_error').html('');
+        $('#WFHreason_error').show().delay(3000).slideUp();
+        $('#WFHreason_error').html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#WFHreason').focus();
+          return false;
+    }
+    var start_datedateParts = start_date.split("-");
+    start_date = start_datedateParts[2] + "-" + start_datedateParts[1] + "-" + start_datedateParts[0];
+
+    var end_datedateParts = end_date.split("-");
+    end_date = end_datedateParts[2] + "-" + end_datedateParts[1] + "-" + end_datedateParts[0];
+    var formData = new FormData();
+    formData.append('start_date',start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('leavetype', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('duration',leaveduration);
+    formData.append('leaveduration',leaveduration);
+    formData.append('attachment', attachment);
+    formData.append('WFH', WFH);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+    $.ajax({
+      url: frontendURL + "leave/",
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      beforeSend: function() {
+        $('.taskcontent').html(
+            '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+        );
+      },
+      success: function (response) {
+       $('.taskcontent').html('');
+          if (response.response.status == 'success') {
+              swal({
+                  icon: response.response.status,
+                  title: "",
+                  text: response.response.msg,
+                  button: "Close",
+              });
+              location.reload();
+          } else {
+              swal({
+                  icon: response.response.status,
+                  title: "",
+                  text: response.response.msg,
+                  button: "Close",
+              });
+          }
+      }
+    });
+    
+  }
+  function WFHcheckleavetype(){
+    var leavetype = $('input[name="WFHleavetype"]:checked').val();
+    var startdate=$("#WFHsdate").val();
+    var enddate=$("#WFHedate").val();
+
+    if(IsValid(leavetype)){
+      $('#WFHleavetype_err').show().delay(3000).slideUp();
+      $('#WFHleavetype_err').html('Application Type is required');
+      $('#WFHleavetype_err').focus();
+      return false;
+    }else{
+      if(leavetype!="Fullday"){
+        if(startdate !="" && enddate!="")  {
+          if(startdate!=enddate){
+            $('#WFHedate').val("");
+            $('#WFHleavefunctionerror').show().delay(3000).slideUp();
+            $('#WFHleavefunctionerror').html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#WFHleavefunctionerror').focus();
+            return false;
+          }
+        }
+      }
+    }
+
+  }
+
+  function validation() {
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    var reason = $("#reason").val();
+    var leavetype = $('input[name="leavetype"]:checked').val();
+    var leavestatus = $('input[name="leavestatus"]:checked').val();
+    var leaveduration = $("input[name='leavetype']:checked").val();
+    var WFH = $("#WFH").val();
+    var attachment = $("#leave_attachment")[0].files[0];
+
+    checkleavetype();
+
+    if (!leavetype) {
+        $('#leavetype_error').show().delay(3000).slideUp();
+        $('#leavetype_error').html('Application Type is required');
+        $('#leavetype').focus();
+        return false;
+    } else if (!leavestatus) {
+        $('#leavestatus_error').show().delay(3000).slideUp();
+        $('#leavestatus_error').html('Application status is required');
+        $('#leavestatus').focus();
+        return false;
+    } else if (!start_date) {
+        $('#start_date').html('');
+        $('#start_date_error').show().delay(3000).slideUp();
+        $('#start_date_error').html('Application start date is required');
+        $('#start_date').focus();
+        return false;
+    } else if (!end_date) {
+        $('#end_date').html('');
+        $('#end_date_error').show().delay(3000).slideUp();
+        $('#end_date_error').html('Application end date is required');
+        $('#end_date').focus();
+        return false;
+    } else if (!reason || !/\S/.test(reason)) {
+        $('#reason').html('');
+        $('#reason_error').show().delay(3000).slideUp();
+        $('#reason_error').html('Application reason is required');
+        $('#reason').focus();
+        return false;
+    }else if(reason.length < 150 ){
+        $('#reason_error').html('');
+        $('#reason_error').show().delay(3000).slideUp();
+        $('#reason_error').html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#reason').focus();
+        return false;
+    }
+
+    var start_dateParts = start_date.split("-");
+    start_date = start_dateParts[2] + "-" + start_dateParts[1] + "-" + start_dateParts[0];
+
+    var end_dateParts = end_date.split("-");
+    end_date = end_dateParts[2] + "-" + end_dateParts[1] + "-" + end_dateParts[0];
+
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('start_date', start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('leavetype', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('leaveduration', leaveduration);
+    formData.append('duration', leaveduration);
+    formData.append('WFH', WFH);
+    formData.append('attachment', attachment);
+
+    $.ajax({
+        url: frontendURL + "leave/",
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function() {
+          $('.taskcontent').html(
+              '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+          );
+        },
+        success: function (response) {
+          $('.taskcontent').html('');
+
+            if (response.response.status == 'success') {
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+                location.reload();
+            } else {
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+            }
+        }
+    });
+  }
+  function applyleavedate() {
+    checkleavetype();
+    var startDate = document.getElementById("start_date").value;
+    var endDate = document.getElementById("end_date").value;
+
+    splitdate = startDate.split("-");
+    newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+    splitenddate = endDate.split("-");
+    newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+    var sdate = new Date(newstartdate)
+    var edate = new Date(newenddate)
+
+    if (( edate < sdate)) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "End date should be greater than or equal to Start date",
+            button: "Close",
+        });
+        document.getElementById("end_date").value = "";
+    }
+    
+    
+    
+
+      
+  
+
+    if (startDate === endDate){
+      $(".durationdiv").show()
+    }
+    else{
+      $(".durationdiv").hide()
+    }
+  }
+  function checkleavetype(){
+    var leavetype = $('input[name="leavetype"]:checked').val();
+    var startdate=$('#start_date').val();
+    var enddate=$('#end_date').val();
+    if(IsValid(leavetype)){
+      $('#leavetype_error').show().delay(3000).slideUp();
+      $('#leavetype_error').html('Application Type is required');
+      $('#leavetype').focus();
+        return false;
+    }else{
+      if(leavetype!="Fullday"){
+
+
+        if(startdate !="" && enddate!="")  {
+          if(startdate!=enddate){
+            $('#end_date').val("");
+            $('#leavefunctionerror').show().delay(3000).slideUp();
+            $('#leavefunctionerror').html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#leavefunctionerror').focus();
+            return false;
+            }
+        }
+      }
+    }
+
+  }
+
+  function modalopen(){
+    var val =$("#Type").val();
+    if(IsValid(val)){
+      $('#Type_err').show().delay(3000).slideUp();
+      $('#Type_err').html('Application Type is required');
+      $('#Type').focus();
+        return false;
+    }else{
+      swal({
+              icon: "info",
+              title: "",
+              text: 'We hope you had a word with your immediate leave manager on call ,if not then please communicate with them.',
+              button: "Ok",
+              }).then(() => {
+                if(val == 1){
+                  $('#WFH').val("False")
+                  $('#ApplyLeave').modal('toggle');
+                  $('#myModaladd').modal('hide');
+                }else if(val==2){
+                  $('#WFH').val("True")
+                  $('#WorkFromHome').modal('toggle');
+                  $('#myModaladd').modal('hide');
+                }
+      });
+    }
+
+
+  }
+
+  function validateFile(input) {
+    const file = input.files[0];
+    const allowedExtensions = /(\.png|\.jpg)$/i;
+    if (!allowedExtensions.test(file.name)) {
+        swal({
+          icon: "info",
+          title: "",
+          text: "Please select a file with a .png or .jpg extension.",
+          buttons: false,
+          
+
+      });
+        input.value = ''; // Clear the file input
+    }
+  }
+
+  
+  
+  $( "#start_date" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+    });
+  $( "#end_date" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+    });
+  $( "#WFHsdate" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+    });
+  $( "#WFHedate" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+  });
+
+
+</script>
+
+
+<script>
+  var selected_month
+  var selected_year
+  var allmappedemp=[]
+  function disablePage() {
+    // Create a transparent overlay div to cover the entire page
+    var overlay = $('<div id="page-overlay"></div>');
+    overlay.css({
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'rgba(0, 0, 0, 0.6)', // Semi-transparent black overlay
+        zIndex: 99999, // Ensure it's on top of everything
+        cursor: 'wait', // Show a wait cursor
+    });
+
+    // Append the overlay to the body
+    $('body').append(overlay);
+  }
+  function enablePage() {
+    $('#page-overlay').remove();
+  }
+
+  $(document).ready(function() {
+    var currentDateinstance = new Date();
+    var currentMonthinstance = currentDateinstance.getMonth() + 1;
+    var currentYearinstance = currentDateinstance.getFullYear();
+    getyearlydata(currentMonthinstance,currentYearinstance)
+    get_attendance_mapped_employees('{{UserId}}');
+    calcal();
+
+
+
+
+    $(".alldatepicker").datepicker({ 
+      dateFormat: 'dd-mm-yy',
+      minDate: 0,
+      changeYear:true,
+      maxDate: +90,
+      changeMonth: true,
+ 
+    });
+
+    $('#start_date').datepicker('option', 'minDate', new Date());
+    $('#end_date').datepicker('option', 'minDate', new Date());
+    $('#WFHsdate').datepicker('option', 'minDate', new Date());
+    $('#WFHedate').datepicker('option','minDate', new Date());
+    $(".durationdiv").hide()
+
+    $('#getlatemarkandleave_startdate').datepicker({
+      dateFormat: 'dd-mm-yy',
+      changeYear:true,
+      changeMonth: true,
+
+    });
+    $('#getlatemarkandleave_enddate').datepicker({        
+      dateFormat: 'dd-mm-yy',
+      changeYear:true,
+      changeMonth: true,
+    });
+
+
+
+  });
+
+  function calcal(){
+
+
+
+    var images = document.querySelectorAll('.image-list img');
+
+    var selectedValue = $('#EmployeeId').val();
+    
+    images.forEach(function(img) {
+        img.classList.remove('image-selected');
+    });
+    
+    var selectedImage = $('.image-list img[data-value="' + selectedValue + '"]');
+
+    selectedImage.addClass('image-selected');
+
+
+
+
+    var monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    var year = new Date().getFullYear();
+    showShopPreview(new Date().getMonth()+1);
+    createCalendar(year);
+
+    function createCalendar(year) {
+      $('.currentYear').html(year);
+      $('#calendar').empty();
+      for (var i = 0; i < monthNames.length; i++) {
+        var month = i + 1;
+        var daysInMonth = new Date(year, month, 0).getDate();
+        var table = '<div class="card1">' +
+                    '<h5 class="card-header1">' + monthNames[i] + ' ' + year + '</h5>' +
+                    '<table class="table table-bordered1">' +
+                    '<tr class="week-row">' +
+                    '<th scope="col">S</th>' +
+                    '<th scope="col">M</th>' +
+                    '<th scope="col">T</th>' +
+                    '<th scope="col">W</th>' +
+                    '<th scope="col">T</th>' +
+                    '<th scope="col">F</th>' +
+                    '<th scope="col">S</th>' +
+                    '</tr>';
+
+        var dayOfWeek = new Date(year, i, 1).getDay();
+        var dayCounter = 1;
+
+        for (var j = 0; j < 6; j++) {
+          table += '<tr>';
+
+          for (var k = 0; k < 7; k++) {
+            if ((j === 0 && k < dayOfWeek) || dayCounter > daysInMonth) {
+              table += '<td></td>';
+            } else {
+              if (k === 0) {
+                table += '<td class="sunday border_box">' + dayCounter + '</td>';
+              } else if (k === 6) {
+                if (dayCounter % 7 === 14 || dayCounter % 7 === 28) {
+                  table += '<td class="fourth-saturday border_box">' + dayCounter  + '</td>';
+                } else if (dayCounter % 7 === 7 || dayCounter % 7 === 21) {
+                  table += '<td class="second-saturday border_box">' + dayCounter + '</td>';
+                } else {
+                  table += '<td class="border_box">' + dayCounter + '</td>';
+                }
+              } else {
+                table += '<td class="border_box">' + dayCounter + '</td>';
+              }
+              dayCounter++;
+            }
+          }
+
+          table += '</tr>';
+        }
+
+        table += '</table>' +
+                 '</div>';
+
+        var $monthContainer = $('<div class="month1">' + table + '</div>');
+        $monthContainer.data('month', month);
+
+        // Check if it's the current month and year
+        if (year === new Date().getFullYear() && month === new Date().getMonth() + 1) {
+          $monthContainer.addClass('selected');
+        }
+
+        $monthContainer.on('click', function() {
+          $('.month1').removeClass('selected');
+          $(this).addClass('selected');
+          var clickedMonth = $(this).data('month');
+          showShopPreview(clickedMonth);
+        });
+
+        $('#calendar').append($monthContainer);
+      }
+    }
+
+    function showShopPreview(month) {
+      var daysInMonth = new Date(year, month, 0).getDate();
+      getyearlydata(month,year)
+      attendancecount(month,year)
+      var tableHTML = '<div class="card1">' +
+                      '<h5 class="card-header1">' + monthNames[month - 1] + ' ' + year + '</h5>' +
+                      '<table class="table table-bordered1">' +
+                      '<tr class="week-row">' +
+                      '<th scope="col">Sun</th>' +
+                      '<th scope="col">Mon</th>' +
+                      '<th scope="col">Tue</th>' +
+                      '<th scope="col">Wed</th>' +
+                      '<th scope="col">Thu</th>' +
+                      '<th scope="col">Fri</th>' +
+                      '<th scope="col">Sat</th>' +
+                      '</tr>';
+
+      var dayOfWeek = new Date(year, month - 1, 1).getDay();
+      var dayCounter = 1;
+      if(month<10){
+        month="0"+month
+      }
+
+
+      for (var j = 0; j < 6; j++) {
+        tableHTML += '<tr>';
+
+        for (var k = 0; k < 7; k++) {
+          if(dayCounter<10){
+            dayCounter_obj="0"+dayCounter
+          }else{
+            dayCounter_obj=dayCounter
+          }
+          var dateclass="date-"+year+"-"+month+"-"+dayCounter_obj
+
+        
+          if ((j === 0 && k < dayOfWeek) || dayCounter > daysInMonth) {
+            tableHTML += '<td></td>';
+          } else {
+            if (k === 0) {
+              tableHTML += '<td class="sunday border_box '+dateclass+'">' + dayCounter + '</td>';
+            } else if (k === 6) {
+              if (dayCounter % 7 === 14 || dayCounter % 7 === 28) {
+                tableHTML += '<td class="fourth-saturday border_box '+dateclass+'">' + dayCounter + '</td>';
+              } else if (dayCounter % 7 === 7 || dayCounter % 7 === 21) {
+                tableHTML += '<td class="second-saturday border_box '+dateclass+'">' + dayCounter + '</td>';
+              } else {
+                tableHTML += '<td class="border_box '+dateclass+'">' + dayCounter + '</td>';
+              }
+            } else {
+              tableHTML += '<td class=" border_box '+dateclass+'">' + dayCounter + '</td>';
+            }
+            dayCounter++;
+          }
+        }
+
+        tableHTML += '</tr>';
+      }
+
+      tableHTML += '</table>' +
+                   '</div>';
+
+      var $popupContainer = $('<div class="popup">' + tableHTML + '</div>');
+
+      $('#popupContainer').html($popupContainer);
+
+    }
+
+
+    $('#prev-year').on('click', function() {
+      year--;
+      var month=new Date().getMonth()+1
+      getyearlydata(month,year);
+      createCalendar(year);
+    });
+
+    $('#next-year').on('click', function() {
+      year++;
+      var month=new Date().getMonth()+1
+      getyearlydata(month,year);
+      get_late_count_per_month(month)
+      createCalendar(year);
+    });
+
+    closeAllTooltips();
+
+  }
+  function attendancecount(selectedMonth,selectedYear){
+    empid = $("#EmployeeId").val();
+    disablePage();
+
+    $.ajax({
+      url: frontendURL +"attendance_cal",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'month':selectedMonth,
+        'year':selectedYear,
+        'empid':empid
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        $('.taskcontent').html(
+            '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+        );
+      },
+      success: function(response){
+       $('.taskcontent').html('');
+        
+        if (empid == "All"){
+          $(response.data).each(function(a, b) {
+            var textContent = $('#popupContainer').find('.date-'+b.fulldate).text();
+            date_html=''
+
+
+            $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-toggle','tooltip');
+            if(b.att_status == 'P'){
+                date_html=`<p  onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');"  class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Total : `+b.total+`<br>Present : `+b.present  +`<br>Leave : `+b.leaves+`<br>Not Found : `+b.noattendenceid    +`</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Total : '+ b.total + '<br>Present : '+b.present  +'<br>Leave : '+ b.leaves +'<br>Not Found : '+ b.noattendenceid);
+            }else if(b.att_status == 'H'){
+                date_html=`<p  onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');"  class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">`+b.reason+`</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "green");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title',b.reason);
+            }else if(b.att_status == 'WO'){
+                date_html=`<p  onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');"  class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Weekly off</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "red");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Weekly off');
+            }else if(b.att_status == 'NF'){
+                date_html=`<p  onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');"  class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Not Found</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("opacity", "0.5");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found');
+            }else{
+                date_html=`<p  onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');"  class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Not Found</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found');
+            }
+          })
+
+        
+        }
+
+        else{
+          var modelsdiv=''
+          $(response.data).each(function(a, b) {
+
+            console.log("hj",b)
+            var textContent = $('#popupContainer').find('.date-'+b.fulldate).text();
+            date_html=''
+            $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-toggle','tooltip');
+            if(b.att_status == 'P'){
+              if(b.extra_days !=''){
+                inTime_toolip=b.inTime + ' ('+b.inTime_date+')'
+                outTime_tooltip=b.outTime + ' ('+b.outTime_date+')'
+              }else{
+                inTime_toolip=b.inTime
+                outTime_tooltip=b.outTime 
+              }
+              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p><p class="inner-date-font-size">In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p>   `;
+              $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+              $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+              $('#popupContainer').find('.date-'+b.fulldate).attr('title','In Time '+ inTime_toolip + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs');
+
+
+
+            }else if(b.att_status == 'H'){
+
+
+
+
+              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">`+b.reason+`</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "green");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title',b.reason);
+
+
+
+
+
+            }else if(b.att_status == 'WFH'){
+
+
+
+
+              if(b.extra_days !=''){
+                inTime_toolip=b.inTime + ' ('+b.inTime_date+')'
+                outTime_tooltip=b.outTime + ' ('+b.outTime_date+')'
+              }else{
+                inTime_toolip=b.inTime
+                outTime_tooltip=b.outTime 
+              }
+
+
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p></p><p class="inner-date-font-size">Work From Home <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(255, 212, 0)");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Work From Home'+'<br>In Time '+ inTime_toolip  + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs');
+    
+
+
+
+            }else if(b.att_status == 'WO'){
+
+
+
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size-wf">Weekly off</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(217 0 0)");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Weekly off');
+
+
+
+            }else if(b.att_status == 'HF'){
+              if(b.extra_days !=''){
+                inTime_toolip=b.inTime + ' ('+b.inTime_date+')'
+                outTime_tooltip=b.outTime + ' ('+b.outTime_date+')'
+              }else{
+                inTime_toolip=b.inTime
+                outTime_tooltip=b.outTime 
+              }
+
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`<span class='extradays'> `+b.extra_days+`</span></p><p class="inner-date-font-size">Halfday <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "grey");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Halfday  <br>In Time '+ inTime_toolip  + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs');
+
+
+            }else if(b.att_status == 'L'){
+
+
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Leave</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(158 219 255)");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Leave');
+
+
+            }else if(b.att_status == 'A'){
+
+              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Not Found</p>`;
+              $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+              $('#popupContainer').find('.date-'+b.fulldate).css("opacity", "0.5");
+              $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found');
+
+            }else{
+              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Not Found</p>`;
+              $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+
+                  $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found');
+            }
+
+
+            modelsdiv+=`
+            
+              <div class="modal fade" id="empattendancelog`+b.fulldate+`" tabindex="-1" aria-labelledby="daytarget" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title py-2" >Attendance log</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="" class="modal-body">
+
+                      <table class="table" style="width:100%;">
+                        <thead>
+                          <tr class="tableHeadings">
+                            <th>Shift Name</th>
+                            <th>CheckIn / CheckOut</th>
+                          </tr>
+                        </thead>
+                        <tbody class="">
+                          ${b.shifts_list.map(l => `
+                            <tr class="border">
+                              <td class='py-0'><span class='py-1'>`+l.shiftname+`</span></td>
+                              <td class="border-left p-0">
+                                ${l.attendance_history.map((entry, index) => `
+                                  <div class='d-flex '>
+                                    <div class='p-1 w-25 border'>
+                                      ${entry['Status'] === 'Check-In' ?
+                                      `<span class='text-success'>${entry['Status']}</span>` 
+                                      : `<span class='text-danger'>${entry['Status']}</span>`}
+
+                                    </div>
+                                    <div class='p-1 w-25 border'>
+                                      `+entry['datetime'].split(" ")[1]+ `  ` + ddmonthyyyy(entry['datetime'].split(" ")[0])+`
+                                    </div>
+                                    <div class='w-25 p-1 border' data-bs-toggle='tooltip' title='`+entry['attendance_type_resaon']+`'>
+                                      `+entry['attendance_type']+ `
+                                    </div>
+                                    <div class='w-25 p-1 border' data-bs-toggle='tooltip' title='`+entry['remote_map_name']+`'>
+                                      <a style="" target='blank' href="`+entry['remote_map_location']+ `">`+entry['remote_map_name']+`</a>
+                                    </div>
+                                  </div>
+                                `).join("\n")}
+                              </td>
+
+                            </tr>
+
+                          `).join("\n")}
+                          
+                        </tbody>
+                      </table>   
+
+
+                    </div>
+
+
+
+ 
+
+                    
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            
+            `
+
+
+
+
+
+
+          })
+           $('#modelsdiv').html(modelsdiv)
+        }
+        
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {return new bootstrap.Tooltip(tooltipTriggerEl)}) 
+
+        //swal.close()
+        enablePage();
+
+      }
+    });
+  }
+
+  function ddmonthyyyy(inputDate) {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = new Date(inputDate).toLocaleDateString(undefined, options);
+    return formattedDate;
+  }
+  function getyearlydata(selectedMonth,selectedYear){
+     selected_month=selectedMonth
+     selected_year=selectedYear
+    empid = $("#EmployeeId").val();
+    $.ajax({
+      url: frontendURL +"attendance_cal_year_change",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'month':selectedMonth,
+        'year':selectedYear,
+        'empid':empid,
+
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        $('.taskcontent').html(
+            '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+        );
+      },
+      success: function(response){
+       $('.taskcontent').html('');
+
+        var trhtml = "";
+        var profile_section_html = "";
+
+        var leaves_section_html = "";
+        var average_day_hours_section_html = "";
+        var monthly_latemarks_section_html = "";
+
+        var total_employee_section_html = "";
+        var present_employee_section_html = "";
+        var onleave_employee_section_html = "";
+        var yettocheckin_employee_section_html = "";
+        var workfromhome_employee_section_html = "";
+
+
+        if (empid != "All"){
+
+          $('.total_employee_section').addClass('d-none')
+          $('.present_employee_section').addClass('d-none')
+          $('.onleave_employee_section').addClass('d-none')
+          $('.yettocheckin_employee_section').addClass('d-none')
+          $('.workfromhome_employee_section').addClass('d-none')
+
+
+          
+          profile_section_html=`
+          <div class="row height_100px">
+            <div class="col-3 height_100px">
+              <img src='`+response.Photo+`' alt="img" class="attandance_calender_profile_img"> 
+            </div>
+            <div class="col-9 height_100px">
+
+              <div class="m-2 mx-3">
+              <div>
+                <span class="user_name_atcal">`+response.Name+`</span>
+              </div>
+              <div>
+                <span class="" style="font-size:12px">`+response.Designation+`</span>
+              </div>
+              <div>
+                <span class="" style="font-size:12px">Employee ID -`+response.EmployeeId+`</span>
+              </div>
+              </div>
+
+
+            </div>
+          </div>
+          `
+          $('.profile_section').html(profile_section_html)
+
+
+          leaves_section_html = `
+            <div class="">
+              <span class="score-title">`+response.monthstr+` Leaves</span>
+              <div>
+                <span  id="year_total_hours_title" class="score-points">`+response.total_6monthly_leave_count+` </span>
+              </div>
+              <span class="progress-section">
+                <progress  id="year_total_hours_count" class="progress-range progress1" min="1" max="12" value="`+response.total_6monthly_leave_count+`"></progress>
+              </span>
+            </div>
+          `
+          $('.leaves_section').html(leaves_section_html).removeClass('d-none')
+
+
+          average_day_hours_section_html=`                    
+            <span class="score-title">Average Day Hours</span>
+            <div>
+              <span id="year_average_hour_title" class="score-points">`+response.avghour+` Hrs</span>
+            </div>
+            <span class="progress-section">
+              <progress id="year_average_hour_count" class="progress-range progress1" min="1" max="9" value="`+response.avghour+`"></progress>
+            </span>
+
+          `
+          $('.average_day_hours_section').html(average_day_hours_section_html).removeClass('d-none')
+
+
+          monthly_latemarks_section_html=`
+          
+            <div class="d-flex">
+              <div class=" cursor-pointer" data-bs-toggle="modal" data-bs-target="#monthlylatemarks">
+                <span class="score-title">Monthly Latemark</span>
+                <div>
+                  <span id="day_longest_hour_title" class="score-points">`+response.monthly_late_count.latecount+` </span>
+                  <span>(`+response.monthly_late_count.days+`  days)</span>
+                </div>
+                <span class="progress-section" >
+                  <progress id="year_average_hour_count" class="progress-range progress1" min="1" max="9" value="9"></progress>
+                </span>
+    
+    
+                
+              </div>
+    
+              <div class="ps-3 info-search d-none">
+                <i onclick="get_leaves_and_latemarks_by_date(`+null+`,`+null+`,`+empid+`);" class="fa fa-solid fa-info-circle infobtn" data-bs-toggle="modal" data-bs-target="#getleaveandlatemarks"></i>
+              </div>
+    
+              <div class="modal fade" id="monthlylatemarks" tabindex="-1" aria-labelledby="monthlylatemarks" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" >Employees Latemarks</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table" style="width:100%;">
+                        <thead>
+                          <tr class="tableHeadings">
+                            <th>Sr No.</th>
+                            <th>Date</th>
+                            <th style="width:30%;">CheckIn Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                          </tr>
+                        </thead>
+                        <tbody class="">
+                          
+                          ${response.monthly_late_count.details.map((l, index) => `
+                            <tr>
+                              <td>${index + 1}</td>
+                              <td>${formatDate(l.date)}</td>
+                              <td>${l.time}</td>
+                            </tr>
+                          `).join("\n")}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          `
+          $('.monthly_latemarks_section').html(monthly_latemarks_section_html).removeClass('d-none')
+
+                  
+
+        }
+        else{
+
+          $('.leaves_section').addClass('d-none')
+          $('.average_day_hours_section').addClass('d-none')
+          $('.monthly_latemarks_section').addClass('d-none')
+
+          profile_section_html=`
+          <div class="row height_100px">
+                      
+            <div class="col-12 height_100px d-flex justify-content-center">
+
+              <div class="m-2 mx-3">
+                <div>
+                  <span class="user_name_atcal">`+response.Name+`</span>
+                </div>
+                <div>
+                  <span class="score-points" style="font-size:16px;" id="year_total_days_title">Count : `+response.context.Total_count+`</span>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          `
+          $('.profile_section').html(profile_section_html)
+
+
+          total_employee_section_html=`
+          <span class="score-title">Total Employees</span>
+          
+            <div>
+              <span class="score-points"  id="year_total_days_title">`+response.context.Total_count+`</span>
+            </div>
+
+          <span class="progress-section">
+
+            <progress  id="year_total_days_count" class="progress-range progress1" min="1" max="`+response.context.Total_count+`" value="`+response.context.Total_count+`"></progress>
+        
+          </span>
+          `
+
+          present_employee_section_html=`
+                <span class="score-title">Present Employees</span>
+                <div>
+                  <span id="presentemp" class="score-points">`+response.context.Present+`</span>
+                </div>
+                
+                <span class="progress-section">
+                  <progress  id="year_total_hours_count" class="progress-range progress1" min="1" max="`+response.context.Total_count+`" value="`+response.context.Present+`"></progress>
+                </span>
+
+
+
+                <div class="modal fade" id="presentempmodal" tabindex="-1" aria-labelledby="presentempmodal" aria-hidden="true">
+                  <div class="modal-dialog  modal-dialog-scrollable">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" >Employees Present</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table" style="width:100%;">
+                          <thead>
+                            <tr class="tableHeadings">
+                              <th>Sr No.</th>
+                              <th>Employee Name</th>
+                              <th style="width:30%;">CheckIn Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                            </tr>
+                          </thead>
+                          <tbody class="">
+                            ${response.context.Presentlist.map(l => `
+                              <tr>
+                              <td>`+l.presentcounter+`</td>
+                              <td>`+l.empname+`</td>
+                              <td>`+l.checkintime+`</td>
+                            </tr>
+                            `).join("\n")}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          `
+          $('.present_employee_section').html(present_employee_section_html).removeClass('d-none')
+
+
+
+          onleave_employee_section_html=`
+                    <span class="score-title">On Leave</span>
+                    <div>
+                      <span  id="emponleave" class="score-points">`+response.context.Onleave+`</span>
+                    </div>
+                    <span class="progress-section">
+                      <progress id="year_total_leaves_count" class="progress-range progress1" min="1" max="`+response.context.Total_count+`" value="`+response.context.Onleave+`"></progress>
+                    </span>
+
+
+
+                    
+                  <div class="modal fade" id="onleavemodal" tabindex="-1" aria-labelledby="onleavemodal" aria-hidden="true">
+                    <div class="modal-dialog  modal-dialog-scrollable">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Employees On Leave</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <table class="table" style="width:100%;">
+                            <thead>
+                              <tr class="tableHeadings">
+                                <th>Sr No.</th>
+                                <th>Employee Name</th>
+                                <th>Leave Duration</th>
+                              </tr>
+                            </thead>
+                            <tbody class="">
+                              ${response.context.leavelist.map(l => `
+                                <tr>
+                                <td>`+l.leavecounter+`</td>
+                                <td>`+l.empname+`</td>
+                                <td>`+l.Leavetype+`</td>
+                              </tr>
+                              `).join("\n")}
+                              
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+          `
+          $('.onleave_employee_section').html(onleave_employee_section_html).removeClass('d-none')
+          
+          workfromhome_employee_section_html=`
+            <span class="score-title">Work From Home</span>
+            <div>
+              <span id="wfhleaves" class="score-points">`+response.context.WFH+`</span>
+            </div>
+            <span class="progress-section">
+              <progress id="year_average_hour_count" class="progress-range progress1" min="1" max="`+response.context.Total_count+`" value="`+response.context.WFH+`"></progress>
+            </span>
+
+
+            <div class="modal fade" id="onwfhmodal" tabindex="-1" aria-labelledby="onwfhmodal" aria-hidden="true">
+              <div class="modal-dialog  modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Employees On WFH</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+                    <table class="table" style="width:100%;">
+                      <thead>
+                        <tr class="tableHeadings">
+                          <th>Sr No.</th>
+                          <th>Employee Name</th>
+                          <th>WFH Duration</th>
+                        </tr>
+                      </thead>
+                      <tbody class="">
+                        ${response.context.wfhlist.map(l => `
+                          <tr>
+                          <td>`+l.wfhcounter+`</td>
+                          <td>`+l.empname+`</td>
+                          <td>`+l.Leavetype+`</td>
+                        </tr>
+                        `).join("\n")}
+                        
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>`
+          $('.workfromhome_employee_section').html(workfromhome_employee_section_html).removeClass('d-none')
+
+          yettocheckin_employee_section_html=`
+            <span class="score-title">Yet To CheckIn</span>
+            <div>
+              <span id="" class="score-points">`+response.context.yettojoin+`</span>
+            </div>
+            <span class="progress-section">
+              <progress id="" class="progress-range progress1" min="1" max="`+response.context.Total_count+`" value="`+response.context.yettojoin+`"></progress>
+            </span>
+
+            <div class="modal fade" id="yettojoinmodal" tabindex="-1" aria-labelledby="yettojoinmodal" aria-hidden="true">
+              <div class="modal-dialog  modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Employees Yet to CheckIn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body tableatt">
+                    <table class="table" style="width:100%;">
+                      <thead>
+                        <tr class="tableHeadings">
+                          <th>Sr No.</th>
+                          <th>Employee Name</th>
+                          <th>Reason</th>
+                        </tr>
+                      </thead>
+                      <tbody class="">
+                        ${response.context.yettojoinlist.map(l => `
+                          <tr>
+                          <td>`+l.ytjcounter+`</td>
+                          <td>`+l.username+`</td>
+                          <td>`+l.reason+`</td>
+                        </tr>
+                        `).join("\n")}
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>`
+          $('.yettocheckin_employee_section').html(yettocheckin_employee_section_html).removeClass('d-none')
+
+        }
+        get_attendance_mapped_employees(empid);
+
+
+            
+       //swal.close()
+      }
+
+    });
+
+  }
+  function get_attendance_by_date(my_date){
+    $.ajax({
+      url: frontendURL +"getattendancebydate",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'my_date':my_date,
+
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        $('.taskcontent').html(
+            '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+        );
+      },
+      success: function(response){
+       $('.taskcontent').html('');
+        
+        modalhtml = `
+        <div class="">
+          <ul class="nav custom-tabs nav-fill" id="myTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Present (`+response.context.Present+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">On leave (`+response.context.Onleave+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab3-tab" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Work From Home (`+response.context.WFH+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab4-tab" data-bs-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Not Found (`+response.context.yettojoin+`)</a>
+            </li>
+          </ul>
+      
+          <div class="tab-content" id="myTabsContent">
+      
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+      
+      
+              <table class="table" style="width:100%;">
+                  <thead>
+                    <tr class="tableHeadings">
+                      <th>Sr No.</th>
+                      <th>Employee Name</th>
+                      <th style="width:30%;">CheckIn Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+                    ${response.context.Presentlist.map(l => `
+                      <tr>
+                      <td>`+l.presentcounter+`</td>
+                      <td>`+l.empname+`</td>
+                      <td>`+l.checkintime+`</td>
+                    </tr>
+                    `).join("\n")}
+                  </tbody>
+                </table>
+      
+      
+            </div>
+      
+            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+              <table class="table" style="width:100%;">
+                  <thead>
+                    <tr class="tableHeadings">
+                      <th>Sr No.</th>
+                      <th>Employee Name</th>
+                      <th style="width:30%;">leave duration <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+      
+                       ${response.context.leavelist.map(l => `
+                            <tr>
+                            <td>`+l.leavecounter+`</td>
+                            <td>`+l.empname+`</td>
+                            <td>`+l.Leavetype+`</td>
+                          </tr>
+                          `).join("\n")}
+      
+                  </tbody>
+              </table> 
+            </div>
+      
+            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+              <table class="table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Employee Name</th>
+                    <th>WFH Duration</th>
+                  </tr>
+                </thead>
+                <tbody class="">
+                  ${response.context.wfhlist.map(l => `
+                    <tr>
+                    <td>`+l.wfhcounter+`</td>
+                    <td>`+l.empname+`</td>
+                    <td>`+l.Leavetype+`</td>
+                  </tr>
+                  `).join("\n")}
+                  
+                </tbody>
+              </table>    
+            </div>
+      
+      
+            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+              <table class="table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Employee Name</th>
+                    <th>Reason</th>
+                  </tr>
+                </thead>
+                <tbody class="">
+                  ${response.context.yettojoinlist.map(l => `
+                    <tr>
+                    <td>`+l.ytjcounter+`</td>
+                    <td>`+l.username+`</td>
+                    <td>`+l.reason+`</td>
+                  </tr>
+                  `).join("\n")}
+                  
+                </tbody>
+              </table>
+            
+            </div>
+          </div>
+        </div>
+
+         `
+      $('#dailytarget_modal').html(modalhtml)
+
+
+
+      }
+    });
+    $("#daytarget").modal("show");
+
+  }
+  function get_attendance_mapped_employees(empid){
+    var options ="";
+    var imageslist="";
+    $.ajax({
+      url: frontendURL +"get_attendance_mapped_employees",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+      },
+      dataType: 'json',
+
+      success: function(response){
+        var counterobj1=0
+        var counterobj2=0
+        if('{{CoreTeam}}'.toString() == 'False'){
+          $('.team-div').removeClass('d-none');
+
+
+        }else{
+          $('.team-div').addClass('d-none');
+
+    
+        }
+        if(response.caluserslist.length <= 1){
+          $('.team-div').hide();
+          $('.emp-dropdown').addClass('d-none');
+          $('.info-search').addClass('d-none');
+
+          $('.generate-excel-report').addClass('d-none');
+
+        }else{
+          $('.emp-dropdown').removeClass('d-none');
+          $('.info-search').removeClass('d-none');
+
+          $('.generate-excel-report').removeClass('d-none');
+
+        }
+          
+        
+
+
+        $.each(response.caluserslist,function(i,o){
+          counterobj1+=1
+          if(o.userid != 'All'){
+            allmappedemp.push(o.userid)
+
+          }
+
+          options += `<option value="`+o.userid+`">`+o.useridstr+`</option>`
+
+          if (o.userid != '{{UserId}}'  && o.userid != "All"){
+            counterobj2+=1
+
+            if(counterobj1  <= 11){
+
+              if(o.Photo == null){
+
+                imageslist +=`<img src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  width="25" height="25" class="rounded-circle" alt="Circular Image"  title="`+o.useridstr+`" onclick="changeemp(this);" data-value="`+o.userid+`">`
+
+              }else{
+
+                imageslist +=`<img src="{{ImageURL}}`+o.Photo+`" class="rounded-circle"  width="25" height="25" alt="Circular Image"  title="`+o.useridstr+`" data-value="`+o.userid+`" onclick="changeemp(this);">`
+
+              }
+            }
+          }
+
+          
+        })
+        
+
+        $(".teamcount").html("<span>("+counterobj2+")</span>");
+        
+
+        $("#image-list").html(imageslist);
+        $("#EmployeeId").html(options);
+        $("#EmployeeId").val(empid);
+        $('img[data-value="'+empid+'"]').addClass('image-selected');
+
+      }
+    });
+
+  }
+  function get_late_count_per_month(Month){
+    var employeeId=$('#EmployeeId').val();
+    $.ajax({
+      url: frontendURL +"get_late_count_per_month",
+      type: 'POST',
+      data:{
+        Month:Month,
+        employeeId:employeeId,
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+      },
+      dataType: 'json',
+
+      success: function(response){
+
+
+        console.log("get_late_count_per_month",response)
+
+      }
+    });
+
+  }
+  function formatDate(inputDate) {
+    var date = new Date(inputDate);
+    var day = date.getDate();
+    var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    var month = monthNames[date.getMonth()];
+    var year = date.getFullYear();
+
+    var formattedDate = day + getOrdinalSuffix(day) + " " + month + " " + year;
+
+    return formattedDate;
+  }
+  function getOrdinalSuffix(number) {
+    var suffix = "th";
+    if (number >= 11 && number <= 13) {
+      suffix = "th";
+    } else {
+      switch (number % 10) {
+        case 1:
+          suffix = "st";
+          break;
+        case 2:
+          suffix = "nd";
+          break;
+        case 3:
+          suffix = "rd";
+          break;
+      }
+    }
+    return suffix;
+  }
+  function changeemp(imagselected){
+    
+    var imagesall = document.querySelectorAll('.image-list img');
+    var selectvalue = document.getElementById('EmployeeId');
+    imagesall.forEach(function(img) {
+      img.classList.remove('image-selected');
+    });
+
+
+    imagselected.classList.add('image-selected');
+      
+    // Access the assigned value
+    var imageValue = imagselected.getAttribute('data-value');
+    
+    // Update the select element
+    selectvalue.value = imageValue;
+    $("#EmployeeId").val(imageValue).trigger("change");
+  }
+  function convertDateFormat(inputDate) {
+    // Split the input date into day, month, and year
+    var dateParts = inputDate.split('-');
+  
+    // Rearrange the date parts in the desired format
+    var outputDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+  
+    return outputDate;
+  }
+  function search_latemark_and_leaves(){
+      var fromDate = document.getElementById('getlatemarkandleave_startdate').value;
+      var toDate = document.getElementById('getlatemarkandleave_enddate').value;
+      var userid = document.getElementById('EmployeeId').value;
+
+      if (fromDate == "" || fromDate == null ) {
+        swal({
+          icon: "error",
+          title: "",
+          text: "Pelase select valid from date",
+          button: "Close",
+      });
+        return false; // Prevent form submission
+      }
+      if (toDate == "" || toDate == null ) {
+        swal({
+          icon: "error",
+          title: "",
+          text: "Pelase select valid to date",
+          button: "Close",
+      });
+        return false; // Prevent form submission
+      }
+      // Check if the fromDate is before or the same as toDate
+      if (new Date(fromDate) > new Date(toDate)) {
+          swal({
+            icon: "error",
+            title: "",
+            text: "To Date must be equal or after From Date",
+            button: "Close",
+        });
+          return false; // Prevent form submission
+      }
+      fromDate = convertDateFormat(fromDate);
+      toDate = convertDateFormat(toDate);
+      
+      get_leaves_and_latemarks_by_date(fromDate,toDate,userid)
+  }
+  function get_leaves_and_latemarks_by_date(startdate,enddate,userid){
+    $.ajax({
+      url: frontendURL +"get_leaves_and_latemarks_by_date",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'start_date':startdate,
+        'end_date':enddate,
+        'empId':userid,
+
+      },
+      dataType: 'json',
+
+      success:function(response){
+        console.log("response",response)
+        modalhtml = `
+        <div class="">
+          <ul class="nav custom-tabs nav-fill" id="latemarkandleaves" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="infotab1-tab" data-bs-toggle="tab" href="#infotab1" role="tab" aria-controls="infotab1" aria-selected="true">Leaves</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="infotab2-tab" data-bs-toggle="tab" href="#infotab2" role="tab" aria-controls="tab2" aria-selected="false">Latemarks</a>
+            </li>
+
+          </ul>
+      
+          <div class="tab-content" id="latemarkandleavesContent">
+      
+            <div class="tab-pane fade show active" id="infotab1" role="tabpanel" aria-labelledby="infotab1-tab">
+      
+      
+
+      
+      
+              <div class="accordion" id="accordionExample">
+
+                `+response.context.leaves.data.leaves+`
+
+
+              </div>
+
+
+
+
+            </div>
+      
+            <div class="tab-pane fade" id="infotab2" role="tabpanel" aria-labelledby="infotab2-tab">
+              <table class="table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Date</th>
+                    <th style="width:30%;">CheckIn Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                  </tr>
+                </thead>
+                <tbody class="">
+                  
+                  ${response.context.latemarks.data.latemarks.map((i, count) => `
+                    <tr>
+                      <td>${count + 1}</td>
+                      <td>${i.date}</td>
+                      <td>${i.intime}</td>
+                    </tr>
+                  `).join("\n")}
+                </tbody>
+              </table>            
+            </div>
+      
+
+          </div>
+        </div>
+         `
+      $('#showleaveandlatemarks').html(modalhtml)
+
+
+
+      }
+    });
+    $("#getleaveandlatemarks").modal("show");
+
+  }
+  function toggledate(idvalue){
+    $('#'+idvalue).focus();
+  }
+  function shiftexcelreport(){
+        var search_employees=$("#EmployeeId").val();
+        if (search_employees =='All'){
+          emplistsech=allmappedemp
+        }else{
+          emplistsech=[search_employees]
+        }
+        var fd = new FormData();
+        fd.append('search_employees',JSON.stringify(emplistsech))
+        fd.append('year',selected_year)
+        fd.append('month',selected_month)
+        fd.append("csrfmiddlewaretoken", '{{csrf_token}}')
+
+        $.ajax({
+            url:frontendURL+"attendanceexcelreport",
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+              $('.taskcontent').html(
+                  '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+              );
+            },
+            success:function(response){
+              $('.taskcontent').html('');
+
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+                urlpath = response.response.url
+                window.location.href = urlpath;
+            }
+        })
+    
+  }
+
+  function get_sift_emp_attendance_by_date(my_date){
+    $.ajax({
+      url: frontendURL +"get_all_emp_attendance_by_date",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'my_date':my_date,
+
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        $('.taskcontent').html(
+            '<span class="spiner"><i class="fa fa-spin fa-spinner"></i> Please Wait...</span>'
+        );
+      },
+      success: function(response){
+       $('.taskcontent').html('');
+        
+        modalhtml = `
+        <div class="">
+          <ul class="nav custom-tabs nav-fill" id="myTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Present (`+response.context.Present+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">On leave (`+response.context.Onleave+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab3-tab" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Work From Home (`+response.context.WFH+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab4-tab" data-bs-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Not Found (`+response.context.yettojoin+`)</a>
+            </li>
+          </ul>
+      
+          <div class="tab-content" id="myTabsContent">
+      
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+      
+      
+              <table class=" model-table" style="width:100%;">
+                  <thead>
+                    <tr class="tableHeadings">
+                      <th>Sr No.</th>
+                      <th>Employee Name</th>
+                      <th>Check-In <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                      <th>Check-Out <i class="fa fa-arrow-up" aria-hidden="true"></i></th>
+                      <th>Total Hrs</th>
+                      <th>Shift</th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+                    ${response.context.Presentlist.map((l, index) => `
+                      <tr>
+                        <td>${index + 1}</td>
+                        <td>${l.empname}</td>
+                        <td ><div data-bs-toggle="tooltip" title=' ${l.check_in_attendance_type_resaon}'>${l.checkintime}</div><div ><a class='attendance_type text-success' data-bs-toggle="tooltip" title=' ${l.check_in_remote_map_name}' href="${l.check_in_remote_map_location}">${l.check_in_attendance_type}</a></div> </td>
+                        <td ><div data-bs-toggle="tooltip" title=' ${l.check_out_attendance_type_resaon}'>${l.checkouttime}</div><div ><a class='attendance_type text-danger' data-bs-toggle="tooltip" title=' ${l.checkout_remote_map_name}' href="${l.checkout_remote_map_location}">${l.check_out_attendance_type}</a></div></td>
+                        <td>${l.total_time}</td>
+                        <td>${l.shift.shiftname} (${l.shift.intime}-${l.shift.outtime})</td>
+                      </tr>
+                    `).join("\n")}
+                    
+                  </tbody>
+                </table>
+      
+      
+            </div>
+      
+            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+              <table class=" model-table" style="width:100%;">
+                  <thead>
+                    <tr class="tableHeadings">
+                      <th>Sr No.</th>
+                      <th>Employee Name</th>
+                      <th>Check-In <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                      <th>Check-Out <i class="fa fa-arrow-up" aria-hidden="true"></i></th>
+                      <th>Total Hrs</th>
+                      <th>Shift</th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+      
+                       ${response.context.leavelist.map((l, index) => `
+                            <tr>
+                            <td>${index + 1}</td>
+                            <td>${l.empname}</td>
+                            <td data-bs-toggle="tooltip" title='${l.check_in_attendance_type}  ${l.check_in_attendance_type_resaon}'><div>${l.checkintime}</div><div class='attendance_type text-success'>${l.check_in_attendance_type}</div> </td>
+                            <td data-bs-toggle="tooltip" title='${l.check_out_attendance_type}  ${l.check_out_attendance_type_resaon}'><div>${l.checkouttime}</div><div class='attendance_type text-danger'>${l.check_out_attendance_type}</div></td>
+                            <td>${l.total_time}</td>
+                            <td>${l.shift.shiftname} (${l.shift.intime}-${l.shift.outtime})</td>
+                          </tr>
+                          `).join("\n")}
+
+                          
+                  </tbody>
+              </table> 
+            </div>
+      
+            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+              <table class=" model-table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Employee Name</th>
+                    <th>Check-In <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                    <th>Check-Out <i class="fa fa-arrow-up" aria-hidden="true"></i></th>
+                    <th>Total Hrs</th>
+                    <th>Shift</th>           
+                         </tr>
+                </thead>
+                <tbody class="">
+
+
+                  ${response.context.wfhlist.map((l, index) => `
+                    <tr>
+                    <td>${index + 1}</td>
+                    <td>${l.empname}</td>
+                    <td data-bs-toggle="tooltip" title='${l.check_in_attendance_type}  ${l.check_in_attendance_type_resaon}'><div>${l.checkintime}</div><div class='attendance_type text-success'>${l.check_in_attendance_type}</div> </td>
+                    <td data-bs-toggle="tooltip" title='${l.check_out_attendance_type}  ${l.check_out_attendance_type_resaon}'><div>${l.checkouttime}</div><div class='attendance_type text-danger'>${l.check_out_attendance_type}</div></td>
+                    <td>${l.total_time}</td>
+                    <td>${l.shift.shiftname} (${l.shift.intime}-${l.shift.outtime})</td>
+                  </tr>
+                  `).join("\n")}
+
+
+                </tbody>
+              </table>    
+            </div>
+      
+      
+            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+              <table class=" model-table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Employee Name</th>
+                    <th>Reason</th>
+                  </tr>
+                </thead>
+                <tbody class="">
+
+
+                  ${response.context.yettojoinlist.map((l, index) => `
+                    <tr>
+                    <td>${index + 1}</td>
+                    <td>${l.username}</td>
+                    <td>${l.reason}</td>
+                  </tr>
+                  `).join("\n")}
+                  
+                </tbody>
+              </table>
+            
+            </div>
+          </div>
+        </div>
+
+         `
+      $('#dailytarget_modal').html(modalhtml)
+
+      $('.model-table').DataTable({
+         searching: false, // Disable search box
+         paging: true // Enable pagination
+        })
+
+
+      }
+    });
+    $("#daytarget").modal("show");
+
+  }
+
+
+
+  
+</script>
+    
+{%endblock%}

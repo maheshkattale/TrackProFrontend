@@ -1,0 +1,4444 @@
+{% extends "index.html" %}
+{% load static %}
+{% load encryption_filters %}
+
+{% block headercontent %}
+<div class="nav-item newheading">
+Update Employee</div>
+{% endblock %}
+{% block content %}
+
+    
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/update_employee.css' %}">
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+            
+
+
+               
+
+
+
+    
+
+
+  <main class="main-wrapper">
+    
+      <div id="snackbar"></div>
+      <div class="leads-div">
+        <div class="row mt-2 px-4">
+          <div class="col p-0 d-flex justify-content-end">
+          
+              <div class="col-md-3  my-auto">
+                  <div class="form-floating mb-3">
+                    <select id='allemployees'  class="form-control" name="">
+                        <option value=''>Select Employee</option> 
+                    </select>
+                    <!-- <label for="allemployees"  class="form-content">Select Employees</label> -->
+
+                  </div>
+                </div>
+          </div>
+
+      </div>
+
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            
+              <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link active" id="pills-personal-info-tab" data-bs-toggle="pill" data-bs-target="#pills-personal-info" type="button" role="tab" aria-controls="pills-personal-info" aria-selected="true">Personal Information </button>
+              </li>
+      
+              <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link " id="pills-educational-tab" data-bs-toggle="pill" data-bs-target="#pills-educational" type="button" role="tab" aria-controls="pills-educational" aria-selected="false">Educational Qualification</button>
+              </li>
+              <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link " id="pills-employment-tab" data-bs-toggle="pill" data-bs-target="#pills-employment" type="button" role="tab" aria-controls="pills-employment" aria-selected="false">Experience & Ref</button>
+              </li>
+              <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-bank-tab" data-bs-toggle="pill" data-bs-target="#pills-bank" type="button" role="tab" aria-controls="pills-bank" aria-selected="false">Bank Details</button>
+              </li>
+              <li class="nav-item p-0 m-0" role="presentation">
+                  <button class="nav-link " id="pills-designation-tab" data-bs-toggle="pill" data-bs-target="#pills-designation" type="button" role="tab" aria-controls="pills-designation" aria-selected="false">Employment Details</button>
+              </li>
+          </ul>
+          
+          <div class="tab-content" id="pills-tabContent">
+      
+      
+              <!-- 1st-Pane -->
+              <div class="tab-pane fade show active" id="pills-personal-info" role="tabpanel" aria-labelledby="pills-personal-info-tab" tabindex="0">
+                  <div class="row" id="">
+                    <div class="row pt-4 p-4">
+
+                      <div class="col-md-4">
+          
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="personalfirstname"   value="{{employeedetails.userdata.Firstname|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                              <label for="personalfirstname"  class="form-content">First Name<span style="color:red">*</span></label>
+                              <span id="personalfirstname_err" class="error"></span>
+                            </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="personallastname"  value="{{employeedetails.userdata.Lastname|default_if_none:''}}"  oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          <label for="personallastname"  class="form-content">Last Name<span style="color:red">*</span></label>
+                          <span id="personallastname_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+          
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="personalmobno"  value="{{employeedetails.userdata.Phone|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                              <label for="personalmobno"  class="form-content">Mobile No</label>
+                              <span id="personalmobno_err" class="error"></span>
+                            </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="date" class="form-control" id="personalbirthyear"  value="{{employeedetails.userdata.BirthDate|default_if_none:''}}">
+                          <label for="personalbirthyear"  class="form-content">Birth Date</label>
+                          <span id="personalbirthyear_err" class="error"></span>
+                        </div>
+          
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control " id="personalmail"   value="{{employeedetails.userdata.personal_email|default_if_none:''}}" >
+                          <label for="personalmail"  class="form-content">Email</label>
+                          <span id="personalmail_err" class="error"></span>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="alternatemail"   value="{{employeedetails.userSecondaryObject.alternatemail|default_if_none:''}}">
+                          <label for="alternatemail"  class="form-content">Alternate Email</label>
+                          <span id="alternatemail_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+          
+                          <select class="form-control"  id="bloodgroup" name="bloodgroup">
+                              <option value="">-- Select Blood Group --</option>
+                              <option value="A+">A+</option>
+                              <option value="A-">A-</option>
+                              <option value="B+">B+</option>
+                              <option value="B-">B-</option>
+                              <option value="AB+">AB+</option>
+                              <option value="AB-">AB-</option>
+                              <option value="O+">O+</option>
+                              <option value="O-">O-</option>
+                          </select>
+          
+                          
+                          <label for="bloodgroup"  class="form-content">Blood Group</label>
+                          <span id="bloodgroup_err" class="error"></span>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+          
+                          <select class="form-control"  id="maritalstatus" name="maritalstatus">
+                              <option value="">-- Select Marital Status --</option>
+                  
+                              <option value="Married">Married</option>
+                              <option value="Unmarried">Unmarried</option>
+                          </select>
+          
+                          
+                          <label for="maritalstatus"  class="form-content">Marital Status</label>
+                          <span id="maritalstatus_err" class="error"></span>
+                        </div>
+                      </div>
+          
+          
+          
+          
+          
+          
+          
+                      <div class="col-md-12">
+                        <label>Residential Address</label>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="rAddresslineone"   value="{{employeedetails.userdata.Address|default_if_none:''}}">
+                          <label for="rAddresslineone"  class="form-content"> Address Line 1</label>
+                          <span id="rAddresslineone_err" class="error"></span>
+                        </div>
+                      </div>
+                      
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="rAddresslinetwo"   value="{{employeedetails.userdata.Addressline2|default_if_none:''}}">
+                          <label for="rAddresslinetwo"  class="form-content"> Address Line 2</label>
+                          <span id="rAddresslinetwo_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="residentialaddpincode"  value="{{employeedetails.userSecondaryObject.residentialaddresspincode|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" maxlength="6">
+                          <label for="residentialaddpincode"  class="form-content">Pincode</label>
+                          <span id="residentialaddpincode_err" class="error"></span>
+                        </div>
+                      </div>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      <div class="col-md-4">
+                        <label for="residentialaddcity"  class="form-content py-0" style="font-size:14px;">City</label>
+          
+                        <div class="form-floating">
+          
+                          <div class="prodwrapper">
+                            <div class="prodsearch" id="prodsearchdiv">
+                              <input name ="residentialadd" type="text" class="form-control" oninput="searchresidentialcities();" id="residentialaddcity"  value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                              <div class="autocomp-box" id="residentialcitylist">
+                              </div>
+                            </div>
+                          </div>
+          
+          
+                        </div>
+                        <span id="residentialaddcity_err" class="error"></span>
+          
+                      </div>
+          
+          
+          
+          
+          
+                      <div class="col-md-4">
+          
+                        <div class="form-floating mb-3">
+          
+                          <select class="form-control"  onchange="getcities(this)" id="residentialaddstate" name="residentialadd">
+                            {%if employeedetails.userSecondaryObject.residentialaddressstate %}
+                            <option value="{{employeedetails.userSecondaryObject.residentialaddressstate}}" selected>{{employeedetails.userSecondaryObject.rstatename}}</option>
+                            {%endif%}
+                            <option value="">-- Select State --</option>
+                          </select>
+                          <label for="residentialaddstate"  class="form-content">State</label>
+                          <span id="residentialaddstate_err" class="error"></span>
+                        </div>
+          
+                      </div>
+          
+                      <div class="col-md-4">
+          
+                        <div class="form-floating mb-3">
+          
+                          <select class="form-control" onchange="getstate(this)" id="residentialaddcountry" name="residentialadd">
+                            <option value="">-- Select Country --</option>
+                            {%for country in countrys %}
+                              {%if employeedetails.userSecondaryObject.residentialaddresscountry == country.id %}
+                              <option selected value="{{country.id}}">{{country.name}}</option>
+                              {%else%}
+                              <option value="{{country.id}}">{{country.name}}</option>
+          
+                              {%endif%}
+                            {%endfor%}
+                          </select>
+                          <label for="residentialaddcountry"  class="form-content">Country</label>
+                          <span id="residentialaddcountry_err" class="error"></span>
+                        </div>
+                      </div>
+          
+
+
+
+
+
+
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="res_lattitude"   value="{{employeedetails.userdata.res_lattitude|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9. ]+/g,'').replace(/(\..*)\./g, '$1');"
+                          >
+                          <label for="res_lattitude"  class="form-content"> Lattitude</label>
+                          <span id="res_lattitude_err" class="error"></span>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="res_longitude"   value="{{employeedetails.userdata.res_longitude|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9. ]+/g,'').replace(/(\..*)\./g, '$1');"
+                          >
+                          <label for="res_longitude"  class="form-content"> Longitude</label>
+                          <span id="res_longitude_err" class="error"></span>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="res_radius"   value="{{employeedetails.userdata.res_radius|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9. ]+/g,'').replace(/(\..*)\./g, '$1');"
+                          >
+                          <label for="res_radius"  class="form-content"> Radius</label>
+                          <span id="res_radius_err" class="error"></span>
+                        </div>
+                      </div>
+
+
+
+
+          
+                      <div class="col-md-12 d-flex">
+                        <label>Select to mark permanant address as residential address 
+                          <input type="checkbox" class="m-2" onchange="copyaddress(this);"/>
+          
+                        </label>
+          
+                      </div>
+          
+                      <div class="col-md-12">
+                        <label>Permanant Address</label>
+                      </div>
+          
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="pAddresslineone"   value="{{employeedetails.userSecondaryObject.permanentaddress|default_if_none:''}}">
+                          <label for="pAddresslineone"  class="form-content"> Address Line 1</label>
+                          <span id="pAddresslineone_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="pAddresslinetwo"   value="{{employeedetails.userSecondaryObject.permanentaddressLine2|default_if_none:''}}">
+                          <label for="pAddresslinetwo"  class="form-content"> Address Line 2</label>
+                          <span id="pAddresslinetwo_err" class="error"></span>
+                        </div>
+                      </div>
+          
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="permanantaddpincode"  value="{{employeedetails.userSecondaryObject.permanantaddresspincode|default_if_none:''}}" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" maxlength="6">
+                          <label for="permanantaddpincode"  class="form-content">Pincode</label>
+                          <span id="permanantaddpincode_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <label for="permamnentaddcity"  class="form-content py-0" style="font-size:14px;">City</label>
+          
+                        <div class="form-floating">
+                          <div class="prodwrapper">
+                            <div class="prodsearch" id="prodpermanentsearchdiv">
+                              <input name = "permamnentaddcity" type="text" class="form-control" oninput="searchpermanentcities();" id="permamnentaddcity"  value="" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                              <div class="autocomp-box" id="permanentcitylist">
+                        
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <span id="permanantaddcity_err" class="error"></span>
+          
+                      </div>
+          
+          
+          
+          
+          
+          
+          
+          
+                      <div class="col-md-4">
+          
+                        <div class="form-floating mb-3">
+          
+                          <select class="form-control" onchange="getcities(this)" id="permanentaddstate" name="permanantadd">
+                            <option value="">-- Select State --</option>
+                            {%if employeedetails.userSecondaryObject.permanantaddressstate %}
+                            <option value="{{employeedetails.userSecondaryObject.permanantaddressstate}}" selected>{{employeedetails.userSecondaryObject.pstatename}}</option>
+                            {%endif%}
+                          </select>
+                          <label for="permanentaddstate"  class="form-content">State</label>
+                          <span id="permanentaddstate_err" class="error"></span>
+                        </div>
+          
+                      </div>
+          
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <select class="form-control" onchange="getstate(this)" id="permanentaddcountry" name="permanantadd">
+                            <option value="">-- Select Country --</option>
+                            {%for country in countrys %}
+                                
+                            {%if employeedetails.userSecondaryObject.permanantaddresscountry == country.id %}
+                            <option selected value="{{country.id}}">{{country.name}}</option>
+                              {%else%}
+                              <option value="{{country.id}}">{{country.name}}</option>
+          
+                            {%endif%} 
+          
+                            {%endfor%}
+                          </select>
+                          <label for="permanentaddcountry"  class="form-content">Country</label>
+                          <span id="permanentaddcountry_err" class="error"></span>
+                        </div>
+                      </div>
+          
+
+          
+                      <div class="col-md-12">
+                        <label >Identity Proof</label>
+          
+                      </div>
+          
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="adhaarcard" name="adhaarcard"  value="{{employeedetails.userSecondaryObject.adhaarcard|default_if_none:''}}"  maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          <label for="adhaarcard"  class="form-content">Aadhar Card</label>
+                          <span id="adhaarcard_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text"  maxlength="12" value="{{employeedetails.userSecondaryObject.pancard|default_if_none:''}}" class="form-control" id="pancard" name="pancard" >
+                          <label for="pancard"  class="form-content">Pan Card</label>
+                          <span id="pancard_err" class="error"></span>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+          
+                      </div>
+          
+          
+          
+                      <div class="col-md-4">
+                        <label for="adhaarFile"  class="form-content cursor-pointer"> AadharCard Photo Copy   
+                          <i class="fa fa-camera"></i>
+                          </label>
+          
+                        <div class="image-div-preview">
+                          <input type="file" id="adhaarFile" class="d-none" name="adhaarcardimage" onchange="validateImage(this,'adhaarFilepreview');">
+                          <div class="image-preview"   id="imagePreview" >
+
+
+                            {% if employeedetails.userSecondaryObject.adhaarcardimage %}
+
+                  
+                                <iframe base64='' src="{{employeedetails.userSecondaryObject.adhaarcardimage}}" id="adhaarFilepreview" class="imagepre"  frameborder="0" allowfullscreen></iframe>
+                              {%else%}
+                                <img base64='' src="" id="adhaarFilepreview" alt="" class="imagepre"/>
+                            {%endif%}
+
+
+                          </div>
+                          <p id="adhaarcardimage_err" class="error ms-5"></p>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+          
+                        <label for="panFile"  class="form-content cursor-pointer"> PanCard Photo Copy                    
+                          <i class="fa fa-camera"></i>
+          
+                        </label>
+          
+                        <div class="image-div-preview">
+                          <input type="file" id="panFile" class="d-none" name="pancardimage" onchange="validateImage(this,'panfilepreview');" >
+                          <div class="image-preview d-flex justify-content-center" id="imagePreview1">
+                            {% if employeedetails.userSecondaryObject.pancardimage %}
+                              <iframe base64='' src="{{employeedetails.userSecondaryObject.pancardimage}}" id="panfilepreview" class="imagepre"  frameborder="0" allowfullscreen></iframe>
+                            {%else%}
+                              <img base64='' id="panfilepreview" src="" alt="" class="imagepre"/>
+                            {%endif%}
+                          </div>
+                          <p id="pancardimage_err" class="error ms-5"></p>
+                        
+                        </div>
+                        
+                      </div>
+          
+          
+                      
+          
+          
+          
+          
+                      <div class="col-md-4">
+          
+                            <label for="passportFile"  class="form-content cursor-pointer"> Passport Photo Copy
+                              <i class="fa fa-camera"></i>
+          
+                            </label>
+                            <div class="image-div-preview">
+                              <input type="file" id="passportFile" class="d-none" name="passportimage" onchange="validateImage(this,'passportFilepreview');"  >
+                              <div class="image-preview"   id="imagePreview" >
+                                {% if employeedetails.userSecondaryObject.passportimage %}
+                                  <!-- <img id="passportFilepreview" class="imagepre" src="{{hostUrl}}{{employeedetails.userSecondaryObject.passportimage}}"> -->
+                                  <iframe base64='' src="{{employeedetails.userSecondaryObject.passportimage}}" id="passportFilepreview" class="imagepre"  frameborder="0" allowfullscreen></iframe>
+                                {%else%}
+                                    <img  base64='' src="" id="passportFilepreview" alt="" class="imagepre"/>
+                                {%endif%}
+                              </div>
+                              <p id="passportimage_err" class="error ms-5"></p>
+                            </div>
+          
+                      </div>
+          
+
+                      <hr class="my-4">
+                      <h5>Emergency Contact Details</h5>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="relationname" name="relationname1"  value="{{employeedetails.userSecondaryObject.relationname1|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          <label for="relationname"  class="form-content">Name</label>
+                          <span id="relationname_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="relation" name="relation1"  value="{{employeedetails.userSecondaryObject.relation1|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          <label for="relation"  class="form-content">Relation</label>
+                          <span id="relation_err" class="error"></span>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+          
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="relationmobno" name="relation1number"  value="{{employeedetails.userSecondaryObject.relation1number|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          <label for="relationmobno"  class="form-content">Mobile No</label>
+                          <span class="error" id="relationmobno_err"></span>
+                        </div>
+                      </div>
+          
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="relationname2" name="relationname2"  value="{{employeedetails.userSecondaryObject.relationname2|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          <label for="relationname2"  class="form-content">Name</label>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="relation2" name="relation2"  value="{{employeedetails.userSecondaryObject.relation2|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                          <label for="relation2"  class="form-content">Relation</label>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-4">
+          
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="relation2mobno" name="relation2number"  value="{{employeedetails.userSecondaryObject.relation2number|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          <label for="relation2mobno"  class="form-content">Mobile No</label>
+                          <span class="error" id="relation2mobno_err"></span>
+          
+                        </div>
+                  
+                      </div>
+          
+                    </div>
+          
+          
+          
+                    
+                    <div class="d-flex justify-content-end my-3">
+                      <a href="javascript:void(0);" onclick="return firststepvalidation();"  class="profile-upload-label">Save and Continue</a>
+                    </div>  
+                </div>
+              </div>
+
+              <!-- 2nd Pane -->
+              <div class="tab-pane fade " id="pills-educational" role="tabpanel" aria-labelledby="pills-educational-tab" tabindex="0">
+                  
+                <div class="row p-4" id="">
+                  <div class="row">
+                    
+        
+        
+        
+                    <div>
+
+                        <table id="qualificationTable">
+                          <tr class="">
+                              <th style="width:15%">Qualification</th>
+                              <th style="width:35%">University</th>
+                              <th style="width:15%">Obtained Marks</th>
+                              <th style="width:10%">From</th>
+                              <th style="width:10%">To</th>
+                              <th style="width:15%">Photocopy</th>
+                          </tr>
+        
+        
+                          {% if ssc_qualification %}
+        
+                              <tr>
+                                <td class="d-flex"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="SSC"/></td>
+                                <td><input type="text" name="university[]" class="educational-input" value="{{ssc_qualification.university}}" /></td>
+                                <td><input type="text" name="obtained_marks[]" class="educational-input" value="{{ssc_qualification.obtain_marks}}" /></td>
+                                <td><input type="date" name="from[]" class="educational-input"value="{{ssc_qualification.fromdate}}"/></td>
+                                <td><input type="date" name="to[]" class="educational-input"value="{{ssc_qualification.todate}}"/></td>
+                                <td><label class="educational-input p-1 custom-file-label cursor-pointer" for="foundssc">Upload IMG <input id="foundssc" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="found" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                <td></td>
+                              </tr>
+        
+                          {% else %}
+        
+                              <tr>
+                                <td class="d-flex"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="SSC"/></td>
+                                <td><input type="text" name="university[]" class="educational-input" value="" /></td>
+                                <td><input type="text" class="educational-input" name="obtained_marks[]" value="" /></td>
+                                <td><input type="date" class="educational-input" name="from[]" value=""/></td>
+                                <td><input type="date"  class="educational-input" name="to[]" value=""/></td>
+                                <td><label class="educational-input p-1 cursor-pointer custom-file-label" for="foundssc">Upload IMG <input id="foundssc" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                <td></td>
+                              </tr>
+        
+                          {% endif %}
+        
+                          {%if HSC_qualification%}
+        
+                                <tr>
+                                  <td class="d-flex"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="HSC"/></td>
+                                  <td><input type="text" name="university[]" class="educational-input" value="{{HSC_qualification.university}}" /></td>
+                                  <td><input type="text"  class="educational-input" name="obtained_marks[]" value="{{HSC_qualification.obtain_marks}}" /></td>
+                                  <td><input type="date"  class="educational-input" name="from[]" value="{{HSC_qualification.fromdate}}"/></td>
+                                  <td><input type="date"  class="educational-input" name="to[]" value="{{HSC_qualification.todate}}"/></td>
+                                  <td><label class="educational-input p-1 custom-file-label cursor-pointer" for="foundhsc">Upload IMG <input id="foundhsc" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="found" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                  <td></td>
+                                </tr>
+        
+                          {%else%}
+        
+                                <tr>
+                                  <td class="d-flex"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="HSC"/></td>
+                                  <td><input type="text" name="university[]" class="educational-input" value="" /></td>
+                                  <td><input type="text" class="educational-input" name="obtained_marks[]" /></td>
+                                  <td><input type="date" class="educational-input" name="from[]" /></td>
+                                  <td><input type="date" class="educational-input" name="to[]" /></td>
+                                  <td><label class="educational-input p-1 custom-file-label cursor-pointer" for="foundhsc">Upload IMG <input id="foundhsc" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                  <td></td>
+                                </tr>
+        
+                          {%endif%}
+                                
+                          {%if gaduation%}
+        
+        
+                                <tr>
+                                  <td title="Graduation/Degree"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="Graduation/Degree"/></td>
+                                  <td><input type="text" name="university[]" class="educational-input" value="{{gaduation.university}}" /></td>
+                                  <td><input type="text" class="educational-input" name="obtained_marks[]" value="{{gaduation.obtain_marks}}" /></td>
+                                  <td><input type="date" class="educational-input" name="from[]" value="{{gaduation.fromdate}}"/></td>
+                                  <td><input type="date" class="educational-input" name="to[]" value="{{gaduation.todate}}"/></td>
+                                  <td><label class="educational-input p-1 custom-file-label cursor-pointer" for="foundgaduation">Upload IMG <input id="foundgaduation" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                </tr>
+        
+        
+                          {%else%}
+        
+                                <tr>
+                                    <td title="Graduation/Degree"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="Graduation/Degree"/></td>
+                                    <td><input type="text" name="university[]" class="educational-input" value="" /></td>
+                                    <td><input type="text" class="educational-input" name="obtained_marks[]" /></td>
+                                    <td><input type="date" class="educational-input" name="from[]" /></td>
+                                    <td><input type="date" class="educational-input" name="to[]" /></td>
+                                    <td><label  class="educational-input p-1 custom-file-label cursor-pointer" for="foundgaduation">Upload IMG <input id="foundgaduation" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                </tr>
+        
+                          {%endif%}
+        
+                          {%if POSTGraduation%}
+                              <tr>
+                                <td title="POST Graduation"><input class="read-only-input table-input-text" type="text" name="qualification_title[]" value="POST Graduation"/></td>
+                                <td><input type="text" name="university[]" class="educational-input" value="{{POSTGraduation.university}}" /></td>
+                                <td><input type="text" class="educational-input" name="obtained_marks[]" value="{{POSTGraduation.obtain_marks}}" /></td>
+                                <td><input type="date" class="educational-input" name="from[]" value="{{POSTGraduation.fromdate}}"/></td>
+                                <td><input type="date" class="educational-input" name="to[]" value="{{POSTGraduation.todate}}"/></td>
+                                <td><label  class="educational-input p-1 custom-file-label cursor-pointer" for="foundpostgaduation">Upload IMG <input id="foundpostgaduation" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                              </tr>
+                          {%else%}
+                              <tr>
+                                <td><input type="text" class="read-only-input table-input-text" name="qualification_title[]" value="POST Graduation"/></td>
+                                <td><input type="text" name="university[]" class="educational-input" value="" /></td>
+                                <td><input type="text" class="educational-input" name="obtained_marks[]" /></td>
+                                <td><input type="date" class="educational-input" name="from[]" /></td>
+                                <td><input type="date" class="educational-input" name="to[]" /></td>
+                                <td><label  class="educational-input p-1 custom-file-label cursor-pointer" for="foundpostgaduation">Upload IMG <input id="foundpostgaduation" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                              </tr>
+        
+                          {%endif%}
+        
+                          {%for q in employeedetails.educationdetails %}
+                            {% if q.qualification_name != "SSC" and q.qualification_name != "HSC" and q.qualification_name != "Graduation/Degree" and q.qualification_name != "POST Graduation"%}
+                                <tr>
+                                  <td><input class="read-only-input table-input-text" type="text" class="educational-input" name="qualification_title[]" value="{{q.qualification_name}}"/></td>
+                                  <td><input type="text" name="university[]" class="educational-input" value="{{q.university}}" /></td>
+                                  <td><input type="text" class="educational-input" name="obtained_marks[]" value="{{q.obtain_marks}}" /></td>
+                                  <td><input type="date" class="educational-input" name="from[]" value="{{q.fromdate}}"/></td>
+                                  <td><input type="date" class="educational-input" name="to[]" value="{{q.todate}}"/></td>
+                                  <td><label  class="educational-input p-1 custom-file-label cursor-pointer" for="found{{q.id}}">Upload IMG <input id="found{{q.id}}" type="file" class="custom-file-input educational-input d-none" name="photocopy[]" base64="" value="" accept=".jpg, .jpeg, .png,.pdf" /></label><div></div></td>
+                                </tr>
+              
+                            {%endif%}
+        
+                          {%endfor%} 
+                            <tr>
+                              <td style="font-weight: 500 !important;">Add Qualification</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+          
+                              <td class="text-right">
+        
+                                <span class="add-icon-education" onclick="addRow()">
+                                  <i class="fa fa-plus cursor-pointer text-danger" aria-hidden="true text-danger"></i>
+                                </span>
+        
+                              </td>
+                            </tr>     
+                        </table>
+                    </div>
+        
+                  </div>
+                  <div class="d-flex justify-content-between my-3">
+                    <a href="javascript:void(0)" class="profile-upload-label" onclick="returnfirststepvalidation();">Preview</a>
+                    
+                    <a href="javascript:void(0)" class="profile-upload-label" onclick="secondstepvalidation();">Save and continue</a>
+        
+                  </div>
+                </div>
+      
+              </div>
+      
+              <!-- 3rd Pane -->
+              <div class="tab-pane fade" id="pills-employment" role="tabpanel" aria-labelledby="pills-employment-tab" tabindex="0">
+                  
+                  <div class="row p-4" id="">
+
+                    <div class="row"> 
+
+
+                      <div class="col-md-12 d-flex justify-content-between">
+                        <h5 class="text-muted">Previous Company Details</h5>
+                        <div>
+                          <span  class="profile-upload-label" onclick="clearForm();" title="View" data-bs-toggle="modal" data-bs-target="#Addcompany">
+                            Add Company
+                          </span>  
+                        </div>
+                      </div>
+          
+                      <div class="modal fade" id="Addcompany" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header py-1 ps-4">
+                                    <h5 class="modal-title py-2" id="exampleModalLabel">                Company Details
+                                    </h5>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="comapanyname" name="comapanyname" value="" required>
+                                                    <label for="comapanyname" class="form-content">Company Name<span style="color:red">*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="companyaddress" name="companyaddress" value="" required>
+                                                    <label for="companyaddress" class="form-content">Company Address<span style="color:red">*</span></label>
+                                                </div>
+                                            </div>
+          
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="date" class="form-control" id="companyjoindate" name="companyjoindate" value="" required>
+                                                    <label for="companyjoindate" class="form-content">Joining Date<span style="color:red">*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="date" class="form-control" id="companyleavedate" name="companyleavedate" value="" required>
+                                                    <label for="companyleavedate" class="form-content">Leaving Date<span style="color:red">*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                              <div class="form-floating mb-3">
+                                                  <input type="text" class="form-control" id="designation" name="designation" value="" required>
+                                                  <label for="designation" class="form-content">Designation<span style="color:red">*</span></label>
+                                              </div>
+                                          </div>
+                                          
+          
+                                          <div class="col-md-6">
+              
+                                        </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                
+                                                    <input type="file" class="form-control" id="salaryslip" name="salaryslip" onchange="validateImage(this,'salaryslipFilepreview')" required>
+                                                    <label for="salaryslip" class="form-content py-2">Salary Slip<span style="color:red">*</span></label>
+                                                </div>
+                                                <div class="image-preview d-flex justify-content-center" id="salaryslipimagePreview">
+                                                    <img id="salaryslipFilepreview" alt="" class="imagepre" />
+                                                </div>
+                                            </div>
+                    
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                        
+                                                    <input type="file" class="form-control" id="relieving" name="relieving" onchange="validateImage(this,'relievingFilepreview')" required>
+                                                    <label for="relieving" class="form-content py-2">Relieving Letter<span style="color:red">*</span></label>
+                                                </div>
+                                                <div class="image-preview d-flex justify-content-center" id="relievingimagePreview">
+                                                    <img id="relievingFilepreview" alt="" class="imagepre" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="addCompany">Add</button>
+                                    <button type="button" class="btn btn-primary" id="editCompany" style="display: none;">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+          
+                      <div>
+                        <div class="row" id="previouscompanylist">
+                          {%for i in employeedetails.company_details%}
+                          <div class="cardcolumn col-lg-4 col-md-6 col-sm-12 mt-4 basecard{{i.id}}">
+                            <div id="card" class="card text-start h-100 cardno{{i.id}}">
+                
+                              <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                                <span class="card-header-blue-txt text-black company_name"></span>
+                                <span>
+                                  <span onclick="editcompany({{i.id}});">
+                                    <i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> 
+                                  </span>
+                                  <span onclick="deletecompany({{i.id}})">
+                                    <i class="fa fa-trash" aria-hidden="true text-danger"></i>
+                                  </span>
+                                </span>
+                
+                              </div>
+                
+                
+                              <div class="card-body">
+                
+                                  <div class="row">
+                
+                
+                
+                
+                                    <div class="col-lg-12">
+
+                                      <div class="card-header head d-flex justify-content-between p-0">
+                                        <div>
+                                          <div class="card-header-blue-txt  heading-company">Company Name : </div>
+                                          <div class="card-header-blue-txt heading-parameters" > {{i.companyname}}</div> 
+                                        </div>
+                                        <div>
+                                          <div class="card-header-blue-txt  heading-company">Designation : </div>
+                                          <div class="card-header-blue-txt heading-parameters" > {{i.designation}}</div> 
+                                        </div>
+                                      </div>
+          
+
+                
+                                    </div>
+                
+                                    <div class="col-lg-12 py-2">
+                                      <div class="card-header p-0">
+                
+                
+                                        <span  class="my-3 card-body-reason-text addReadMore company_address showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="Address">{{i.companyaddress}}</span>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                      <div class="card-header head d-flex justify-content-between p-0">
+                                        <span>                                   
+                                            <span class="card-header-blue-txt  heading-company">From</span><br>
+                                            <span class="card-header-blue-txt heading-parameters">{{i.formatedjoinDate}}</span> 
+                                        </span>
+                                        <span class="d-flex justify-content-between">
+                                            <span>                                   
+                                              <span class="card-header-blue-txt  heading-company">To</span><br>
+                                              <span class="card-header-blue-txt heading-parameters">{{i.formatedleaveDate}}</span> 
+                                            </span>
+              
+              
+                                        </span>
+                                        
+                                        <span class="d-none">                                   
+                                          <span class="card-header-txt">Designation</span><br>
+                                          <span class="card-header-blue-txt designation">{{i.designation}}</span> 
+                                        </span>
+                                    </div>
+                                    </div>
+                
+                
+                
+                                  </div>
+                
+                              </div>
+                              <div class="card-footer cardfooter mt-auto">
+                                <div class="row">
+                
+                
+                                  <div class="col-lg-12 conclusion-box d-flex justify-content-between my-2">
+                    
+                                    <span class="view-image-txt" data-bs-toggle="modal" 
+                                    data-bs-target="#viewsalaryslip{{i.id}}"
+                                    >View Salary Slip</span>
+                
+                
+                                    <span class="view-image-txt"  data-bs-toggle="modal" 
+                                    data-bs-target="#viewrelieving{{i.id}}">View Relieving Letter</span>
+                                  </div>
+                                </div>
+                
+                                
+                
+                              </div>
+                
+                              <div class="modal fade" id="viewsalaryslip{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                
+                                  <div class="modal-content">           
+                                    <div class="modal-header">
+                                      <h5 class="modal-title py-2" id="exampleModalLabel">Salary Slip</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="row py-1">
+                                        <div>
+                                          <iframe base64='{{i.salaryslip}}' src="{{i.salaryslip}}" class="salary img-thumbnail" style="width: 100%; height: 100%"  frameborder="0" allowfullscreen></iframe>
+
+                    
+                                        </div>
+                                      </div>            
+                                    </div>
+                                    <div class="modal-footer d-flex">
+                                      <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                    
+                              <div class="modal fade" id="viewrelieving{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                
+                                  <div class="modal-content">           
+                                    <div class="modal-header">
+                                      <h5 class="modal-title py-2" id="exampleModalLabel">Relieving Letter</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="row py-1">
+                                        <div>
+                                          <iframe base64='{{i.relieving}}' src="{{i.relieving}}" class="relieving img-thumbnail" style="width: 100%; height: 100%"  frameborder="0" allowfullscreen></iframe>
+
+                    
+                                        </div>
+                                      </div>            
+                                    </div>
+                                    <div class="modal-footer d-flex">
+                                      <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                
+                            </div>
+                
+                
+                
+                          </div>
+                          {%endfor%}
+                        </div>
+          
+                      </div>
+          
+                      <hr class="mt-5">
+          
+          
+                      <h5 class="mt-3 text-muted">Reference Details</h5>
+                      <h6 class="my-3 text-muted">Reference Name 1</h6>
+                      <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refname1" name="refname1"  value="{{employeedetails.userSecondaryObject.refname1|default_if_none:''}}">
+                          <label for="refname1"  class="form-content">Reference Name </label>
+                          <!-- <span class="error" id="refname1_err"></span> -->
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+          
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refnumber1" name="refnumber1"  value="{{employeedetails.userSecondaryObject.refnumber1|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          <label for="refnumber1"  class="form-content">Mobile No</label>
+                          <span class="error" id="refnumber1_err"></span> 
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refdesg1" name="refdesg1"  value="{{employeedetails.userSecondaryObject.refdesg1|default_if_none:''}}">
+                          <label for="refdesignation1"  class="form-content">Designation</label>
+                          <span class="error" id="refdesignation1_err"></span> 
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+          
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refemail1" name="refemail1"  value="{{employeedetails.userSecondaryObject.refemail1|default_if_none:''}}">
+                          <label for="refemail1"  class="form-content">Email Address</label>
+                          <span class="error" id="refemail1_err"></span> 
+                        </div>
+                  
+                      </div>
+          
+                      <div class="col-md-12">
+                        <h6 class="my-3 text-muted">Reference Name 2</h6>
+                      </div>
+          
+          
+          
+                      <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refname2" name="refname2"  value="{{employeedetails.userSecondaryObject.refname2|default_if_none:''}}">
+                          <label for="refname2"  class="form-content">Reference Name </label>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+          
+          
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refnumber2" name="refnumber2"  value="{{employeedetails.userSecondaryObject.refnumber2|default_if_none:''}}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                          <label for="refmob2"  class="form-content">Mobile No</label>
+                          <span class="error" id="refnumber2_err"></span> 
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refdesg2" name="refdesg2"  value="{{employeedetails.userSecondaryObject.refdesg2|default_if_none:''}}">
+                          <label for="refdesignation2"  class="form-content">Designation</label>
+                        </div>
+                      </div>
+          
+                      <div class="col-md-6">
+          
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="refemail2" name="refemail2"  value="{{employeedetails.userSecondaryObject.refemail2|default_if_none:''}}">
+                          <label for="refemail2"  class="form-content">Email Address</label>
+                          <span class="error" id="refemail2_err"></span> 
+                        </div>
+                  
+                      </div>
+          
+          
+                    </div>
+          
+          
+          
+                    <div class="d-flex justify-content-between my-3">
+          
+          
+          
+                      <a href="javascript:void(0)" class="profile-upload-label" onclick="returnsecondstepvalidation();">Preview</a>
+          
+                      <a href="javascript:void(0)" class="profile-upload-label" onclick="return thirdstepvalidation();">Save and continue</a>
+                    
+          
+                    
+                    </div>
+                      
+      
+                  </div>
+      
+      
+              </div>
+      
+              <!-- 4th Pane-->
+              <div class="tab-pane fade" id="pills-bank" role="tabpanel" aria-labelledby="pills-bank-tab" tabindex="0">
+                  
+                <div class="row p-4"  id="">
+
+                  <div class="row">
+                    <h5 class="my-3 text-muted">Details and Document</h5>
+        
+                    <div class="col-md-4">
+        
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="accountholdername" name="accountholdername"  value="{{employeedetails.userSecondaryObject.accountholdername|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <label for="accountholdername"  class="form-content">Account Holder Name</label>
+                        <span id="accountholdername_err" class="error"></span>
+                      </div>
+                    </div>
+        
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="bankname" name="bankname"  value="{{employeedetails.userSecondaryObject.bankname|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <label for="bankname"  class="form-content">Bank Name</label>
+                        <span id="bankname_err" class="error"></span>
+                      </div>
+                    </div>
+        
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="branchname" name="branchname"  value="{{employeedetails.userSecondaryObject.branchname|default_if_none:''}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <label for="branchname"  class="form-content">Branch Name</label>
+                        <span id="branchname_err" class="error"></span>
+                      </div>
+                    </div>
+        
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="ifsc" name="ifsccode"  value="{{employeedetails.userSecondaryObject.ifsccode|default_if_none:''}}">
+                        <label for="ifsc"  class="form-content">IFSC Code</label>
+                        <span id="ifsc_err" class="error"></span> 
+                      </div>
+                    </div>
+        
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="accountno" name="accountnumber"  value="{{employeedetails.userSecondaryObject.accountnumber|default_if_none:''}}" >
+                        <label for="accountno"  class="form-content">Account Number</label>
+                        <span id="accountno_err" class="error"></span>
+                      </div>
+        
+                    </div>
+                  
+        
+        
+        
+        
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="confirmaccountno" name="confirmaccountnumber"  value="{{employeedetails.userSecondaryObject.confirmaccountnumber|default_if_none:''}}">
+                        <label for="confirmaccountno"  class="form-content">Confirm Account Number</label>
+                        <span id="confirmaccountno_err" class="error"></span>
+                      </div>
+                    </div>
+                      
+                
+                    <h5 class="my-3 text-muted">Other Details</h5>
+        
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="previouspfaccountno" name="previouspfaccountno"  value="{{employeedetails.userSecondaryObject.previous_pf_accountno|default_if_none:''}}">
+                          <label for="previouspfaccountno"  class="form-content">Previous PF Account </label>
+                          <span id="previouspfaccountno_err" class="error"></span>
+                        </div>
+                      </div>
+        
+          
+        
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="esic" name="esic"  value="{{employeedetails.userSecondaryObject.esic_number|default_if_none:''}}">
+                          <label for="esic"  class="form-content">ESIC Number</label>
+                          <span id="esic_err" class="error"></span>
+                        </div>
+                      </div>
+        
+        
+                  </div>
+                  <div class="d-flex justify-content-between my-3">
+                    <a href="javascript:void(0)" class="profile-upload-label" onclick="returnthirdstepvalidation();">Preview</a>
+            
+                    <a href="javascript:void(0)" class="profile-upload-label" onclick="return fourthstepvalidation();">Save and continue</a>
+                  
+                    
+                  </div>
+                </div>
+      
+              </div>
+
+              <!-- 5th Pane -->
+              <div class="tab-pane fade " id="pills-designation" role="tabpanel" aria-labelledby="pills-designation-tab" tabindex="0">
+                  
+                <div class="row p-4" id="">
+                  <div class="row">
+                    <h5 class="my-3 text-muted">Employment Details</h5>
+
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="empemail"  name="empemail"  name="employeeId" value="{{employeedetails.userdata.email|default_if_none:''}}">
+                        <label for="empemail" class="form-content">Official Email<span style="color:red">*</span></label>
+                        <span id="empemail_err" class="error"></span>
+                      </div>
+                    </div>
+
+
+
+
+
+                    <div class="col-md-4">
+        
+                      <div class="form-floating mb-3">
+
+                        
+                        <select id='addEmpRole' class="form-control" name="role">
+                            <option value=''>Select Role</option> 
+
+                        </select>
+                        <label for="addEmpRole" class="form-content">Role<span style="color:red">*</span></label>
+                        <span id="addEmpRole_err" class="error"></span>
+
+
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+
+                        <select id='addEmpDesignation' class="form-control" name="designation">
+                            <option value=''>Select Designation</option> 
+                            {% for i in designationlist %}
+                                {%if employeedetails.userdata.DesignationId == i.DesignationName %}
+                                <option value="{{i.id}}" selected>{{i.DesignationName}}</option>
+                                {%else%}
+                                <option value="{{i.id}}">{{i.DesignationName}}</option>
+                                {%endif%}
+                            {% endfor %}
+                        </select>
+                        <label for="addEmpDesignation" class="form-content">Designation<span style="color:red">*</span></label>
+
+                        <span id="addEmpDesignation_err" class="error"></span>
+                      </div>
+
+
+
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+
+                        <select id='addEmpDepartment' class="form-control" name="DepartmentID">
+                            <option value=''>Select Department</option> 
+
+                        </select>
+                        <label for="addEmpDepartment" class="form-content">Department<span style="color:red">*</span></label>
+                        <span id="addEmpDepartment_err" class="error"></span>
+
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+
+                        <select id='addEmpEmploymentStatus' class="form-control" name="employeeStatus">
+                            <option value='probation'>Probation</option>                               
+                            <option value='confirm'>Confirm</option>                               
+                            <option value='trainee'>Trainee</option>                               
+                            <option value='intern'>Intern</option>                               
+                                    
+
+                        </select>
+                        <label for="addEmpEmploymentStatus"  class="form-content">Employment Status<span style="color:red">*</span></label>
+
+                        <span id="addEmpEmploymentStatus_err" class="error"></span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                      <div class="form-floating mb-3">
+
+                        <input type="date" class="form-control" id="EmpJoinDate"  name="DateofJoining" autocomplete="off" value="{{employeedetails.userdata.DateofJoining}}" >
+                        <label for="EmpJoinDate" class="form-content">Date of Joining<span style="color:red">*</span></label>
+                        <span id="EmpJoinDate_err" class="error"></span>
+
+
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+
+                      <select id='addEmpLocation' class="form-control" name="location">
+                          <option value=''>Select Work Location</option> 
+                          {% for l in locationlist %}
+                          {%if employeedetails.userdata.locationId == l.id %}
+                            <option value="{{l.id}}" selected>{{l.LocationName}}</option>
+                            {%else%}
+                            <option value="{{l.id}}">{{l.LocationName}}</option>
+                            {%endif%}
+                            {% endfor %}
+                      </select>
+                      <label for="addEmpLocation" class="form-content">Work Location<span style="color:red">*</span></label>
+
+                      <span id="addEmpLocation_err" class="error"></span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+
+
+                        <input type="text" class="form-control" id="addEmpAttendanceId"   name="employeeId" value="{{employeedetails.userdata.employeeId|default_if_none:''}}">
+                        <label for="addEmpAttendanceId" class="form-content">Attendance Id</label>
+                        <span id="addEmpAttendanceId_err" class="error"></span>
+
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <select id='addEmpTOW'  class="form-control" name="typeofwork">
+                            <option value=''>Select Type of Work</option> 
+
+                            <option value="1" selected>Work From Home</option>
+                            <option value="2" selected>Work From Office</option>
+                            <option value="3" selected>Outdoor</option>
+                            <option value="4" selected>Hybrid</option>
+                
+
+                        </select>
+                        <label for="addEmpTOW"  class="form-content">Type of Work<span style="color:red">*</span></label>
+                        <span id="addEmpTOW_err" class="error"></span>
+                      </div>
+                    </div>
+
+
+                    {% comment %} <div class="col-lg-4 ">
+                      <div class="form-floating mb-3">
+                        <input class="form-control" type="password" id="password" placeholder="Enter Password" autocomplete="new-password" name="password" oninput="checkPasswordStrength();">
+                        <label for="password" class="form-content">Password</label>
+                        <span id="password_err" class="error"></span>
+                      </div>
+                    </div> {% endcomment %}
+                    
+                    
+                    
+
+
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <select id='employeetype'  class="form-control" name="employeetype">
+                            <option value=''>Select Employee Type</option> 
+                        </select>
+                        <label for="employeetype"  class="form-content">Employee Type <span style="color:red">*</span></label>
+                        <span id="employeetype_err" class="error"></span>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between my-3">
+                    <a href="javascript:void(0)" class="profile-upload-label" onclick="returnfourthstepvalidation();">Preview</a>
+            
+                    <a href="javascript:void(0)" class="profile-upload-label" onclick="return fifthstepvalidation();">Save</a>
+                  
+                    
+                  </div>    
+                </div>
+                
+              </div>
+          </div>
+      
+        </div>
+      
+  </main>
+  
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+  <script src="{% static 'admin/master/add_employee.js'%}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+
+  <script>
+
+
+    function formatDate(inputDate) {
+      var date = new Date(inputDate);
+      var day = date.getDate();
+      var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+      var month = monthNames[date.getMonth()];
+      var year = date.getFullYear();
+  
+      var formattedDate = day + getOrdinalSuffix(day) + " " + month + " " + year;
+  
+      return formattedDate;
+    }
+  
+    function getOrdinalSuffix(number) {
+      var suffix = "th";
+      if (number >= 11 && number <= 13) {
+        suffix = "th";
+      } else {
+        switch (number % 10) {
+          case 1:
+            suffix = "st";
+            break;
+          case 2:
+            suffix = "nd";
+            break;
+          case 3:
+            suffix = "rd";
+            break;
+        }
+      }
+      return suffix;
+    }
+  
+    $('.custom-file-input').on('change', function() {
+      ;
+
+      var allowedExtensions = ["jpg", "jpeg", "png","pdf"]; // Allowed file extensions
+
+      // Get the selected file
+      var file = this.files[0];
+
+      // Check if a file is selected
+      if (file) {
+          
+
+          // Check file extension
+          var fileName = file.name.toLowerCase();
+          var fileExtension = fileName.split(".").pop();
+          if ($.inArray(fileExtension, allowedExtensions) === -1) {
+              swal({
+                icon: "error",
+                title: "",
+                text: "Invalid file type. Allowed types are: " + allowedExtensions.join(", "),
+                timer:2000,
+      
+              });
+              // Clear the file input
+              $(this).val("");
+              $(this).closest('td').find('div').html(' ');
+              return;
+          }else{
+            var fileName = $(this).val().split('\\').pop(); // Extract the selected file name
+            $(this).closest('td').find('div').html(fileName);
+            var closestTd = $(this).closest('td');
+            var cellNumber = closestTd.index();
+            var rowNumber = closestTd.closest('tr').index();
+            
+            
+            var targetTd = $('tr').eq(rowNumber).find('td').eq(cellNumber);
+            var inputInTd = targetTd.find('input');
+
+
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (evt) {
+                var base64 = evt.target.result;
+                inputInTd.attr('base64',base64);    
+
+            }
+
+
+          }
+
+
+      }
+
+
+
+    });
+
+  
+    $('#allemployees').on('change', function() {
+        var selectedValue = this.value; // Get the selected value
+        var url='/update/'; // Define the URL to redirect to
+
+        if (selectedValue !== "") {
+            var encrypted_id = btoa(selectedValue.toString());
+            window.location.href = url+encrypted_id;
+        } 
+    });
+
+
+    $(document).ready(function() {
+        $("#allemployees").select2();
+        $("#employeetype").select2();
+
+      residentialcitydata({{employeedetails.userSecondaryObject.residentialaddresscity|default_if_none:''}})
+      permanentcitydata({{employeedetails.userSecondaryObject.permanantaddresscity|default_if_none:''}})
+      getrolelist()
+      getdesignationlist()
+      getlocationlist()
+      getdepartmentlist()
+      get_attendance_mapped_employees()
+      getemployeetypelist()
+      $("#addEmpTOW").val('{{employeedetails.userdata.typeofwork}}')
+      $('#addEmpTOW').change();
+
+      $("#addEmpEmploymentStatus").val('{{employeedetails.userdata.employeementStatus}}')
+      $('#addEmpEmploymentStatus').change();
+
+      var preselectedValue='{{employeedetails.userSecondaryObject.bloodgroup}}';
+
+
+      
+      var bloodGroupSelect = document.getElementById('bloodgroup');
+  
+      for (var i = 0; i < bloodGroupSelect.options.length; i++) {
+          if (bloodGroupSelect.options[i].value === preselectedValue) {
+              bloodGroupSelect.options[i].selected = true;
+              break; // Exit the loop once a match is found
+          }
+      }
+  
+  
+      var preselectedmaritalstatusValue='{{employeedetails.userSecondaryObject.maritalstatus}}';
+      var maritalstatusSelect = document.getElementById('maritalstatus');
+  
+      for (var i = 0; i < maritalstatusSelect.options.length; i++) {
+          if (maritalstatusSelect.options[i].value === preselectedmaritalstatusValue) {
+              maritalstatusSelect.options[i].selected = true;
+              break; // Exit the loop once a match is found
+          }
+      }
+  
+      var readURL = function(input) {
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+  
+              reader.onload = function (e) {
+                  $('.profile-pic').attr('src', e.target.result);
+              }
+      
+              reader.readAsDataURL(input.files[0]);
+          }
+      }
+      
+      
+      $(".upload-button").on('click', function() {
+          $(".file-upload").click();
+      });
+  
+      var dobInput = $('#personalbirthyear');
+      var ageError = $('#personalbirthyear_err');
+  
+      dobInput.on('input', function() {
+          const selectedDate = new Date(dobInput.val());
+          const currentDate = new Date();
+          const age = currentDate.getFullYear() - selectedDate.getFullYear();
+  
+          // Check if the user is above 15 years old
+          if (age < 15) {
+              ageError.text('You must be at least 15 years old.');
+              dobInput[0].setCustomValidity('You must be at least 15 years old.');
+          } else {
+              ageError.text('');
+              dobInput[0].setCustomValidity('');
+          }
+      });
+  
+  
+  
+      // Attach the validation function to the "Add" button's click event.
+  
+  
+  
+  
+  
+  
+
+
+  
+  
+  
+    });
+  
+  
+  
+  
+
+
+
+
+
+    function validateImage(input, preview) {
+      var maxSizeMB = 2;
+      var allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    
+      var file = input.files[0];
+    
+
+
+      
+          
+
+
+
+
+      if (!file) {
+        console.error("No file selected.");
+        return;
+      }
+    
+      var fileName = file.name.toLowerCase();
+      var fileExtension = fileName.split(".").pop();
+    
+      if ($.inArray(fileExtension, allowedExtensions) === -1) {
+        showError("Invalid file type. Allowed types are: " + allowedExtensions.join(", "));
+        clearInputAndPreview(input, preview);
+        return;
+      }
+    
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (evt) {
+          var base64 = evt.target.result;
+          $("#"+preview).attr('base64',base64)
+      }
+
+
+
+      if (fileExtension === "pdf") {
+        displayPdfPreview(file, preview);
+      } else {
+        displayImagePreview(file, preview);
+      }
+    }
+    
+    function displayPdfPreview(file, preview) {
+
+      var iframeElement = $('<iframe>');
+    
+      var fileUrl = URL.createObjectURL(file);
+      iframeElement.attr('src', fileUrl);
+    
+      replacePreviewWithElement(preview, iframeElement);
+    }
+    
+    function displayImagePreview(file, preview) {
+      var reader = new FileReader();
+    
+      reader.onload = function (e) {
+        var imageElement = $('<img>');
+        imageElement.attr('src', e.target.result);
+        imageElement.attr('base64',e.target.result)
+
+
+        replacePreviewWithElement(preview, imageElement);
+      };
+    
+      reader.onerror = function (e) {
+        console.error("Error reading file:", e);
+      };
+    
+      reader.readAsDataURL(file);
+    }
+    
+    function replacePreviewWithElement(preview, newElement) {
+      var existingPreview = $("#" + preview);
+      newElement.attr('id', existingPreview.attr('id'));
+      newElement.attr('alt', existingPreview.attr('alt'));
+      newElement.attr('class', existingPreview.attr('class'));
+      
+      existingPreview.replaceWith(newElement);
+    }
+    
+    function clearInputAndPreview(input, preview) {
+      $(input).val("");
+      $("#" + preview).attr("src", "");
+    }
+    
+    function showError(message) {
+      swal({
+        icon: "error",
+        title: "",
+        text: message,
+        timer: 2000,
+      });
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    function validatequalificationImage(input,preview) {
+      var allowedExtensions = ["jpg", "jpeg", "png"]; // Allowed file extensions
+
+      // Get the selected file
+      var file = input.files[0];
+
+      // Check if a file is selected
+      if (file) {
+          
+
+          // Check file extension
+          var fileName = file.name.toLowerCase();
+          var fileExtension = fileName.split(".").pop();
+          if ($.inArray(fileExtension, allowedExtensions) === -1) {
+              swal({
+                icon: "error",
+                title: "",
+                text: "Invalid file type. Allowed types are: " + allowedExtensions.join(", "),
+                timer:2000,
+      
+              });
+              // Clear the file input
+              $(input).val("");
+              $("#"+preview).attr("src", '');
+
+              return;
+          }
+
+
+      }
+    }
+      // Define the validation function.
+      function validateInputFields() {
+        var isValid = true;
+  
+        // Loop through the first two rows of the table.
+        $('#qualificationTable tr:lt(3)').each(function() {
+          var inputs = $(this).find('input');
+  
+          inputs.each(function() {
+            // Check if the input field is empty.
+            var id = $(this).attr('id');
+            var fieldType = $(this).attr('type');
+  
+            if (fieldType === 'text' || fieldType === 'date') {
+  
+              if ($(this).val() === '') {
+                isValid = false;
+                $(this).css('border', '1px solid red');
+              }else{
+                $(this).css('border', 'none');
+  
+              }
+            }else if(fieldType === 'file'){
+              var labelForInput = $("label[for='" + $(this).attr('id') + "']");
+              if ($(this).attr('value') === '') {
+                if($(this).val() === ''){
+                  isValid = false;
+                  labelForInput.css('border', '1px solid red');
+                }
+  
+              }else{
+                labelForInput.css('border', 'none');
+              }
+  
+            }
+          });
+        });
+  
+        // If any field in the first two rows is empty, display an error message or take action.
+        if (!isValid) {
+  
+          swal({
+            icon: "error",
+            title: "",
+            text: 'Please fill in all required fields.',
+            buttons: false,
+            timer:2000,
+  
+          });
+        }
+  
+        return isValid;
+      }
+  
+      $(function(){
+          var dtToday = new Date();
+  
+          var month = dtToday.getMonth() + 1;// jan=0; feb=1 .......
+          var day = dtToday.getDate();
+          var year = dtToday.getFullYear() - 18;
+          if(month < 10)
+              month = '0' + month.toString();
+          if(day < 10)
+              day = '0' + day.toString();
+          var minDate = year + '-' + month + '-' + day;
+          var maxDate = year + '-' + month + '-' + day;
+        $('#personalbirthyear').attr('max', maxDate);
+      });
+
+
+      function validatePhoneNumber(phoneNumber) {
+        if (!phoneNumber.trim()) {
+          return true;  // Phone number is empty, no need to validate
+        }
+
+      // Define a regular expression pattern for a valid phone number
+      var pattern = /^\d{10}$/;  // Assumes a 10-digit phone number
+
+      // Check if the phone number matches the pattern
+        return pattern.test(phoneNumber);
+      }
+      function validateemail(email) {
+          if (!email.trim()) {
+            return true;  // Phone number is empty, no need to validate
+          }
+
+        // Define a regular expression pattern for a valid phone number
+        var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Check if the phone number matches the pattern
+          return pattern.test(email);
+      }
+      function validateadharnumber(adharnumber) {
+        if (!adharnumber.trim()) {
+          return true;  // Phone number is empty, no need to validate
+        }
+
+        // Define a regular expression pattern for a valid phone number
+        var pattern = /^\d{12}$/;
+
+        // Check if the phone number matches the pattern
+          return pattern.test(adharnumber);
+      }
+
+      function validatepannumber(pannumber) {
+        if (!pannumber.trim()) {
+          return true;  // Phone number is empty, no need to validate
+        }
+
+        // Define a regular expression pattern for a valid phone number
+        var pattern = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]$/;
+
+        // Check if the phone number matches the pattern
+          return pattern.test(pannumber);
+      }
+
+      function firststepvalidation() {
+          var imagepreview = $('#idProofPreview').prop('src');
+          var personalfirstname = $('#personalfirstname').val().trim();
+          var personallastname = $('#personallastname').val().trim();
+          var personalmobno = $('#personalmobno').val().trim();
+          var personalbirthyear = $('#personalbirthyear').val().trim();
+          var bloodgroup = $('#bloodgroup').val();
+          var maritalstatus = $('#maritalstatus').val();
+          var personalmail = $('#personalmail').val();
+          var alternatemail = $('#alternatemail').val();
+  
+          var rAddresslineone=$('#rAddresslineone').val().trim();
+          var rAddresslinetwo=$('#rAddresslinetwo').val().trim();
+  
+          //var residentialadd = $('#residentialadd').val().trim();
+          var residentialaddcountry = $('#residentialaddcountry').val();
+          var residentialaddstate = $('#residentialaddstate').val();
+          var residentialaddcity = $('#residentialaddcity').attr('cityid');
+          var residentialaddpincode = $('#residentialaddpincode').val().trim();
+
+          var res_lattitude = $('#res_lattitude').val().trim();
+          var res_longitude = $('#res_longitude').val().trim();
+          var res_radius = $('#res_radius').val().trim();
+  
+  
+  
+          //var permanantadd = $('#permanantadd').val().trim();
+          var permanentaddcountry = $('#permanentaddcountry').val();
+          var permanentaddstate = $('#permanentaddstate').val();
+          var permanantaddcity = $('#permamnentaddcity').attr('cityid');
+          
+          var permanantaddpincode = $('#permanantaddpincode').val();
+  
+          var pAddresslineone=$('#pAddresslineone').val().trim();
+          var pAddresslinetwo=$('#pAddresslinetwo').val().trim();
+  
+  
+          var relationname = $('#relationname').val().trim();
+          var relationname2 = $('#relationname2').val().trim();
+  
+          var relation = $('#relation').val().trim();
+          var relation2 = $('#relation2').val().trim();
+  
+          var relationmobno = $('#relationmobno').val().trim();
+          var relation2mobno = $('#relation2mobno').val().trim();
+  
+  
+          var phoneNumberPattern = /^\d{10}$/;
+          var adhaarFilepreview = $('#adhaarFilepreview').attr('src');
+
+          var adhaarbase64 = $('#adhaarFilepreview').attr('base64');
+          var pancardbase64 = $('#panfilepreview').attr('base64');
+          var passportbase64 = $('#passportFilepreview').attr('base64');
+
+
+          var panfilepreview = $('#panfilepreview').attr('src'); 
+          var adhaarcard = $('#adhaarcard').val().trim();
+          var pancard = $('#pancard').val().trim();
+          var adhaarcardimage = $('#adhaarFile')[0].files[0];
+          var passportimage = $('#passportFile')[0].files[0];
+          var pancardimage = $('#panFile')[0].files[0];
+          var adharregexp=/(^[0-9]{4}[0-9]{4}[0-9]{4}$)|(^[0-9]{4}\s[0-9]{4}\s[0-9]{4}$)|(^[0-9]{4}-[0-9]{4}-[0-9]{4}$)/;
+          var regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+          const selectedBirthDate = new Date(personalbirthyear);
+          const currentDate = new Date();
+          const age = currentDate.getFullYear() - selectedBirthDate.getFullYear();
+          var pincodePattern = /^\d{6}$/;
+  
+          // Check if the user is above 15 years old
+          if (residentialaddcity == undefined){
+            residentialaddcity=''
+          } 
+          if (permanantaddcity == undefined){
+            permanantaddcity=''
+          }
+          
+          if (IsValid(personalfirstname)) {
+              $('#personalfirstname').html();
+              $('#personalfirstname_err').show().delay(3000).slideUp();
+              $('#personalfirstname_err').html('Please enter your first name');
+              $('#personalfirstname').focus();
+              return false;
+          }
+          if (IsValid(personallastname)) {
+              $('#personallastname').html();
+              $('#personallastname_err').show().delay(3000).slideUp();
+              $('#personallastname_err').html('Please enter your last name');
+              $('#personallastname').focus();
+              return false;
+          }
+          if (!validatePhoneNumber(personalmobno)) {
+            $('#personalmobno').html();
+            $('#personalmobno_err').show().delay(3000).slideUp();
+            $('#personalmobno_err').html('Please enter valid mobile number');
+            $('#personalmobno').focus();
+            return false;            
+          } 
+
+
+
+          if (!validateemail(personalmail)) {
+            $('#personalmail').html();
+            $('#personalmail_err').show().delay(3000).slideUp();
+            $('#personalmail_err').html('Please enter valid email');
+            $('#personalmail').focus();
+            return false;            
+          } 
+          if (!validateemail(alternatemail)) {
+            $('#alternatemail').html();
+            $('#alternatemail_err').show().delay(3000).slideUp();
+            $('#alternatemail_err').html('Please enter valid email');
+            $('#alternatemail').focus();
+            return false;            
+          } 
+          /*if (IsValid(personalmobno)) {
+              $('#personalmobno').html();
+              $('#personalmobno_err').show().delay(3000).slideUp();
+              $('#personalmobno_err').html('Please enter your mobile number');
+              $('#personalmobno').focus();
+              return false;
+          }
+          if (!phoneNumberPattern.test(personalmobno)) {
+            $('#personalmobno').html();
+            $('#personalmobno_err').show().delay(3000).slideUp();
+            $('#personalmobno_err').html('Please enter valid mobile number');
+            $('#personalmobno').focus();
+            return false;
+          }*/
+          /*if (IsValid(personalbirthyear)) {
+              $('#personalbirthyear').html();
+              $('#personalbirthyear_err').show().delay(3000).slideUp();
+              $('#personalbirthyear_err').html('Please select your birth date');
+              $('#personalbirthyear').focus();
+              return false;
+          }*/
+          if (age < 15) {
+            $('#personalbirthyear').html();
+            $('#personalbirthyear_err').show().delay(3000).slideUp();
+            $('#personalbirthyear_err').html('You must be at least 15 years old.');
+            $('#personalbirthyear').focus();
+            return false;
+          
+          } 
+
+          if(!validateadharnumber(adhaarcard)){
+            $('#adhaarcard').html();
+            $('#adhaarcard_err').show().delay(3000).slideUp();
+            $('#adhaarcard_err').html('Please enter valid Adhaar Card number');
+            $('#adhaarcard').focus();
+            return false;
+          }
+          if (!validatepannumber(pancard)) {
+            $('#pancard').html();
+            $('#pancard_err').show().delay(3000).slideUp();
+            $('#pancard_err').html('Please enter valid Pan Card number');
+            $('#pancard').focus();
+            return false;
+          }
+          
+         /* if (IsValid(rAddresslineone)) {
+              $('#rAddresslineone').html();
+              $('#rAddresslineone_err').show().delay(3000).slideUp();
+              $('#rAddresslineone_err').html('Please enter your residential address line 1');
+              $('#rAddresslineone').focus();
+              return false;
+          }
+          if (IsValid(rAddresslinetwo)) {
+            $('#rAddresslinetwo').html();
+            $('#rAddresslinetwo_err').show().delay(3000).slideUp();
+            $('#rAddresslinetwo_err').html('Please enter your residential address line 2');
+            $('#rAddresslinetwo').focus();
+            return false;
+          }
+          if (IsValid(residentialaddpincode)) {
+            $('#residentialaddpincode').html();
+            $('#residentialaddpincode_err').show().delay(3000).slideUp();
+            $('#residentialaddpincode_err').html('Please enter your residential address pincode');
+            $('#residentialaddpincode').focus();
+            return false;
+          }
+          if (!pincodePattern.test(residentialaddpincode)) {
+            $('#residentialaddpincode').html();
+            $('#residentialaddpincode_err').show().delay(3000).slideUp();
+            $('#residentialaddpincode_err').html('Please enter valid pincode');
+            $('#residentialaddpincode').focus();        
+            return false;
+  
+          }
+          if (IsValid(residentialaddcity)) {
+            $('#residentialaddcity').html();
+            $('#residentialaddcity_err').show().delay(3000).slideUp();
+            $('#residentialaddcity_err').html('Please select your residential address city');
+            $('#residentialaddcity').focus();
+            $("html, body").scrollTop(200);
+
+            return false;
+          }
+          if (IsValid(residentialaddstate)) {
+            $('#residentialaddstate').html();
+            $('#residentialaddstate_err').show().delay(3000).slideUp();
+            $('#residentialaddstate_err').html('Please select your residential address state');
+            $('#residentialaddstate').focus();
+            return false;
+          }
+          if (IsValid(residentialaddcountry)) {
+            $('#residentialaddcountry').html();
+            $('#residentialaddcountry_err').show().delay(3000).slideUp();
+            $('#residentialaddcountry_err').html('Please select your residential address country');
+            $('#residentialaddcountry').focus();
+            return false;
+          }
+  
+          if (IsValid(pAddresslineone)) {
+            $('#pAddresslineone').html();
+            $('#pAddresslineone_err').show().delay(3000).slideUp();
+            $('#pAddresslineone_err').html('Please enter your permamnent address line 1');
+            $('#pAddresslineone').focus();
+            return false;
+          }
+          if (IsValid(pAddresslinetwo)) {
+            $('#pAddresslinetwo').html();
+            $('#pAddresslinetwo_err').show().delay(3000).slideUp();
+            $('#pAddresslinetwo_err').html('Please enter your permamnent address line 2');
+            $('#pAddresslinetwo').focus();
+            return false;
+          }
+          if (IsValid(permanantaddpincode)) {
+            $('#permanantaddpincode').html();
+            $('#permanantaddpincode_err').show().delay(3000).slideUp();
+            $('#permanantaddpincode_err').html('Please enter your permamnent address pincode');
+            $('#permanantaddpincode').focus();
+            return false;
+          }
+          if (!pincodePattern.test(permanantaddpincode)) {
+            $('#permanantaddpincode').html();
+            $('#permanantaddpincode_err').show().delay(3000).slideUp();
+            $('#permanantaddpincode_err').html('Please enter valid pincode');
+            $('#permanantaddpincode').focus();   
+            return false;
+        
+          }
+          if (IsValid(permanantaddcity)) {
+            $('#permanantaddcity').html();
+            $('#permanantaddcity_err').show().delay(3000).slideUp();
+            $('#permanantaddcity_err').html('Please select your permamnent address city');
+            $('#permanantaddcity').focus();
+            $("html, body").scrollTop(500);
+
+            return false;
+          }
+  
+          if (IsValid(permanentaddstate)) {
+            $('#permanentaddstate').html();
+            $('#permanentaddstate_err').show().delay(3000).slideUp();
+            $('#permanentaddstate_err').html('Please select your permamnent address state');
+            $('#permanentaddstate').focus();
+            return false;
+          }
+          
+          if (IsValid(permanentaddcountry)) {
+            $('#permanentaddcountry').html();
+            $('#permanentaddcountry_err').show().delay(3000).slideUp();
+            $('#permanentaddcountry_err').html('Please select your permamnent address country');
+            $('#permanentaddcountry').focus();
+            return false;
+          }
+  
+  
+  
+          if (IsValid(adhaarcard)) {
+            $('#adhaarcard').html();
+            $('#adhaarcard_err').show().delay(3000).slideUp();
+            $('#adhaarcard_err').html('Please enter your Adhaar Card number');
+            $('#adhaarcard').focus();
+            return false;
+          }
+          if(!adharregexp.test(adhaarcard)){
+            $('#adhaarcard').html();
+            $('#adhaarcard_err').show().delay(3000).slideUp();
+            $('#adhaarcard_err').html('Please enter valid Adhaar Card number');
+            $('#adhaarcard').focus();
+            return false;
+          }
+          if (IsValid(pancard)) {
+            $('#pancard').html();
+            $('#pancard_err').show().delay(3000).slideUp();
+            $('#pancard_err').html('Please enter your Pan Card number');
+            $('#pancard').focus();
+            return false;
+          }
+          if (!regpan.test(pancard)) {
+            $('#pancard').html();
+            $('#pancard_err').show().delay(3000).slideUp();
+            $('#pancard_err').html('Please enter valid Pan Card number');
+            $('#pancard').focus();
+            return false;
+          }
+          if(adhaarFilepreview==""){
+            if (IsValid(adhaarcardimage)) {
+              $('#adhaarcardimage').html();
+              $('#adhaarcardimage_err').show().delay(3000).slideUp();
+              $('#adhaarcardimage_err').html('Please upload copy of your Adhaar Card');
+              $('#adhaarcard').focus();
+              return false;
+            }
+          }
+          if(panfilepreview==""){
+            if (IsValid(pancardimage)) {
+              $('#pancardimage').html();
+              $('#pancardimage_err').show().delay(3000).slideUp();
+              $('#pancardimage_err').html('Please upload copy of your Pan Card');
+              $('#panFile').focus();
+              return false;
+            }
+          }
+          if (IsValid(relationname)) {
+            $('#relationname').html();
+            $('#relationname_err').show().delay(3000).slideUp();
+            $('#relationname_err').html('Please enter relation name');
+            $('#relationname').focus();
+            return false;
+          }
+          if (IsValid(relation)) {
+              $('#relation').html();
+              $('#relation_err').show().delay(3000).slideUp();
+              $('#relation_err').html('Please enter relation');
+              $('#relation').focus();
+              return false;
+          }
+          if (IsValid(relationmobno)) {
+              $('#relationmobno').html();
+              $('#relationmobno_err').show().delay(3000).slideUp();
+              $('#relationmobno_err').html('Please enter contact number for emergency');
+              $('#relationmobno').focus();
+              return false;
+          }if (!phoneNumberPattern.test(relationmobno)) {
+            $('#relationmobno').html();
+            $('#relationmobno_err').show().delay(3000).slideUp();
+            $('#relationmobno_err').html('Please enter valid contact number for emergency');
+            $('#relationmobno').focus();
+            return false;
+          }*/
+          if (!validatePhoneNumber(relationmobno)) {
+            $('#relationmobno').html();
+            $('#relationmobno_err').show().delay(3000).slideUp();
+            $('#relationmobno_err').html('Please enter valid phone number');
+            $('#relationmobno').focus();
+            return false;
+          }
+  
+          if (!validatePhoneNumber(relation2mobno)) {
+            $('#relation2mobno').html();
+            $('#relation2mobno_err').show().delay(3000).slideUp();
+            $('#relation2mobno_err').html('Please enter valid phone number');
+            $('#relation2mobno').focus();
+            return false;
+          }
+  
+          else{
+            var formData = new FormData();
+  
+            formData.append("id",'{{userID}}');
+            formData.append("imagepreview",imagepreview);
+            formData.append("Firstname",personalfirstname);
+            formData.append("Lastname",personallastname);
+            formData.append("Phone",personalmobno);
+            formData.append("BirthDate",personalbirthyear); 
+            formData.append("maritalstatus",maritalstatus);
+            formData.append("personal_email",personalmail);
+            formData.append("alternatemail",alternatemail);
+            formData.append("bloodgroup",bloodgroup); 
+  
+            formData.append("rAddresslineone",rAddresslineone);
+            formData.append("rAddresslinetwo",rAddresslinetwo);
+  
+            formData.append("residentialaddresscountry",residentialaddcountry);
+  
+            formData.append("residentialaddressstate",residentialaddstate);
+            formData.append("residentialaddresscity",residentialaddcity);
+            formData.append("residentialaddresspincode",residentialaddpincode);
+            formData.append("res_lattitude",res_lattitude);
+            formData.append("res_longitude",res_longitude);
+            formData.append("res_radius",res_radius);
+         
+  
+            formData.append("pAddresslineone",pAddresslineone);
+            formData.append("pAddresslinetwo",pAddresslinetwo);
+            formData.append("permanantaddresscountry",permanentaddcountry);
+            formData.append("permanantaddressstate",permanentaddstate);
+            formData.append("permanantaddresscity",permanantaddcity);
+            formData.append("permanantaddresspincode",permanantaddpincode);
+            
+            
+            
+            
+            
+            
+  
+  
+  
+  
+  
+            formData.append("relationname1",relationname);
+            formData.append("relationname2",relationname2);
+  
+            formData.append("relation1",relation);
+            formData.append("relation2",relation2);
+            formData.append("relation1number",relationmobno);
+            formData.append("relation2number",relation2mobno);
+            formData.append("adhaarcard", adhaarcard);
+            formData.append("pancard", pancard);
+
+            formData.append("adhaarbase64", adhaarbase64);
+            formData.append("pancardbase64", pancardbase64);
+            formData.append("passportbase64", passportbase64);
+
+            formData.append("adhaarcardimage", adhaarcardimage);
+            formData.append("pancardimage", pancardimage); 
+            formData.append("passportimage", passportimage); 
+            
+            formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+                  $.ajax({ 
+                  type: "POST",
+                  url: frontendURL + "update_employee_first_step",
+                  headers:{
+                    'Authorization': 'Token '+ '{{token}}'
+                  },
+                  dataType: 'json',
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  success: function(response) {
+                  if(response.status != 1){
+                      swal({
+                        icon: "warning",
+                        title: "",
+                        text: response.Msg,
+                        button: "Close",
+                        timer:2000,
+                      });
+                    }else{
+                      swal({
+                      icon: "success",
+                      title: "",
+                      text: response.Msg,
+                      buttons: false,
+                      timer:2000,
+                    });
+                    $("#pills-personal-info-tab").removeClass('active');
+                    $("#pills-personal-info").removeClass('active');
+                    $("#pills-personal-info").removeClass('show');
+
+                    $("#pills-educational-tab").addClass('active');
+                    $("#pills-educational").addClass('active');
+                    $("#pills-educational").addClass('show');
+
+                    $("#pills-employment-tab").removeClass('active');
+                    $("#pills-employment").removeClass('active'); 
+                    $("#pills-employment").removeClass('show');
+
+                    
+                    $("#pills-bank-tab").removeClass('active');
+                    $("#pills-bank").removeClass('active');
+                    $("#pills-bank").removeClass('show');
+
+                    $("#pills-designation-tab").removeClass('active'); 
+                    $("#pills-designation").removeClass('active'); 
+                    $("#pills-designation").removeClass('show'); 
+  
+                    } 
+                    
+                    
+                  }
+                });
+                      
+          }
+          
+          
+          
+      }
+
+      function secondstepvalidation(){ 
+        //var validation = validateInputFields();
+        var validation = true;
+        if (validation==true){
+  
+        var qualificationsArray = getQualifications();
+        console.log("qualificationsArray",qualificationsArray)
+        var educationalform = new FormData();
+  
+        for (var j=0; j<qualificationsArray.length; j++){
+          educationalform.append(qualificationsArray[j]['QualificationTitle'],qualificationsArray[j]['Photocopy'])
+        }
+  
+  
+        qualificationsArray=JSON.stringify(qualificationsArray)
+        educationalform.append("qualificationsArray",qualificationsArray);
+        educationalform.append("csrfmiddlewaretoken","{{csrf_token}}");
+  
+        $.ajax({ 
+          type: "POST",
+          url: frontendURL + "update_employee_second_step",
+  
+          headers:{
+            'Authorization': 'Token '+ '{{token}}'
+          },
+  
+          dataType: 'json',
+          data: educationalform,
+          processData: false,
+          contentType: false,
+  
+          success: function(response) {
+          if(response.status == 200){
+              swal({
+                icon: "success",
+                title: "",
+                text: response.Msg,
+                button: "Close",
+                timer:2000,
+              });
+              $("#pills-personal-info-tab").removeClass('active');
+              $("#pills-personal-info").removeClass('active');
+              $("#pills-personal-info").removeClass('show');
+      
+              $("#pills-educational-tab").removeClass('active');
+              $("#pills-educational").removeClass('active');
+              $("#pills-educational").removeClass('show');
+      
+              $("#pills-employment-tab").addClass('active');
+              $("#pills-employment").addClass('active'); 
+              $("#pills-employment").addClass('show');
+      
+              
+              $("#pills-bank-tab").removeClass('active');
+              $("#pills-bank").removeClass('active');
+              $("#pills-bank").removeClass('show');
+      
+              $("#pills-designation-tab").removeClass('active'); 
+              $("#pills-designation").removeClass('active'); 
+              $("#pills-designation").removeClass('show');
+            }else{
+              swal({
+              icon: "error",
+              title: "",
+              text: response.Msg,
+              buttons: false,
+              timer:2000,
+  
+            });
+    
+  
+    
+            } 
+            
+            
+          }
+        });
+  
+  
+  
+      }
+    }
+
+      function returnsecondstepvalidation(){ 
+            $("#pills-personal-info-tab").removeClass('active');
+            $("#pills-personal-info").removeClass('active');
+            $("#pills-personal-info").removeClass('show');
+    
+            $("#pills-educational-tab").addClass('active');
+            $("#pills-educational").addClass('active');
+            $("#pills-educational").addClass('show');
+    
+            $("#pills-employment-tab").removeClass('active');
+            $("#pills-employment").removeClass('active'); 
+            $("#pills-employment").removeClass('show');
+    
+            
+            $("#pills-bank-tab").removeClass('active');
+            $("#pills-bank").removeClass('active');
+            $("#pills-bank").removeClass('show');
+    
+            $("#pills-designation-tab").removeClass('active'); 
+            $("#pills-designation").removeClass('active'); 
+            $("#pills-designation").removeClass('show');
+
+      }
+      function returnthirdstepvalidation(){ 
+        $("#pills-personal-info-tab").removeClass('active');
+        $("#pills-personal-info").removeClass('active');
+        $("#pills-personal-info").removeClass('show');
+
+        $("#pills-educational-tab").removeClass('active');
+        $("#pills-educational").removeClass('active');
+        $("#pills-educational").removeClass('show');
+
+        $("#pills-employment-tab").addClass('active');
+        $("#pills-employment").addClass('active'); 
+        $("#pills-employment").addClass('show');
+
+        
+        $("#pills-bank-tab").removeClass('active');
+        $("#pills-bank").removeClass('active');
+        $("#pills-bank").removeClass('show');
+
+        $("#pills-designation-tab").removeClass('active'); 
+        $("#pills-designation").removeClass('active'); 
+        $("#pills-designation").removeClass('show');
+        
+  
+      }
+      function returnfourthstepvalidation(){ 
+        $("#pills-personal-info-tab").removeClass('active');
+        $("#pills-personal-info").removeClass('active');
+        $("#pills-personal-info").removeClass('show');
+
+        $("#pills-educational-tab").removeClass('active');
+        $("#pills-educational").removeClass('active');
+        $("#pills-educational").removeClass('show');
+
+        $("#pills-employment-tab").removeClass('active');
+        $("#pills-employment").removeClass('active'); 
+        $("#pills-employment").removeClass('show');
+
+        
+        $("#pills-bank-tab").addClass('active');
+        $("#pills-bank").addClass('active');
+        $("#pills-bank").addClass('show');
+
+        $("#pills-designation-tab").removeClass('active'); 
+        $("#pills-designation").removeClass('active'); 
+        $("#pills-designation").removeClass('show');
+        
+  
+      }
+      function returnfirststepvalidation(){ 
+  
+        $("#pills-personal-info-tab").addClass('active');
+        $("#pills-personal-info").addClass('active');
+        $("#pills-personal-info").addClass('show');
+
+        $("#pills-educational-tab").removeClass('active');
+        $("#pills-educational").removeClass('active');
+        $("#pills-educational").removeClass('show');
+
+        $("#pills-employment-tab").removeClass('active');
+        $("#pills-employment").removeClass('active'); 
+        $("#pills-employment").removeClass('show');
+
+        
+        $("#pills-bank-tab").removeClass('active');
+        $("#pills-bank").removeClass('active');
+        $("#pills-bank").removeClass('show');
+
+        $("#pills-designation-tab").removeClass('active'); 
+        $("#pills-designation").removeClass('active'); 
+        $("#pills-designation").removeClass('show'); 
+
+  
+      }
+      function thirdstepvalidation(){
+  
+        var refname1 = $('#refname1').val();
+        var refdesg1 = $('#refdesg1').val();
+        var refnumber1 = $('#refnumber1').val();
+        var refemail1 = $('#refemail1').val();
+        var refname2 = $('#refname2').val();
+        var refdesg2 = $('#refdesg2').val();
+        var refnumber2 = $('#refnumber2').val();
+        var refemail2 = $('#refemail2').val();
+
+        if (!validatePhoneNumber(refnumber1)) {
+          $('#refnumber1').html();
+          $('#refnumber1_err').show().delay(3000).slideUp();
+          $('#refnumber1_err').html('Please enter valid phone number');
+          $('#refnumber1').focus();
+          return false;
+        }if (!validateemail(refemail1)) {
+          $('#refemail1').html();
+          $('#refemail1_err').show().delay(3000).slideUp();
+          $('#refemail1_err').html('Please enter valid email');
+          $('#refemail1').focus();
+          return false;
+        }if (!validatePhoneNumber(refnumber2)) {
+          $('#refnumber2').html();
+          $('#refnumber2_err').show().delay(3000).slideUp();
+          $('#refnumber2_err').html('Please enter valid phone number');
+          $('#refnumber2').focus();
+          return false;
+        }if (!validateemail(refemail2)) {
+          $('#refemail2').html();
+          $('#refemail2_err').show().delay(3000).slideUp();
+          $('#refemail2_err').html('Please enter valid email');
+          $('#refemail2').focus();
+          return false;
+        }else{
+
+          var formData = new FormData();
+    
+          var previouscompanydetails = companyList
+            
+    
+          for (var j=0; j<previouscompanydetails.length; j++){
+            formData.append("salaryslip",previouscompanydetails[j]['salarySlip'])
+            formData.append("relieving",previouscompanydetails[j]['relieving'])
+          }
+    
+          formData.append("previouscompanydetails",JSON.stringify(previouscompanydetails));
+
+    
+    
+          formData.append("id",'{{userID}}');
+          formData.append("refname1",refname1);
+          formData.append("refdesg1",refdesg1);
+          formData.append("refnumber1",refnumber1);
+          formData.append("refemail1",refemail1);
+          formData.append("refname2",refname2);
+          formData.append("refdesg2",refdesg2);
+          formData.append("refnumber2",refnumber2);
+          formData.append("refemail2",refemail2);
+          formData.append("csrfmiddlewaretoken","{{csrf_token}}");
+    
+          $.ajax({ 
+            type: "POST",
+            url: frontendURL + "update_employee_third_step",
+    
+            headers:{
+              'Authorization': 'Token '+ '{{token}}'
+            },
+    
+            dataType: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+    
+            success: function(response) {
+            if(response.status == 400){
+                swal({
+                  icon: "warning",
+                  title: "",
+                  text: response.Msg,
+                  button: "Close",
+                  timer:2000,
+                });
+              }else{
+                swal({
+                icon: "success",
+                title: "",
+                text: "Documents Saved Successfully.",
+                buttons: false,
+                timer:2000,
+              });
+              $("#pills-personal-info-tab").removeClass('active');
+              $("#pills-personal-info").removeClass('active');
+              $("#pills-personal-info").removeClass('show');
+      
+              $("#pills-educational-tab").removeClass('active');
+              $("#pills-educational").removeClass('active');
+              $("#pills-educational").removeClass('show');
+      
+              $("#pills-employment-tab").removeClass('active');
+              $("#pills-employment").removeClass('active'); 
+              $("#pills-employment").removeClass('show');
+      
+              
+              $("#pills-bank-tab").addClass('active');
+              $("#pills-bank").addClass('active');
+              $("#pills-bank").addClass('show');
+      
+              $("#pills-designation-tab").removeClass('active'); 
+              $("#pills-designation").removeClass('active'); 
+              $("#pills-designation").removeClass('show');
+              } 
+              
+              
+            }
+          });
+    
+        }
+      }
+
+      function validateifsc(ifsc) {
+        if (!ifsc.trim()) {
+          return true;  // Phone number is empty, no need to validate
+        }
+
+      // Define a regular expression pattern for a valid phone number
+      var pattern=/^[A-Za-z]{4}0[A-Z0-9a-z]{6}$/;
+
+      // Check if the phone number matches the pattern
+        return pattern.test(ifsc);
+     }
+      function fourthstepvalidation(){
+  
+  
+  
+        //3rd form
+        var accountholdername = $('#accountholdername').val().trim(); 
+        var branchname = $('#branchname').val().trim();
+        var bankname = $('#bankname').val().trim();
+        var ifsc = $('#ifsc').val().trim();
+        var accountno = $('#accountno').val().trim();
+        var confirmaccountno = $('#confirmaccountno').val().trim();
+        var previouspfaccountno = $('#previouspfaccountno').val().trim();
+        var esic = $('#esic').val().trim();
+  
+  
+        var ifscregex=/^[A-Za-z]{4}0[A-Z0-9a-z]{6}$/;
+        var isMatch = ifscregex.test(ifsc);
+        if(!validateifsc(ifsc)){
+          $('#ifsc').html();
+          $('#ifsc_err').show().delay(3000).slideUp();
+          $('#ifsc_err').html('Please enter valid Bank IFSC code');
+          $('#ifsc').focus();
+          return false;
+        }
+        /*if (IsValid(accountholdername)) {
+          $('#accountholdername').html();
+          $('#accountholdername_err').show().delay(3000).slideUp();
+          $('#accountholdername_err').html('Please enter  account holder name');
+          $('#accountholdername').focus();
+          return false;
+        }
+        if (IsValid(bankname)) {
+          $('#bankname').html();
+          $('#bankname_err').show().delay(3000).slideUp();
+          $('#bankname_err').html('Please enter your Bank name');
+          $('#bankname').focus();
+          return false;
+        }
+  
+        if (IsValid(ifsc)) {
+          $('#ifsc').html();
+          $('#ifsc_err').show().delay(3000).slideUp();
+          $('#ifsc_err').html('Please enter your Bank IFSC code');
+          $('#ifsc').focus();
+          return false;
+        }
+  
+        if(!ifscregex.test(ifsc)){
+          $('#ifsc').html();
+          $('#ifsc_err').show().delay(3000).slideUp();
+          $('#ifsc_err').html('Please enter valid Bank IFSC code');
+          $('#ifsc').focus();
+          return false;
+        }
+        if (IsValid(accountno)) {
+          $('#accountno').html();
+          $('#accountno_err').show().delay(3000).slideUp();
+          $('#accountno_err').html('Please enter your Account number');
+          $('#accountno').focus();
+          return false;
+        }
+        if (IsValid(confirmaccountno)) {
+          $('#confirmaccountno').html();
+          $('#confirmaccountno_err').show().delay(3000).slideUp();
+          $('#confirmaccountno_err').html('Please re-confirm your Account number');
+          $('#confirmaccountno').focus();
+          return false;
+        }*/
+        if (confirmaccountno != accountno) {
+          $('#confirmaccountno').html();
+          $('#confirmaccountno_err').show().delay(3000).slideUp();
+          $('#confirmaccountno_err').html('Account number not matched');
+          $('#confirmaccountno').focus();
+          return false;
+        }
+  
+  
+  
+        else{
+  
+          var formData = new FormData();
+  
+          formData.append("id",{{userID}});
+  
+  
+  
+  
+          formData.append("bankname", bankname);
+          formData.append("branchname", branchname);
+          formData.append("accountholdername", accountholdername);
+          formData.append("ifsccode", ifsc);
+          formData.append("accountnumber", accountno);
+          formData.append("confirmaccountnumber", confirmaccountno);
+          formData.append("previouspfaccountno", previouspfaccountno);
+          formData.append("esic", esic);
+  
+  
+          formData.append('csrfmiddlewaretoken','{{csrf_token}}') 
+          $.ajax({ 
+            type: "POST",
+            url: frontendURL + "update_employee_fourth_step",
+            
+            
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+            if(response.status != 1){
+                swal({
+                  icon: "warning",
+                  title: "",
+                  text: response.Msg,
+                  button: "Close",
+                  timer:2000,
+                });
+              }else{
+                swal({
+                icon: "success",
+                title: "",
+                text: response.Msg,
+                buttons: false,
+                timer:2000,
+              });
+              
+              $("#pills-personal-info-tab").removeClass('active');
+              $("#pills-personal-info").removeClass('active');
+              $("#pills-personal-info").removeClass('show');
+      
+              $("#pills-educational-tab").removeClass('active');
+              $("#pills-educational").removeClass('active');
+              $("#pills-educational").removeClass('show');
+      
+              $("#pills-employment-tab").removeClass('active');
+              $("#pills-employment").removeClass('active'); 
+              $("#pills-employment").removeClass('show');
+      
+              
+              $("#pills-bank-tab").removeClass('active');
+              $("#pills-bank").removeClass('active');
+              $("#pills-bank").removeClass('show');
+      
+              $("#pills-designation-tab").addClass('active'); 
+              $("#pills-designation").addClass('active'); 
+              $("#pills-designation").addClass('show');
+
+
+
+              } 
+            
+            }
+          });
+              
+        }
+        
+  
+      } 
+
+      function fifthstepvalidation() {
+         var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+         var addEmpAttendanceId = $('#addEmpAttendanceId').val().trim();
+         var empemail = $('#empemail').val().trim();
+         var addEmpDesignation = $('#addEmpDesignation').val();
+         var addEmpEmploymentStatus = $('#addEmpEmploymentStatus').val();
+         var addEmpLocation = $('#addEmpLocation').val();
+         var addEmpRole = $('#addEmpRole').val();
+         var addEmpDepartment = $('#addEmpDepartment').val();
+         var EmpJoinDate = $('#EmpJoinDate').val();
+         var addEmpTOW = $('#addEmpTOW').val();
+         var employeetype = $('#employeetype').val();
+         //var password = $('#password').val();
+ 
+            if (!validateEmail(empemail)) {
+            
+              $('#empemail_err').show().delay(3000).slideUp();
+              $('#empemail_err').html('Please enter vaild email address');
+              $('#empemail').focus();
+              return false;
+            }
+
+            if (IsValid(addEmpRole)) {
+              $('#addEmpRole_err').show().delay(3000).slideUp();
+              $('#addEmpRole_err').html('Please select Role');
+              $('#addEmpRole').focus();
+              return false;
+            }
+
+          
+ 
+         if (IsValid(addEmpDesignation)) {
+             $('#addEmpDesignation_err').show().delay(3000).slideUp();
+             $('#addEmpDesignation_err').html('Designation field is required');
+             $('#addEmpDesignation').focus();
+             return false;
+         } 
+         
+         if (IsValid(addEmpDepartment)) {
+            $('#addEmpDepartment_err').show().delay(3000).slideUp();
+            $('#addEmpDepartment_err').html('Please select Department');
+            $('#addEmpDepartment').focus();
+            return false;
+        }  
+         if (IsValid(addEmpEmploymentStatus)) {
+             $('#addEmpEmploymentStatus_err').show().delay(3000).slideUp();
+             $('#addEmpEmploymentStatus_err').html('Please select Employee Status');
+             $('#addEmpEmploymentStatus').focus();
+             return false;
+         }
+         if (IsValid(EmpJoinDate)) {
+            $('#EmpJoinDate_err').show().delay(3000).slideUp();
+            $('#EmpJoinDate_err').html('Please provide joining date');
+            $('#EmpJoinDate').focus();
+            return false;
+        } 
+          if (addEmpLocation == '') {
+             $('#addEmpLocation_err').show().delay(3000).slideUp();
+             $('#addEmpLocation_err').html('Please select location');
+             $('#addEmpLocation').focus();
+             return false;
+         } 
+
+
+
+
+         if (IsValid(addEmpTOW)) {
+             $('#addEmpTOW_err').show().delay(3000).slideUp();
+             $('#addEmpTOW_err').html('Please select type of work');
+             $('#addEmpTOW').focus();
+             return false;
+         } 
+         if (IsValid(employeetype)) {
+          $('#employeetype_err').show().delay(3000).slideUp();
+          $('#employeetype_err').html('Please select employee type');
+          $('#employeetype').focus();
+          return false;
+        }
+          else{
+
+          var formData = new FormData();
+  
+          formData.append("id",{{userID}});
+          formData.append("employeeId",addEmpAttendanceId);
+          formData.append("email",empemail);
+          formData.append("DesignationId",addEmpDesignation);
+          formData.append("employeementStatus",addEmpEmploymentStatus);
+          formData.append("locationId",addEmpLocation);
+          formData.append("RoleID",addEmpRole);
+          formData.append("DateofJoining",EmpJoinDate);
+          formData.append("employeetype",employeetype);
+          formData.append("typeofwork",addEmpTOW);
+          formData.append("DepartmentID",addEmpDepartment);  
+          formData.append('csrfmiddlewaretoken','{{csrf_token}}') 
+          /*if (password !='' && password != null){
+            formData.append("password",password);  
+
+          }*/
+
+
+          $.ajax({ 
+            type: "POST",
+            url: frontendURL + "update_employee_fifth_step",
+            
+            
+            data: formData,
+            processData: false,
+            contentType: false,
+            
+            success: function(response) {
+              if(response.status == 1){
+                swal({
+                  icon: "success",
+                  title: "",
+                  text: response.Msg,
+                  buttons: false,
+                  timer:2000,
+                }).then(() => {
+                  
+                  window.location.href = "/employeelist";
+
+                });
+              }else{
+                swal({
+                  icon: "error",
+                  title: "",
+                  text: response.Msg,
+                  buttons: false,
+                  timer:2000,
+                });
+                
+              } 
+              
+            }
+          });
+
+
+
+        }
+      }
+
+
+
+      function addRow() {
+          var table = document.getElementById("qualificationTable");
+          var newRow = table.insertRow(table.rows.length);
+  
+          var cells = newRow.insertCell(0);
+
+          var deleteButton = document.createElement("span");
+          deleteButton.type = "button";
+          deleteButton.innerHTML = '<i class="fa fa-trash mx-1" aria-hidden="true text-danger"></i>';
+          deleteButton.className = ""; // Add a class called "delete-button"
+          deleteButton.onclick = function() {
+              deleteRow(newRow);
+          };
+          cells.appendChild(deleteButton);
+
+          var inputTitle = document.createElement("input");
+          inputTitle.type = "text";
+          inputTitle.name = "qualification_title[]";
+          inputTitle.classList.add("educational-input");
+          cells.classList.add("d-flex");
+          cells.appendChild(inputTitle);
+
+
+
+
+          cells = newRow.insertCell(1);
+          var inputuniversity = document.createElement("input");
+          inputuniversity.type = "text";
+          inputuniversity.name = "university[]";
+          inputuniversity.classList.add("educational-input"); 
+          cells.appendChild(inputuniversity);
+  
+          cells = newRow.insertCell(2);
+          var inputMarks = document.createElement("input");
+          inputMarks.type = "text";
+          inputMarks.name = "obtained_marks[]";
+          inputMarks.classList.add("educational-input");
+          cells.appendChild(inputMarks);
+  
+  
+          cells = newRow.insertCell(3);
+          var inputjoindate = document.createElement("input");
+          inputjoindate.type = "date";
+          inputjoindate.name = "from[]";
+          inputjoindate.classList.add("educational-input");
+          cells.appendChild(inputjoindate);
+  
+  
+          cells = newRow.insertCell(4);
+          var inputleavedate = document.createElement("input");
+          inputleavedate.type = "date";
+          inputleavedate.name = "to[]";
+          inputleavedate.classList.add("educational-input");
+          cells.appendChild(inputleavedate);
+  
+  
+          cells = newRow.insertCell(5);
+  
+          var label = document.createElement("label");
+          label.textContent = "Upload IMG"; 
+  
+  
+          var inputFile = document.createElement("input");
+          inputFile.type = "file";
+          inputFile.name = "photocopy[]";
+          inputFile.accept = ".pdf, .jpg, .jpeg, .png";
+          label.classList.add("educational-input");
+          label.classList.add("py-1");
+          label.classList.add("custom-file-label");
+          inputFile.classList.add("custom-file-input");
+          inputFile.classList.add("educational-input");
+          inputFile.setAttribute('base64','');
+
+          inputFile.style.display = "none";
+          label.for = inputFile.name;
+          cells.appendChild(label);
+          cells.appendChild(inputFile);
+
+          var div = document.createElement("div");
+          cells.appendChild(div);
+          
+          label.addEventListener("click", function() {
+            inputFile.click();
+          });
+  
+  
+          
+
+
+          
+      }
+  
+      function addCompanyRow() {
+        var table = document.getElementById("CompanyTable");
+        var newRow = table.insertRow(table.rows.length);
+  
+        var cells = newRow.insertCell(0);
+        var inputTitle = document.createElement("input");
+        inputTitle.type = "text";
+        inputTitle.name = "companyname[]";
+        cells.appendChild(inputTitle);
+  
+        cells = newRow.insertCell(1);
+        var inputMarks = document.createElement("input");
+        inputMarks.type = "text";
+        inputMarks.name = "companyaddress[]";
+        cells.appendChild(inputMarks);
+  
+  
+        cells = newRow.insertCell(2);
+        var inputMarks = document.createElement("input");
+        inputMarks.type = "date";
+        inputMarks.name = "from[]";
+        cells.appendChild(inputMarks);
+  
+        cells = newRow.insertCell(3);
+        var inputMarks = document.createElement("input");
+        inputMarks.type = "date";
+        inputMarks.name = "to[]";
+        cells.appendChild(inputMarks);
+  
+  
+        cells = newRow.insertCell(4);
+        var inputFile = document.createElement("input");
+        inputFile.type = "file";
+        inputFile.name = "salaryslip[]";
+        inputFile.accept = ".pdf, .jpg, .jpeg, .png";
+        cells.appendChild(inputFile);
+  
+        cells = newRow.insertCell(5);
+        var inputFile = document.createElement("input");
+        inputFile.type = "file";
+        inputFile.name = "relievingletter[]";
+        inputFile.accept = ".pdf, .jpg, .jpeg, .png";
+        cells.appendChild(inputFile);
+  
+  
+        cells = newRow.insertCell(6);
+        var deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.innerText = "Delete";
+        deleteButton.className = "btn btn-danger"; // Add a class called "delete-button"
+  
+        deleteButton.onclick = function() {
+            deletecompanyRow(newRow);
+        };
+        cells.appendChild(deleteButton);
+      }
+      function deleteRow(row) {
+          var table = document.getElementById("qualificationTable");
+          table.deleteRow(row.rowIndex);
+      }
+  
+      function deletecompanyRow(row) {
+        var table = document.getElementById("CompanyTable");
+        table.deleteRow(row.rowIndex);
+      }
+  
+      function imageToBase64(imageFile) {
+        return new Promise(function(resolve, reject) {
+          if (!imageFile) {
+              resolve(null);
+          } else {
+              var reader = new FileReader();
+              reader.readAsDataURL(imageFile);
+              reader.onload = function() {
+                  resolve(reader.result.split(',')[1]); // Extract Base64 data
+              };
+              reader.onerror = reject;
+          }
+        });
+      }
+      function getQualifications() {
+          var qualificationsArray=[]
+          var table = document.getElementById("qualificationTable");
+          for (var i = 1; i < table.rows.length; i++) {
+              var row = table.rows[i];
+              var qualificationInput = row.cells[0].getElementsByTagName("input")[0];
+              var universityInput = row.cells[1].getElementsByTagName("input")[0];
+              var obtainedMarksInput = row.cells[2].getElementsByTagName("input")[0];
+              var fromdateInput = row.cells[3].getElementsByTagName("input")[0];
+              var todateInput = row.cells[4].getElementsByTagName("input")[0];
+              var fileInput = row.cells[5].getElementsByTagName("input")[0];
+              
+
+              var photocopyInput;
+  
+              if (qualificationInput) {
+                  qualificationInput=qualificationInput
+              }else{
+                qualificationInput=""
+              }
+  
+  
+              if (universityInput) {
+                universityInput=universityInput
+              }else{
+                universityInput=""
+              }
+  
+              if (obtainedMarksInput) {
+                obtainedMarksInput=obtainedMarksInput
+              }else{
+                obtainedMarksInput=""
+              }
+  
+              if (fromdateInput) {
+                fromdateInput=fromdateInput
+              }else{
+                fromdateInput=""
+              }
+  
+  
+              if (todateInput) {
+                todateInput=todateInput
+              }else{
+                todateInput=""
+              }
+  
+  
+  
+              if (fileInput) {
+                if (fileInput.files.length > 0) {
+                    // photocopyInput = fileInput.files[0];
+                    photocopyInput = fileInput.getAttribute("base64");
+
+                } else {
+                  photocopyInput=""
+                }
+              }
+
+              // Check if the input elements exist
+              if (qualificationInput !== "" && qualificationInput.value !== "" && qualificationInput.value !==null &&
+                fromdateInput.value !=="" && fromdateInput.value !==null &&
+                todateInput.value !=="" && todateInput.value !==null &&
+                  universityInput.value !=="" && universityInput.value !==null &&
+                  obtainedMarksInput.value !=="" && obtainedMarksInput.value !==null) {
+                  var qualificationTitle = qualificationInput.value;
+                  var university = universityInput.value;
+                  var obtainedMarks = obtainedMarksInput.value;
+                  var fromdate = fromdateInput.value;
+                  var todate = todateInput.value;
+                  var Photocopy = photocopyInput ;
+                  
+  
+                  qualificationsArray.push({
+                    "userid":'{{userID}}',
+                    "QualificationTitle": qualificationTitle,
+                    "university":university,
+                    "ObtainedMarks": obtainedMarks,
+                    "Photocopy": Photocopy,
+                    "fromdate":fromdate,
+                    "todate":todate,
+  
+                  });
+                  console.log("qualificationsArray push",qualificationsArray)
+
+              }
+          }
+          return qualificationsArray
+          // You can use 'qualificationsArray' as needed here.
+      }
+      function customSubmit() {
+          // Check if any of the input fields are empty
+          var isValid = validateForm();
+  
+          if (isValid) {
+              // Perform custom actions when the "Submit" button is clicked.
+              // You can add your custom logic here.
+              
+              // Show a SweetAlert with a "Thank You" message
+  
+              swal({
+                icon: "success",
+                title: "Thank You!",
+                text: "Your form has been submitted successfully.",
+                button: "Close",
+                timer:2000,
+              });
+          } else {
+              // Display an error message if any field is empty
+  
+              swal({
+                icon: "error",
+                title: "Error!",
+                text: "Please fill in all fields for each qualification.",
+                button: "Close",
+              });
+          }
+      }
+      function validateForm() {
+          var table = document.getElementById("qualificationTable");
+          for (var i = 1; i < table.rows.length; i++) {
+              var row = table.rows[i];
+              var qualificationInput = row.cells[0].getElementsByTagName("input")[0];
+              var obtainedMarksInput = row.cells[1].getElementsByTagName("input")[0];
+              var photocopyInput = row.cells[2].getElementsByTagName("input")[0];
+  
+              if (
+                  qualificationInput && obtainedMarksInput && photocopyInput &&
+                  (qualificationInput.value.trim() === "" ||
+                  obtainedMarksInput.value.trim() === "" ||
+                  photocopyInput.value.trim() === "")
+              ) {
+                  return false; // At least one field is empty
+              }
+          }
+          return true; // All fields are filled
+      }
+  
+      let editingcompanyid=null;
+      let editingCompany = null; // Stores the company being edited
+      const companyList = [];
+    
+      function convertDateFormat(inputDate) {
+          var dateComponents = inputDate.split('-');
+          return dateComponents[2] + '-' + dateComponents[1] + '-' + dateComponents[0];
+      }
+    
+      function clearForm() {
+          $("#comapanyname").val('');
+          $("#companyaddress").val('');
+          $("#designation").val('');
+          $("#companyjoindate").val('');
+          $("#companyleavedate").val('');
+          $("#salaryslip").val('');
+          $("#salaryslipFilepreview").attr('src', '');
+          $("#relieving").val('');
+          $("#relievingFilepreview").attr('src', '');
+          $("#editCompany").hide();
+          $("#addCompany").show();
+      }
+  
+    // Add Company button click event
+      $("#addCompany").click(function() {
+    
+          const companyName = $("#comapanyname").val().trim();
+          const companyAddress = $("#companyaddress").val().trim();
+          const designation = $("#designation").val().trim();
+          const joinDate = $("#companyjoindate").val();
+          const leaveDate = $("#companyleavedate").val();
+          const salarySlip = document.getElementById("salaryslip").files[0];
+          const relieving = document.getElementById("relieving").files[0];
+          const relievingbase64 = $("#relievingFilepreview").attr('base64')
+          const salarySlipbase64 = $("#salaryslipFilepreview").attr('base64')
+
+          
+            if (companyName =="" || companyName ==null) {
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add valid company name.',
+                buttons: true,
+    
+              });
+            } else if(companyAddress =="" || companyAddress ==null){
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add valid company address.',
+                buttons: true,
+    
+              });
+            }else if(joinDate =="" || joinDate ==null){
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add your join date.',
+                buttons: true,
+    
+              });
+            }else if(leaveDate =="" || leaveDate ==null){
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add your leaving date.',
+                buttons: true,
+    
+              });
+            }else if(designation =="" || designation ==null){
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add your designation.',
+                buttons: true,
+    
+              });
+            }else if(salarySlip =="" || salarySlip ==null){
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add your salary slip.',
+                buttons: true,
+    
+              });
+            }else if(relieving =="" || relieving ==null){
+              swal({
+                icon: "error",
+                title: "",
+                text: 'Please add your relieving letter.',
+                buttons: true,
+    
+              });
+            }else {
+    
+    
+    
+    
+              const companyObject = {
+                name: companyName,
+                address: companyAddress,
+                designation: designation,
+                joinDate: joinDate,
+                leaveDate: leaveDate,
+                salarySlip: salarySlipbase64,
+                relieving: relievingbase64,
+              };
+    
+              companyList.push(companyObject);
+    
+              var companydata = new FormData();
+    
+              companydata.append("id",{{userID}});
+              companydata.append("comapanyname",companyName);
+              companydata.append("joinDate",joinDate);
+              companydata.append("designation",designation);
+              companydata.append("leaveDate",leaveDate);
+              companydata.append("salarySlip",salarySlipbase64);
+              companydata.append("relieving",relievingbase64);
+              companydata.append("companyaddress",companyAddress);
+              companydata.append('csrfmiddlewaretoken','{{csrf_token}}') 
+    
+              $.ajax({ 
+                type: "POST",
+                url: frontendURL + "add_user_previous_company",
+                
+                
+                data: companydata,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                if(response.status == 200){
+                swal({
+                  icon: "success",
+                  title: "",
+                  text: response.Msg,
+                  buttons: false,
+                  timer:2000,
+                });
+    
+    
+    
+    
+                const previouscompanyDetails = `                
+
+
+
+                <div class="cardcolumn col-lg-4 col-md-6 col-sm-12 mt-4 basecard`+response.data.id+`">
+                  <div id="card" class="card text-start h-100 cardno`+response.data.id+`">
+      
+                    <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                      <span class="card-header-blue-txt text-black company_name"></span>
+                      <span>
+                        <span onclick="editcompany(`+response.data.id+`);">
+                          <i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> 
+                        </span>
+                        <span onclick="deletecompany(`+response.data.id+`)">
+                          <i class="fa fa-trash" aria-hidden="true text-danger"></i>
+                        </span>
+                      </span>
+      
+                    </div>
+      
+      
+                    <div class="card-body">
+      
+                        <div class="row">
+      
+      
+      
+      
+                          <div class="col-lg-12">
+
+                            <div class="card-header head d-flex justify-content-between p-0">
+                              <div>
+                                <div class="card-header-blue-txt  heading-company">Company Name : </div>
+                                <div class="card-header-blue-txt heading-parameters" > `+response.data.companyname+`</div> 
+                              </div>
+                              <div>
+                                <div class="card-header-blue-txt  heading-company">Designation : </div>
+                                <div class="card-header-blue-txt heading-parameters" >`+response.data.designation+`</div> 
+                              </div>
+                            </div>
+
+
+      
+                          </div>
+      
+                          <div class="col-lg-12 py-2">
+                            <div class="card-header p-0">
+      
+      
+                              <span  class="my-3 card-body-reason-text addReadMore company_address showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="Address">`+response.data.companyaddress+`</span>
+                            </div>
+                          </div>
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                              <span>                                   
+                                  <span class="card-header-blue-txt  heading-company">From</span><br>
+                                  <span class="card-header-blue-txt heading-parameters">`+formatDate(response.data.joinDate)+`</span> 
+                              </span>
+                              <span class="d-flex justify-content-between">
+                                  <span>                                   
+                                    <span class="card-header-blue-txt  heading-company">To</span><br>
+                                    <span class="card-header-blue-txt heading-parameters">`+formatDate(response.data.leaveDate)+`</span> 
+                                  </span>
+    
+    
+                              </span>
+                              
+                              <span class="d-none">                                   
+                                <span class="card-header-txt">Designation</span><br>
+                                <span class="card-header-blue-txt designation">`+response.data.designation+`</span> 
+                              </span>
+                          </div>
+                          </div>
+      
+      
+      
+                        </div>
+      
+                    </div>
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+      
+      
+                        <div class="col-lg-12 conclusion-box d-flex justify-content-between my-2">
+          
+                          <span class="view-image-txt" data-bs-toggle="modal" 
+                          data-bs-target="#viewsalaryslip`+response.data.id+`"
+                          >View Salary Slip</span>
+      
+      
+                          <span class="view-image-txt"  data-bs-toggle="modal" 
+                          data-bs-target="#viewrelieving`+response.data.id+`">View Relieving Letter</span>
+                        </div>
+                      </div>
+      
+                      
+      
+                    </div>
+      
+                    <div class="modal fade" id="viewsalaryslip`+response.data.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Salary Slip</h5>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row py-1">
+                              <div>
+          
+                                <iframe base64='`+response.data.salaryslip+`' src="`+response.data.salaryslip+`" class="salary img-thumbnail" style="width: 100%; height: 100%"  frameborder="0" allowfullscreen></iframe>
+
+
+                                
+                              </div>
+                            </div>            
+                          </div>
+                          <div class="modal-footer d-flex">
+                            <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
+                    <div class="modal fade" id="viewrelieving`+response.data.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Relieving Letter</h5>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row py-1">
+                              <div>
+                                <iframe base64='`+response.data.relieving+`' src="`+response.data.relieving+`" class="relieving img-thumbnail" style="width: 100%; height: 100%"  frameborder="0" allowfullscreen></iframe>
+
+          
+                              </div>
+                            </div>            
+                          </div>
+                          <div class="modal-footer d-flex">
+                            <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+      
+                  </div>
+      
+      
+      
+                </div>
+
+
+                `;
+      
+                $("#previouscompanylist").append(previouscompanyDetails);
+    
+    
+                
+    
+    
+                  }else{
+    
+                  
+                  swal({
+                  icon: "warning",
+                  title: "",
+                  text: response.Msg,
+                  button: "Close",
+                  timer:2000,
+                });
+                  } 
+                
+                }
+              });
+    
+              //$("#companylist").append(companyDetails);
+    
+    
+    
+    
+    
+    
+              // Clear the form fields
+              clearForm();
+    
+              // Close the modal
+              $("#Addcompany").modal("hide");
+    
+    
+            }
+      });
+  
+  
+  
+    // Edit previous company button click event
+    function editcompany(id){
+      const card = $(this).closest(".card");
+  
+      editingcompanyid=id
+  
+      $.ajax({ 
+        type: "POST",
+        url: frontendURL + "getusercompanydetails",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'id':id,
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+          if(response.status ==200){
+  
+            $("#comapanyname").val(response.data.companyname);
+            $("#companyaddress").val(response.data.companyaddress);
+            $("#companyjoindate").val(response.data.joinDate);
+            $("#companyleavedate").val(response.data.leaveDate);
+            $("#designation").val(response.data.designation);
+            $("#salaryslipFilepreview").attr("src", response.data.salaryslip);
+            $("#relievingFilepreview").attr("src", response.data.relieving);
+
+            $("#salaryslipFilepreview").attr("base64", response.data.salaryslip);
+            $("#relievingFilepreview").attr("base64", response.data.relieving);
+  
+            editingCompany = card;
+  
+            $("#addCompany").hide();
+            $("#editCompany").show();
+            $('#Addcompany').modal('show');
+          }else{
+            swal({
+              icon: "error",
+              title: "",
+              text: response.Msg,
+              buttons: false,
+              timer:2000,
+            });
+            
+          } 
+          
+        }
+      });
+    }
+  
+    $(document).on("click", ".editpreviousCompanyBtn", function() {
+      const card = $(this).closest(".card");
+      const companyName = card.find(".company_name").text();
+      const designation = card.find(".designation").text();
+      const fromDate = card.find(".from_date").text();
+      const toDate = card.find(".to_date").text();
+      const companyAddress = card.find(".company_address").text();
+  
+  
+      $("#comapanyname").val(companyName);
+      $("#companyaddress").val(companyAddress);
+      $("#companyjoindate").val(fromDate);
+      $("#companyleavedate").val(toDate);
+      $("#designation").val(designation);
+  
+      const imgSrc = card.find(".salary").attr("src");
+      $("#salaryslipFilepreview").attr("src", imgSrc);
+      $("#salaryslipFilepreview").attr("base64", imgSrc);
+  
+      const relievingimgsrc = card.find(".relieving").attr("src");
+      $("#relievingFilepreview").attr("src", relievingimgsrc);
+      $("#relievingFilepreview").attr("base64", relievingimgsrc);
+  
+      editingCompany = card;
+      $("#addCompany").hide();
+      $("#editCompany").show();
+      $('#Addcompany').modal('show');
+      
+    });
+  
+    // Edit Company modal button click event
+    $("#editCompany").click(function() {
+  
+  
+        const companyName = $("#comapanyname").val();
+        const companyAddress = $("#companyaddress").val();
+        const designation = $("#designation").val();
+        const joinDate = $("#companyjoindate").val();
+        const leaveDate = $("#companyleavedate").val();
+        const salarySlip = document.getElementById("salaryslip").files[0];
+        const relieving = document.getElementById("relieving").files[0];
+
+        const relievingbase64 = $("#relievingFilepreview").attr('base64')
+        const salarySlipbase64 = $("#salaryslipFilepreview").attr('base64')
+
+
+        if (companyName =="" || companyName ==null) {
+          swal({
+            icon: "error",
+            title: "",
+            text: 'Please add valid company name.',
+            buttons: true,
+  
+          });
+        }else if(companyAddress =="" || companyAddress ==null){
+          swal({
+            icon: "error",
+            title: "",
+            text: 'Please add valid company address.',
+            buttons: true,
+  
+          });
+        }else if(joinDate =="" || joinDate ==null){
+          swal({
+            icon: "error",
+            title: "",
+            text: 'Please add your join date.',
+            buttons: true,
+  
+          });
+        }else if(leaveDate =="" || leaveDate ==null){
+          swal({
+            icon: "error",
+            title: "",
+            text: 'Please add your leaving date.',
+            buttons: true,
+  
+          });
+        }else if(designation =="" || designation ==null){
+          swal({
+            icon: "error",
+            title: "",
+            text: 'Please add your designation.',
+            buttons: true,
+  
+          });
+        }else{
+          var editcompanydata = new FormData();
+          editcompanydata.append("id",editingcompanyid);
+          editcompanydata.append("userid",{{userID}});
+          editcompanydata.append("comapanyname",companyName);
+          editcompanydata.append("joinDate",joinDate);
+          editcompanydata.append("designation",designation);
+          editcompanydata.append("leaveDate",leaveDate);
+          editcompanydata.append("salarySlip",salarySlipbase64);
+          editcompanydata.append("relieving",relievingbase64);
+          editcompanydata.append("companyaddress",companyAddress);
+          editcompanydata.append('csrfmiddlewaretoken','{{csrf_token}}') 
+  
+          $.ajax({ 
+            type: "POST",
+            url: frontendURL + "edit_user_previous_company",
+            
+            
+            data: editcompanydata,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+            if(response.status == 200){
+              swal({
+                icon: "success",
+                title: "",
+                text: response.Msg,
+                buttons: false,
+                timer:2000,
+              });
+  
+              const updatedpreviouscompanyDetails = `                
+  
+
+  
+
+                  <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                    <span class="card-header-blue-txt text-black company_name"></span>
+                    <span>
+                      <span onclick="editcompany(`+response.data.id+`);">
+                        <i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> 
+                      </span>
+                      <span onclick="deletecompany(`+response.data.id+`)">
+                        <i class="fa fa-trash" aria-hidden="true text-danger"></i>
+                      </span>
+                    </span>
+    
+                  </div>
+    
+    
+                  <div class="card-body">
+    
+                      <div class="row">
+    
+    
+    
+    
+                        <div class="col-lg-12">
+
+                          <div class="card-header head d-flex justify-content-between p-0">
+                            <div>
+                              <div class="card-header-blue-txt  heading-company">Company Name : </div>
+                              <div class="card-header-blue-txt heading-parameters" > `+response.data.companyname+`</div> 
+                            </div>
+                            <div>
+                              <div class="card-header-blue-txt  heading-company">Designation : </div>
+                              <div class="card-header-blue-txt heading-parameters" >`+response.data.designation+`</div> 
+                            </div>
+                          </div>
+
+
+    
+                        </div>
+    
+                        <div class="col-lg-12 py-2">
+                          <div class="card-header p-0">
+    
+    
+                            <span  class="my-3 card-body-reason-text addReadMore company_address showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="Address">`+response.data.companyaddress+`</span>
+                          </div>
+                        </div>
+                        <div class="col-lg-12">
+                          <div class="card-header head d-flex justify-content-between p-0">
+                            <span>                                   
+                                <span class="card-header-blue-txt  heading-company">From</span><br>
+                                <span class="card-header-blue-txt heading-parameters">`+formatDate(response.data.joinDate)+`</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                                <span>                                   
+                                  <span class="card-header-blue-txt  heading-company">To</span><br>
+                                  <span class="card-header-blue-txt heading-parameters">`+formatDate(response.data.leaveDate)+`</span> 
+                                </span>
+  
+  
+                            </span>
+                            
+                            <span class="d-none">                                   
+                              <span class="card-header-txt">Designation</span><br>
+                              <span class="card-header-blue-txt designation">`+response.data.designation+`</span> 
+                            </span>
+                        </div>
+                        </div>
+    
+    
+    
+                      </div>
+    
+                  </div>
+                  <div class="card-footer cardfooter mt-auto">
+                    <div class="row">
+    
+    
+                      <div class="col-lg-12 conclusion-box d-flex justify-content-between my-2">
+        
+                        <span class="view-image-txt" data-bs-toggle="modal" 
+                        data-bs-target="#viewsalaryslip`+response.data.id+`"
+                        >View Salary Slip</span>
+    
+    
+                        <span class="view-image-txt"  data-bs-toggle="modal" 
+                        data-bs-target="#viewrelieving`+response.data.id+`">View Relieving Letter</span>
+                      </div>
+                    </div>
+    
+                    
+    
+                  </div>
+    
+                  <div class="modal fade" id="viewsalaryslip`+response.data.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    
+                      <div class="modal-content">           
+                        <div class="modal-header">
+                          <h5 class="modal-title py-2" id="exampleModalLabel">Salary Slip</h5>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row py-1">
+                            <div>
+        
+                              <iframe base64='`+response.data.salaryslip+`' src="`+response.data.salaryslip+`" class="salary img-thumbnail" style="width: 100%; height: 100%"  frameborder="0" allowfullscreen></iframe>
+
+
+                              
+        
+                            </div>
+                          </div>            
+                        </div>
+                        <div class="modal-footer d-flex">
+                          <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  <div class="modal fade" id="viewrelieving`+response.data.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    
+                      <div class="modal-content">           
+                        <div class="modal-header">
+                          <h5 class="modal-title py-2" id="exampleModalLabel">Relieving Letter</h5>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row py-1">
+                            <div>
+                              <iframe base64='`+response.data.relieving+`' src="`+response.data.relieving+`" class="relieving img-thumbnail" style="width: 100%; height: 100%"  frameborder="0" allowfullscreen></iframe>
+        
+        
+                            </div>
+                          </div>            
+                        </div>
+                        <div class="modal-footer d-flex">
+                          <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+          `;
+  
+          $(".cardno"+response.data.id).html(updatedpreviouscompanyDetails);
+  
+              }else{
+  
+              
+              swal({
+              icon: "warning",
+              title: "",
+              text: response.Msg,
+              button: "Close",
+              timer:2000,
+            });
+              } 
+            
+            }
+          });
+  
+  
+  
+  
+  
+            // Update the company object in the list
+  
+            const cardContainer = editingCompany.closest(".row"); // Update the selector as per your HTML structure
+            const cardIndex = cardContainer.find(".card").index(editingCompany);
+  
+            companyList[cardIndex] = {
+                name: companyName,
+                address: companyAddress,
+                designation: designation,
+                joinDate: joinDate,
+                leaveDate: leaveDate,
+                salarySlip: salarySlip,
+                relieving: relieving,
+            };
+  
+            clearForm();
+            editingCompany = null;
+            $("#editCompany").hide();
+            $("#addCompany").show();
+            $("#Addcompany").modal("hide");
+  
+  
+        }
+    });
+  
+    // Delete Company button click event
+    function deletecompany(id){
+  
+      swal({title: "Are you sure?",
+              text: "you want to delete company details ?",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }) 
+            .then((isConfirm) => {
+              if (isConfirm) {
+  
+  
+  
+  
+                $.ajax({ 
+                  type: "POST",
+                  url: frontendURL + "deleteusercompanydetails",
+                  headers:{
+                    'Authorization': 'Token '+ '{{token}}'
+                  },
+                  data: {
+                      'id':id,
+                      'csrfmiddlewaretoken':'{{csrf_token}}'
+                  },
+                  
+                  success: function(response) {
+                    if(response.status ==200){
+                      swal({
+                        icon: "success",
+                        title: "",
+                        text: response.Msg,
+                        buttons: false,
+                        timer:2000,
+                      });
+                      const cardContainer = $(".basecard"+response.data.id); // Update the selector as per your HTML structure
+                      cardContainer.remove();
+            
+  
+                    }else{
+                      swal({
+                        icon: "error",
+                        title: "",
+                        text: response.Msg,
+                        buttons: false,
+                        timer:2000,
+                      });
+                      
+                    } 
+                    
+                  }
+                });
+  
+  
+  
+  
+  
+  
+  
+  
+  
+            } else {
+              swal("operation canceled!", {
+              icon: "error",
+              });
+          }
+      });
+        
+    }
+  
+    function getstate(selected){
+      var statehtml = `<option selected disabled value="" >-- Select State --</option>`;
+      var cityhtml = `<option selected disabled value="" >-- Select City --</option>`;
+  
+      var countryid=selected.value
+      $.ajax({ 
+        type: "POST",
+        url: frontendURL + "getstatesbycountryid",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'countryid':countryid,
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+          if(response.response.status == "success"){
+  
+              $(response.data).each(function(a, b) {
+                statehtml += `<option value="` + b.id + `">` + b.name + `</option>`
+              })
+  
+  
+  
+  
+          }else{
+            swal({
+              icon: "error",
+              title: "",
+              text: response.response.msg,
+              buttons: false,
+              timer:2000,
+            });
+            
+          } 
+          $('#'+selected.name+'state').html(statehtml)
+          $('#'+selected.name+'city').html(cityhtml)
+        }
+      });
+    }
+  
+    function getcities(selected){
+      var html = `<option value="" selected disabled>-- Select City --</option>`;
+  
+      var stateid=selected.value
+      $.ajax({ 
+        type: "POST",
+        url: frontendURL + "getcitiesbystateid",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'stateid':stateid,
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+          if(response.response.status == "success"){
+  
+              $(response.data).each(function(a, b) {
+                  html += `<option value="` + b.id + `">` + b.name + `</option>`
+              })
+  
+  
+  
+          }else{
+            swal({
+              icon: "error",
+              title: "",
+              text: response.response.msg,
+              buttons: false,
+              timer:2000,
+            });
+            
+          } 
+          $('#'+selected.name+'city').html(html)
+        }
+        
+  
+      });
+    }
+    function copyaddress(ckeckboxsect){
+      if (ckeckboxsect.checked) {
+        var raddressline1=$("#rAddresslineone").val();
+        var raddressline2=$("#rAddresslinetwo").val();
+        var rpincode=$("#residentialaddpincode").val();
+        var rcity = $("#residentialaddcity").val();
+        var rcityval = $('#residentialaddcity').attr('cityid');
+        var rstate = $("#residentialaddstate option:selected");
+        var rstateval = $("#residentialaddstate").val();
+        var rcountryval=$("#residentialaddcountry").val();
+        var rcountry = $("#residentialaddcountry option:selected");
+  
+  
+        
+        $("#pAddresslineone").val(raddressline1);
+        $("#pAddresslinetwo").val(raddressline2);
+        $("#permanantaddpincode").val(rpincode);
+        $("#permamnentaddcity").val(rcity);
+        $('#permamnentaddcity').attr('cityid',rcityval);
+        var statehtml = `<option selected value="`+rstateval+`">`+rstate.text()+`</option>`;
+        $("#permanentaddstate").html(statehtml);
+        var countryhtml = `<option selected value="`+rcountryval+`">`+rcountry.text()+`</option>`;
+        $("#permanentaddcountry").html(countryhtml);
+  
+  
+        $("#pAddresslinetwo").prop("disabled", true); 
+        $("#pAddresslineone").prop("disabled", true); 
+        $("#permanantaddpincode").prop("disabled", true); 
+        $("#permamnentaddcity").prop("disabled", true); 
+        $("#permanentaddstate").prop("disabled", true); 
+        $("#permanentaddcountry").prop("disabled", true); 
+  
+      }else{
+        $("#pAddresslinetwo").prop("disabled", false); 
+        $("#pAddresslineone").prop("disabled", false); 
+        $("#permanantaddpincode").prop("disabled", false); 
+        $("#permamnentaddcity").prop("disabled", false); 
+        $("#permanentaddstate").prop("disabled", false); 
+        $("#permanentaddcountry").prop("disabled", false);  
+      }
+    }
+  
+    function searchresidentialcities(){
+      var trhtml ="";
+      var cityname = $("#residentialaddcity").val().trim();
+      
+      var fd = new FormData();    
+      fd.append("cityname",cityname);
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"searchcities",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+        
+          $("#prodsearchdiv").addClass('active');
+          $.each(response.data,function(i,o){
+            trhtml += `
+            <li class="searchlistli" value="`+o.id+`" onclick="residentialcitydata('`+o.id+`');">`+o.name+`</li>
+            `
+          })
+          $("#residentialcitylist").html(trhtml);
+    
+        },
+      });
+    }
+  
+    function residentialcitydata(cityid){
+    
+      var cityid = cityid
+      var fd = new FormData();    
+      fd.append("cityid",cityid);
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"searchstatecountry",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          $("#prodsearchdiv").removeClass('active');
+          var sthtml = `<option value="`+response.data.state+`">`+response.data.statename+`</option>`
+          var countryhtml = `<option value="`+response.data.country+`">`+response.data.countryname+`</option>`
+          $("#residentialaddcity").val(response.data.name);
+          $("#residentialaddcity").attr('cityid',response.data.id);
+          $("#residentialaddstate").html(sthtml);
+          $("#residentialaddcountry").html(countryhtml);
+        },
+      });
+    }
+  
+  
+    function searchpermanentcities(){
+      var trhtml ="";
+      var cityname = $("#permamnentaddcity").val().trim();
+      var fd = new FormData();    
+      fd.append("cityname",cityname);
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"searchcities",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+        
+          $("#prodpermanentsearchdiv").addClass('active');
+          $.each(response.data,function(i,o){
+            trhtml += `
+            <li class="searchlistli" value="`+o.id+`" onclick="permanentcitydata('`+o.id+`');">`+o.name+`</li>
+            `
+          })
+          $("#permanentcitylist").html(trhtml);
+    
+        },
+      });
+    }
+  
+    function permanentcitydata(cityid){
+      var cityid = cityid
+      var fd = new FormData();    
+      fd.append("cityid",cityid);
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"searchstatecountry",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          $("#prodpermanentsearchdiv").removeClass('active');
+          var sthtml = `<option value="`+response.data.state+`">`+response.data.statename+`</option>`
+          var countryhtml = `<option value="`+response.data.country+`">`+response.data.countryname+`</option>`
+          $("#permamnentaddcity").val(response.data.name);
+          $("#permamnentaddcity").attr('cityid',response.data.id);
+          $("#permanentaddstate").html(sthtml);
+          $("#permanentaddcountry").html(countryhtml);
+        },
+      });
+    }
+
+    function getrolelist(){
+      var html=''
+      var fd = new FormData();    
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"getrolelist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          html += `<option value="" >Select Role</option>`
+
+          $(response.data).each(function(a, b) {
+            if( b.RoleName == '{{employeedetails.userdata.RoleID}}' ){
+              html += `<option value="` + b.id + `" selected>` + b.RoleName + `</option>`
+            }else{
+              html += `<option value="` + b.id + `">` + b.RoleName + `</option>`
+            }
+          })
+          $("#addEmpRole").html(html);
+
+        },
+      });
+    }
+
+    function getdesignationlist(){
+      var html=''
+      var fd = new FormData();    
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"getdesignationlist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          html += `<option value="" >Select Designation</option>`
+
+          $(response.data).each(function(a, b) {
+
+            if( b.DesignationName == '{{employeedetails.userdata.DesignationId}}' ){
+              html += `<option value="` + b.id + `" selected>` + b.DesignationName + `</option>`
+            }else{
+              html += `<option value="` + b.id + `">` + b.DesignationName + `</option>`
+            }
+          })
+          $("#addEmpDesignation").html(html);
+
+        },
+      });
+    }
+
+
+    function getlocationlist(){
+      var html=''
+      var fd = new FormData();    
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"getlocationlist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          html += `<option value="" >Select Location</option>`
+
+          $(response.data).each(function(a, b) {
+            if( b.id == '{{employeedetails.userdata.locationId}}' ){
+              html += `<option value="` + b.id + `" selected>` + b.LocationName + `</option>`
+            }else{
+              html += `<option value="` + b.id + `">` + b.LocationName + `</option>`
+            }
+          })
+          $("#addEmpLocation").html(html);
+
+        },
+      });
+    }
+
+    function getdepartmentlist(){
+      var html=''
+      var fd = new FormData();    
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"getdepartmentlist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          var numberToCheck ='';
+
+          {% for department_id in employeedetails.userdata.DepartmentID %}
+             numberToCheck='{{ department_id }}'
+          {% endfor %}
+
+          html += `<option value="" >Select Department</option>`
+
+          $(response.data).each(function(a, b) {
+            if( b.id == numberToCheck ){
+              html += `<option value="` + b.id + `" selected>` + b.DepartmentName + `</option>`
+            }else{
+              html += `<option value="` + b.id + `">` + b.DepartmentName + `</option>`
+            }
+          })
+          $("#addEmpDepartment").html(html);
+
+        },
+      });
+    }
+
+
+    function get_attendance_mapped_employees(){
+        var options ="";
+    
+        $.ajax({
+          url: frontendURL +"get_attendance_mapped_employees",
+          type: 'POST',
+          data:{
+            csrfmiddlewaretoken:'{{ csrf_token }}',
+          },
+          dataType: 'json',
+    
+          success: function(response){
+            $.each(response.caluserslist,function(i,o){
+              options += `<option value="`+o.userid+`">`+o.useridstr+`</option>`
+            })
+            
+            $("#allemployees").html(options);
+            $("#allemployees").val('{{userID}}');
+            
+    
+          }
+        });
+    
+    }
+
+
+
+    function getemployeetypelist(){
+      var html=''
+      var fd = new FormData();    
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"getemployeetypelist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          html += `<option value="" >Select Employee Type</option>`
+  
+          console.log("respo Employee Type",response,'')
+          $(response.data).each(function(a, b) {
+  
+              html += `<option value="` + b.id + `">` + b.employeetype + `</option>`
+          })
+          $("#employeetype").html(html);
+          $("#employeetype").val('{{employeedetails.userdata.employeetype}}');
+          $('#employeetype').change();
+        },
+      });
+    }
+
+      
+  </script>
+    
+{% endblock %}

@@ -1,0 +1,687 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+    CompOff Requests
+</div>
+
+
+
+
+
+{% endblock %}
+{% block content %}
+
+
+
+
+
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/apply_leave.css' %}">
+<style>
+    .managers-imgs {
+        padding: 0px;
+    }
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+                class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                    style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+
+
+    <div class="leads-div">
+        <ul class="nav nav-pills mb-3 overflow-auto" id="pills-tab" role="tablist">
+
+
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link active" id="pills-pending-tab" onclick="get_compoffs('pending');"
+                    data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab"
+                    aria-controls="pills-pending" aria-selected="false">Pending
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-approved-tab" onclick="get_compoffs('approved');"
+                    data-bs-toggle="pill" data-bs-target="#pills-approved" type="button" role="tab"
+                    aria-controls="pills-approved" aria-selected="false">Approved
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-rejected-tab" onclick="get_compoffs('rejected');"
+                    data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab"
+                    aria-controls="pills-rejected" aria-selected="false">Rejected
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-expired-tab" onclick="get_compoffs('expired');" data-bs-toggle="pill"
+                    data-bs-target="#pills-expired" type="button" role="tab" aria-controls="pills-expired"
+                    aria-selected="false">Expired
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-withdraw-tab" onclick="get_compoffs('withdraw');" data-bs-toggle="pill"
+                    data-bs-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw"
+                    aria-selected="false">Withdraw
+                    CompOff</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+                <button class="nav-link" id="pills-reschedule-tab" onclick="get_compoffs('reschedule');" data-bs-toggle="pill"
+                    data-bs-target="#pills-reschedule" type="button" role="tab" aria-controls="pills-reschedule"
+                    aria-selected="false">Reschedule
+                    CompOff</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+
+
+
+
+            <div class="tab-pane fade show active" id="pills-pending" role="tabpanel"
+                aria-labelledby="pills-pending-tab" tabindex="0">
+                <div class="row" id="pending-compoffs">
+
+
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab"
+                tabindex="0">
+                <div class="row" id="approved-compoffs">
+
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab"
+                tabindex="0">
+                <div class="row" id="rejected-compoffs">
+
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-expired" role="tabpanel" aria-labelledby="pills-expired-tab"
+                tabindex="0">
+                <div class="row" id="expired-compoffs">
+
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-withdraw" role="tabpanel" aria-labelledby="pills-withdraw-tab"
+                tabindex="0">
+                <div class="row" id="withdraw-compoffs">
+
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-reschedule" role="tabpanel" aria-labelledby="pills-reschedule-tab"
+                tabindex="0">
+                <div class="row" id="reschedule-compoffs">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+
+{% endblock %}
+{% block indexaddbuttons %}
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        get_compoffs('pending');
+    });
+
+    function get_compoffs(status) {
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('status', status);
+
+        $.ajax({
+            url: frontendURL + "get_compoff_requests",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function () {
+                swal({
+                    icon: "info",
+                    title: "",
+                    text: "Loading...",
+                    buttons: false,
+                });
+            },
+            success: function (response) {
+                swal.close();
+                console.log("response", response)
+                var col_div = ''
+
+                if (response.response.n == 1) {
+
+                    $(response.data).each(function (a, b) {
+                        col_div += ` 
+                    
+
+                        <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                            <div id="card" class="card text-start h-100">
+
+
+                                <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                                <span class="card-header-blue-txt text-black">`+b.user_name+`</span>
+                                <span class="d-flex">                          
+
+                                </span>
+                                </div>
+
+
+
+
+                                <div class="card-header head d-flex justify-content-between align-items-center">
+         
+
+                                    <span class="d-flex justify-content-end">
+                                        <span class="text-left">
+                                            <span class="card-header-txt">Comp-Off Date </span><br>
+                                            <span class="card-header-txt" title="`+ b.created_at + `">` + b.created_at + `</span>
+                                        </span>
+                                        <span>
+
+                                    
+                                        </span>
+                                    </span>
+                                    <span>
+                                        <span class="card-header-txt">Total Hrs</span><br>
+                                        <span class="card-header-txt">`+ b.working_hrs + ` </span>
+                                    </span>
+                                </div>
+
+                                <div class="card-body py-3">
+
+                                    <div class="row">
+
+
+
+
+                                        <div class="col-lg-12">
+                                            <div class="card-header head d-flex justify-content-between p-0">
+                                                <span>
+                                                    <span class="card-header-txt">Valid From</span><br>
+                                                    <span class="card-header-blue-txt">`+ b.date + `</span>
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <span>
+                                                  
+                                                        <span class="card-header-txt">Valid Till</span><br>
+                                                        <span class="card-header-blue-txt">`+ b.valid_date + `</span>
+                                              
+                                                        
+                                                    </span>
+
+
+                                                </span>
+                                                <span>
+                                        
+                                                                <span class="card-header-txt">Claimed Date</span><br>
+                                                                <span class="card-header-blue-txt">`+ b.claim_date + `</span>
+                                                </span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                                ${status === 'rejected'|| status === 'reschedule'|| b.earlier_reschedule?
+                                `
+
+                
+                                                                <div class="card-header p-0">
+
+                                                                    <span class="card-header-txt">
+                                                                        ${status === 'pending'?`Reschedule `:``}
+                                                                        Reason :</span><br>
+
+                                                                    <span class="my-3 card-body-reason-text addReadMore showlesscontent "
+                                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                                        title="not available">`+ b.reason + `.</span>
+                                                                </div>
+                                                                
+                                                                `
+                                : `
+                                                        
+                                                            `}
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer cardfooter mt-auto">
+                                    <div class="row">
+
+                                        <div class="col-lg-12 conclusion-box my-2">
+                                            <div class="py-2 d-flex justify-content-between">
+                                                <span class="image-list card-header-txt py-1 col-lg-8 col-md-6 col-sm-12"
+                                                    style="display: flex; align-items: center;">
+
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.status === null ?
+                                        `
+                                                                <img class="manager-pic manager-pic-Pending  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="⏳ ${l.manager_name}" />                                                            
+                                                                `
+                                        : `
+                                                        
+                                                            `}
+                                                        `).join("\n")}
+
+                                                    <span class="ps-1">This comp-off is `+ status + `.</span>
+                                                </span>
+
+                                                <span
+                                                    class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.status === true ?
+                                                `
+                                                                <img class="manager-pic manager-pic-Approved  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="✅ ${l.manager_name}" />                                                            
+                                                                `
+                                                : ``}
+
+                                                        `).join("\n")}
+                                                            
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.status === false ?
+                                                        `
+                                                                <img class="manager-pic manager-pic-Rejected  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="❌ ${l.manager_name}" />                                                          
+                                                                `
+                                                        : ``}
+
+                                                        `).join("\n")}
+
+                                                        
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    ${status === 'pending' ? ` 
+
+                                        <div class="row mt-2 ButttonStatus`+ b.id + `">
+                                            <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                                <button class="btn w-100  btn-danger" onclick="reject_compoff(`+ b.id + `)">Reject</button>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                                <button class="btn w-100  btn-secondary" onclick="reschedule_compoff(`+ b.id + `)">Reschedule</button>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                                <button class="btn w-100   btn-success" onclick="approve_compoff(`+ b.id + `)">Approve</button>
+                                            </div>
+                                        </div>
+                                    ` : ``}
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+                        </div>
+
+                    `
+                    });
+                    $('#' + status + '-compoffs').html(col_div)
+                }
+                else {
+                    col_div += ` 
+                    <div class="noappdiv">
+                        <div class="text-center py-4 ">No Compoff Found!</div>
+                    </div>`
+                    $('#' + status + '-compoffs').html(col_div)
+
+
+
+                }
+
+            }
+        });
+    }
+    function approve_compoff(id) {
+        swal({
+            title: "Are you sure?",
+            text: "you want to approve compoff",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: frontendURL + "approve_compoff",
+                        type: 'POST',
+                        headers: {
+                            'Authorization': 'Token {{token}}'
+                        },
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'id': id
+                        },
+                        dataType: 'json',
+                        beforeSend: function () {
+
+                            var PendingDivButttonStatus = ""
+                            PendingDivButttonStatus = `
+                                <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                <button class="btn w-100   btn-primary" >Loading...</button>
+                                </div>
+                            `
+
+                            $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+                        },
+                        success: function (response) {
+
+                            if (response['response']['n'] == 1) {
+                                swal({
+                                    icon: "success",
+                                    title: "",
+                                    text: response['response']['msg'],
+                                    button: "Close",
+                                })
+
+                                var PendingDivButttonStatus = ""
+                                PendingDivButttonStatus = `
+                                    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                        <button class="btn w-100   btn-success" >Approved</button>
+                                    </div>
+                                `
+                                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+
+                            }
+                            else {
+                                swal({
+                                    icon: "error",
+                                    title: "",
+                                    text: response['response']['msg'],
+                                    button: "Close",
+                                }).then(() => {
+                                    // Code to execute after the user closes the SweetAlert dialog
+                                    location.reload(); // Reload the page
+                                });
+                            }
+
+
+
+
+                        }
+                    });
+
+                }
+            })
+    }
+
+
+    
+    function reject_compoff(id) {
+        swal({
+            title: "Are you sure?",
+            text: "you want to reject compoff",
+
+            content: {
+                element: "input",
+                attributes: {
+                    placeholder: "Enter rejection reason",
+                    type: "text",
+                },
+            },
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+
+
+        })
+            .then((reason) => {
+                if (reason != null) {
+
+                    $.ajax({
+                        url: frontendURL + "reject_compoff",
+                        type: 'POST',
+                        headers: {
+                            'Authorization': 'Token {{token}}'
+                        },
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'id': id,
+                            'reason': reason,
+                        },
+                        dataType: 'json',
+                        beforeSend: function () {
+
+                            var PendingDivButttonStatus = ""
+                            PendingDivButttonStatus = `
+                            <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                <button class="btn w-100   btn-primary" >Loading...</button>
+                            </div>
+                            `
+
+                            $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+                        },
+                        success: function (response) {
+
+                            if (response['response']['n'] == 1) {
+
+                                swal({
+                                    icon: "success",
+                                    title: "",
+                                    text: response['response']['msg'],
+                                    button: "Close",
+                                })
+                                var PendingDivButttonStatus = ""
+                                PendingDivButttonStatus = `
+                                    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                    <button class="btn w-100   btn-danger" >Rejected</button>
+                                    </div>
+                                `
+                                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+
+                            }
+                            else {
+
+ 
+   
+
+
+
+                                swal({
+                                    icon: "error",
+                                    title: "",
+                                    text: response['response']['msg'],
+                                    buttons: true,
+                                    dangerMode: true
+                                }).then((willDelete) => {
+                                        if (willDelete) {
+                                            reject_compoff(id)
+
+                                        }
+                                    
+                                });
+                                var PendingDivButttonStatus = ""
+                                PendingDivButttonStatus = `
+                                    <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100  btn-danger" onclick="reject_compoff(`+id + `)">Reject</button>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100  btn-secondary" onclick="Reschedule_compoff(`+id + `)">Reschedule</button>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100   btn-success" onclick="approve_compoff(`+id + `)">Approve</button>
+                                    </div>
+                                `
+                                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+                            }
+
+
+
+
+                        }
+                    });
+
+
+                }
+            })
+    }
+    function reschedule_compoff(id) {
+        swal({
+            title: "Are you sure?",
+            text: "you want to reschedule compoff",
+
+            content: {
+                element: "input",
+                attributes: {
+                    placeholder: "Enter reschedule reason",
+                    type: "text",
+                },
+            },
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+
+
+        })
+            .then((reason) => {
+                if (reason != null) {
+
+                    $.ajax({
+                        url: frontendURL + "reschedule_compoff",
+                        type: 'POST',
+                        headers: {
+                            'Authorization': 'Token {{token}}'
+                        },
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            'id': id,
+                            'reason': reason,
+                        },
+                        dataType: 'json',
+                        beforeSend: function () {
+
+                            var PendingDivButttonStatus = ""
+                            PendingDivButttonStatus = `
+                            <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                <button class="btn w-100   btn-primary" >Loading...</button>
+                            </div>
+                            `
+
+                            $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+                        },
+                        success: function (response) {
+
+                            if (response['response']['n'] == 1) {
+
+                                swal({
+                                    icon: "success",
+                                    title: "",
+                                    text: response['response']['msg'],
+                                    button: "Close",
+                                })
+                                var PendingDivButttonStatus = ""
+                                PendingDivButttonStatus = `
+                                    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                    <button class="btn w-100   btn-secondary" >Reschedule</button>
+                                    </div>
+                                `
+                                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+
+                            }
+                            else {
+
+ 
+   
+
+
+
+                                swal({
+                                    icon: "error",
+                                    title: "",
+                                    text: response['response']['msg'],
+                                    buttons: true,
+                                    dangerMode: true
+                                }).then((willDelete) => {
+                                        if (willDelete) {
+                                            reschedule_compoff(id)
+                                        }
+                                });
+                                var PendingDivButttonStatus = ""
+                                PendingDivButttonStatus = `
+                                    <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100  btn-danger" onclick="reject_compoff(`+id + `)">Reject</button>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100  btn-secondary" onclick="Reschedule_compoff(`+id + `)">Reschedule</button>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100   btn-success" onclick="approve_compoff(`+id + `)">Approve</button>
+                                    </div>
+                                `
+                                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+                            }
+
+
+
+
+                        }
+                    });
+
+
+                }
+            })
+    }
+
+
+
+</script>
+
+{% endblock %}

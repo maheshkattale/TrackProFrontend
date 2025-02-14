@@ -1,0 +1,533 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+    Employee Packets Mapping
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+    .modal-body label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        /* color: #174fa3; */
+    }
+
+    .modal-body input {
+        /* width: 100%; */
+        font-size: 16px;
+        color: #5f5b5b;
+        border: none;
+        border-bottom: 1px solid rgb(214, 214, 214);
+        background: transparent;
+        height: 30px;
+        transition: border 0.4s ease;
+        margin: 0 5px;
+    }
+
+    .modal-body input:focus {
+        /* width: 100%; */
+        font-size: 16px;
+        color: #5f5b5b;
+        border: none;
+        border-bottom: 1px solid rgb(214, 214, 214);
+        background: transparent;
+        height: 30px;
+        transition: border 0.4s ease;
+        margin: 0 5px;
+        outline: none;
+    }
+
+
+    .MultiCheckBox {
+        border-bottom: 1px solid #afafaf;
+        padding: 5px;
+        cursor: pointer;
+        height: 50px;
+        border-radius: 0px;
+        background: #ffffff;
+        display: inline-block;
+        width: 220px;
+        padding: 8px;
+        color: gray;
+    }
+
+    .MultiCheckBox .k-icon {
+        float: right;
+        font-weight: bolder;
+        color: #979797;
+        font-size: 10px;
+    }
+
+    .MultiCheckBoxDetail {
+        display: none;
+        position: absolute;
+        border: 1px solid #ddd;
+        background-color: #ffffff;
+        z-index: 1000;
+        width: 230px;
+        padding: 5px;
+        overflow-y: auto;
+    }
+
+    .MultiCheckBoxDetailBody {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .MultiCheckBoxDetail .cont {
+        padding: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .MultiCheckBoxDetail .cont:hover {
+        background-color: #f1f1f1;
+    }
+
+    .MultiCheckBoxDetailHeader {
+        background: #eee;
+        padding: 5px;
+        /* font-weight: bold; */
+        display: flex;
+        align-items: center;
+    }
+
+    .MultiCheckBoxDetailHeader input {
+        margin-right: 10px;
+    }
+
+    #selectedemployees {
+        min-height: 40px;
+        border: 1px solid #ddd;
+        padding: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        background: #f9f9f9;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .modalClose {
+        background-color: white;
+        border: 1px solid #F24B59;
+        color: #F24B59;
+        width: auto;
+        margin-right: 5%;
+        padding: 7px 25px;
+        border-radius: 30px;
+        font-size: 14px;
+    }
+
+    .selected-employee {
+        background: #7a7a7a;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        display: inline-flex;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .selected-employee .remove-employee {
+        margin-left: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+    }
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+                class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                    style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+
+
+
+
+    <div class="table-div">
+        <table id="myTable" class="row-border w-100">
+            <thead>
+                <tr class="">
+                    <th style="width:10%" class="">Sr. No</th>
+                    <th style="" class="">Packet</th>
+                    <th style="width:10%" class="">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for i in packetlist %}
+
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.PacketName}}</td>
+                    <td>
+                        <a class="viewEmpDeetsBtn" style="cursor:pointer;" data-bs-toggle="modal"
+                            data-bs-target="#packetmapping" onclick="change_packet_select('{{i.id}}')"><img
+                                class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px"
+                                alt="edit icon"></a>
+
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="packetmapping" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header ps-4 justify-content-center">
+                    <h5 class="modal-title pt-1 pb-4" id="exampleModalLabel">Employee Mapping</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-12 px-4" style="position:relative;">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="PacketName">Packet Name</label>
+                                    <select name="PacketName" id="PacketName"
+                                        class="form-control select2dropdown indexselect2" onchange="get_employees();">
+                                        {% for i in packetlist %}
+                                        <option value="{{i.id}}">{{i.PacketName}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    <span id="PacketNameerror" class="error"></span>
+                                </div>
+
+
+                                <div class="col-4">
+                                    <label for="Location">Location</label>
+                                    <select name="Location" id="Location"
+                                        class="form-control select2dropdown indexselect2" onchange="get_employees();">
+                                        <option value="">Select Location</option>
+                                        {% for i in locations %}
+                                        <option value="{{i.id}}">{{i.LocationName}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    <span id="Locationerror" class="error"></span>
+                                </div>
+
+
+                                <div class="col-4">
+                                    <label for="Employees">Employees</label>
+                                    <select name="Employees" id="Employees" class="form-control" multiple>
+                                        <option value="2">2</option>
+                                        <option value="1">1</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="7">7</option>
+
+                                    </select>
+                                    <span id="Employeeserror" class="error"></span>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="selectedemployees" class="py-2">Selected Employees</label>
+                                    <!-- <textarea name="selectedemployees" id="selectedemployees" cols="10" rows="3"
+                                        style="width: 100%;outline: none;"></textarea> -->
+                                    <div id="selectedemployees"></div>
+
+                                    <span id="selectedemployeesrequired"></span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modalClose" data-bs-dismiss="modal">Close</button>
+                    <button class="" id="addEmployeeBtn" onclick="return map_employees_packet();">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</main>
+{% endblock %}
+
+
+{% block script %}
+{{block.super}}
+
+
+
+<script>
+
+
+    function change_packet_select(id) {
+        $('#PacketName').val(id).trigger('change');
+    }
+    function get_employees() {
+        var PacketId = $('#PacketName').val();
+        var Location = $('#Location').val();
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "packet/get_packet_mapped_employees",
+            data: {
+                'Location': Location,
+                'PacketId': PacketId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {
+                console.log("reps", response);
+                var employeesDropdown = $("#Employees");
+                employeesDropdown.empty(); // Clear existing options
+
+                var selectedEmployees = [];
+
+                $.each(response.data, function (index, employee) {
+                    var option = `<option value="${employee.id}">${employee.employeeId} - ${employee.name}</option>`;
+                    employeesDropdown.append(option);
+
+                    if (employee.selected) {
+                        selectedEmployees.push({
+                            id: employee.id,
+                            name: employee.name
+                        });
+                    }
+                });
+
+                // Destroy previous multi-checkbox instance
+                $(".MultiCheckBox").remove();
+                $(".MultiCheckBoxDetail").remove();
+
+                // Reinitialize MultiCheckBox
+                employeesDropdown.CreateMultiCheckBox({
+                    width: '230px',
+                    color: 'grey',
+                    defaultText: 'Select Employees',
+                    height: '250px'
+                });
+
+                // ✅ Wait for UI to render, then check selected checkboxes
+                setTimeout(function () {
+                    $.each(selectedEmployees, function (index, employee) {
+                        $(".MultiCheckBoxDetail input[type='checkbox'][value='" + employee.id + "']").prop("checked", true);
+                    });
+
+                    // ✅ Trigger update to reflect selections in UI
+                    $(".MultiCheckBoxDetail").next().UpdateSelect();
+                }, 500); // Short delay to ensure UI is ready
+
+                // Update Selected Employees Display
+                updateSelectedEmployeesBox(selectedEmployees);
+            }
+        });
+    }
+
+
+
+
+
+
+
+    function map_employees_packet() {
+        var PacketId = $('#PacketName').val()
+
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "packet/apply_employees_packet_mapping",
+            data: {
+                'selected_employee_ids': JSON.stringify(selected_employee_ids),
+                'PacketId': PacketId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {
+                console.log("reps111", response)
+                if (response.response.n == 1) {
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.response.msg,
+                        buttons: false,
+                    });
+                    window.location.reload();
+                } else {
+
+                    swal({
+                        icon: "warning",
+                        title: "",
+                        text: response.response.msg,
+                        button: "Close",
+                    });
+                }
+
+
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function updateSelectedEmployeesBox(selectedEmployees) {
+        var selectedContainer = $("#selectedemployees");
+        selectedContainer.html(""); // Clear previous content
+
+        $.each(selectedEmployees, function (index, employee) {
+            var employeeBox = $("<span class='selected-employee' data-value='" + employee.id + "'>" +
+                employee.name + " <span class='remove-employee'>&times;</span></span>");
+
+            selectedContainer.append(employeeBox);
+        });
+    }
+
+
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+
+        $("#Employees").CreateMultiCheckBox({ width: '230px', color: 'grey', defaultText: 'Select Employees', height: '250px' });
+    });
+
+    var defaultMultiCheckBoxOption = {
+        width: "220px",
+        defaultText: "Select Below",
+        height: "200px"
+    };
+    var selected_employee_ids = []
+    jQuery.fn.extend({
+        CreateMultiCheckBox: function (options) {
+            var localOption = {};
+            localOption.width = options?.width || defaultMultiCheckBoxOption.width;
+            localOption.defaultText = options?.defaultText || defaultMultiCheckBoxOption.defaultText;
+            localOption.height = options?.height || defaultMultiCheckBoxOption.height;
+
+            this.hide().attr("multiple", "multiple");
+            var divSel = $("<div class='MultiCheckBox'>" + localOption.defaultText +
+                "<span class='k-icon k-i-arrow-60-down'>▼</span></div>").insertBefore(this);
+            divSel.css({ width: localOption.width });
+
+            var detail = $("<div class='MultiCheckBoxDetail'><div class='MultiCheckBoxDetailHeader'>" +
+                "<input type='checkbox' class='selectAll' /> Select All</div>" +
+                "<div class='MultiCheckBoxDetailBody'></div></div>").insertAfter(divSel);
+            detail.css({ width: parseInt(options.width) + 10, "max-height": localOption.height });
+
+            var multiCheckBoxDetailBody = detail.find(".MultiCheckBoxDetailBody");
+            this.find("option").each(function () {
+                var val = $(this).val();
+                multiCheckBoxDetailBody.append("<div class='cont'><input type='checkbox' class='mulinput' value='" +
+                    val + "' /> " + $(this).text() + "</div>");
+            });
+
+            multiCheckBoxDetailBody.css("max-height", parseInt($(".MultiCheckBoxDetail").css("max-height")) - 28 + "px");
+        },
+
+        UpdateSelect: function () {
+            var selected = [];
+            var selectedContainer = $("#selectedemployees"); // Get the container
+            selectedContainer.html(""); // Clear previous selection
+
+            this.prev().find(".mulinput:checked").each(function () {
+                var val = $(this).val();
+                var text = $(this).closest(".cont").text().trim(); // Get label text
+                selected.push(val);
+
+                // Create an HTML box for selected employee
+                var employeeBox = $("<span class='selected-employee' data-value='" + val + "'>" +
+                    text + " <span class='remove-employee'>&times;</span></span>");
+
+                selectedContainer.append(employeeBox);
+
+            });
+            // console.log("selected", selected)
+            this.val(selected);
+            selected_employee_ids = selected
+        }
+    });
+
+    $(document).on("click", ".MultiCheckBox", function () {
+        $(".MultiCheckBoxDetail").hide(); // Hide all open dropdowns
+        $(this).next().toggle();
+    });
+
+    $(document).on("click", ".MultiCheckBoxDetail", function (e) {
+        e.stopPropagation(); // Prevent closing on inside click
+    });
+
+    $(document).on("click", ".selectAll", function () {
+        var isChecked = $(this).prop("checked");
+        var checkboxes = $(this).closest(".MultiCheckBoxDetail").find(".MultiCheckBoxDetailBody input");
+        checkboxes.prop("checked", isChecked);
+
+        $(this).closest(".MultiCheckBoxDetail").next().UpdateSelect();
+    });
+
+    $(document).on("click", ".MultiCheckBoxDetail .mulinput", function () {
+        var totalCheckboxes = $(".MultiCheckBoxDetailBody input").length;
+        var checkedCheckboxes = $(".MultiCheckBoxDetailBody input:checked").length;
+
+        $(".selectAll").prop("checked", totalCheckboxes === checkedCheckboxes);
+        $(this).closest(".MultiCheckBoxDetail").next().UpdateSelect();
+    });
+
+    $(document).mouseup(function (e) {
+        var container = $(".MultiCheckBoxDetail");
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+            container.hide();
+        }
+    });
+
+    $(document).on("click", ".remove-employee", function () {
+        var value = $(this).parent().data("value");
+
+        // Uncheck the corresponding checkbox
+        $(".mulinput[value='" + value + "']").prop("checked", false);
+
+        // Remove the box
+        $(this).parent().remove();
+
+        // Update the select box state
+        $(".MultiCheckBoxDetail").next().UpdateSelect();
+    });
+
+
+</script>
+
+
+{% endblock %}

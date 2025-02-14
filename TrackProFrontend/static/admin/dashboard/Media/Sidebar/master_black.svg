@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="menu_icon_thin" transform="translate(136 -191)">
+    <rect id="icon_frame" width="32" height="32" transform="translate(-136 191)" fill="none" opacity="0"/>
+    <path id="account_tree_FILL0_wght300_GRAD0_opsz48" d="M20.592,28.038V24.223h-4.8V11.7H12.438v3.908H4.5V6.5h7.938v3.785h8.154V6.5H28.5v9.108H20.592V11.7H17.208V22.838h3.385V18.9H28.5v9.138ZM5.885,7.885v0ZM21.977,20.315v0Zm0-12.431v0Zm0,6.338h5.138V7.885H21.977Zm0,12.431h5.138V20.315H21.977ZM5.885,14.223h5.138V7.885H5.885Z" transform="translate(-136.5 189.731)" fill="#282828"/>
+  </g>
+</svg>

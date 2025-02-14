@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrackPro-Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/icons/ortblck.svg' %}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- 2.Owl carousel Theme min.css -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+    integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'assets/scripts/select2-4.1.0-rc.0/dist/css/select2.min.css' %}">
+
+  <link href="{% static 'assets/scripts/select2-bootstrap-theme-0.1.0-beta.10/dist/select2-bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+  <link rel="stylesheet" href="{% static 'admin/sweetalert.css'%}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+
+  <!-- <link rel="stylesheet" href="{% static 'admin/dashboard/datepicker.css'%}" /> -->
+
+  <link rel="stylesheet" href="{% static 'admin/dashboard/dashboard.css'%}" />
+  <link rel="stylesheet" href="{% static 'assets/css/style2.css'%}" />
+</head>
+
+<body>
+  <!-- ==================Overlay Element and Expanded Navbar======================= -->
+
+
+  <!-- ==================Navbar(Header)======================= -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark gradient-custom fixed-top">
+      <div class="container-fluid">
+        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button> -->
+        <div class="collapse navbar-collapse justify-content-between" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <div class="pe-2 cursor-pointer" id="menu2">
+                <div>
+                  <img src="{% static 'assets\images\menu_icon.svg'%}" alt="menuicon" width="30px">
+                </div>
+              </div>
+            </li>
+            <li class="nav-item">
+              <div class="companylogo">
+                {%if companylogo is None %}
+                <img class="img" src="{% static 'assets\images\zentro_logo.jpeg'%}" alt="" width="100">
+                {%elif companylogo == "" %}
+                <img class="img" src="{% static 'assets\images\zentro_logo.jpeg'%}" alt="" width="100">
+                {%else%}
+                <img class="img" src="{{ImageURL}}/media/{{companylogo}}" alt="No logo" width="100">
+                {%endif%}
+              </div>
+
+            </li>
+
+          </ul>
+
+
+          {%block headercontent%}
+
+          {%endblock%}
+
+          <div class="me-2 navdropdown">
+            <div class="notbar">
+              <ul class="notulbar">
+                {%if basecheck_taskmanager == True %}
+                <li class="iconli">
+                  <a href="{% url 'task:ManagerReview'%}" class="position-relative">
+                    <img id="icon" class="notficonimg" src="{% static 'assets/icons/pending_actions.svg' %}">
+                    <span class="bg_notification badge">
+
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  </a>
+
+                </li>
+                {%endif%}
+
+                {%if basecheck_leavemanager == True %}
+                <li class="dropdown notifications-menu notify dropstart iconli" onclick="leavenotification();">
+                  <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown"
+                    style="margin-top: -4px;" class="notf" class="position-relative">
+                    <img id="icon" class="notficonimg" src="{% static 'assets/icons/leavenotf.svg' %}">
+                    <span class="bg_leave_notification badge">
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu activenotify dropstart"
+                    style="width: 340px !important;max-height:400px !important;box-shadow: 0 3px 5px rgb(0 0 0 / 38%);">
+                    <li class="header">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>Leave Requests</div>
+                        <div class="me-2"><span type="button" class="close">&times;</span></div>
+                      </div>
+                    </li>
+                    <li>
+                      <!-- inner menu: contains the actual data -->
+                      <div class="menu leavenotfmenu">
+
+
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+                {%endif%}
+                <li class="dropdown notifications-menu notify dropstart iconli">
+                  <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown"
+                    style="margin-top: -4px;" class="notf" onclick="readnotification();">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="label badge" id="leavelabel" style="background: #00aeef !important;"></span>
+                  </a>
+                  <ul class="dropdown-menu  activenotify dropstart"
+                    style="width: 340px !important;max-height:400px !important;box-shadow: 0 3px 5px rgb(0 0 0 / 38%);">
+                    <li class="header" id="noftnum">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>Notifications</div>
+                        <div class="me-2"><span type="button" class="close">&times;</span></div>
+                      </div>
+                    </li>
+                    <li>
+                      <!-- inner menu: contains the actual data -->
+                      <div class="menu notfmenu">
+
+
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-center">
+                        <div class="viewmorenotf"><a href="{% url 'users:filternotificationslist' %}" class=""
+                            id="">View More</a></div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+
+            <div class="username py-3">
+              <div>{{Firstname}} {{Lastname}}</div>
+              <div class="desgntion">{{Designation}}</div>
+            </div>
+
+            <div class="dropdown dropleft">
+              <a class="dropdown-toggle" data-bs-toggle="dropdown" class="userimage">
+                <img src="{{photo}}" width="35" height="35" class="rounded-circle">
+                {% comment %} <img id="icon" class="drpdwnimg" width="70%"
+                  src="{% static 'assets/icons/profile.png' %}">{% endcomment %}
+              </a>
+              <ul class="dropdown-menu index-dropdown">
+                <li><a class="dropdown-item" href="{% url 'users:secondary_info' %}">
+                    <img id="icon" class="drpdwnimg" src="{% static 'assets/icons/profile.png' %}"> My Profile</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'users:updatepassword' userID %}">
+                    <img id="icon" class="drpdwnimg" src="{% static 'assets/icons/changepassword.png' %}">Change
+                    Password</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'users:logout' %}">
+                    <img id="icon" class="drpdwnimg" src="{% static 'assets/icons/logout.png' %}">Logout</a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </nav>
+
+    <div class="row">
+      <div class="content">
+        <!-- <div class="row">
+              {%for i in Menulist %}
+              {%if i.ParentID != 0 %}
+              <div class="nav-content">
+                  <a href="{{i.MenuPath}}" class="font">
+                    <div class="navbarimage">
+                      <img id="icon" class="svg" 
+                        src="{% static 'assets/svg/' %}{{i.MenuIcon}}.svg">
+                      </div></a>
+                  <p class="icon-text"><b>{{i.MenuName}}</b></p>
+              </div>
+              {%endif%}
+              {%endfor%}
+
+          </div> -->
+
+
+        {% for i in Menulist %}
+        {% if i.ParentID == 0 %}
+        <div class="mainmenuheader">
+          {{i.MenuName}}
+        </div>
+
+        <div class="row" id="">
+          {% for j in Menulist %}
+          {% if i.MenuID == j.ParentID %}
+          <div class="col-md-3 nav-content">
+            <a href="{{j.MenuPath}}" class="font iconsvg">
+              <div class="navbarimage">
+                <img id="icon" class="svg" src="{% static 'assets/svg/' %}{{j.MenuIcon}}.svg">
+              </div>
+              <div class="icon-text">{{j.MenuName}}</div>
+            </a>
+          </div>
+          {% endif%}
+          {% endfor %}
+        </div>
+
+        {%endif%}
+        {%endfor%}
+      </div>
+    </div>
+  </header>
+
+
+
+  {% block content %}
+
+  {% endblock %}
+  {% if basecheck_taskmanager == True %}
+  <!----  Assign task modal-->
+  <div class="modal" id="baseassignTaskModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalToggleLabel">Assign Task</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-2">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="baseassigntaskProject">Project Name</label>
+                  <select class="form-control select2dropdown indexselect2" id="baseassigntaskProject"
+                    name="baseassigntaskProject">
+                    <option value="">Select Project</option>
+
+                  </select>
+                  <span id="baseassigntaskProjectrequired"></span>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="baseassigntaskBy">Assign By</label>
+                <select class="form-control select2dropdown indexselect2" id="baseassigntaskBy" name="baseassigntaskBy">
+
+                  <option value="{{userID}}" selected>{{Firstname}} {{Lastname}}</option>
+
+                </select>
+                <span id="baseassigntaskByrequired"></span>
+              </div>
+
+
+              <div class="col-md-6">
+                <label for="baseassignTaskEmployee">Employee</label>
+                <select class="form-control select2dropdown" id="baseassignTaskEmployee" name="baseassignTaskEmployee">
+                  <option value="">Select Employee</option>
+
+                </select>
+                <span id="baseassignTaskEmployeerequired"></span>
+              </div>
+
+              <div class="col-md-6">
+                <label for="baseAssigntaskDate">Date</label>
+                <input type="text" id="baseAssigntaskDate" placeholder="Select Date" name="DateofJoining"
+                  autocomplete="off" readonly>
+                <span id="baseAssigntaskDaterequired"></span>
+                <!-- <div id="calendarIcon"></div> -->
+              </div>
+
+              <div class="col-md-12">
+                <label for="baseassignTaskTitle">Task details</label>
+                <textarea name="baseassignTaskTitle" id="baseassignTaskTitle" cols="10" rows="3"
+                  style="width: 100%;"></textarea>
+                <span id="baseassignTaskTitlerequired"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
+          <span class="modal-add-btn" id="savebutton" onclick="baseassignsaveTask();">Add</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% block header_parent %}
+  <div>
+    <a class="float" id="menu-share">
+      <i class="fa fa-plus my-float" aria-hidden="true"></i>
+    </a>
+    <ul class="floatul">
+      {% block indexaddbuttons %}
+
+      {% endblock %}
+      {% if basecheck_taskmanager == True %}
+      <li onclick="baseassign_tasklist()"><a data-bs-toggle="modal" href="#baseassignTaskModal">
+          <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Assign Task"
+            src="{% static 'assets/svg/assigntaskicon.svg' %}">
+        </a></li>
+      {%endif%}
+      <li><a data-bs-toggle="modal" href="#baseTaskModal" onclick="baseprojectlist()">
+          <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Task"
+            src="{% static 'assets/svg/addtaskicon.svg' %}">
+        </a></li>
+    </ul>
+  </div>
+
+  {% endblock %}
+  <div class="notfacceptmodalhtml">
+    <div class="modal fade" id="notfapprovemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+          <div class="modal-header pb-0">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Accept Application</h5>
+          </div>
+          <div class="modal-body py-0">
+            <input type="hidden" id="acceptmodalapprovalid">
+            <input type="hidden" id="acceptmodalleaveid">
+            <div class="row py-1">
+              <div> Are you sure you want to Approve leave Request?
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="notfindexfooter">
+              <a href="javascript:void(0)" class="btn btn-outline-danger btn-font rounded-pill"
+                data-bs-dismiss="modal">Close</a>
+              <a href="javascript:void(0)" data-bs-dismiss="modal"
+                onclick="notfApplicationApprove(document.getElementById('acceptmodalapprovalid').value,document.getElementById('acceptmodalleaveid').value)"
+                class="btn btn-outline-success  btn-font rounded-pill" id="">Approve</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="notfrejectmodalhtml">
+    <div class="modal fade" id="notfrejectmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+          <div class="modal-header ps-4 py-1">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Reject Application</h5>
+          </div>
+          <div class="modal-body py-0">
+            <input type="hidden" id="rejectmodalapprovalid">
+            <input type="hidden" id="rejectmodalleaveid">
+            <div class="row">
+              <div class="col-12 px-4">
+                <label for="reason">Comment </label>
+                <textarea rows="3" style="width:100%;" id="notfreason" name="comment"></textarea>
+                <span id="notfreasonerror" class="error-message"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="notfindexfooter">
+              <a href="javascript:void(0)" class="btn btn-outline-danger  btn-font rounded-pill closemodalpopup"
+                data-bs-dismiss="modal" id="rejectclosemodal">Close</a>
+              <a href="javascript:void(0)" class="btn btn-outline-success  btn-font rounded-pill"
+                onclick="notfrejectleave(document.getElementById('rejectmodalapprovalid').value,document.getElementById('rejectmodalleaveid').value)">Reject</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!----add task modal-->
+  <div class="modal" id="baseTaskModal" aria-hidden="true" aria-labelledby="baseTaskModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="baseTaskModal">Add Task</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="baseProject">Project Name</label>
+
+                  <select class="form-control select2dropdown" id="baseProject" name="Project">
+                    <option value="">Select Project</option>
+
+                    {% for p in project %}
+                    {% if p.Active == True %}
+                    <option value="{{p.id}}">{{p.ProjectName}}</option>
+                    {% endif %}
+                    {% endfor %}
+
+                  </select>
+                  <span id="baseprojectrequired"></span>
+                </div>
+
+
+
+              </div>
+              <div class="col-md-6">
+                <label for="baseAssignBy">Assign By</label>
+                <select class="form-control select2dropdown" id="baseAssignBy" name="AssignBy">
+                  <option value="">Select Manager</option>
+                  {% for m in basemanagerlist %}
+                  <option value="{{m.ManagerID}}">{{m.ManagerIDStr}}</option>
+                  {% endfor %}
+                </select>
+                <span id="baseassignByrequired"></span>
+              </div>
+              <div class="col-md-6">
+                <label for="baseAssignDate">Date</label>
+                <input type="text" id="baseAssignDate" placeholder="Select Date" name="DateofJoining" autocomplete="off"
+                  readonly>
+                <span id="basedaterequired"></span>
+                <!-- <div id="calendarIcon"></div> -->
+              </div>
+              <div class="col-md-12">
+                <label for="baseTaskTitle">Task details</label>
+                <textarea name="TaskTitle" id="baseTaskTitle" cols="10" rows="3" style="width: 100%;"></textarea>
+                <span id="basetasknamerequired"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
+          <span class="modal-add-btn" id="basesavebutton" onclick="basesaveTask();">Add</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="main-footer" id="footer">
+    <div class="pull-right hidden-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="06 Jan 2024">
+      <b>Version</b> 3.18
+    </div>
+    <strong>Copyright © 2024 <a href="https://onerooftech.com/" target="_blank" class="acolor">OneRoof Technologies
+        LLP</a></strong> All rights
+    reserved.
+  </footer>
+
+
+
+  <!-- Script Files -->
+  {% block script %}
+  <!--     
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script> -->
+  <!-- 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
+  <script src="{% static 'js/jquerry/jquery.js'%}"></script>
+  <script src="{% static 'js/jquerry/jquery.min.js'%}"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="{% static 'js/sweetalert.js'%}"></script>
+
+  <script src="{% static 'assets/scripts/select2-4.1.0-rc.0/dist/js/select2.min.js' %}"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+
+
+  <script src="{% static 'js/validation/validations.js'%}"></script>
+  <script>
+
+    $(".alert").slideDown("slow").delay(3000).slideUp();
+    var frontendURL = '{{basefrontendUrl}}'
+
+    $(document).ready(function () {
+
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+
+      $("#baseAssignDate").datepicker({
+        dateFormat: 'dd-mm-yy',
+        minDate: -5,
+        maxDate: 0
+      })
+
+      $("#baseAssigntaskDate").datepicker({
+        dateFormat: 'dd-mm-yy',
+        minDate: -5,
+        maxDate: 4
+      })
+
+
+      $(".select2dropdown").select2(
+
+      );
+
+      $('.content').hide();
+      $("#menu2").click(function () {
+        $('.content').fadeToggle();
+        $(this).toggleClass("openmenu2");
+      });
+      notificationlist();
+    });
+
+
+    function baseprojectlist() {
+      basegetTodaydate();
+      $.ajax({
+        type: 'GET',
+        url: frontendURL + 'project/baseprojectlist',
+
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+          var opthtml = "<option value=''>Select Project</option>"
+          $.each(response.data, function (i, o) {
+            opthtml += `
+              <option value="`+ o.id + `">` + o.ProjectName + `</option>
+              `
+          })
+          $("#baseProject").html(opthtml);
+
+        }
+      })
+    }
+
+    function baseassign_tasklist() {
+      basegetTodaydate();
+      $.ajax({
+        type: 'GET',
+        url: frontendURL + 'baseproj_emplist',
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+          var opthtml = "<option value=''>Select Project</option>"
+          $.each(response.projectlist, function (i, o) {
+            opthtml += `
+              <option value="`+ o.id + `">` + o.ProjectName + `</option>
+              `
+          })
+          $("#baseassigntaskProject").html(opthtml);
+
+          var emphtml = "<option value=''>Select Employee</option>"
+          $.each(response.emplist, function (i, o) {
+            emphtml += `
+              <option value="`+ o.UserID + `">` + o.UserIDStr + `</option>
+              `
+          })
+          $("#baseassignTaskEmployee").html(emphtml);
+
+        }
+      })
+    }
+
+    function baseassignsaveTask() {
+      var employeeId = parseInt($("#baseassignTaskEmployee").val());
+      var task = $("#baseassignTaskTitle").val().trim();
+      var AssignDate = $("#baseAssigntaskDate").val();
+      var projectname = $("#baseassigntaskProject").val();
+      var AssignBy = $("#baseassigntaskBy").val();
+      // var employeeId = $("#baseassignTaskEmployee").val();
+
+      if (IsValid(projectname)) {
+        $('#baseassigntaskProjectrequired').html('');
+        $("#baseassigntaskProjectrequired").show().delay(3000).slideUp();
+        $('#baseassigntaskProjectrequired').html('Please Select Project').css('color', 'red');
+        $('#baseassigntaskProject').focus();
+        return false;
+      } else if (IsValid(AssignBy)) {
+        $('#baseassigntaskByrequired').html('');
+        $("#baseassigntaskByrequired").show().delay(3000).slideUp();
+        $('#baseassigntaskByrequired').html('Please select Manager').css('color', 'red');
+        $('#baseassigntaskBy').focus();
+        return false;
+      }
+      else if (IsValid(AssignDate)) {
+        $('#baseAssigntaskDaterequired').html('');
+        $("#baseAssigntaskDaterequired").show().delay(3000).slideUp();
+        $('#baseAssigntaskDaterequired').html('Please enter date.').css('color', 'red');
+        $('#baseAssigntaskDate').focus();
+        return false;
+      }
+      else if (IsValid(employeeId)) {
+        $('#baseassignTaskEmployeerequired').html('');
+        $("#baseassignTaskEmployeerequired").show().delay(3000).slideUp();
+        $('#baseassignTaskEmployeerequired').html('Please select employee.').css('color', 'red');
+        $('#baseassignTaskEmployee').focus();
+        return false;
+      } else if (IsValid(task)) {
+        $('#baseassignTaskTitlerequired').html('');
+        $("#baseassignTaskTitlerequired").show().delay(3000).slideUp();
+        $('#baseassignTaskTitlerequired').html('Please enter your Task before submitting.').css('color', 'red');
+        $('#baseassignTaskTitle').focus();
+        return false;
+      } else {
+
+        $.ajax({
+          type: 'get',
+          url: frontendURL + 'task/checktaskbymanagerUI/' + employeeId,
+
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          processData: false,
+          contentType: false,
+          dataType: 'json',
+          beforeSend: function () {
+            $('#savebutton').html('<i class="fa fa-spin fa-spinner savebutton"></i> Submitting...');
+            $("#savebutton").css({ "pointer-events": "none", "opacity": "0.5" });
+          },
+          success: function (response) {
+            $("#assignbasetoggle").prop('checked', true)
+            $('#savebutton').html('Add');
+            $("#savebutton").css({ "pointer-events": "auto", "opacity": "1" });
+            if (response.response.n == 1) {
+              var contenthtml = `
+                    <div class="row" id="addmodalsection">
+                      <div class="popdiv d-flex">
+                      <div class="col-md-6 d-flex" style="text-align: left;">
+                          <div class="my-3">
+                          <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Project Name</b></span> <br>
+                            <span id="projectname" style="font-size: 14px;">`+ response.data.ProjectName + `</span>
+                          </div>   
+                      </div>
+                      <div class="col-md-6 d-flex justify-content-end">
+                        <div class="my-3">
+                        <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Assign By</b></span> <br>
+                        <span id="projectassignby" style="font-size: 14px;">`+ response.data.AssignByStr + `</span>
+                      </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="row" id="addmodalsection">
+                    
+                    <div class="col-md-12">
+                      <div class="row" style="font-size: 14px;"><b style="padding: 0px;display: flex;justify-content: flex-start;font-weight: 500 !important;" class="ms-3">Task details</b></div>
+                      <div id="projecttaskdetail" style="word-break: break-word;font-size: 14px;text-align: left;" class="row ms-1">`+ response.data.TaskTitle + `</div>
+                    </div>
+
+                    <div class="col-md-12 text-center">
+                      <p class="text-center" style="font-size: 18px;font-weight: 500 !important;">Do You Still Want to add task?</p>
+                      <div class="d-flex justify-content-center">
+                       
+                        </div>
+                    
+                      </div>
+                  </div>
+                  `
+              var span = document.createElement("span");
+              span.innerHTML = contenthtml;
+              swal({
+                icon: "warning",
+                title: "",
+                text: "Some Tasks Are Running",
+                buttons: true,
+                dangerMode: true,
+                content: span,
+              })
+                .then((isConfirm) => {
+                  if (isConfirm) {
+                    baseAddTaskbymanager();
+
+                  } else {
+                    swal("Your Task has not been Added!", {
+                      icon: "error",
+                    });
+                  }
+                });
+
+
+            } else {
+              baseAddTaskbymanager();
+            }
+
+          },
+          error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+          }
+        });
+      }
+
+    }
+
+
+    function baseAddTaskbymanager() {
+      var task = $("#baseassignTaskTitle").val().trim();
+      var AssignDate = $("#baseAssigntaskDate").val();
+      var projectname = $("#baseassigntaskProject").val();
+      var AssignBy = $("#baseassigntaskBy").val();
+      var employeeId = $("#baseassignTaskEmployee").val();
+
+      if (IsValid(projectname)) {
+        $('#baseassigntaskProjectrequired').html('');
+        $("#baseassigntaskProjectrequired").show().delay(3000).slideUp();
+        $('#baseassigntaskProjectrequired').html('Please Select Project').css('color', 'red');
+        $('#baseassigntaskProject').focus();
+        return false;
+      } else if (IsValid(AssignBy)) {
+        $('#baseassigntaskByrequired').html('');
+        $("#baseassigntaskByrequired").show().delay(3000).slideUp();
+        $('#baseassigntaskByrequired').html('Please select Manager').css('color', 'red');
+        $('#baseassigntaskBy').focus();
+        return false;
+      }
+      else if (IsValid(AssignDate)) {
+        $('#baseAssigntaskDaterequired').html('');
+        $("#baseAssigntaskDaterequired").show().delay(3000).slideUp();
+        $('#baseAssigntaskDaterequired').html('Please enter date.').css('color', 'red');
+        $('#baseAssigntaskDate').focus();
+        return false;
+      }
+      else if (IsValid(employeeId)) {
+        $('#baseassignTaskEmployeerequired').html('');
+        $("#baseassignTaskEmployeerequired").show().delay(3000).slideUp();
+        $('#baseassignTaskEmployeerequired').html('Please select employee.').css('color', 'red');
+        $('#baseassignTaskEmployee').focus();
+        return false;
+      } else if (IsValid(task)) {
+        $('#baseassignTaskTitlerequired').html('');
+        $("#baseassignTaskTitlerequired").show().delay(3000).slideUp();
+        $('#baseassignTaskTitlerequired').html('Please enter your Task before submitting.').css('color', 'red');
+        $('#baseassignTaskTitle').focus();
+        return false;
+      } else {
+
+        var Project = $('#baseassigntaskProject').val();
+        var TaskTitle = $('#baseassignTaskTitle').val();
+        var date = $('#baseAssigntaskDate').val();
+        var AssignBy = $('#baseassigntaskBy').val();
+        var employeeId = parseInt($("#baseassignTaskEmployee").val());
+
+        // var helpTaken = $('#helptaken').val();
+        //get weekday
+        var dt = $("#baseAssigntaskDate").datepicker("getDate");
+        var dateDay = dt.getDate();
+        var dateMonth = dt.getMonth() + 1;
+        var dateYear = dt.getFullYear()
+        var date = dateDay + "/" + dateMonth + "/" + dateYear;
+        var dateStr = dateDay + "/" + dateMonth + "/" + dateYear;
+        getWeekday = s => {
+          const [dd, mm, yyyy] = s.split('/'),
+            date = new Date(yyyy, mm - 1, dd)
+          return date.toLocaleDateString('en-US', {
+            weekday: 'long'
+          })
+        }
+
+        var Day = getWeekday(dateStr)
+        var AddedByManager = "true"
+
+        var postdata = new FormData();
+        postdata.append('Project', Project);
+        postdata.append('TaskTitle', TaskTitle);
+        postdata.append('AssignBy', AssignBy);
+        postdata.append('Day', Day);
+        postdata.append('AssignDate', dateStr);
+        postdata.append('employeeId', employeeId);
+
+
+        postdata.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+        var errorhtml;
+        var imghtml;
+        $.ajax({
+          type: 'post',
+          url: frontendURL + 'task/addTaskbymanager',
+          data: postdata,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+
+
+            if (response.n == 1) {
+              $('#baseassignTaskModal').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#baseassigntaskProject").val("").trigger("change");
+              $("#baseassignTaskTitle").val("");
+              $("#baseassignTaskEmployee").val("").trigger("change");
+
+              var task = response.data.id
+              var projectname = response.data.ProjectName;
+              var projectassignby = response.data.AssignByStr;
+              var projecttaskdetail = response.data.TaskTitle;
+
+              var content2html = `
+                        <div class="row" id="addmodalsection">
+                          <div class="popdiv d-flex">
+                          <div class="col-md-6 d-flex" style="text-align: left;">
+                              <div class="my-3">
+                              <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Project Name</b></span> <br>
+                               <span id="projectname" style="font-size: 14px;">`+ projectname + `</span>
+                              </div>   
+                          </div>
+                          <div class="col-md-6 d-flex justify-content-end">
+                            <div class="my-3">
+                            <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Assign By</b></span> <br>
+                            <span id="projectassignby" style="font-size: 14px;">`+ projectassignby + `</span>
+                          </div>
+                          </div>
+                        </div>
+                        </div>
+                          <div class="row" id="addmodalsection">
+                          
+                          <div class="col-md-12">
+                            <div class="row" style="font-size: 14px;"><b style="padding: 0px;display: flex;justify-content: flex-start;font-weight: 500 !important;" class="ms-3">Task details</b></div>
+                            <div id="projecttaskdetail" style="word-break: break-word;font-size: 14px;text-align: left;" class="row ms-1">`+ projecttaskdetail + `</div>
+                          </div>
+                        </div>
+                        `
+              var span = document.createElement("span");
+              span.innerHTML = content2html;
+
+              swal({
+                icon: "success",
+                title: "",
+                text: "Task Assigned Successfully",
+                button: "Close",
+                content: span,
+              });
+
+              var pageurl = window.location.href;
+              if (pageurl == frontendURL + "task/manageremptask") {
+                usercurrentweekdata();
+
+              } else {
+                console.log("noooooooooo")
+              }
+
+            } else {
+              $('#baseassignTaskModal').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#baseassigntaskProject").val("").trigger("change");
+              $("#baseassignTaskEmployee").val("").trigger("change");
+              // $("#AssignDate").val("");
+              $("#baseassignTaskTitle").val("");
+
+              swal({
+                icon: "warning",
+                title: "",
+                text: "Error while adding Task",
+                button: "Close",
+              });
+            }
+
+          },
+          error: function (error) {
+            $('#baseassignTaskModal').modal('hide');
+            $('.modal-backdrop').remove();
+            $("#baseassigntaskProject").val("").trigger("change");
+            $("#baseassignTaskEmployee").val("").trigger("change");
+            $("#baseassignTaskTitle").val("");
+            swal({
+              icon: "warning",
+              title: "",
+              text: "Task cannot be added",
+              button: "Close",
+            });
+
+          }
+
+        });
+      }
+    }
+
+    function basegetTodaydate() {
+
+      var todayDate = new Date();
+      date = todayDate.getDate();
+      if (todayDate.getMonth == 12) {
+        currentMonth = todayDate.getMonth();
+      } else {
+        currentMonth = todayDate.getMonth() + 1;
+      }
+      month = currentMonth.toString().padStart(2, '0');
+      year = todayDate.getFullYear();
+      currentDate = date + "-" + month + "-" + year
+      $("#baseAssignDate").val(currentDate);
+      $("#baseAssigntaskDate").val(currentDate);
+
+    }
+
+
+    function basesaveTask() {
+      debugger
+      var task = $("#baseTaskTitle").val().trim();
+      var AssignDate = $("#baseAssignDate").val();
+      var projectname = $("#baseProject").val();
+      var AssignBy = $("#baseAssignBy").val();
+      if (IsValid(projectname)) {
+        $('#baseprojectrequired').html('');
+        $("#baseprojectrequired").show().delay(3000).slideUp();
+        $('#baseprojectrequired').html('Please Select Project').css('color', 'red');
+        $('#baseProject').focus();
+        return false;
+      } else if (IsValid(AssignBy)) {
+        $('#baseassignByrequired').html('');
+        $("#baseassignByrequired").show().delay(3000).slideUp();
+        $('#baseassignByrequired').html('Please select Manager').css('color', 'red');
+        $('#baseAssignBy').focus();
+        return false;
+      }
+      else if (IsValid(AssignDate)) {
+        $('#basedaterequired').html('');
+        $("#basedaterequired").show().delay(3000).slideUp();
+        $('#basedaterequired').html('Please enter date.').css('color', 'red');
+        $('#baseAssignDate').focus();
+        return false;
+      } else if (IsValid(task)) {
+        $('#basetasknamerequired').html('');
+        $("#basetasknamerequired").show().delay(3000).slideUp();
+        $('#basetasknamerequired').html('Please enter your Task before submitting.').css('color', 'red');
+        $('#baseTaskTitle').focus();
+        return false;
+      } else {
+
+        var Project = $('#baseProject').val();
+        var TaskTitle = $('#baseTaskTitle').val();
+        var date = $('#baseAssignDate').val();
+        var AssignBy = $('#baseAssignBy').val();
+        var dt = $("#baseAssignDate").datepicker("getDate");
+        var dateDay = dt.getDate();
+        var dateMonth = dt.getMonth() + 1;
+        var dateYear = dt.getFullYear()
+        var date = dateDay + "/" + dateMonth + "/" + dateYear;
+        var dateStr = dateDay + "/" + dateMonth + "/" + dateYear;
+        getWeekday = s => {
+          const [dd, mm, yyyy] = s.split('/'),
+            date = new Date(yyyy, mm - 1, dd)
+          return date.toLocaleDateString('en-US', {
+            weekday: 'long'
+          })
+        }
+
+        var Day = getWeekday(dateStr)
+
+
+        var postdata = new FormData();
+        postdata.append('Project', Project);
+        postdata.append('TaskTitle', TaskTitle);
+        postdata.append('AssignBy', AssignBy);
+        postdata.append('Day', Day);
+        postdata.append('AssignDate', dateStr);
+
+        postdata.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+        var errorhtml;
+        var imghtml;
+        $.ajax({
+          type: 'post',
+          url: frontendURL + 'task/addTaskAjax',
+          data: postdata,
+          processData: false,
+          contentType: false,
+          beforeSend: function () {
+            $('#basesavebutton').html('<i class="fa fa-spin fa-spinner savebutton"></i> Submitting...');
+            $("#basesavebutton").css({ "pointer-events": "none", "opacity": "0.5" });
+          },
+
+          success: function (response) {
+            $("#basetoggle").prop('checked', true);
+            $('#basesavebutton').html('Add');
+            $("#basesavebutton").css({ "pointer-events": "auto", "opacity": "1" });
+            if (response.n == 1) {
+              $('#baseTaskModal').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#baseProject").val("").trigger("change");
+              $("#baseAssignBy").val("").trigger("change");
+              $("#baseTaskTitle").val("");
+              var projectname = response.data.ProjectName;
+              var projectassignby = response.data.AssignByStr;
+              var projecttaskdetail = response.data.TaskTitle;
+
+              var contenthtml = `
+                        <div class="row" id="addmodalsection">
+                          <div class="popdiv d-flex">
+                          <div class="col-md-6 d-flex" style="text-align: left;">
+                              <div class="my-3">
+                              <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Project Name</b></span> <br>
+                               <span id="projectname" style="font-size: 14px;">`+ projectname + `</span>
+                              </div>   
+                          </div>
+                          <div class="col-md-6 d-flex justify-content-end">
+                            <div class="my-3">
+                            <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Assign By</b></span> <br>
+                            <span id="projectassignby" style="font-size: 14px;">`+ projectassignby + `</span>
+                          </div>
+                          </div>
+                        </div>
+                        </div>
+                          <div class="row" id="addmodalsection">
+                          
+                          <div class="col-md-12">
+                            <div class="row" style="font-size: 14px;"><b style="padding: 0px;display: flex;justify-content: flex-start;font-weight: 500 !important;" class="ms-3">Task details</b></div>
+                            <div id="projecttaskdetail" style="word-break: break-word;font-size: 14px;text-align: left;" class="row ms-1">`+ projecttaskdetail + `</div>
+                          </div>
+                        </div>
+                        `
+              var span = document.createElement("span");
+              span.innerHTML = contenthtml;
+
+              swal({
+                icon: "success",
+                title: "",
+                text: "Task Added Successfully",
+                button: "Close",
+                content: span,
+              });
+
+              var pageurl = window.location.href;
+              if (pageurl == frontendURL + "task/") {
+                usercurrentweekdata();
+
+              } else {
+                console.log("noooooooooo")
+              }
+
+            } else {
+              $('#baseTaskModal').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#baseProject").val("").trigger("change");
+              $("#baseAssignBy").val("").trigger("change");
+              // $("#AssignDate").val("");
+              $("#baseTaskTitle").val("");
+
+              swal({
+                icon: "warning",
+                title: "",
+                text: "TrackPro Marks has been already given for this week",
+                button: "Close",
+              });
+            }
+          },
+          error: function (error) {
+            $('#baseTaskModal').modal('hide');
+            $('.modal-backdrop').remove();
+            $("#baseProject").val("").trigger("change");
+            $("#baseAssignBy").val("").trigger("change");
+            $("#baseAssignDate").val("");
+            $("#baseTaskTitle").val("");
+            swal({
+              icon: "warning",
+              title: "",
+              text: "Some Tasks are still running, hold them if you want to start antoher task, close them if everthing is completed.",
+              button: "Close",
+            });
+
+          }
+
+        });
+      }
+    }
+
+
+    function notificationlist() {
+      $.ajax({
+        type: 'get',
+        url: frontendURL + 'notificationlist',
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function (response) {
+          var notf_count = response.count
+          if (notf_count > 0) {
+            $('#leavelabel').show()
+            $('#leavelabel').html(notf_count)
+          } else {
+            $('#leavelabel').hide()
+          }
+
+          // $('#noftnum').append("Notifications").css('text-align', 'start')
+
+
+          if (response.leavecount > 0) {
+            $('.bg_leave_notification').show()
+            $('.bg_leave_notification').html(response.leavecount)
+          } else {
+            $('.bg_leave_notification').hide()
+            $('.badge').hide()
+          }
+
+          if (response.trackprocheckcount > 0) {
+            $('.bg_notification').html(response.trackprocheckcount)
+          }
+          else {
+            $('.bg_notification').hide()
+          }
+
+
+
+
+        },
+        error: function (error) {
+          console.log('error df; ' + JSON.stringify(error));
+        }
+      });
+    }
+
+    $(document).click(function (event) {
+      if (!$(event.target).closest('.content').length && !$(event.target).closest('#menu2').length) {
+        $('.content').hide();
+        $('#menu2').removeClass("openmenu2");
+      }
+
+
+    });
+
+
+    //  $(document).click('select2:open', () => {
+    //     document.querySelector('.select2-search__field').focus();
+    //   });
+
+  </script>
+  <script>
+
+    $(".dark-overlay").click(function () {
+      closeExpandedNav();
+    });
+
+    $('#hamburger-icon').click(function () {
+      $(".expanded-nav").addClass("expanded");
+      $(".dark-overlay").show();
+    })
+
+    function closeExpandedNav() {
+      $(".expanded-nav").removeClass("expanded");
+      setTimeout(() => {
+        $(".dark-overlay").hide();
+      }, 480);
+    }
+
+
+    function notfApplicationApprove(leaveid, notfid) {
+      $.ajax({
+        url: frontendURL + "leave/leaveactionFront",
+        type: 'POST',
+        headers: {
+          'Authorization': 'Token {{token}}'
+        },
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          'id': leaveid
+        },
+        dataType: 'json',
+        beforeSend: function () {
+          swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+
+          });
+        },
+        success: function (response) {
+          if (response['response']['n'] == 1) {
+            swal({
+              icon: "success",
+              title: "",
+              text: "Application Accepted Successfully",
+              button: "Close",
+            });
+            notificationlist();
+          }
+          else {
+            swal({
+              icon: "error",
+              title: "",
+              text: response['response']['msg'],
+              button: "Close",
+            }).then(() => {
+              // Code to execute after the user closes the SweetAlert dialog
+              location.reload(); // Reload the page
+            });
+          }
+
+        }
+      });
+
+    }
+
+    function clickmodal() {
+      $(".closemodalpopup").click();
+      $('.modal-backdrop').remove();
+    }
+
+
+    function notfrejectleave(id, notfid) {
+      var reason = $("#notfreason").val();
+      if (IsValid(reason)) {
+        $('#notfreasonerror').html('');
+        $('#notfreasonerror').show().delay(3000).slideUp();
+        $('#notfreasonerror').html('This field is required');
+        $('#notfreason').focus();
+        return false;
+      } else if (!/\S/.test(reason)) {
+        $('#notfreasonerror').html('');
+        $('#notfreasonerror').show().delay(3000).slideUp();
+        $('#notfreasonerror').html('This field is required');
+        $('#notfreason').focus();
+        return false;
+      } else {
+        $.ajax({
+          url: frontendURL + "leave/leaveactionFront",
+          type: 'POST',
+          headers: {
+            'Authorization': 'Token {{token}}'
+          },
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            'id': id,
+            'comment': reason,
+          },
+          dataType: 'json',
+          beforeSend: function () {
+            swal({
+              icon: "info",
+              title: "",
+              text: "Loading...",
+              buttons: false,
+
+            });
+          },
+          success: function (response) {
+            if (response['response']['n'] == 1) {
+              $("#notfrejectmodal").modal('toggle');
+              swal({
+                icon: "success",
+                title: "",
+                text: "Application rejected Successfully.",
+                button: "Close",
+              });
+              notificationlist();
+            }
+            else {
+              swal({
+                icon: "error",
+                title: "",
+                text: response['response']['msg'],
+                button: "Close",
+              }).then(() => {
+                // Code to execute after the user closes the SweetAlert dialog
+                location.reload(); // Reload the page
+              });
+            }
+          }
+        });
+      }
+    }
+
+
+    function readnotification() {
+      $.ajax({
+        url: frontendURL + "readnotification",
+        type: 'GET',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: 'json',
+        success: function (response) {
+          notificationlist();
+          var timelist = []
+          var divnamelist = []
+          var notfitem = ""
+
+
+          if (response.data.data.length > 0) {
+            $.each(response.data.data, function (i, o) {
+              console.log("00",o)
+              if (o.leaveID != null) {
+                if (o.To_manager == true && o.action_Taken == false) {
+                  if (o.leaveID != 0) {
+
+                    var encrypted_leave_id = btoa(o.leaveID.toString());
+                    var encrypted_id = btoa(o.leaveapprovalid.toString());
+                    var applicationdetailsurl = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id;
+                    notfitem += `
+                  <div class="linotf notfcountclass ps-2 pe-2">                          
+                    <div class="row"> 
+                      <div class="col-md-2">
+                        <div class="notfimgdiv"> ${o.NotificationTypeId == 1
+                        ? `<img src="{% static 'assets/images/not_new_task_assigned.svg'%}">` :
+                        o.NotificationTypeId == 3
+                          ? `<img src="{% static 'assets/images/not_leave.svg'%}">` :
+                          o.NotificationTypeId == 5
+                            ? `<img src="{% static 'assets/images/not_war_check.svg'%}">` :
+
+                            `<img src="{% static 'assets/images/zentro_logo.jpeg'%}">`
+                      }
+                        </div>
+                      </div>
+
+                      <div class="col-md-10 ps-0">
+
+                        <div class="notftextdiv">
+                          <div class="notfmsg">` + o.NotificationMsg + `</div>
+                        </div>
+
+                        <div class='reasondatebox'>
+                          <div class='notfleavereason'>` + o.leavemanager.reason + `</div>
+                          <div class='leavedate'>`  + o.newleavestartdate + `  to  ` + o.newleaveenddate + `</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                          <div class="appdate">`+ o.applieddate + `</div>
+                          <div class="apptime">`+ o.appliedtime + `</div>
+                        </div>
+
+                        <div class='notfleaveactionflex'>
+                          <a class='notfviewbutton'  href="`+ applicationdetailsurl + `">View</a>
+                          <div class='notfapprovebutton' data-bs-toggle='modal' data-bs-target='#notfapprovemodal' onclick="getapprovemodal(`+ o.leaveapprovalid + `,` + o.id + `);">Approve</div>
+                          <div class='notfrejectbutton'data-bs-toggle='modal' data-bs-target='#notfrejectmodal' onclick="getrejectmodal(`+ o.leaveapprovalid + `,` + o.id + `)">Reject</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>`
+
+
+                  }
+                } else if (o.To_manager == false && o.action_Taken == false) {
+                  if (o.NotificationTitle == 'Working Status') {
+                    var timername = 'loadingtime' + o.id;
+                    divnamelist.push(timername)
+                    timelist.push(o.notfctntime)
+
+                    notfitem += `
+                        <div class='linotf notfcountclass ps-2 pe-2'>
+                          <div class='row'>
+                            <div class='col-md-2'>
+                              <div class='notfimgdiv'> ${o.NotificationTypeId == 1
+                        ? `<img src="{% static 'assets/images/not_new_task_assigned.svg'%}">` :
+                        o.NotificationTypeId == 3
+                          ? `<img src="{% static 'assets/images/not_leave.svg'%}">` :
+                          o.NotificationTypeId == 5
+                            ? `<img src="{% static 'assets/images/not_war_check.svg'%}">` :
+                            `<img src="{% static 'assets/images/zentro_logo.jpeg'%}">`
+                      }
+                                  
+                              </div>
+                            </div>
+
+                            <div class='col-md-10 ps-0'>
+                              <div class='notftextdiv'>
+                                  <div class='notfmsg'>` + o.NotificationMsg + `</div>
+                              </div>
+                              <div class="d-flex justify-content-between mt-2">
+                                <div class="appdate">`+ o.notfctndate + `</div>
+                                <div class="apptime">`+ o.notfctntime + `</div>
+                              </div>
+
+                              ${o.action_Taken == false
+                        ? `
+                                  <div id="working_status_actions` + o.id + `" class='d-flex justify-content-between my-2'>
+                                    <div class='notfapprovebutton' onclick="workingstatus('yes','working_status_actions`+ o.id + `','` + o.id + `')">Yes</div>
+                                    <div class='notfrejectbutton'  onclick="workingstatus('no','working_status_actions`+ o.id + `','` + o.id + `')">No</div>
+                                    <div class='w-100 mx-1' id='loadingtime`+ o.id + `'>00:00:00</div>
+                                  </div>
+                                `
+                        : `<div></div>`
+                      }
+                            </div>
+
+
+                          </div>
+                        </div>`
+
+                  } else {
+
+
+                    notfitem += `
+                      <div class='linotf notfcountclass ps-2 pe-2'>
+                        <div class='row'>
+                          <div class='col-md-2'>
+                            <div class='notfimgdiv'>
+                              ${o.NotificationTypeId == 1 ?
+                        `<img src="{% static 'assets/images/not_new_task_assigned.svg'%}">` :
+                        o.NotificationTypeId == 3 ?
+                          `<img src="{% static 'assets/images/not_leave.svg'%}">` :
+                          o.NotificationTypeId == 5 ?
+                            `<img src="{% static 'assets/images/not_war_check.svg'%}">` :
+
+                            `<img src="{% static 'assets/images/zentro_logo.jpeg'%}">`
+                      }
+                            </div>
+                          </div>
+
+                          <div class='col-md-10 ps-0'>
+                            <div class='notftextdiv'>
+                              <div class='notfmsg'>` + o.NotificationMsg + `</div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                              <div class="appdate">`+ o.notfctndate + `</div>
+                              <div class="apptime">`+ o.notfctntime + `</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>`
+                  }
+                } else if (o.To_manager == true && o.action_Taken == null) {
+                  notfitem += `
+                    <div class='linotf notfcountclass ps-2 pe-2'>
+                      <div class='row'>
+                        <div class='col-md-2'>
+                          <div class='notfimgdiv'>
+                            ${o.NotificationTypeId == 1 ?
+                      `<img src="{% static 'assets/images/not_new_task_assigned.svg'%}">` :
+                      o.NotificationTypeId == 3 ?
+                        `<img src="{% static 'assets/images/not_leave.svg'%}">` :
+                        o.NotificationTypeId == 5 ?
+                          `<img src="{% static 'assets/images/not_war_check.svg'%}">` :
+
+                          `<img src="{% static 'assets/images/zentro_logo.jpeg'%}">`
+                    }
+                                
+                          </div>
+                        </div>
+                        <div class='col-md-10 ps-0'>
+                          <div class='notftextdiv'>
+                            <div class='notfmsg'>` + o.NotificationMsg + `</div>
+                          </div>
+                          <div class="d-flex justify-content-between mt-2">
+                            <div class="appdate">`+ o.notfctndate + `</div>
+                            <div class="apptime">`+ o.notfctntime + `</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>`
+                }
+              }
+
+            });
+          }
+          else {
+            $('#leavelabel').hide()
+            notfitem += `
+              <div class='linotf ps-2 pe-2'>          
+                <div class='leave'>
+                    No Notifications
+                </div>           
+              </div>`
+          }
+          $('.notfmenu').html(notfitem)
+
+
+          for (let i = 0; i < timelist.length; i++) {
+            scheduleFunction(timelist[i], divnamelist[i]);
+          }
+
+
+
+
+
+        }
+      });
+    }
+
+    function leavenotification() {
+      $.ajax({
+        url: frontendURL + "leavenotificationlist",
+        type: 'GET',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: 'json',
+        success: function (response) {
+          notificationlist();
+          var ncount = $('.notfcountclass').length;
+
+          var leavenotfitem = ""
+
+
+          if (response.data.data.length > 0) {
+            $.each(response.data.data, function (i, o) {
+              if (o.To_manager == true && o.action_Taken == false) {
+
+                var encrypted_leave_id = btoa(o.leaveID.toString());
+                var encrypted_id = btoa(o.leaveapprovalid.toString());
+                var applicationdetailsurl = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id;
+
+
+                leavenotfitem += `<div class="linotf ps-2 pe-2"> 
+
+                                 
+                                  <div class="row"> 
+
+                                    <div class="col-md-2">
+                                    <div class="notfimgdiv"> 
+                                      ${o.NotificationTypeId == 1
+                    ? `<img src="{% static 'assets/images/not_new_task_assigned.svg'%}">`
+                    :
+                    o.NotificationTypeId == 3
+                      ? `<img src="{% static 'assets/images/not_leave.svg'%}">`
+                      :
+                      o.NotificationTypeId == 5
+                        ? `<img src="{% static 'assets/images/not_war_check.svg'%}">`
+                        :
+                        `<img src="{% static 'assets/images/zentro_logo.jpeg'%}">`
+                  }
+                                    </div>
+                                    </div>
+
+                                    <div class="col-md-10 ps-0">
+
+                                    <div class="notftextdiv">
+                                     <div class="notfmsg">` + o.NotificationMsg + `</div>
+                                     </div>
+
+                                      <div class='reasondatebox'>
+                                        <div class='notfleavereason'>` + o.leavemanager.reason + `</div>
+                                        <div class='leavedate'>`  + o.newleavestartdate + `  to  ` + o.newleaveenddate + `</div>
+                                      </div>
+
+                                      <div class="d-flex justify-content-between">
+                                        <div class="appdate">`  + o.applieddate + `</div>
+                                        <div class="apptime">`  + o.appliedtime + `</div>
+                                      </div>
+
+                                      <div class='notfleaveactionflex'>
+                                        <a class='notfviewbutton'  href="`+ applicationdetailsurl + `">View</a>
+
+                                        <div class='notfapprovebutton' data-bs-toggle='modal' data-bs-target='#notfapprovemodal' onclick="getapprovemodal(`+ o.leaveapprovalid + `,` + o.id + `);">Approve</div>
+
+                                        <div class='notfrejectbutton' data-bs-toggle='modal' data-bs-target='#notfrejectmodal' onclick="getrejectmodal(`+ o.leaveapprovalid + `,` + o.id + `)">Reject</div>
+                                      </div>
+
+                                     
+
+                                      </div>
+                                      </div>
+
+                                    </div>`
+              }
+
+
+            });
+          }
+
+
+
+          else {
+            $('.bg_leave_notification').hide()
+            $('.badge').hide()
+            leavenotfitem += `<div class='linotf ps-2 pe-2'>
+                            
+                            <div class='d-flex justify-content-center leavetext'>
+                              No Leave Requests
+                            </div> 
+                           
+                            </div>`
+          }
+          $('.leavenotfmenu').html(leavenotfitem)
+
+
+
+
+
+          var acceptmodalhtml = ""
+          var rejectmodalhtml = ""
+
+
+
+
+
+        }
+      });
+    }
+    function updateCountdown(countdown, divname) {
+      var element = document.getElementById(divname);
+      const hours = Math.floor(countdown / 3600);
+      const minutes = Math.floor((countdown % 3600) / 60);
+      const seconds = countdown % 60;
+      element.innerHTML = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+    function formatTime(time) {
+      return time < 10 ? `0${time}` : time;
+    }
+    function scheduleFunction(targetTimeString, divname) {
+      const now = new Date();
+      const targetTime = new Date(now);
+
+      const [time, period] = targetTimeString.split(" ");
+      const [hours, minutes, seconds] = time.split(":");
+      let targetHours = parseInt(hours);
+
+      if (period === "PM" && targetHours < 12) {
+        targetHours += 12;
+      }
+
+      targetTime.setHours(targetHours, parseInt(minutes), parseInt(seconds), 0);
+
+      // Add 15 minutes to the target time
+      targetTime.setMinutes(targetTime.getMinutes() + 15);
+
+      const timeDifference = targetTime - now;
+
+      if (timeDifference > 0) {
+        // Show initial countdown
+        updateCountdown(Math.ceil(timeDifference / 1000), divname);
+
+        // Update countdown every second
+        const countdownInterval = setInterval(() => {
+          const remainingTime = Math.ceil((targetTime - new Date()) / 1000);
+          updateCountdown(remainingTime, divname);
+
+          if (remainingTime <= 0) {
+            clearInterval(countdownInterval);
+            // Execute the function when the countdown reaches zero
+            hit_forced_attendace();
+          }
+        }, 1000);
+      } else {
+        console.log("The specified time has already passed.");
+      }
+    }
+
+    function hit_forced_attendace() {
+      console.log("Function executed 15 minutes after the specified time");
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "mark_forced_system_checkout",
+        headers: { "Authorization": "Token {{token}}" },
+
+        data: {
+          'status': 'no',
+          //'task_notification_id': tasknotificationid,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (response) {
+          swal({
+            icon: 'info',
+            title: "",
+            text: response.response.msg,
+            buttons: true,
+
+          })
+
+        }
+      })
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function workingstatus(status, divname, tasknotificationid) {
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "change_working_status",
+        headers: { "Authorization": "Token {{token}}" },
+
+        data: {
+          'status': status,
+          'task_notification_id': tasknotificationid,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (response) {
+          swal({
+            icon: response.response.status,
+            title: "",
+            text: response.response.msg,
+            buttons: true,
+
+          })
+          $("#" + divname).hide();
+
+        }
+      })
+    }
+
+
+
+
+
+    function getapprovemodal(approvalid, leaveid) {
+      $("#acceptmodalapprovalid").val(approvalid);
+      $("#acceptmodalleaveid").val(leaveid);
+    }
+
+    function getrejectmodal(approvalid, leaveid) {
+      $("#rejectmodalapprovalid").val(approvalid);
+      $("#rejectmodalleaveid").val(leaveid);
+    }
+
+    var backendURL = '{{basebackendUrl}}'
+
+    var url = window.location.href;
+
+    $('.nav-content a').filter(function () {
+      return this.href == url;
+    }).parent().removeClass('activelink active').end().addClass('activelink');
+
+  </script>
+
+  {% endblock %}
+</body>
+
+</html>

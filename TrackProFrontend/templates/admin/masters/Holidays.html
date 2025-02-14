@@ -1,0 +1,354 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+  Holidays
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+  .fa-minus-circle {
+    font-size: 22px
+  }
+
+  .savebtn {
+    background: #00a1ff !important;
+    padding: 5px 25px !important;
+    margin: 0px !important;
+    border-radius: 24px !important;
+    font-size: 15px !important;
+    color: white !important;
+    text-align: center;
+    border: none;
+  }
+
+  .del-icon {
+    cursor: pointer;
+  }
+
+  .modal-body label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #174fa3;
+  }
+
+  .modal-body input {
+    width: 100%;
+    font-size: 16px;
+    color: #5f5b5b;
+    border: none;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: transparent;
+    height: 30px;
+    transition: border 0.4s ease;
+    margin-bottom: 12px;
+  }
+
+  .modal-body input:focus {
+    width: 100%;
+    font-size: 16px;
+    color: #5f5b5b;
+    border: none;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: transparent;
+    height: 30px;
+    transition: border 0.4s ease;
+    margin-bottom: 12px;
+    outline: none;
+  }
+
+  .currentmonth {
+    color: Green;
+  }
+
+  #calendarIcon {
+
+    bottom: 30px;
+    right: 30px;
+  }
+</style>
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div
+        style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+        class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+          style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div id="snackbar"></div>
+
+
+
+
+
+
+  <div class="table-div">
+    <table id="myTable" class="row-border w-100">
+      <thead>
+        <tr class="">
+          <th style="width:10%" class="">Sr. No</th>
+          <th style="width:10%" class="">Day</th>
+          <th style="width:20%" class="">Date</th>
+          <th style="width:50%" class="">Festival/Occassion</th>
+          <th style="width:10%" class="">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for i in holidaylist %}
+        {%if i.currentmonth == True %}
+        <tr>
+          <td class="currentmonth">{{forloop.counter}}</td>
+          <td class="currentmonth">{{i.Day}}</td>
+          <td class="currentmonth">{{i.Date}}</td>
+          <td class="currentmonth">{{i.Festival}}</td>
+          <td>
+            <a class="viewEmpDeetsBtn" style="cursor:pointer;" data-bs-toggle="modal"
+              data-bs-target="#updatemodal{{i.id}}"><img class="edit-icon"
+                src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>
+            <a class="px-1 deleteholbtn" style="cursor:pointer;" data-bs-toggle="modal"
+              data-bs-target="#deletemodal{{i.id}}"><img class="del-icon"
+                src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+
+          </td>
+        </tr>
+        {%else%}
+        <tr>
+          <td>{{forloop.counter}}</td>
+          <td>{{i.Day}}</td>
+          <td>{{i.Date}}</td>
+          <td>{{i.Festival}}</td>
+          <td>
+            <a class="viewEmpDeetsBtn" style="cursor:pointer;" data-bs-toggle="modal"
+              data-bs-target="#updatemodal{{i.id}}"><img class="edit-icon"
+                src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>
+            <a class="px-1 deleteholbtn" style="cursor:pointer;" data-bs-toggle="modal"
+              data-bs-target="#deletemodal{{i.id}}"><img class="del-icon"
+                src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+
+          </td>
+        </tr>
+        {%endif%}
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="addmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <form class="formstyle" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-header ps-4">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Add Holiday</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12 px-4 mt-3" style="position:relative;">
+                <label for="date">Date<span style="color:red;">*</span></label>
+                <input class="mt-2" type="text" id="Date" placeholder="Date" name="Date" autocomplete="off">
+                <div id="calendarIcon"></div>
+                <span id="Dateerror" class="error"></span>
+              </div>
+              <div class="col-12 px-4" style="position:relative;">
+                <label for="Festival">Festival/Occassion<span style="color:red;">*</span></label>
+                <input type="text" class="" id="Festival" value="" name="Festival" placeholder="Enter Festival">
+                <span id="Festivalerror" class="error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  {% for i in holidaylist %}
+  <div class="modal fade" id="updatemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title py-2" id="exampleModalLabel">Update Holiday</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 px-4 mt-3" style="position:relative;">
+              <label for="updateholiday_date{{i.id}}">Date</label>
+              <input type="text" id="updateholiday_date{{i.id}}" class="updateholiday_date" placeholder="Select Date"
+                value="{{i.updateolddate}}" name="updateholiday_date" autocomplete="off">
+              <div id="calendarIcon"></div>
+              <span id="updateholiday_dateerror{{i.id}}" class="error"></span>
+            </div>
+            <div class="col-12 px-4">
+              <label for="updateholidayfestival{{i.id}}">Festival/Occassion</label>
+              <input type="text" class="" id="updateholidayfestival{{i.id}}" value="{{i.Festival}}">
+              <span id="updateholidayfestivalerror{{i.id}}" class="error-message"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+          <button class="trackproBtn" id="addEmployeeBtn" onclick="updateholiday('{{i.id}}')">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% for i in holidaylist %}
+  <div class="modal fade" id="deletemodal{{i.id}}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          Are you sure you want to delete?
+        </div>
+        <div class="modal-footer">
+          <a href="javascript:void(0)" onclick="deleteholiday('{{i.id}}')" class="btn btn-danger"
+            data-bs-dismiss="modal">Yes</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+<li><a data-bs-toggle="modal" data-bs-target="#addmodal">
+    <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Holidays"
+      src="{% static 'assets/svg/holidays.svg' %}">
+  </a></li>
+{% endblock %}
+
+{% block script %}
+{{block.super}}
+<script>
+  $(document).ready(function () {
+    $('#myTable').DataTable();
+
+    $("#Date").datepicker({
+      dateFormat: 'dd-mm-yy',
+      changeYear: true,
+      changeMonth: true,
+    });
+    $(".updateholiday_date").datepicker({
+      dateFormat: 'dd-mm-yy',
+      changeYear: true,
+      changeMonth: true,
+    });
+
+
+
+  });
+
+  function formValidation() {
+
+
+
+    var Festival = $('#Festival').val().trim();
+    var date = $('#Date').val().trim();
+    if (IsValid(date)) {
+      $('#Date').html('');
+      $('#Dateerror').show().delay(3000).slideUp();
+      $('#Dateerror').html('Date of Holiday is required');
+      $('#Date').focus();
+      return false;
+    }
+
+    if (IsValid(Festival)) {
+      $('#Festival').html('');
+      $('#Festivalerror').show().delay(3000).slideUp();
+      $('#Festivalerror').html('Festival/Occassion is required');
+      $('#Festival').focus();
+      return false;
+    }
+
+  }
+
+
+
+  function updateholiday(id) {
+
+    var Festival = $('#updateholidayfestival' + id).val().trim();
+    var date = $('#updateholiday_date' + id).val().trim();
+
+    if (IsValid(date)) {
+      $('#updateholiday_date' + id).html('');
+      $('#updateholiday_dateerror' + id).show().delay(3000).slideUp();
+      $('#updateholiday_dateerror' + id).html('Date of Holiday is required');
+      $('#updateholiday_date' + id).focus();
+      return false;
+    }
+    else if (IsValid(Festival)) {
+      $('#updateholidayfestival' + id).html('');
+      $('#updateholidayfestivalerror' + id).show().delay(3000).slideUp();
+      $('#updateholidayfestivalerror' + id).html('Festival/Occassion is required');
+      $('#updateholidayfestival' + id).focus();
+      return false;
+    } else {
+
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "updateholidays",
+        data: {
+          'id': id,
+          'Date': date,
+          'Festival': Festival,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (response) {
+          console.log("reps", response.data.n)
+          if (response.data.n == 1) {
+            window.location = frontendURL + "Holidays";
+          } else {
+            window.location = frontendURL + "Holidays";
+          }
+
+        }
+      });
+    }
+  }
+
+
+
+  function deleteholiday(id) {
+    var id = id;
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "delete_holidays",
+      data: {
+        'id': id,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      success: function (response) {
+        console.log("response", response)
+        if (response.data.n == 1) {
+          window.location = frontendURL + "Holidays";
+        } else {
+          window.location = frontendURL + "Holidays";
+        }
+
+      }
+    });
+
+  }
+</script>
+{% endblock %}

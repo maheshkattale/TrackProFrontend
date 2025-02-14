@@ -1,0 +1,646 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+    Leave Mapping
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'admin/dashboard/dashboard.css'%}" />
+<link rel="stylesheet" href="{% static 'assets/css/style2.css'%}" />
+<style>
+    .dataTables_wrapper .dataTables_filter input {
+        border: none;
+        border-radius: 3px;
+        padding: 5px;
+        background-color: transparent;
+        margin-left: 3px;
+        outline: none;
+    }
+
+    .dataTables_wrapper #leave_mapping_Table_filter label::after {
+        content: '\f002' !important;
+        font-family: FontAwesome !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        text-decoration: inherit !important;
+        color: #000 !important;
+        font-size: 18px !important;
+        padding-right: 0.5em !important;
+    }
+
+    .dataTables_wrapper #leave_mapping_Table_filter label {
+        border-radius: 0px !important;
+        border: none !important;
+        padding: 5px !important;
+        background-color: transparent !important;
+        margin-left: 3px !important;
+        border-bottom: 1px solid rgb(190, 190, 190) !important;
+        outline: none !important;
+        color: rgb(151, 151, 151) !important;
+
+    }
+
+    .secondrow {
+        position: relative;
+    }
+
+    .srnumber {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 9% !important;
+    }
+
+    .spanrank {
+        border: 1px solid #888888;
+        border-radius: 50%;
+        padding: 0px 8px;
+        color: #888888;
+    }
+
+    .td_text {
+        text-align: left !important;
+    }
+
+    .select2-container--default.select2-container--disabled .select2-selection--single {
+        background-color: transparent;
+        cursor: default;
+    }
+
+    .select2-container--default .select2-selection--single {
+        border-bottom: none !important;
+
+    }
+
+    .select2-container .select2-selection--single .select2-selection__rendered {
+
+        color: #000000;
+    }
+
+    .prodsearch .autocomp-box {
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+        max-height: 280px;
+        overflow-y: auto;
+        border: 1px solid lightgrey;
+    }
+
+    .prodsearch.active .autocomp-box {
+        padding: 10px 8px;
+        opacity: 1;
+        pointer-events: auto;
+        border: 1px solid lightgrey;
+        position: absolute;
+        background: white;
+        width: 18%;
+    }
+
+    .autocomp-box li {
+        list-style: none;
+        padding: 5px 6px;
+        font-size: 14px;
+        display: none;
+        width: 100%;
+        cursor: default;
+        border-radius: 3px;
+    }
+
+    .prodsearch.active .autocomp-box li {
+        display: block;
+    }
+
+    .autocomp-box li:hover {
+        background: #efefef;
+        cursor: pointer;
+    }
+
+    .digit-group input {
+        background-color: white;
+        height: 45px;
+        width: 42px;
+        border-radius: 6px;
+        outline: none;
+        font-size: 1.125rem;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    .digit-group .splitter {
+        padding: 0 5px;
+        color: white;
+        font-size: 24px;
+    }
+</style>
+
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+                class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                    style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+
+    <div class="title-div row py-3">
+        <div class="col">
+            <span class="company-title">Leave mapping</span>
+        </div>
+
+        <div class="col justify-content-end">
+            <div class="d-flex justify-content-end">
+
+                <div class="mx-1 justify-content-end">
+                    <button class="btn-round-blue usermapping-form-button" onclick="Apply_mapping();" type="submit">+
+                        Apply Mapping</button>
+
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+    </div>
+
+
+
+    <div class="table-div">
+        <table class="w-100 row-border" id="leave_mapping_Table">
+            <thead class="border-bottom">
+                <th></th>
+                <th>Sr. No</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Manager 1</th>
+                <th>Manager 2</th>
+                <th>Manager 3</th>
+            </thead>
+
+            <tbody id="emplpoyee_table_body">
+
+
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+
+<script>
+
+    var EmployeeIds = [];
+    var checkedEmployeeIds = [];
+
+    $(document).ready(function () {
+        getemplist()
+        $(".usermapping-form-button").hide()
+
+        $('#leave_mapping_Table').on('change', 'input[type="checkbox"]', function () {
+
+            $(this).closest('tr').find('input').removeAttr("disabled")
+
+            var employeeIdcopy = parseInt($(this).val(), 10);
+            var position1copy = $(this).closest('tr').find('.manager1').attr('managerid1');
+            var position2copy = $(this).closest('tr').find('.manager2').attr('managerid2');
+            var position3copy = $(this).closest('tr').find('.manager3').attr('managerid3');
+            var serialNumber = parseInt($(this).closest('tr').find('.srno').text(), 10);
+
+            mappings = {
+                serialNumber: serialNumber,
+                employeeId: employeeIdcopy,
+                position1: position1copy,
+                position2: position2copy,
+                position3: position3copy,
+            }
+
+
+            var existingEmployeeIndex = checkedEmployeeIds.findIndex(function (employee) {
+                return employee.employeeId === mappings.employeeId;
+            });
+
+            if ($(this).prop('checked')) {
+                if (existingEmployeeIndex !== -1) {
+                    // Update the existing employee if found
+                    checkedEmployeeIds[existingEmployeeIndex] = mappings;
+                    EmployeeIds[existingEmployeeIndex] = mappings;
+                } else {
+                    EmployeeIds.push(employeeIdcopy)
+                    checkedEmployeeIds.push(mappings);
+                }
+            } else {
+                // Remove the employee ID from the array if the checkbox is unchecked
+                var index = existingEmployeeIndex;
+                if (index !== -1) {
+                    checkedEmployeeIds.splice(index, 1);
+                    EmployeeIds.splice(index, 1);
+                }
+            }
+
+            checkedEmployeeIds.sort((a, b) => a.serialNumber - b.serialNumber);
+
+            if (checkedEmployeeIds.length < 1) {
+                $(".usermapping-form-button").hide()
+            } else {
+                $(".usermapping-form-button").show()
+            }
+
+            // You can use the checkedEmployeeIds list as needed
+            console.log("checkedEmployeeIds on chnage checkbox", checkedEmployeeIds)
+        });
+    });
+
+
+
+    function checked_Checkbox() {
+        var selected = new Array();
+        $(".manager-dropdown-select").attr("disabled", true);
+        $(".Checkbox:checked").each(function () {
+            $(this).closest('tr').find('input').removeAttr("disabled")
+            var employeeIdcopy = $(this).val();
+            var position1copy = $(this).closest('tr').find('.manager1').attr('managerid1');
+            var position2copy = $(this).closest('tr').find('.manager2').attr('managerid2');
+            var position3copy = $(this).closest('tr').find('.manager3').attr('managerid3');
+
+            mappings = {
+                employeeId: employeeIdcopy,
+                position1: position1copy,
+                position2: position2copy,
+                position3: position3copy,
+            }
+            selected.push(mappings);
+        });
+
+
+
+    }
+
+    function Apply_mapping() {
+        // 
+        var New_dictionary = []
+        var select1manager;
+        var select2manager;
+        var select3manager;
+
+        console.log("checkedEmployeeIds Apply_mapping", checkedEmployeeIds)
+        $.each(checkedEmployeeIds, function (index, employee) {
+            // Perform your desired operations on each employee here
+            if (index === 0) {
+                select1manager = employee.position1;
+                select2manager = employee.position2;
+                select3manager = employee.position3;
+            }
+            manager1 = {
+                employeeId: employee.employeeId,
+                position: 1,
+                managerId: employee.position1,
+            }
+            manager2 = {
+                employeeId: employee.employeeId,
+                position: 2,
+                managerId: employee.position2,
+            }
+            manager3 = {
+                employeeId: employee.employeeId,
+                position: 3,
+                managerId: employee.position3,
+            }
+
+
+
+            multi_manager1 = {
+                employeeId: employee.employeeId,
+                position: 1,
+                managerId: select1manager,
+            }
+            multi_manager2 = {
+                employeeId: employee.employeeId,
+                position: 2,
+                managerId: select2manager,
+            }
+            multi_manager3 = {
+                employeeId: employee.employeeId,
+                position: 3,
+                managerId: select3manager,
+            }
+
+
+            if (New_dictionary.length < 3) {
+                New_dictionary.push(manager1);
+                New_dictionary.push(manager2);
+                New_dictionary.push(manager3);
+            } else {
+                New_dictionary.push(multi_manager1);
+                New_dictionary.push(multi_manager2);
+                New_dictionary.push(multi_manager3);
+            }
+        });
+
+
+
+
+        $.ajax({
+            url: frontendURL + 'leave/Apply_Leave_Mapping',
+            headers: { "Authorization": "Token {{token}}" },
+            type: 'POST',
+
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+
+                'New_dictionary': JSON.stringify(New_dictionary)
+            },
+
+            dataType: 'json',
+            success: function (response) {
+                swal({
+                    icon: "success",
+                    title: "",
+                    text: "Mapping Applied Successfully",
+                    button: "Close",
+                    content: "",
+                }).then(() => {
+                    // Code to execute after the user closes the SweetAlert dialog
+                    location.reload(); // Reload the page
+                });
+            },
+            error: function (error) {
+                swal({
+                    icon: "warning",
+                    title: "",
+                    text: JSON.stringify(error),
+                    button: "Close",
+                    content: "",
+                });
+            }
+        });
+    }
+
+    function check_options() {
+        var row = $(this).closest('tr');
+        var manager1copy = row.find('.manager1').val();
+        var manager2copy = row.find('.manager2').val();
+        var manager3copy = row.find('.manager3').val();
+        row.find(".manager1 option").show();
+        row.find(".manager2 option").show();
+        row.find(".manager3 option").show();
+        if (manager1copy != null) {
+            row.find(".manager2 option[value='" + manager1copy + "']").hide();
+            row.find(".manager3 option[value='" + manager1copy + "']").hide();
+        } else if (manager2copy != null) {
+            row.find(".manager1 option[value='" + manager2copy + "']").hide();
+            row.find(".manager3 option[value='" + manager2copy + "']").hide();
+        } else if (manager3copy != null) {
+            row.find(".manager1 option[value='" + manager3copy + "']").hide();
+            row.find(".manager2 option[value='" + manager3copy + "']").hide();
+        }
+    }
+
+    function searchmanager(userid, managercount) {
+        $(".prodsearch").removeClass('active');
+        $("#prodsearchdiv" + managercount + userid).find("#manager" + managercount + userid).attr('managerid' + managercount, '');
+
+        var username = $("#manager" + managercount + userid).val();
+        var trhtml = "";
+        var fd = new FormData();
+        fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
+        fd.append("username", username);
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "emplist",
+            data: fd,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+                $("#prodsearchdiv" + managercount + userid).addClass('active');
+                $.each(response.data, function (i, o) {
+                    trhtml += `
+                        <li class="searchlistli" value="`+ o.id + `" onclick="managerlistdata('` + o.id + `','` + o.Firstname + ' ' + o.Lastname + `','` + managercount + `','` + userid + `');">` + o.Firstname + ` ` + o.Lastname + `</li>
+                        `
+                })
+                $("#managerlist" + managercount + userid).html(trhtml);
+
+            },
+        });
+    }
+
+    function managerlistdata(managerid, managername, managercount, userid) {
+
+        var fd = new FormData();
+        fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
+        fd.append("managerid", managerid);
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "get_emp_by_id",
+            data: fd,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+                console.log("response", response, response.data.id)
+                $("#prodsearchdiv" + managercount + userid).removeClass('active');
+                $("#manager" + managercount + userid).val(response.data.Firstname + ' ' + response.data.Lastname);
+                $("#prodsearchdiv" + managercount + userid).find("#manager" + managercount + userid).attr('managerid' + managercount, response.data.id);
+
+                changemanager("#manager" + managercount + userid)
+            },
+        });
+
+
+
+    }
+    
+    function getemplist() {
+        var trhtml = ""
+        var fd = new FormData();
+        fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "leave/get_leavemapping_employee_list",
+            data: fd,
+            processData: false,
+            contentType: false,
+
+            success: function (response) {
+
+
+
+                var counterobj = 0
+                $.each(response.data, function (i, o) {
+                    counterobj += 1
+
+                    trhtml += `
+                    <tr>
+                        <td>
+                            <input type="checkbox" onchange="checked_Checkbox();" class="Checkbox 1 check`+ o.id + `" id="check` + o.id + `" name="check` + o.id + `" value="` + o.id + `">
+                            <label class="" for="check`+ o.id + `"></label>
+                        </td>
+                        <td class="srno"> `+ counterobj + `</td>
+                        <td style="text-overflow:ellipsis;">`+ o.Firstname + ` ` + o.Lastname + `</td>
+                        <td>`+ o.DepartmentID + `</td>
+
+                        <td>
+
+
+
+                            <div class="prodwrapper">
+                                <div class="prodsearch" id="prodsearchdiv1`+ o.id + `">
+                                <input onclick="check_options();" placeholder="Manager 1" name ="manager1`+ o.id + `" type="text" class="form-control manager-dropdown-select manager1" oninput="searchmanager(` + o.id + `,1);" id="manager1` + o.id + `"  managerid1 ="` + o.managerid1 + `" value="` + o.managername1 + `" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" disabled>
+                                <span id="managererr`+ o.id + `" class="error"></span>
+                                <div class="autocomp-box" id="managerlist1`+ o.id + `">
+                                    
+                                </div>
+                                </div>
+                            </div>   
+
+
+                        </td> 
+                                                
+                        <td>
+
+                            <div class="prodwrapper">
+                                <div class="prodsearch" id="prodsearchdiv2`+ o.id + `">
+                                <input onclick="check_options();" placeholder="Manager 2" name ="manager2`+ o.id + `" type="text" class="form-control manager-dropdown-select manager2" oninput="searchmanager(` + o.id + `,2);" id="manager2` + o.id + `"  managerid2 ="` + o.managerid2 + `" value="` + o.managername2 + `" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" disabled>
+                                <span id="managererr`+ o.id + `" class="error"></span>
+                                <div class="autocomp-box" id="managerlist2`+ o.id + `">
+                                    
+                                </div>
+                                </div>
+                            </div>                    
+                        </td>   
+
+                        <td>
+
+
+                            <div class="prodwrapper">
+                                <div class="prodsearch" id="prodsearchdiv3`+ o.id + `">
+                                <input onclick="check_options();" placeholder="Manager 3" name ="manager3`+ o.id + `" type="text" class="form-control manager-dropdown-select manager3" oninput="searchmanager(` + o.id + `,3);" id="manager3` + o.id + `"  managerid3 ="` + o.managerid3 + `" value="` + o.managername3 + `" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" disabled>
+                                <span id="managererr`+ o.id + `" class="error"></span>
+                                <div class="autocomp-box" id="managerlist3`+ o.id + `">
+                                    
+                                </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </td>
+                        
+                    </tr>`
+
+                })
+
+                trhtml
+                $('#emplpoyee_table_body').html(trhtml);
+
+                initlizedatatable()
+
+
+
+
+
+
+            },
+        });
+    }
+    
+    function initlizedatatable() {
+        var dataTable = $('#leave_mapping_Table').DataTable({
+            "searching": true, // Enable global search
+
+            "deferRender": true,
+
+            "columnDefs": [
+                {
+                    "targets": [2, 3], // Apply the following options only to the first column (index 0)
+                    "searchable": true // Enable search for the "name" column
+                },
+                {
+                    "targets": [0, 1, 3, 4, 5, 6], // Apply the following options to the second and third columns (index 1 and 2)
+                    "searchable": false // Disable search for the "age" and "country" columns
+                }
+            ],
+            "language": {
+                "searchPlaceholder": "by emp or dept" // Set the placeholder text for the search input
+            }
+        });
+    }
+    
+    function changemanager(selectedinput) {
+
+
+        var employeeIdcopy = parseInt($(selectedinput).closest('tr').find('input[type="checkbox"]').val(), 10);
+
+        var position1copy = $(selectedinput).closest('tr').find('.manager1').attr('managerid1');
+        var position2copy = $(selectedinput).closest('tr').find('.manager2').attr('managerid2');
+        var position3copy = $(selectedinput).closest('tr').find('.manager3').attr('managerid3');
+
+
+        var serialNumber = parseInt($(selectedinput).closest('tr').find('.srno').text(), 10);
+
+        mappings = {
+            serialNumber: serialNumber,
+            employeeId: employeeIdcopy,
+            position1: position1copy,
+            position2: position2copy,
+            position3: position3copy,
+        }
+        var existingEmployeeIndex = checkedEmployeeIds.findIndex(function (employee) {
+            return employee.employeeId === mappings.employeeId;
+        });
+
+        if ($(selectedinput).closest('tr').find('input[type="checkbox"]').prop('checked')) {
+            if (existingEmployeeIndex !== -1) {
+                checkedEmployeeIds[existingEmployeeIndex] = mappings;
+                EmployeeIds[existingEmployeeIndex] = mappings;
+            } else {
+                EmployeeIds.push(employeeIdcopy)
+                checkedEmployeeIds.push(mappings);
+            }
+        } else {
+            // Remove the employee ID from the array if the checkbox is unchecked
+            var index = existingEmployeeIndex;
+            if (index !== -1) {
+                checkedEmployeeIds.splice(index, 1);
+                EmployeeIds.splice(index, 1);
+            }
+        }
+
+        checkedEmployeeIds.sort((a, b) => a.serialNumber - b.serialNumber);
+
+        if (checkedEmployeeIds.length < 1) {
+
+            $(".usermapping-form-button").hide()
+
+        } else {
+            $(".usermapping-form-button").show()
+        }
+        // You can use the checkedEmployeeIds list as needed
+        console.log("checkedEmployeeIds on chnage select", checkedEmployeeIds)
+
+    }
+
+
+
+</script>
+
+{% endblock %}

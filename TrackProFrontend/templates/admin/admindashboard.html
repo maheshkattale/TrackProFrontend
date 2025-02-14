@@ -1,0 +1,1317 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+  Admin Dashboard
+</div>
+{% endblock %}
+{% block content %}
+<style>
+
+
+  .Monthname .select2-container .select2-selection--single .select2-selection__rendered {
+    font-size: 12px;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: #444;
+      line-height: 10px;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 10px;
+  }
+  .select2-container--default .select2-selection--single {
+      height: 25px;
+      box-shadow: none;
+  }
+  .select2-results__option {
+      padding: 3px;
+      user-select: none;
+      -webkit-user-select: none;
+      font-size: 11px !important;
+  }
+
+  #attlisttable_filter{
+    position: absolute;
+      top: -13%;
+      left: 1%;
+  }
+  #attlisttable_length{
+    display:none;
+  }
+  .graphwrapper{
+    width:100%;
+    display:block;
+    overflow:hidden;
+    padding:7px 10px;
+    background:#fff;
+    border-radius:4px;
+  }
+
+  .graphwrapper canvas{
+    background:#fff;
+    height:250px;
+  }
+  th{
+    font-weight:500 !important;
+    padding: 4px;
+      font-size: 13px;
+  }
+
+  .graphwrapper h1{
+    font-family: Roboto;
+    color: #fff;
+    margin-top:20px;
+    font-weight:200;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+  }
+  .atttableProfileImage {
+      height: 40px;
+      width: 40px;
+      /* border-radius: 50%; */
+      margin-right: 16px;
+      background-size: cover;
+      
+  }
+  .searchbutton{
+    border: 1px solid lightgrey;
+      font-size: 13px;
+      /* height: 25px; */
+      padding: 4px 10px;
+  }
+  .nobday{
+        font-size:13px;
+        margin-left:13px;
+      }
+      .attwrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-evenly;
+      border-radius: 5px;
+      }
+
+      .attwrapper .option {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      margin: 0 3px;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 0 10px;
+      border: 2px solid lightgrey;
+      transition: all 0.3s ease;
+      }
+
+      .attwrapper .option .dot {
+      height: 10px;
+      width: 10px;
+      background: #d9d9d9;
+      border-radius: 50%;
+      position: relative;
+      margin-right:3px;
+      }
+
+      .detailsbtndiv {
+      color: #174fa3;
+      border: 1px solid #174fa3;
+      border-radius: 15px;
+      width: 80px;
+      padding: 2px 5px;
+      font-size: 12px;
+  }
+
+      input[type="radio"] {
+      display: none;
+      }
+
+      #option-1:checked:checked ~ .option-1,
+      #option-2:checked:checked ~ .option-2,
+      #option-3:checked:checked ~ .option-3{
+      border-color: #174fa3;
+
+      }
+
+      #option-1:checked:checked ~ .option-1 .dot,
+      #option-2:checked:checked ~ .option-2 .dot,
+      #option-3:checked:checked ~ .option-3 .dot{
+      /* background: #174fa3; */
+      display:none;
+      }
+
+      #option-1:checked:checked ~ .option-1 .dot::before,
+      #option-2:checked:checked ~ .option-2 .dot::before,
+      #option-3:checked:checked ~ .option-3 .dot::before {
+      opacity: 1;
+      transform: scale(1);
+      }
+
+      .attwrapper .option span {
+      font-size: 12px;
+      color: #676767;
+      }
+
+      #option-1:checked:checked ~ .option-1 span,
+      #option-2:checked:checked ~ .option-2 span,
+      #option-3:checked:checked ~ .option-3 span{
+      color: #174fa3 ;
+      }
+      .searchbox{
+        background-color: #EBFAFF;
+      }
+      #attlisttable tbody td {
+      padding: 4px 10px !important;
+      }
+      #attlisttable>tbody>tr>td{
+      text-transform: capitalize;
+      font-weight: 400;
+      padding: 6px !important;
+      border:1px solid #8080804f;
+  }
+
+  /* #attlisttable tbody{
+    display: block;
+    max-height: 220px;
+    overflow-y: scroll;
+  }
+
+  #attlisttable thead, #attlisttable tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+  #attlisttable tbody td{
+    padding:6px;
+    border: 1px solid lightgrey;
+  } */
+
+  .atttableProfileImage img{
+  width:40px;
+  height:40px;
+  }
+  #attlisttable{
+  width: 100%;
+  }
+  .tableHeadings {
+      background-color: #d3d3d345;
+    }
+  .holdycolor .holdybar{
+    background-color: #174fa3;
+    color:white;
+    text-align:center;
+  }
+  /* .holdycolor td{
+    color:white;
+  } */
+  .leavecolor .leavebar{
+    background-color:rgb(231 94 94);
+    color:white;
+    text-align:center;
+  }
+  /* .leavecolor td{
+    color:white;
+  } */
+  .Woffcolor .weekoffbar{
+    background-color: #008000c2;
+    color:white;
+    text-align:center;
+  }   
+
+  #modaltable thead tr{
+    border-bottom: 1px solid #ada9a9;
+    border-top: 1px solid #ada9a9;
+  }
+  #modaltable tbody td{
+    padding:10px;
+  }
+  #modalempphoto{
+    width:80%;
+  }
+  .modalimgcontainer{
+    width:40px;
+    height:30px;
+    border-radius: 50%;
+  }
+  #modaldataweek{
+    border:none;
+    font-size:12px;
+  }
+  #modalempdesignation{
+      color: #174fa3;
+      display: flex;
+      justify-content: center;
+      background-color: #e2f7ff;
+      padding: 13px 10px;
+      font-size: 12px;
+      border: 1px solid transparent;
+      border-radius: 15px;
+      width:150px;
+  }
+  div.dt-buttons .dt-button {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 1px 10px;
+      margin: 0;
+      font-size: 11px;
+      background-color: white !important;
+  }
+  .firstheadtext{
+    font-weight:500;
+    font-size:15px;
+  }
+  #weeklist{
+    border: none;
+  }
+  .fa-arrow-down{
+    font-size:12px;
+    font-weight: 500;
+  }
+  .modalempid{
+    font-size:13px;
+    font-weight:400;
+    color:rgb(179, 176, 176);
+  }
+
+  .attmodaltable thead tr th {
+      font-size: 14px;
+      background-color: #bec8cc !important;
+      color: black;
+      text-align: left;
+      font-weight: 500;
+      padding: 5px 10px !important;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+      box-sizing: border-box;
+      display: inline-block;
+      min-width: 1.5em;
+      padding: 0px !important;
+      margin: 8px 8px 8px 2px !important;
+      text-align: center;
+      text-decoration: none !important;
+      cursor: pointer;
+      color: inherit !important;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      background: transparent;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button .active:hover{
+      background-color: #b9f7ff !important;
+      outline-color: #b9f7ff !important;
+      border-color: #b9f7ff !important;
+  }
+  .dataTables_wrapper .dataTables_info {
+      margin-left: 5px;
+  }
+  .edit-icon{
+      cursor: pointer;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  box-sizing: border-box !important;
+  display: inline-block !important;
+  min-width: 30px !important;
+  max-height:30px !important;
+  padding: 2px 7px 7px 5px !important;
+  margin: 0 0 0 2px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  color: black !important;
+  border: 1px solid rgb(236, 236, 236) !important;
+  border-radius: 6px !important;
+  background: white !important;
+
+  }
+  .dataTables_wrapper #attlisttable_filter input {
+      padding: 1px !important;
+      margin-top: 7px !important;
+      width:400px;
+      background-color: white;
+      font-size:12px;
+  
+  }
+  .dataTables_wrapper .dataTables_scroll {
+      clear: both;
+      height: 265px !important;
+  }
+  .leavetable{
+    border-collapse: collapse !important;
+  }
+  .leavetable .tbody, td, tfoot, th, thead, tr{
+    border-style: solid;
+  }
+  #mySearch{
+      width: 400px;
+      border: 1px solid lightgrey;
+      font-size: 14px;
+      height: 30px;
+  }
+  #mySearch:focus{
+      outline: none;
+  }
+
+  /* #attexcelreportbtn {
+      font-size: 12px;
+      border: 1px solid #a9a6a6;
+      background-color: #d3d3d37d;
+      padding: 1px 20px;
+  } */
+  .select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #aaa;
+    border-radius: 0px;
+    height: 33px;
+    box-shadow: none;
+  }
+  .select2-container{
+    min-width: 100px;
+  }
+  .holdayheading {
+
+    margin: auto 0;
+}
+</style>
+
+<main class="main-wrapper">
+          <div class="row pt-3">
+            
+                
+
+            <div class="col-md-3">
+              <div class="adminmaincard firstrowfirstcard h-100">
+                  <div class="d-flex justify-content-between mb-2 firstcardheading">
+                      <div class="firstheadtext">Today's Status</div>
+                  </div>
+                  <div class="row mt-4">
+                      <div class="col-md-6 firstcarddatabox">
+                          <div class="attbox"><img src="/static/Media/taskicons/addashboardcheck.svg"  width="100%" height="60%" alt="Paris" ></div>
+                          <div class="firstcardtext">Total</div>
+                          <p>{{todaystatus_list.totalcount}}</p>
+                      </div>
+                      <div class="col-md-6 firstcarddatabox">
+                          <div class="latebox"><img src="/static/Media/taskicons/addashboardhourglass.svg"  width="100%" height="60%" alt="Paris" ></div>
+                          <div class="firstcardtext">Attendance</div>
+                          <p>{{todaystatus_list.att_count}}</p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6 firstcarddatabox">
+
+
+                              <a href="/late_attendance"><div class="absentbox"><img src="/static/Media/taskicons/addashboardabsent.svg"  style="cursor:pointer;" width="100%" height="60%" alt="Paris" ></div></a>
+
+
+                          <div class="modal fade" id="Latecomersmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-scrollable">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Late Arrived</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                <table class="table leavetable" style="width:100%;">
+                                    <thead>
+                                      <tr class="tableHeadings" style="height:30px;font-weight:500;">
+                                        <th>Sr No.</th>
+                                        <th>Employee Name</th>
+                                        <th style="width:20%;">In Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody class="">
+                                      {%for i in todaystatus_list.lateemplist%}
+                                      <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{i.empname}}</td>
+                                        <td>{{i.intime}}</td>
+                                      </tr>
+                                      {%endfor%}
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="firstcardtext">Late Arrived</div>
+                          <p>{{todaystatus_list.latecount}}</p>
+                      </div>
+                      <div class="col-md-6 firstcarddatabox">
+                          <div class="leavebox"><img src="/static/Media/taskicons/addashboardleave.svg" style="cursor:pointer;" width="100%" height="60%" alt="Paris"data-bs-toggle="modal" data-bs-target="#Leavelistmodal"></div>
+                          <div class="modal fade" id="Leavelistmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-scrollable">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Employees on Leave</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                <table class="table leavetable" style="width:100%;">
+                                    <thead>
+                                      <tr class="tableHeadings" style="height:30px;font-weight:500;">
+                                        <th>Sr No.</th>
+                                        <th>Employee Name</th>
+                                        <th>Leave Duration</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody class="">
+                                      {%for i in todaystatus_list.leaveemplist%}
+                                      <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{i.empname}}</td>
+                                        <td>{{i.Leavetype}}</td>
+                                      </tr>
+                                      {%endfor%}
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="firstcardtext">Leave Applied</div>
+                          <p>{{todaystatus_list.onleavecount}}</p>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              
+                <div class="adminmaincard firstrowsecondcard h-100">
+                    <div class="pb-2 atthead">Location</div>
+                    <div class="piediv">
+                        <canvas id="campaign_report"></canvas>
+                        {{ locationcountdata|json_script:"locationcountdata" }}
+                    </div>
+                </div>
+            </div>
+
+       
+           
+            <div class="col-md-4">
+              <div class="adminmaincard h-100">
+                <div class="atthead d-flex justify-content-between">  
+                  <div class="my-auto">Attendance Overview</div>
+                  <div class="Monthname">
+                    <select name="weeks" class="select2dropdown" id="weeklist" onchange="attoverviewchart()">
+                      <option value="">Current Week</option>
+                      {%for i in weeklist%}
+                      <option value="{{i.no}}">{{i.weekname}}</option>
+                      {%endfor%}
+                    </select>
+                  </div>
+                </div>
+                <div class="graphwrapper">
+                  <canvas id="attoverviewgraph"></canvas>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="">
+                    <div class="owl-carousel owl-theme" id="testimonialCarousel">
+                        {% for i in allbdaylist %}
+                        <div class="carouselItem birthdaybg">
+                            <span class="ps-2 mt-1" style="font-size:12px;"> Birthday Today</span>
+                          <div class="d-flex py-2">
+                            <div class="testProfImage ms-1">
+                                <img src="{{i.userimage}}">
+                            </div>
+                            <div class="testUserDeets">
+                              <p class="testUserName mb-0">{{i.Firstname}} {{i.Lastname}}</p>
+                              <p class="testUserDept mb-0">
+                                {% for u in i.DepartmentID %}
+                                {{ u}}{% if not forloop.last %}, {% endif %}
+                                {%endfor%}
+                               </p>
+                            </div>
+                          </div>
+                        </div>
+                        {% empty %}
+                        <div class="carouselItem birthdaybg"style="height:90px;">
+                          <span class="ps-2 mt-1" style="font-size:12px;">Birthday Today</span>
+                        <div class="d-flex py-2">
+                          <span class="nobday">No Birthdays Today</span>
+                        </div>
+                      </div>
+                        {% endfor %}
+                        {% for a in announcements %}
+                        <div class="carouselItem anndiv">
+                              <div class="testUserDeets" style="height:90px;">
+                                <div class="ps-2 annhead">Announcement</div>
+                                <div class="anntext">{{a.announcementText}}</div>
+                              </div>
+                          </div>
+                          {% empty %}
+                          <div class="carouselItem noanndiv">
+                            <div class="testUserDeets" style="height:90px;">
+                              <div class="d-flex ps-2 noannhead">
+                                  <div>Announcements </div>
+                                  <div class="ms-2 mt-1"><img class="hornimage" width="5%" src="/static/Media/taskicons/megaphone.png"/></div>
+                              </div>
+                              <!-- <div class="anntext">No Announcements</div> -->
+                            </div>
+                        </div>
+                          {% endfor %}
+                    </div>
+                </div>
+               
+            <div class="adminmaincard holidaycard mt-2">
+              <div class="d-flex justify-content-between mx-2 pt-2">
+                <div class="holdayheading">Employees on Holiday</div>
+                <div class="Monthname">
+                  <select name="mo" id="month" class="select2dropdown" onchange = "getholidaydata();">
+                    {%for i in Monthlist %}
+                      {% if i.month == currentmonth %}
+                        <option value="{{i.month}}" selected>{{i.monthname}}</option>
+                      {% else %}
+                        <option value="{{i.month}}">{{i.monthname}}</option>
+                      {% endif %}
+                    {%endfor%}
+                  </select>
+                </div>
+              </div>
+           
+              <div class="emphl_list pt-2">
+
+               
+
+
+              </div>
+
+            </div>
+          </div>
+   
+  </div>
+
+  <div class="row mt-1 pb-4">
+
+    <div class="col-md-9">
+      <div class="adminmaincard h-100" style="position:relative;">
+        <div class="d-flex justify-content-between px-2 my-2" style="align-items: center;">
+          <div class="atthead">Attendance List</div>
+          <div class="d-flex">
+            <!-- <div class="me-2"><button type="button" id="attexcelreportbtn" onclick="attendance_excel();"><i class="fa fa-download" aria-hidden="true"></i> Download Excel Report</button></div> -->
+            <div id="excelreportbtn" ></div>
+            <div id="pdfreortbtn" class="ms-2"></div>
+          </div> 
+        </div>
+        <div class="searchbox d-flex justify-content-between px-2 py-2">
+          <div class="">
+            <div>
+
+            </div>
+          </div>
+          <div>
+            <div class="attwrapper">
+              <input type="radio" name="selectdatafilter" value="Monthly" id="option-1"  onclick="att_listdata()">
+              <input type="radio" name="selectdatafilter" value="Weekly" id="option-2" checked onclick="att_listdata()">
+             
+
+              <label for="option-1" class="option option-1">
+              <div class="dot"></div> <span>Monthly</span> </label>
+
+              <label for="option-2" class="option option-2">
+              <div class="dot"></div> <span>Weekly</span> </label>
+
+              <!-- <label for="option-3" class="option option-3">
+              <div class="dot"></div> <span>Today</span> </label> -->
+
+        
+              </div>
+          </div> 
+        </div>
+        
+        <div class="attdatadiv">
+          <table class="" id="attlisttable">
+            <thead>
+              <tr class="tableHeadings" style="height:30px;font-weight:500;">
+                <th>EMP Code</th>
+                <th style="width:30%;">EMP Name</th>
+                <th>Department</th>
+                <th>On Time <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                <th>Late <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                <th>Leave <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                <th>Action</th>
+              </tr>
+              
+            </thead>
+            <tbody class="attendancelistbody">
+
+            </tbody>
+          </table>
+         
+        </div>
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="adminmaincard top_uscorecard mt-2 h-100">
+        <div class="d-flex justify-content-between mx-2 pt-2">
+          <div class="holdayheading pt-1">Top/Under Performers </div>
+          <div class="Monthname">
+            <select id="topweek" class="select2dropdown" onchange = "getscoredata();">
+              {%for i in weeklist %}
+                {% if i.no == prevweek %}
+                  <option value="{{i.no}}" selected>Previous Week</option>
+                {% else %}
+                  <option value="{{i.no}}">{{i.weekname}}</option>
+                {% endif %}
+              {%endfor%}
+            </select>
+          </div>
+        </div>
+        <div class="scorelist pt-2">
+
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" >
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+         
+            <h6 class="modal-title" id="exampleModalToggleLabel">Employee Details</h6>
+            <input id="userdyanmic" class="d-none" type="text" value="">
+            <div class="d-flex">
+              <div>
+                <select id="modaldataweek" class="select2dropdown" onchange = "attmodaldata(document.getElementById('userdyanmic').value);">
+                  {%for i in weeklist %}
+                    {% if i.Week == prevweek %}
+                    <option value="{{i.no}}" selected>{{i.weekname}}</option>
+                    {% else %}
+                    <option value="{{i.no}}">{{i.weekname}}</option>
+                    {% endif %}
+                  {%endfor%}
+                </select>
+              </div>
+            
+            
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+           
+        </div>
+        <div class="modal-body p-0">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="d-flex justify-content-between">
+                  <div class="d-flex">
+                    <div class="modalimgcontainer">
+                          <img id="modalempphoto" src="">
+                    </div>
+                    <div class="ms-2">
+                      <div id="modalempname"></div>
+                      <div class="modalempid">Attendance Id : <span id="modalempid"></span></div>
+                    </div>
+                  </div>
+                  <div id="modalempdesignation"></div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table attmodaltable w-100" id="modaltable">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>CheckIn</th>
+                      <th>CheckOut</th>
+                      <th>Difference</th>
+                    </tr>
+                  </thead>
+                  <tbody id="attmodaldatabody" class="">
+                 
+                  </tbody>
+                </table>
+                
+              </div>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+
+
+
+
+<script>
+  
+$(document).ready(function(){
+  att_listdata();
+    getpiechartinfo();
+    attoverviewchart();
+    setTimeout( function(){ 
+      // Do something after 1 second 
+      getholidaydata();
+      getscoredata();
+    }  , 1000 );
+});
+
+
+
+function getholidaydata(){
+  var monthname  = $('#month').val()
+  $.ajax({
+        type: 'post',
+        url: frontendURL + "getadminholidaydata",
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'Month': monthname
+        },
+        dataType: 'json',
+        success: function (response) {
+          var holidaydetail ="" ; 
+          $.each(response.data,function(i,o){
+            holidaydetail += `
+            <div class="row py-2">
+                <div class="col-md-7">
+                  <div class="d-flex empholidaydiv" data-bs-toggle="tooltip" data-bs-placement="bottom" title="`+o.reason+`">
+                    <div class="leaveuserimage ps-2"><img src="`+o.userimage+`" ></div>
+                      <div class="leaveusername">`+o.Username+`</div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="holidaydate pe-1">`+o.daystring+`</div>
+                </div>
+              </div>
+            `
+          });
+          $('.emphl_list').html(holidaydetail);
+
+          var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function attendance_excel(){
+  var filterval = $('input[name="selectdatafilter"]:checked').val();
+  $.ajax({
+        type: 'post',
+        url: frontendURL + "excel_admin_att_list",
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'listdatafilter': filterval,
+        },
+        dataType: 'json',
+        success: function (response) {
+          urlpath = response.response.downloadurl
+          window.location.href = urlpath;
+
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function getscoredata(){
+  var topweek  = $('#topweek').val()
+  $.ajax({
+        type: 'post',
+        url: frontendURL + "getadminscoredata",
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'Week': topweek
+        },
+        dataType: 'json',
+        success: function (response) {
+          var scoredetail ="" ; 
+          if (response.data.data.length == 10){
+            $.each(response.data.data,function(i,o){
+          
+              if( o.trackprostatus == "Top"){  
+              scoredetail += `
+                <div class="row py-2">
+                    <div class="col-md-8">
+                      <div class="d-flex empholidaydiv">
+                        <div class="leaveuserimage ps-1"><img src="`+o.userimage+`" ></div>
+                          <div class="leaveusername">`+o.Username+`</div>
+                      </div>
+                   </div>
+                    <div class="col-md-4">
+                      <div class="percent greenp pe-1">`+o.TrackProPercent+`%</div>
+                    </div>
+                  </div>
+                `
+              }
+              else{
+                scoredetail += `
+                <div class="row py-2">
+                    <div class="col-md-8">
+                      <div class="d-flex empholidaydiv">
+                        <div class="leaveuserimage ps-1"><img src="`+o.userimage+`" ></div>
+                          <div class="leaveusername">`+o.Username+`</div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="percent redp pe-1">`+o.TrackProPercent+`%</div>
+                    </div>
+                  </div>
+                `
+             }
+              });
+            $('.scorelist').html(scoredetail);
+          }else{
+            $.each(response.data.data,function(i,o){
+          
+              if( o.TrackProPercent > 50){  
+              scoredetail += `
+                <div class="row py-1">
+                    <div class="col-md-8">
+                      <div class="d-flex empholidaydiv">
+                        <div class="leaveuserimage ps-1"><img src="`+o.userimage+`" ></div>
+                          <div class="leaveusername">`+o.Username+`</div>
+                      </div>
+                   </div>
+                    <div class="col-md-4">
+                      <div class="percent greenp pe-1">`+o.TrackProPercent+`%</div>
+                    </div>
+                  </div>
+                `
+              }
+              else{
+                scoredetail += `
+                <div class="row py-1">
+                    <div class="col-md-8">
+                      <div class="d-flex empholidaydiv">
+                        <div class="leaveuserimage ps-1"><img src="`+o.userimage+`" ></div>
+                          <div class="leaveusername">`+o.Username+`</div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="percent redp pe-1">`+o.TrackProPercent+`%</div>
+                    </div>
+                  </div>
+                `
+             }
+              });
+            $('.scorelist').html(scoredetail);
+          }
+           
+           
+        },
+        error: function (error) {
+            swal({
+              icon: "error",
+              title: "",
+              text: "Unable to find list...",
+              buttons: 'Close',
+    
+          });
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+
+
+  
+function att_listdata(){
+  var filterval = $('input[name="selectdatafilter"]:checked').val();
+  var atttablehtml ="";
+  $.ajax({
+        type: 'post',
+        url: frontendURL + "admin_att_list",
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'listdatafilter': filterval,
+        },
+        dataType: 'json',
+       
+
+        success: function (response) {
+                $.each(response.data, function(i,o){
+                  atttablehtml += `
+                <tr class="">
+                  <td>`+o.empcode+`</td>
+                  <td style="width:30%;">
+                    <div class="employeeDetails">
+                      <div class="atttableProfileImage">
+                        <img src=`+o.userimage+` />
+                      </div>
+                      <div class="employeeNameAndDesignation">
+                        <div class="empName">`+o.empname+`</div>
+                        <div class="empDesig d-none d-lg-block">
+                          `+o.Designation+`
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>`+o.departmentid+`</td>
+
+                  <td>`+o.ontimecount+`</td>
+                  <td>`+o.Latecount+`</td>
+                  <td>`+o.Leavecount+`</td>
+                  <td> <div class="detailsbtndiv">
+                        <a style="color:#174fa3;" style="cursor:pointer;" class="viewdt" onclick="attmodaldata(`+o.user+`)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle"> View Details </a>
+                    </div></td>
+                </tr>`
+                
+                })
+
+                initialiseDataTable(atttablehtml)
+        }
+      })
+}
+
+
+
+function initialiseDataTable(trHTML) {
+  
+    if ($.fn.DataTable.isDataTable('#attlisttable')) {
+        $('#attlisttable').DataTable().destroy();
+    }
+
+    $('#attlisttable tbody').empty();
+    $(".attendancelistbody").html(trHTML);
+
+    var table = $('#attlisttable').DataTable({
+      "ordering": false,
+        "bLengthChange": false ,
+        scrollY: '220px',
+        scrollCollapse: true,
+        language: {
+        searchPlaceholder: "Enter Employee Name or empcode or department"
+      }
+        
+    }) 
+
+    var buttons = new $.fn.dataTable.Buttons(table, {
+          buttons: [{
+            extend : 'excel',
+            exportOptions: {
+                columns: [0,1,2,3,4,5]
+            },
+            text : '<span class="exportButton">Download Excel Report <i class="fa fa-download"></i></span> '        
+          }]
+     }).container().appendTo($('#excelreportbtn'));
+
+     var buttons = new $.fn.dataTable.Buttons(table, {
+          buttons: [{
+            extend : 'pdf',
+            exportOptions: {
+                columns: [0,1,2,3,4,5]
+            },
+            text : '<span class="exportButton">Download PDF Report <i class="fa fa-download"></i></span> '        
+          }]
+     }).container().appendTo($('#pdfreortbtn'));
+    }
+
+
+function attmodaldata(userid){
+  $("#userdyanmic").val(userid);
+  weekmodaldatafilter = $('#modaldataweek').val();
+  $.ajax({
+        type: 'post',
+        url: frontendURL + "admin_attmodal_data",
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'weekmodaldatafilter': weekmodaldatafilter,
+            'modaluserid': userid
+        },
+        dataType: 'json',
+        success: function (response) {
+          console.log("swwwwwwwwwwwwwwwww",response)
+          $('#modalempname').text(response.data.userdatalist.username)
+          $('#modalempphoto').attr('src',response.data.userdatalist.userimage)
+          $('#modalempid').text(response.data.userdatalist.useremployeeId)
+          $('#modalempdesignation').text(response.data.userdatalist.userdesignation)
+          
+          var atttablehtml = ""
+          $.each(response.data.weekdatalist, function(i,o){
+                if (o.daystatus == "Holiday"){
+                  atttablehtml += `
+                <tr class="holdycolor">
+                  <td>`+o.weekdate+`</td>
+                  <td class="holdybar" colspan="3">Holiday</td> 
+                </tr>`
+                }
+                else if (o.daystatus == "Leave"){
+                  atttablehtml += `
+                <tr class="leavecolor">
+                  <td>`+o.weekdate+`</td>
+                   <td class="leavebar" colspan="3">Leave</td>
+                </tr>`
+                }
+                else if (o.daystatus == "WeeklyOff"){
+                  atttablehtml += `
+                <tr class="Woffcolor">
+                  <td>`+o.weekdate+`</td>
+                  <td class="weekoffbar" colspan="3">Weekly Off</td>
+                </tr>`
+                }
+                else{
+                  atttablehtml += `
+                <tr class="">
+                  <td>`+o.weekdate+`</td>
+                  <td>`+o.checkintime+`</td>
+                  <td>`+o.checkouttime+`</td>
+                  <td>`+o.timediff+`</td>
+                </tr>`
+                }
+                $('#attmodaldatabody').html(atttablehtml);
+                 
+                })
+
+        }
+      })
+}
+
+function attoverviewchart(){
+
+var weekno  = $("#weeklist").val();
+
+
+  $.ajax({
+        type: 'post',
+        url: frontendURL + "admin_att_overview",
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'weekfilter': weekno
+        },
+        dataType: 'json',
+        success: function (response) {
+
+
+          //var canvas = document.getElementById("attoverviewgraph");
+          //var context = canvas.getContext("2d");
+          //context.clearRect(0, 0, canvas.width, canvas.height);
+            $(".graphwrapper").html('<canvas id="attoverviewgraph"></canvas>')
+          var ctx = document.getElementById("attoverviewgraph").getContext('2d');
+         
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: response.data.datelist,
+              datasets: [{
+                label: 'Present',
+                backgroundColor: "#174fa3",
+                data: response.data.presentlist,
+
+              }, {
+                label: 'Latecoming',
+                backgroundColor: "#ABABAB",
+                data: response.data.latecomerlist,
+              }, {
+                label: 'Leave',
+                backgroundColor: "#DFDFDF",
+                data: response.data.leavelist,
+              }]
+            },
+          options: {
+              tooltips: {
+                displayColors: true,
+                callbacks:{
+                  mode: 'x',
+                },
+              },
+              scales: {
+                xAxes: [{
+                  barThickness: 25,
+                  stacked: true,
+                  ticks: {
+                    autoSkip: false,
+                    maxRotation: 0,
+                    minRotation: 0
+                },
+                  gridLines: {
+                    display: false,
+                  }
+                }],
+                yAxes: [{
+                  stacked: true,
+                  ticks: {
+                    beginAtZero: true,
+                    stepSize: 10
+                  },
+                  type: 'linear',
+                }]
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: { 
+                position: 'top',
+                
+                labels: {
+                  usePointStyle: true,
+                  boxWidth: 0
+                }
+             },
+            }
+          });
+          
+
+          },
+          error: function (error) {
+              console.log('error; ' + JSON.stringify(error));
+          }
+          });
+
+    }
+
+
+
+
+
+function getpiechartinfo(){
+    var locationdata = JSON.parse(document.getElementById('locationcountdata').textContent);
+        loclist = locationdata['locationlist']
+        loccount = locationdata['locationcount']
+        makelocationpiechart(loclist,loccount)
+}
+// Function to generate a random color
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+function makelocationpiechart(loclist,loccount){
+   const backgroundColor = loclist.map(() => getRandomColor());
+
+    const data = {
+        labels: loclist,
+        datasets: [{
+          data: loccount,
+          hoverOffset: 0,
+          backgroundColor: backgroundColor,
+        }]
+      };
+    
+      const config = {
+        type: 'doughnut',
+        data: data,
+        options: {
+            legend: {
+              display: true,
+              position: 'bottom',
+
+              labels: {
+                display: true,
+                fontSize: 8,
+                generateLabels: function(chart) {
+                    const data = chart.data;
+                    if (data.labels.length && data.datasets.length) {
+                        const labelBoxes = [];
+            
+                        data.labels.forEach((label, i) => {
+                            const backgroundColor = data.datasets[0].backgroundColor[i];
+                            const labelBox = {
+                                text: `\u2022 ${label}`,
+                                fillStyle: backgroundColor,
+                                hidden: isNaN(data.datasets[0].data[i]) || chart.getDatasetMeta(0).data[i].hidden,
+                                index: i
+                            };
+                            labelBoxes.push(labelBox);
+                        });
+            
+                        // Calculate the total width of label boxes
+                        const totalWidth = labelBoxes.reduce((sum, box) => sum + box.radius * 2, 0);
+            
+                        // Calculate the starting position to center the labels
+                        let startX = (chart.width - totalWidth) / 2;
+            
+                        return labelBoxes.map((labelBox) => {
+                            const box = {
+                                ...labelBox,
+                                line: [{
+                                    startX: startX + labelBox.radius, // Adjust to center the bullet
+                                    startY: 0,
+                                    endX: startX + labelBox.radius,
+                                    endY: 0
+                                }],
+                            };
+                            startX += labelBox.radius * 2;
+                            return box;
+                        });
+                    } else {
+                        return [];
+                    }
+                }
+            }
+            
+            ,
+            },
+          borderWidth: 0,
+          cutout: '50%', // Adjust as needed
+          radius: '80%', // Increase this value to make the doughnut wider
+          rotation: 70
+        }
+      };
+
+
+
+   
+
+
+
+
+      
+
+      const myChart = new Chart(
+        document.getElementById('campaign_report'),
+        config
+      );
+}
+
+let testArr = $('.carouselItem');
+      let noOfTest = testArr.length;
+      let noOfDots = Math.ceil(noOfTest / 5);
+
+      $('#testimonialCarousel').owlCarousel({
+        loop:true,
+        margin:10,
+        nav:false,
+        items: 1,
+        dots: false,
+        dotsEach: noOfDots,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        autoplayHoverPause: true
+      });
+
+</script>
+
+
+
+{% endblock %}

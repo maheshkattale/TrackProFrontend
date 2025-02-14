@@ -1,0 +1,533 @@
+{% extends "index.html" %}
+{% load static %} 
+{% load encryption_filters %}
+
+{% block headercontent %}
+<div class="nav-item newheading">
+Employee List</div>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+  .main-wrapper {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.title-div {
+  margin: 27px 0px !important;
+
+}
+.viewEmpDeetsBtn .fa{
+  font-size: 18px;
+  cursor: pointer !important;
+}
+</style>
+
+<main class="main-wrapper">
+  
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+
+    <!-- <div class="title-div  d-flex justify-content-end align-items-center">
+        <div class="empMasterControls ">
+           <button class="fiterBtn" id="filterBtn" type="button" data-bs-toggle="collapse" data-bs-target="#filtersRow" aria-expanded="false" aria-controls="filtersRow"></button> 
+      </div>
+    </div> -->
+
+    <div class="row mt-2 mb-2" id="">
+      <div class="col-lg-2 col-md-6 col-6 pe-0 d-flex">
+        <input type="search" id="employeeListsearch" class="searchbar input-feild"  placeholder="Search by Name" onkeyup="multiple_search();">
+        <label for="employeeListsearch" class="employeeListSearchlabel"></label>
+      </div>
+
+      <div class="col-lg-3 col-md-6 col-6">
+        <select class="input-feild select2dropdown" id="searchdesg" onchange="multiple_search();">
+          <option selected value="">Search by Designation</option>
+
+        </select>
+      </div>
+
+      <div class="col-lg-3 col-md-6 col-6">
+        <select class="input-feild select2dropdown" id="searchdept" onchange="multiple_search();">
+          <option selected value="">Search by Department</option>
+
+        </select>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <select class="input-feild select2dropdown" id="searchlocation" onchange="multiple_search();">
+          <option selected value="">Search by Location</option>
+
+        </select>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <select class="input-feild select2dropdown" id="searchattendance" onchange="multiple_search();">
+          <option selected value="">Attendance Id</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="row my-3 card-row" id="employeeslist">
+      {% for i in employeelist %}
+        <div class="col-lg-3 col-md-6 col-sm-12 emp-card m-0 p-0 landsacpetabview  empcarddiv{{i.id}}">
+          <div class="card-height-md card-defaults empDeetsCard p-0">
+
+            <div class="empMasterCardHeader row">
+              <div class="empHeaderDetails col-lg-10">
+                {% if i.Photo != None %}
+                <img class="empHeaderProfPic" src="{{ImageURL}}{{i.Photo}}" alt="profile image"/>
+                {%else%}
+                <img class="empHeaderProfPic" src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}" alt="profile image"/>
+                {%endif%}
+                <div class="empHeaderNameID">
+                  <p class="empHeaderName">{{i.Firstname}} {{i.Lastname}} </p>
+                  <p class="empHeaderID">Employee Id - {{i.uid|default_if_none:""}}</p>
+                </div>
+              </div>
+              
+              <button type="button" class="viewEmpDeetsBtn d-flex col-lg-1 p-0" title="View" >
+                
+                <a href="/update/{{ i.id|encrypt_parameter }}"   ><i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i></a>
+
+              </button>          
+              <button type="button" class="viewEmpDeetsBtn d-flex col-lg-1 pb-1 p-0" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteemployee{{i.id}}">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </button>          
+            </div>
+
+            <div class="empMasterCardBody">
+              <div class="row">
+                <div class="col-6">
+                  <p class="empCardField">Email id</p>
+                  <p class="empCardFieldValue" data-bs-toggle="tooltip" title="{{i.email}}" style="text-overflow: ellipsis;">{{i.email}}</p>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField">Mobile No</p>
+                  <p class="empCardFieldValue">{{i.Phone}}</p>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField">Date of Joining</p>
+                  <p class="empCardFieldValue">{{i.DateofJoining}}</p>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField ">Work Location</p>
+                  <p class="empCardFieldValue locationName">{{i.locationId}}</p>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField">Designation</p>
+                  <p class="empCardFieldValue designationName">{{i.DesignationId}}</p>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField ">Department</p>
+                  <p class="empCardFieldValue departmentName">{{i.DepartmentID|join:', ' }}</p>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField">Documents</p>
+                  <span class="d-flex">
+                    {%if i.documentverified == False %}
+                    <p class="docsNotUpdated">Unverified</p>
+                    <p class="docsNotUpdatedLogo mx-1" data-bs-toggle="tooltip" data-bs-placement="bottom" ></p>
+                    {%else%}
+                    <p class="docsUpdated">Verified</p>
+                    <p class="docsUpdatedLogo mx-1" data-bs-toggle="tooltip" data-bs-placement="bottom" ></p>
+                    {%endif%}
+                  </span>
+                </div>
+                <div class="col-6">
+                  <p class="empCardField ">Employment Status</p>
+                  <p class="empCardFieldValue departmentName">{{i.employeementStatus}}</p>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      
+    </div>
+
+    {% for i in employeelist %}
+  
+      <div class="modal fade" id="deleteemployee{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">           
+            <div class="modal-header">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Delete Employee</h5>
+            </div>
+            <div class="modal-body">
+              <div class="row py-1">
+                <div> Are you sure you want to Delete this employee?
+                </div>
+              </div>            
+            </div>
+            <div class="modal-footer d-flex">
+              <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+              <button  onclick="blockemployee({{i.id}})" class="notfapprovebtn" id="">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </main>
+
+
+
+{%endblock%}
+{% block indexaddbuttons %}
+
+<!-- <li> <a href="{% url 'users:onboarding-list' %}">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Onboarding"
+  src="{% static 'assets/svg/designation.svg' %}">
+</a></li> -->
+
+<li>   
+  <a href="{% url 'users:addemployee' %}">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Employee"
+  src="{% static 'assets/svg/viewemployeeicon.svg' %}">
+  </a>
+</li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  
+  $(document).ready(function(){
+    getdepartmentlist()
+    getlocationlist()
+    getdesignationlist()
+    x = document.querySelectorAll('.empHeaderName');  
+    deptx = document.querySelectorAll('.departmentName');
+    locx = document.querySelectorAll('.locationName');
+    desgx = document.querySelectorAll('.designationName');
+
+    console.log("X",x)
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    }) 
+  })
+
+  const searchEl = document.querySelector('.searchbar');
+
+  var x;
+
+
+  function deptsearch(){
+    var dept = $("#searchdept").val()
+    console.log("dept",dept)
+    item = dept
+    searchItem = item.toLowerCase();
+    deptx.forEach((item,index) => {
+    if(!item.innerHTML.toLowerCase().includes(searchItem)){
+      item.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'none';
+      }else {
+        item.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'block';
+      }
+    })
+  }
+
+  searchEl.addEventListener("keyup", search); 
+
+  function locsearch(){
+    var dept = $("#searchlocation").val()
+    item = dept
+    searchItem = item.toLowerCase();
+    locx.forEach((item,index) => {
+    if(!item.innerHTML.toLowerCase().includes(searchItem)){
+      item.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'none';
+      }else {
+        item.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'block';
+      }
+    })
+  }
+
+  function desgsearch(){
+    var dept = $("#searchdesg").val()
+    item = dept
+    searchItem = item.toLowerCase();
+    desgx.forEach((item,index) => {
+    if(!item.innerHTML.toLowerCase().includes(searchItem)){
+      item.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'none';
+      }else {
+        item.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'block';
+      }
+    })
+  }
+
+  function multiple_search(){
+    var html;
+    html="";
+    var name = $("#employeeListsearch").val()
+    var designation = $("#searchdesg").val()
+    var department = $("#searchdept").val()
+    var location = $("#searchlocation").val()
+    var attendance = $("#searchattendance").val()
+
+      console.log(name,designation,department,location)
+
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "employee_filter",
+        headers: {"Authorization": "Token {{token}}"},
+
+        data: {
+            'name': name,
+            "designation":designation,
+            "department":department,
+            "location":location,
+            "attendance":attendance,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (response) {   
+          console.log("-----",response) 
+
+            if(response.response.n==1){
+              $(response.data).each(function(a, b) {
+                var encrypted_id = btoa(b.id.toString());
+                if (b.employeeId != null){
+                  var employeeId = b.employeeId
+                }else{
+                  var employeeId = ""
+                }
+                var employeeId
+
+                html +=  
+                `
+                <div class="col-lg-3 col-md-6 col-sm-12 emp-card m-0 p-0 landsacpetabview empcarddiv`+b.id+`">
+                  <div class="card-height-md card-defaults empDeetsCard p-0">
+
+                    <div class="empMasterCardHeader row">
+                      <div class="empHeaderDetails col-lg-10">
+  
+                        <img class="empHeaderProfPic" id="profile`+b.id+`" src="{{ImageURL}}`+b.Photo+`" alt="profile image"/>
+                        <div class="empHeaderNameID">
+                          <p class="empHeaderName">`+b.Firstname +` `+ b.Lastname+` </p>
+
+                          <p class="empHeaderID">Employee Id - `+b.uid+`</p>
+                        </div>
+                      </div>
+
+                          
+                      <button type="button" class="viewEmpDeetsBtn d-flex col-lg-1 p-0" title="View">
+                        <a href="/update/`+encrypted_id+`"   ><i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i></a>
+                      </button>          
+                      <button type="button" class="viewEmpDeetsBtn d-flex col-lg-1 p-0  pb-1" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteemployee`+b.id+`">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </button>  
+                    </div>
+        
+                    <div class="empMasterCardBody">
+                      <div class="row">
+        
+                        <div class="col-6">
+                          <p class="empCardField">Email id</p>
+                          <p class="empCardFieldValue" title="`+ b.email+`" style="text-overflow: ellipsis;">`+ b.email+`</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField">Mobile No</p>
+                          <p class="empCardFieldValue">`+ b.Phone+`</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField">Date of Joining</p>
+                          <p class="empCardFieldValue">`+ b.DateofJoining+`</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField ">Work Location</p>
+                          <p class="empCardFieldValue locationName">`+ b.locationId+`</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField">Designation</p>
+                          <p class="empCardFieldValue designationName">`+ b.DesignationId+`</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField ">Department</p>
+                          <p class="empCardFieldValue departmentName">`+ b.DepartmentID+`</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField">Documents</p>
+                          <span class="d-flex">
+                            
+                            <p class="Secondary_info`+b.id+`"></p>
+                            <p class="Secondary_infoLogo`+b.id+`"></p>
+                            
+           
+                          </span>
+                          <!-- <p class="empCardFieldValue">Trainee</p> -->
+                        </div>
+                        <div class="col-6">
+                          <p class="empCardField ">Employment Status</p>
+                          <p class="empCardFieldValue departmentName">`+ b.employeementStatus+`</p>
+                        </div>      
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                `
+              
+              })
+              $('#employeeslist').html(html)
+              $(response.data).each(function(a, b) {
+                var Photo
+  
+  
+                if(b.Photo == null){
+                    $('#profile'+b.id).attr('src', frontendURL+'static/admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png');
+                }
+  
+  
+                if(b.documentverified == false){
+                  $('.Secondary_info'+b.id).html('<p class="docsNotUpdated">Unverified</p>')
+                  $('.Secondary_infoLogo'+b.id).html('<p id="docsNotUpdatedLogo'+b.id+'" class="docsNotUpdatedLogo mx-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title=""></p>')
+                }else{
+                  $('.Secondary_info'+b.id).html(' <p class="docsUpdated">Verified</p>')
+                  $('.Secondary_infoLogo'+b.id).html(' <p id="docsNotUpdatedLogo'+b.id+'" class="docsUpdatedLogo mx-1 data-bs-toggle="tooltip" data-bs-placement="bottom" title=""></p>')
+                }
+              
+
+  
+                
+  
+              })
+              x = document.querySelectorAll('.empHeaderName');  
+              var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+              var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl)
+            }) 
+            }    
+        }
+      });
+  }
+  function blockemployee(id){
+    var html=''
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    fd.append("id",id);
+    $.ajax({
+      type: "POST",
+      url: frontendURL+"block_employee_ajax",
+      data: fd,
+      processData: false,
+      contentType: false,
+      
+      success: function(response) {
+        console.log("respo delete",response,)
+        if (response.n==1){
+          swal({
+            icon: 'success',
+            title: "",
+            text: response.Msg,
+            button: "Close",
+            }); 
+            $('.modal').modal('hide');
+            $('.empcarddiv'+id).hide(); 
+        }else{
+          swal({
+            icon: 'error',
+            title: "",
+            text: response.Msg,
+            button: "Close",
+            }); 
+        }
+
+      },
+    });
+  }
+
+  function getdepartmentlist(){
+    var html=''
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    $.ajax({
+      type: "POST",
+      url: frontendURL+"getdepartmentlist",
+      data: fd,
+      processData: false,
+      contentType: false,
+      
+      success: function(response) {
+        console.log("respo department",response,)
+        var numberToCheck ='';
+
+
+
+        html += `<option value="" >Select Department</option>`
+
+        $(response.data).each(function(a, b) {
+            html += `<option value="` + b.id + `">` + b.DepartmentName + `</option>`
+        })
+        $("#searchdept").html(html);
+
+      },
+    });
+  }
+  function getlocationlist(){
+    var html=''
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    $.ajax({
+      type: "POST",
+      url: frontendURL+"getlocationlist",
+      data: fd,
+      processData: false,
+      contentType: false,
+      
+      success: function(response) {
+        console.log("respo location",response,'')
+        html += `<option value="" >Select Location</option>`
+
+        $(response.data).each(function(a, b) {
+            html += `<option value="` + b.id + `">` + b.LocationName + `</option>`
+        })
+        $("#searchlocation").html(html);
+
+      },
+    });
+  }
+
+
+  function getdesignationlist(){
+    var html=''
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    $.ajax({
+      type: "POST",
+      url: frontendURL+"getdesignationlist",
+      data: fd,
+      processData: false,
+      contentType: false,
+      
+      success: function(response) {
+        html += `<option value="" >Select Designation</option>`
+
+        console.log("respo designation",response,'')
+        $(response.data).each(function(a, b) {
+
+            html += `<option value="` + b.id + `">` + b.DesignationName + `</option>`
+        })
+        $("#searchdesg").html(html);
+
+      },
+    });
+  }
+</script>
+{% endblock %}

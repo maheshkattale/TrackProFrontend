@@ -1,0 +1,1056 @@
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Client Master
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
+<style>
+  .select2-dropdown {
+    z-index: 111111 !important;
+}
+#clientTable_filter label{
+    display: flex;
+    align-items: baseline;
+}
+#managerTable_filter label{
+    display: flex;
+    align-items: baseline;
+}
+.actionicons{
+  display:flex;
+  justify-content: space-around;
+}
+.createaddbtn {
+    border-radius: 50%;
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 30px 2px;
+    background-color: #174fa3 !important;
+}
+.modaladdbtn{
+    width:100%;
+    background-color: #174fa3 !important;
+    color: white;
+    padding:10px 50px;
+    text-align: center;
+    border:none;
+    border-radius: 20px;
+}
+.modalClosebtn{
+    margin-left:16px;
+    color: red;;
+    padding:6px 41px;
+    text-align: center;
+    border-radius: 20px;
+    border:1px solid red;
+    background-color: transparent !important;
+}
+#clientTable{
+    width:100%;
+}
+.modaltable-div {
+    background-color: white !important;
+    border-radius: 12px !important;
+    margin: 27px 0px !important;
+    padding: 7px 15px 15px 15px !important;
+    box-shadow: 0 0 13px #0000001f;
+}
+</style>
+
+
+<main class="main-wrapper">
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+    <form  method="post" class="formstyle" enctype="multipart/form-data">
+      <div class="title-div">
+       
+          <span class="company-title">Client Dashboard</span>
+          <span>
+            <button type="button" class="add-btn" data-bs-toggle="modal" data-bs-target="#projectmodal">+ Add Project</button>
+            <button type="button" class="add-btn" data-bs-toggle="modal" data-bs-target="#clientmodal">+ Add Client</button>
+            <button type="button" class="add-btn" data-bs-toggle="modal" data-bs-target="#Managermodal">+ Add Manager</button>
+          </span>
+        
+
+          <!-- Button trigger modal -->
+        
+          {% csrf_token %}
+
+        
+      </div>
+
+
+
+      <div class="row form-project-master-div mx-1 mt-4">
+        <div class="col-5">
+            <div class="row">
+                <div class="col-6">
+                    <label for="createclient">Client </label>
+                    <select id='createclient' name="createclient" class="input-feild select2dropdown">
+                      <option value=''>Select client</option> 
+                      {% for i in clientlist %}
+                      <option value="{{i.id}}">{{i.ClientName}}</option>
+                      {% endfor %}
+                      </select>
+                      <p id="createclienterror" class="error"></p>
+                  </div>
+                  <div class="col-6">
+                      <label for="createSPOC">Company SPOC</label>
+                      <select id='createSPOC' name="createSPOC" class="input-feild select2dropdown" >
+                        <option value="">Select SPOC person</option>
+                            {% for i in employeelist %}
+                            <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
+                            {% endfor %}
+                      </select>
+                      <p id="SPOCpersonerror" class="error"></p>
+                    </div>
+            </div>
+        </div>
+        <div class="col-3">
+          <label for="Team">Create Team</label>
+          <select id='Team' name="Team" class="input-feild select2dropdown" data-placeholder="Select Team" multiple>
+                <option value=''>Select Team</option>
+                {% for i in employeelist %}
+                <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
+                {% endfor %} 
+          </select>
+          <p id="Teamerror" class="error"></p>
+        </div>
+        <div class="col-3">
+          <label for="createManager">Select Managers</label>
+          <select id='createManager' name="createManager" class="input-feild select2dropdown" data-placeholder="Select Client Side Managers" multiple >
+            <option value="">Select Managers</option>
+                {% for i in managerlist %}
+                <option value="{{i.id}}">{{i.ManagerName}}</option>
+                {% endfor %}
+          </select>
+          <p id="createManagererror" class="error"></p>
+        </div>
+
+        
+          <div class="col-1">
+            <span>
+            <button type="submit" name="add_form" onclick="Add_createclient();"  class="createaddbtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+            </span>
+            </div>
+      </div>
+    </form>
+
+    <div class="table-div">
+      <table class="row-border w-100" id="createclientTable">
+          <thead>
+              <th>
+                  Sr.No
+              </th>
+              <th>
+               Client Name
+              </th>
+              <th style="width:25%;">
+                Team
+              </th>
+              <th>
+               Client Side Manager
+              </th>
+              <th>
+                Company SPOC
+               </th>
+              <th class="text-center">
+                  Action
+              </th>
+          </thead>
+
+          <tbody id="projectbody">
+            {%for i in createclientlist %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.ClientName}}</td>
+                <td>{{i.Team|join:', '}}</td>
+                <td>{{i.Client_ManagerId|join:', '}}</td>
+                <td>{{i.SPOC_PersonName}}</td>
+                <td class="actionicons">
+                    <a  title="edit" class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#modal{{i.id}}"><img class="edit-icon" src="{% static '/Media/taskicons/edit.svg' %}" height="20px" alt="edit icon"> </a>   
+                    <a  title="delete"class="viewEmpDeetsBtn" onclick="createclientdelete({{i.id}})"><img class="edit-icon" src="{% static '/Media/taskicons/delete.svg' %}" height="20px" alt="edit icon"> </a>   
+                </td>
+            </tr>
+            {%endfor%}
+
+
+          </tbody>
+      </table>
+    </div>
+
+    {% for i in createclientlist %}
+    <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form  method="post" class="formstyle" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title" id="exampleModalLabel">Update Details</h5>
+          </div>
+          
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-3 px-4">
+                <input type="hidden" name="updateid" value="{{i.id}}">
+                <label for="clientname{{i.id}}">Client Name</label>
+                <select id='clientname{{i.id}}' name="updateclientname" class="input-feild select2dropdown">
+                  <option value=''>Select client</option> 
+                  {% for c in clientlist %}
+                  {%if i.ClientName == c.ClientName %}
+                  <option value="{{c.id}}" selected>{{c.ClientName}}</option>
+                  {%else%}
+                  <option value="{{c.id}}">{{c.ClientName}}</option>
+                  {%endif%}
+                  {% endfor %}
+                  </select>
+                <!-- <input type="text" id="clientname{{i.id}}" value="{{i.ClientName}}" name="clientname" > -->
+                <span id="clientnameerror{{i.id}}" class="error-message"></span>
+              </div>
+              <div class="col-3 px-4">
+                <label for="spocperson{{i.id}}">Spoc person</label>
+                <select id='spocperson{{i.id}}' name="updatespocperson" class="input-feild select2dropdown">
+                  <option value=''>Select Spoc person</option> 
+                  {% for s in employeelist %}
+                  {% if s.Fullname == i.SPOC_PersonName%}
+                  <option value="{{s.id}}" selected>{{s.Firstname}} {{s.Lastname}}</option>
+                  {%else%}
+                  <option value="{{s.id}}">{{s.Firstname}} {{s.Lastname}}</option>
+                  {%endif%}
+                  {% endfor %}
+                  </select>
+                <!-- <input type="text" id="spocperson{{i.id}}" value="{{i.SPOC_PersonName}}" name="spocperson" > -->
+                <span id="spocpersonerror{{i.id}}" class="error-message"></span>
+              </div>
+              <div class="col-3 px-4">
+              <label for="Team{{i.id}}">Team</label>
+              
+              
+              <select id='Team{{i.id}}' name="UpdateTeam" class="select2dropdown" multiple>
+                    <option value=''>Select Team</option> 
+                    {% for e in employeelist %}
+                    {% if e.Fullname in i.Team%}
+                    <option value="{{e.id}}" selected>{{e.Firstname}} {{e.Lastname}}</option>
+                    {%else%}
+                    <option value="{{e.id}}">{{e.Firstname}} {{e.Lastname}}</option>
+                    {%endif%}
+                    {% endfor %}
+              </select>
+              <span id="Teamerror{{i.id}}" class="error-message"></span>
+              </div>
+              <div class="col-3 px-4">
+                <label for="Managers{{i.id}}">Managers</label>
+                <select id='Managers{{i.id}}' name="Managers" class="select2dropdown" style="bottom: 100%;" multiple>
+                      {% for u in managerlist %}
+                      {% if u.ManagerName in i.Client_ManagerId  %}
+                      <option value="{{u.id}}" selected>{{u.ManagerName}}</option>
+                        {%else%}
+                      <option value="{{u.id}}">{{u.ManagerName}} </option>
+                      {%endif%} 
+                      
+                      {% endfor %}
+                </select>
+                <span id="Managererror{{i.id}}" class="error-message"></span>
+              </div>
+            </div>
+          </div>
+       
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="trackproBtn" id="editEmployeeDetails" name="update_form" onclick="Update_createclient({{i.id}})">Update</button>
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="modal fade" id="clientmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 px-4 pt-4">
+              <label for="clientname">Client Name</label>
+              <input type="text" id="clientname" oninput="this.value = this.value.replace(/[^a-zA-Z>.\-\ ]+/g,'').replace(/(\..-*)\./g, '$1');">
+              <span id="clientnameerror" class="error-message"></span>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <span  id="clientnamebutton">
+                <button class="modaladdbtn"  onclick="AddClientName();" type="button">Add</button>
+            </span>
+            <button type="button" class="modalClosebtn" data-bs-dismiss="modal">Close</button>
+           
+          </div>
+
+          <div class="row">
+            <div class="modaltable-div">
+                <table class="row-border w-100" id="clientTable">
+                    <thead>
+                        <th>
+                            Sr.No
+                        </th>
+                        <th>
+                         Client Name
+                        </th>
+                        <th class="text-center" style="width:10%">
+                            Action
+                        </th>
+                    </thead>
+          
+                    <tbody id="clientmasterbody">
+                      {%for i in clientlist %}
+                      <tr>
+                          <td>{{forloop.counter}}</td>
+                          <td>{{i.ClientName}}</td>
+                          <td class="actionicons">
+                              <a  title="edit" class="viewEmpDeetsBtn" onclick="getclientname({{i.id}},'{{i.ClientName}}')"><img class="edit-icon" src="{% static '/Media/taskicons/edit.svg' %}" height="20px" alt="edit icon"> </a>   
+                          
+                          
+
+                              <a title="delete" class="viewEmpDeetsBtn" data-bs-toggle="modal"  data-bs-target="#deleteclient{{i.id}}" ><img class="edit-icon" src="{% static '/Media/taskicons/delete.svg' %}" height="20px" alt="delete icon"> </a>
+                              <div class="modal fade" id="deleteclient{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered w-25">
+                                
+                                  <div class="modal-content">           
+                                    <div class="modal-header ps-3 text-center">
+                                      <h5 class="modal-title py-2" id="exampleModalLabel">Delete Client</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      
+                                      <div class="row">
+                                        <div> 
+                                          Are you sure you want to delete this?
+                        
+                                        </div>
+                                     
+                                    
+                                   
+                                   
+                                      </div>
+                                    
+                                    </div>
+                                    <div class="modal-footer ">
+                            
+                                        <a onclick="DeleteClientName({{i.id}})"  class="Role-btn text-center" id="addEmployeeBtn">Delete</a>
+                        
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                          
+                            </td>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
+                </table>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+        
+          <!-- <button class="trackproBtn" id="editEmployeeDetails" onclick="AddClient({{i.id}})">Add</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  </div>
+  <div class="modal fade" id="projectmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel">Add Project</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-6 px-4 pt-4">
+              <label for="projectname">Project Name</label>
+              <input type="text" id="projectname" oninput="this.value = this.value.replace(/[^a-zA-Z>.\-\ ]+/g,'').replace(/(\..-*)\./g, '$1');">
+              <span id="projectnameerror" class="error-message"></span>
+            </div>
+            
+            <div class="col-6 px-4 pt-3">
+              <label for="clientid">Client</label>
+
+              <select id='clientid' class="input-feild select2dropdown ">
+                <option value="">Select Client</option>
+
+                {%for i in clientlist %}
+                    <option value="{{i.id}}">{{i.ClientName}}</option>
+                {%endfor%}
+              </select>
+              <span id="clientiderror" class="error-message"></span>
+
+            </div>
+
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <span  id="clientprojectbutton">
+                <button class="modaladdbtn"  onclick="Addproject();" type="button">Add</button>
+            </span>
+            <button type="button" class="modalClosebtn" data-bs-dismiss="modal">Close</button>
+           
+          </div>
+
+          <div class="row">
+            <div class="modaltable-div">
+                <table class="row-border w-100" id="clientTable">
+                    <thead>
+                        <th>
+                            Sr.No
+                        </th>
+                        <th>
+                         Project Name
+                        </th>
+                        <th>
+                          Client Name
+                         </th>
+                        <th class="text-center" style="width:10%">
+                            Action
+                        </th>
+                    </thead>
+          
+                    <tbody id="clientmasterbody">
+                      {%for i in projectlist %}
+                      <tr>
+                        
+                          <td>{{forloop.counter}}</td>
+                          <td>{{i.ProjectName}}</td>
+                          <td>{{i.client_name}}</td>
+                          <td class="actionicons">
+                              <a  title="edit" class="viewEmpDeetsBtn" onclick="getclientproject({{i.id}},'{{i.ClientId}}','{{i.ProjectName}}')"><img class="edit-icon" src="{% static '/Media/taskicons/edit.svg' %}" height="20px" alt="edit icon"> </a>   
+                          
+                          
+
+                              <a title="delete" class="viewEmpDeetsBtn" data-bs-toggle="modal"  data-bs-target="#deleteclientproject{{i.id}}" ><img class="edit-icon" src="{% static '/Media/taskicons/delete.svg' %}" height="20px" alt="delete icon"> </a>
+                              <div class="modal fade" id="deleteclientproject{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered w-25">
+                                
+                                  <div class="modal-content">           
+                                    <div class="modal-header ps-3 text-center">
+                                      <h5 class="modal-title py-2" id="exampleModalLabel">Delete Client Project</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      
+                                      <div class="row">
+                                        <div> 
+                                          Are you sure you want to delete this?
+                        
+                                        </div>
+                                     
+                                    
+                                   
+                                   
+                                      </div>
+                                    
+                                    </div>
+                                    <div class="modal-footer ">
+                            
+                                        <a onclick="DeleteClientProject({{i.id}})"  class="Role-btn text-center" id="addEmployeeBtn">Delete</a>
+                        
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                          
+                            </td>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
+                </table>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----manager modal-->
+<div class="modal fade" id="Managermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel">Add Client-Side Manager</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 px-4 pt-4">
+              <label for="managername">Manager Name</label>
+              <input type="text" id="managername" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+              <span id="managernameerror" class="error-message" ></span>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center"> 
+            <span  id="managernamebutton">
+                <button class="modaladdbtn"  onclick="AddManagerName();" type="button">Add</button>
+            </span>
+            <button type="button" class="modalClosebtn" data-bs-dismiss="modal">Close</button>
+          </div>
+
+          <div class="row">
+            <div class="modaltable-div">
+                <table class="row-border w-100" id="managerTable">
+                    <thead>
+                        <th>
+                            Sr.No
+                        </th>
+                        <th>
+                            Manager Name 
+                        </th>
+                        <th class="text-center">
+                            Action
+                        </th>
+                    </thead>
+          
+                    <tbody id="clientmasterbody">
+                      {%for i in managerlist %}
+                      <tr>
+                          <td>{{forloop.counter}}</td>
+                          <td>{{i.ManagerName}}</td>
+                          <td class="actionicons">
+                              <a title="edit" class="viewEmpDeetsBtn" onclick="getManagername({{i.id}},'{{i.ManagerName}}')"><img class="edit-icon" src="{% static '/Media/taskicons/edit.svg' %}" height="20px" alt="edit icon"> </a>   
+
+
+
+
+
+
+                              <a title="delete" class="viewEmpDeetsBtn" data-bs-toggle="modal"  data-bs-target="#deletemanager{{i.id}}" ><img class="edit-icon" src="{% static '/Media/taskicons/delete.svg' %}" height="20px" alt="delete icon"> </a>
+                              <div class="modal fade" id="deletemanager{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered w-25">
+                                
+                                  <div class="modal-content">           
+                                    <div class="modal-header ps-3 text-center">
+                                      <h5 class="modal-title py-2" id="exampleModalLabel">Delete Manager</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      
+                                      <div class="row">
+                                        <div> 
+                                          Are you sure you want to delete this?
+                        
+                                        </div>
+                                     
+                                    
+                                   
+                                   
+                                      </div>
+                                    
+                                    </div>
+                                    <div class="modal-footer ">
+                            
+                                        <a onclick="DeleteManagerName({{i.id}})"  class="Role-btn text-center" id="addEmployeeBtn">Delete</a>
+                        
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                          </td>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
+                </table>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  $(document).ready(function () {
+    $('#createclientTable').DataTable();
+    $('#clientTable').DataTable();
+    $('#managerTable').DataTable();
+    
+    $('.input-feild').on("focus", function () {
+      var label = $('label[for=' + this.id + ']');
+      label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+    });
+  });
+
+
+//////////////////   clientmaster   //////////////////////
+  function getclientname(id,name){
+    $("#clientname").val(name);
+    var trhtml = '<button class="modaladdbtn"  onclick="UpdateClientName('+id+');" type="button">Update</button>'
+    $("#clientnamebutton").html(trhtml)
+  }
+  function getclientproject(id,clientid,projectname){
+    $("#clientid").val(clientid).trigger("change");;
+
+    $("#projectname").val(projectname);
+    var trhtml = '<button class="modaladdbtn"  onclick="UpdateClientProject('+id+');" type="button">Update</button>'
+    $("#clientprojectbutton").html(trhtml)
+  }
+  function UpdateClientName(id){
+    var clientname = $("#clientname").val();
+    if (IsValid(clientname)) {
+        $('#clientnameerror').show().delay(3000).slideUp();
+        $('#clientnameerror').html('Client Name is required');
+        $('#clientname').focus();
+        return false;
+      }else{
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/Updateclient",
+          data: {
+            'ClientName' : clientname,
+            'ClientID':id,
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                $("#clientname").val("");
+                var trhtml = '<button class="modaladdbtn"  onclick="AddClientName();"  type="button">Add</button>'
+                $("#clientnamebutton").html(trhtml)
+
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL +"ClientMaster/createclient";
+              }
+              
+          }
+      });
+      }
+  }
+
+  function AddClientName(){
+    console.log("apomki")
+    var clientname = $("#clientname").val();
+    if (IsValid(clientname)) {
+        $('#clientnameerror').show().delay(3000).slideUp();
+        $('#clientnameerror').html('Client Name is required');
+        $('#clientname').focus();
+        return false;
+      }else{
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/Addclient",
+          async: true,
+          data: {
+            'ClientName' : clientname,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }
+              
+          }
+      });
+      }
+  }
+
+  function DeleteClientName(id){
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/Deleteclient",
+          data: {
+            'ClientID':id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }
+          }
+      });
+  }
+
+
+
+
+////////////////////// manager //////////////////////////////khana khane gye?
+
+
+
+function getManagername(id,name){
+    $("#managername").val(name);
+    var trhtml = '<button class="modaladdbtn"  onclick="UpdateManagerName('+id+');" type="button">Update</button>'
+    $("#managernamebutton").html(trhtml)
+  }
+
+  function UpdateManagerName(id){
+    var managername = $("#managername").val();
+    if (IsValid(managername)) {
+        $('#managernameerror').show().delay(3000).slideUp();
+        $('#managernameerror').html('Manager Name is required');
+        $('#managername').focus();
+        return false;
+      }else{
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/updateclientsidemanager",
+          data: {
+            'managername' : managername,
+            'ManagerID':id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                $("#managername").val("");
+                var trhtml = '<button class="modaladdbtn"  onclick="AddManagerName();"  type="button">Add</button>'
+                $("#managernamebutton").html(trhtml)
+
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL +"ClientMaster/createclient";
+              }
+              
+          }
+      });
+      }
+  }
+
+  function AddManagerName(){
+    var managername = $("#managername").val();
+    if (IsValid(managername)) {
+        $('#managernameerror').show().delay(3000).slideUp();
+        $('#managernameerror').html('Manager Name is required');
+        $('#managername').focus();
+        return false;
+      }else{
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/Addclientsidemanager",
+          data: {
+            'managername' : managername,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }
+              
+          }
+      });
+      }
+  }
+
+  function DeleteManagerName(id){
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/DeleteManager",
+          data: {
+            'ManagerID':id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }
+          }
+      });
+  }
+
+function Add_createclient(){
+    var client = $("#createclient").val();
+    var Manager = $("#createManager").val();
+    var Team = $("#Team").val();
+    var SPOCperson = $("#createSPOC").val();
+
+    if (IsValid(client)) {
+        $('#createclienterror').show().delay(3000).slideUp();
+        $('#createclienterror').html('Client Name is required');
+        $('#createclient').focus();
+        event.preventDefault()
+        return false;
+      }else if (IsValid(SPOCperson)) {
+        $('#SPOCpersonerror').show().delay(3000).slideUp();
+        $('#SPOCpersonerror').html('SPOCperson is required');
+        $('#createSPOC').focus();
+        event.preventDefault()
+        return false;
+      }else if (IsValid(Team)) {
+        $('#Teamerror').show().delay(3000).slideUp();
+        $('#Teamerror').html('Team is required');
+        $('#Team').focus();
+        event.preventDefault()
+        return false;
+      }else if (IsValid(Manager)) {
+        $('#createManagererror').show().delay(3000).slideUp();
+        $('#createManagererror').html('Manager field is required');
+        $('#createManager').focus();
+        event.preventDefault()
+        return false;
+      }
+}
+
+
+function Update_createclient(id){
+  var client = $("#clientname"+id).val();
+  var Manager = $("#Managers"+id).val();
+  var Team = $("#Team"+id).val();
+  var SPOCperson = $("#spocperson"+id).val();
+
+  if (IsValid(client)) {
+      $('#clientnameerror'+id).show().delay(3000).slideUp();
+      $('#clientnameerror'+id).html('Client Name is required');
+      $('#clientname'+id).focus();
+      event.preventDefault()
+      return false;
+    }else if (IsValid(SPOCperson)) {
+      $('#spocpersonerror'+id).show().delay(3000).slideUp();
+      $('#spocpersonerror'+id).html('Spoc person is required');
+      $('#spocperson'+id).focus();
+      event.preventDefault()
+      return false;
+    }else if (IsValid(Team)) {
+      $('#Teamerror'+id).show().delay(3000).slideUp();
+      $('#Teamerror'+id).html('Team is required');
+      $('#Team'+id).focus();
+      event.preventDefault()
+      return false;
+    }else if (IsValid(Manager)) {
+      $('#Managererror'+id).show().delay(3000).slideUp();
+      $('#Managererror'+id).html('Manager is required');
+      $('#Managers'+id).focus();
+      event.preventDefault()
+      return false;
+    }
+}
+
+
+
+
+function createclientdelete(id){
+    $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/delete_createclient",
+          data: {
+            'ID':id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.n)
+              if(response.n == 1){
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }
+          }
+      });
+}
+
+
+
+
+ 
+    
+    
+
+
+  
+  function searchproject(){
+    var ProjectName = $('#ProjectName').val().trim();
+    console.log("dsadasd")
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "project/searchProjectDetail",
+      data: {
+        'project' : ProjectName,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      success: function (response) {         
+         var trHtml = ""
+         counter = 1
+          $.each(response.data,function(i,o){
+            console.log("response sds",o)
+            trHtml += `
+            <tr>
+              <td >`+counter+`</td>
+              <td>`+o.ProjectName+`</td>
+              <td>`+o.ProjectBA+`</td>
+              <td>`+o.ProjectCoordinator+`</td>
+              <td>
+                  <a title="edit" class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#modal`+o.id+`"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon">
+                  </a>   
+              </td>
+          </tr>
+            `
+            counter += 1;
+          })
+          initialiseDataTable(trHtml);
+       
+      }
+  });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function Addproject(){
+    console.log("Addproject")
+    var clientid = $("#clientid").val().trim();
+    var projectname = $("#projectname").val().trim();
+
+    if (IsValid(projectname)) {
+        $('#projectnameerror').show().delay(3000).slideUp();
+        $('#projectnameerror').html('Project Name is required');
+        $('#projectname').focus();
+        return false;
+      }if (IsValid(clientid)) {
+        $('#clientiderror').show().delay(3000).slideUp();
+        $('#clientiderror').html('Please Select Client .');
+        $('#clientid').focus();
+        return false;
+      }else{
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/Addclient_project",
+          async: true,
+          data: {
+            'ProjectName' : projectname,
+            'ClientId' : clientid,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }
+              
+          }
+      });
+      }
+  }
+
+
+  function UpdateClientProject(id){
+
+    var clientid = $("#clientid").val();
+    var projectname = $("#projectname").val();
+    if (IsValid(projectname)) {
+      $('#projectnameerror').show().delay(3000).slideUp();
+      $('#projectnameerror').html('Project Name is required');
+      $('#projectname').focus();
+      return false;
+    }if (IsValid(clientid)) {
+      $('#clientiderror').show().delay(3000).slideUp();
+      $('#clientiderror').html('Please Select Client .');
+      $('#clientid').focus();
+      return false;
+    }else{
+        $.ajax({
+          type: "POST",
+          url: frontendURL + "ClientMaster/Updateclientproject",
+          data: {
+            'projectname' : projectname,
+            'clientid':clientid,
+            'id':id,
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                $("#clientid").val("");
+                $("#projectname").val("");
+                var trhtml = '<button class="modaladdbtn"  onclick="Addproject();"  type="button">Add</button>'
+                $("#clientprojectbutton").html(trhtml)
+
+                  window.location = frontendURL + "ClientMaster/createclient";
+              }else{
+                  window.location = frontendURL +"ClientMaster/createclient";
+              }
+              
+          }
+      });
+      }
+  }
+  function DeleteClientProject(id){
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "ClientMaster/deleteclientproject",
+      data: {
+        'id':id,
+        'csrfmiddlewaretoken': '{{ csrf_token }}',
+      },
+      success: function (response) {         
+          console.log("reps",response.data.n)
+          if(response.data.n == 1){
+              window.location = frontendURL + "ClientMaster/createclient";
+          }else{
+              window.location = frontendURL + "ClientMaster/createclient";
+          }
+      }
+  });
+}
+
+</script>
+
+{% endblock %}

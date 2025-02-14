@@ -1,0 +1,147 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Project
+</div>
+{% endblock %}
+{% block content %}
+<style>
+    .modal-header{
+      justify-content: center;
+    }
+  </style>
+<main class="main-wrapper">
+    {% if messages %}
+                        <div class="row" style="justify-content: center;">
+                          <div class="col-sm-6 col-sm-offset-3">
+                            {% for message in messages %}
+                            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              <p style="margin-bottom: 0px;">{{ message }}</p>
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        {% endif %}
+    <div id="snackbar"></div>
+    <div class="row g-3 mb-3 d-none">
+      <div>Employee List</div>
+    <div class="col-12">
+        <div class="card-height-xl card-defaults datatableCard datatable_padding">
+
+            <table id="example" class="table table-striped datatable" style="width:100%">
+            <thead>
+            <tr class="tableHeadings roleTableheadings">
+              <th class="text-center">Sr. No</th>
+              <th class="text-center d-none">empid</th>
+              <th class="text-center" style="width:80%">Employee Name</th>
+              <th class=" d-lg-table-cell text-center">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for i in emplist %}
+            <tr>
+                <td class="text-center">{{forloop.counter}}</td>
+                <td class="d-none">{{i.UserID}}</td>
+                <td style="width:80%">{{i.UserIDStr}}</td>
+                <td>
+                   <a href="viewemployeetask/{{i.UserID}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>                 
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+    {% for i in rolelist %}
+    <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title" id="exampleModalLabel">Role Details</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12 px-4">
+                <label for="updateRole{{i.id}}">Role Name</label>
+                <input type="text" id="updateRole{{i.id}}" value="{{i.RoleName}}" >
+                <span id="rolenameerror{{i.id}}" class="error-message"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+
+    function formValidation(){
+
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      
+        var RoleName = $('#RoleName').val().trim();   
+      
+        if (IsValid(RoleName)) {
+          $('#snackbar').html('');
+          $('#snackbar').html('Name field is required');
+          $('#RoleName').focus();
+          return false;
+      }else{
+        $('#snackbar').addClass('validationBox')
+      }
+      }
+
+      function updateRole(id) {
+        var updateRole = $('#updateRole'+id).val();
+    
+
+        if (IsValid(updateRole)) {
+            $('#rolenameerror'+id).html('');
+            $('#rolenameerror'+id).show().delay(3000).slideUp();
+            $('#rolenameerror'+id).html('This field is required');
+            $('#updateRole'+id).focus();
+            return false;
+        }else{
+
+   
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "role/updateRole",
+            data: {
+                'RoleName': updateRole,
+                'roleId':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response.data.n)
+                if(response.data.n == 1){
+                    window.location = frontendURL + "users/role";
+                }else{
+                    window.location = frontendURL + "users/role";
+                }
+                
+            }
+        });
+        }
+    }
+</script>
+{% endblock %}

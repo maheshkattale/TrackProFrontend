@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="humburger" transform="translate(-3818 149)">
+    <g id="Rectangle_10236" data-name="Rectangle 10236" transform="translate(3818 -149)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="32" height="32" stroke="none"/>
+      <rect x="0.5" y="0.5" width="31" height="31" fill="none"/>
+    </g>
+    <path id="menu_FILL0_wght300_GRAD0_opsz48" d="M6.5,27.75v-1.5h24v1.5Zm0-6.733V19.483h24v1.533Zm0-6.767v-1.5h24v1.5Z" transform="translate(3815.5 -152.75)"/>
+  </g>
+</svg>

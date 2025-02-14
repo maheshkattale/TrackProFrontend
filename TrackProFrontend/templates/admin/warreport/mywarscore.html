@@ -1,0 +1,156 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+ my trackpro score
+</div>
+{% endblock %}
+{% block content %}
+
+<main class="main-wrapper">
+    {% if messages %}
+                        <div class="row" style="justify-content: center;">
+                          <div class="col-sm-6 col-sm-offset-3">
+                            {% for message in messages %}
+                            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              <p style="margin-bottom: 0px;">{{ message }}</p>
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        {% endif %}
+    <div id="snackbar"></div>
+
+    <div class="row my-4 px-3">
+        
+        <div class="col d-flex align-items-center p-0">
+            <div class="col-md-3">
+                <label for="Year">Year:</label><br>
+                <select id='Year' name="Year" class="select2dropdown">
+                  {% for y in combined.results.year %}
+                  <option value="{{y.Year}}">{{y.Year}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            
+        </div>
+      </div>
+
+    <div class="row g-3 mb-3">
+    <div class="col-12">
+        <div class="card-height-xl card-defaults datatableCard datatable_padding" style="padding:2rem;">
+
+            <table id="dataTable" class="table table-striped datatable" style="width:100%;">
+            <thead>
+            <tr class="tableHeadings roleTableheadings">
+              <th class="text-center">Sr. No</th>
+              <th class="text-center">Year</th>
+              <th class="d-none d-lg-table-cell text-center">Week</th>
+              <th class="d-none d-lg-table-cell text-center">Percentage</th>
+              <th class="d-none d-lg-table-cell text-center">View Task</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in combined.results.IntermediateTrackProResult %}
+            <tr>
+                <td class="text-center">{{forloop.counter}}</td>
+                <td id="year{{w.id}}">{{w.Year}}</td>
+                <td id="week{{w.id}}">{{w.Week}}</td>
+                <td>{{w.TrackProPercent|floatformat:2}}</td>
+                <td >
+                    <a class="viewEmpDeetsBtn" onclick="getTasks({{w.id}})"><i class="fa fa-eye" aria-hidden="true" style="font-size: 22px;cursor:pointer"></i>
+                    </a>   
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>                 
+          </table>
+
+        </div>
+      </div>
+    </div>
+    <div class="popup">
+
+    </div>
+</main>
+
+{% endblock %}
+{% block script%}
+{{block.super}}
+<script src="{% static 'js/datatable/datatable.js'%}"></script>
+
+<script>
+    
+
+
+    function getTasks(id) {
+        year = parseInt($('#year' + id).text())
+        week = parseInt($('#week' + id).text())
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'task/ThreeParamData',
+            data: {
+                'Year': year,
+                'Week': week,
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+            },
+            dataType: 'json',
+            success: function(response) {
+                var trHTML = '';
+                var Assigndateconstant = '';
+                var yearconstant = '';
+                var weekconstant = '';
+                $('#addtable').empty();
+                if (response.tasks.length > 0) {
+                    $.each(response.tasks, function(i, o) {
+                        trHTML += '<tr id="row' + o.id + '"><td>' + o.AssignDate +
+                            '</td><td>' + o.Day +
+                            '</td><td>' + o.TaskTitle +
+                            '</td></tr>'
+                        yearconstant = o.Year
+                        weekconstant = o.Week
+
+                    });
+                    $('.popup').empty();
+                    $('.popup').append(`<div class="modal fade modal-lg" id="myModal` + id + `">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" style="font-size:20px;"> <span id="scoretitle">Year: </span>` + yearconstant + ` ` +
+                        `<span id="scoretitle" class="ms-3">Week No: </span>` + weekconstant + `</h4>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table" id="example2">
+                        <thead>
+                          <tr>
+                            <th scope="col">Assign Date</th>
+                            <th scope="col">Day</th>
+                            <th scope="col">Task Title</th>
+                          </tr>
+                        </thead>
+                        <tbody class="taskdata">` + trHTML + `
+                          <tr>
+                          </tr>
+                        </tbody>
+                      </table>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-s" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                  </div><!-- /.modal -->`)
+                } else {
+                    trHTML += '<tr><td colspan="7" class="text-center">No task available</td></tr>';
+                }
+                $("#myModal" + id).modal("show");
+
+            }
+        });
+    }
+</script>
+
+{% endblock %}

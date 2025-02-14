@@ -1,0 +1,674 @@
+{% extends "index.html" %}
+{% load static %}
+{% load encryption_filters %}
+
+{% block headercontent %}
+<div class="nav-item newheading">
+  Shift Swap Requests
+</div>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/leave_request.css' %}">
+
+<main class="main-wrapper">
+
+
+
+
+  <div class="leads-div">
+
+    <!-- Card-Box_Nav-Bar_Nav-Pills -->
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+      <li class="nav-item p-0 m-0" role="presentation">
+        <button class="nav-link active" id="pills-pending-tab" onclick="get_applications('pending');" data-bs-toggle="pill"
+          data-bs-target="#pills-pending" type="button" role="tab" aria-controls="pills-pending"
+          aria-selected="true">Pending Application</button>
+      </li>
+
+      <li class="nav-item p-0 m-0" role="presentation">
+        <button class="nav-link" id="pills-approved-tab" onclick="get_applications('approved');" data-bs-toggle="pill"
+          data-bs-target="#pills-approved" type="button" role="tab" aria-controls="pills-approved"
+          aria-selected="false">Approved Application</button>
+      </li>
+      <li class="nav-item p-0 m-0" role="presentation">
+        <button class="nav-link" id="pills-rejected-tab" onclick="get_applications('rejected');" data-bs-toggle="pill"
+          data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected"
+          aria-selected="false">Rejected Application</button>
+      </li>
+
+
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+
+
+
+      <!-- 2nd Pane -->
+
+      <div class="tab-pane fade active show " id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab"
+        tabindex="0">
+
+        <div class="row" id="pending-applications">
+
+
+        </div>
+
+      </div>
+      <!-- 3rd Pane -->
+
+      <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab" tabindex="0">
+
+        <div class="row" id="approved-applications">
+
+
+        </div>
+
+      </div>
+      <!-- 4th Pane-->
+
+      <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab" tabindex="0">
+
+        <div class="row" id="rejected-applications">
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+</main>
+
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+
+<script>
+  var tab_status = 'pending'
+  $(document).ready(function () {
+    var currentYear = new Date().getFullYear();
+    getdepartmentlist()
+
+    // Populate the select tag with options for the past 50 years
+    for (var year = currentYear + 1; year >= currentYear - 49; year--) {
+      $('#search_year').append($('<option>', {
+        value: year,
+        text: year
+      }));
+    }
+
+    $('#search_year').val(currentYear)
+
+    get_applications('pending');
+
+  });
+  
+  function search_by_name() {
+    get_applications(tab_status)
+  }
+
+  function get_applications(status) {
+    tab_status = status
+    var formData = new FormData();
+
+    var name = $("#searchbar").val()
+    var department_value = $("#searchdept").val()
+    var year = $("#search_year").val()
+    var month = $("#search_month").val()
+
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('name', name);
+    formData.append('department_value', department_value);
+    formData.append('year', year);
+    formData.append('month', month);
+    formData.append('status', status);
+
+    $.ajax({
+      url: frontendURL + "shift/get_shift_swap_applications",
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      beforeSend: function () {
+        swal({
+          icon: "info",
+          title: "",
+          text: "Loading...",
+          buttons: false,
+        });
+      },
+      success: function (response) {
+        swal.close();
+        console.log("response", response)
+        var col_div = ''
+
+        if (response.response.n == 1) {
+
+          $(response.data).each(function (a, b) {
+
+            col_div += ` 
+                    
+
+                        <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                            <div id="card" class="card text-start h-100">
+
+
+                                <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                                <span class="card-header-blue-txt text-black"></span>
+                                <span class="d-flex">  
+                                    
+                                </span>
+                                </div>
+
+
+
+
+                                <div class="card-header head d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <span class="card-header-txt">Shift Swaping</span><br>
+                                        <span class="card-header-txt">`+ b.Status + ` </span>
+                                    </span>
+                                    <span class="d-flex justify-content-end">
+                                        <span class="text-left">
+                                            <span class="card-header-txt">Application Date </span><br>
+                                            <span class="card-header-txt" title="`+ b.created_at + `">` + b.created_at + `</span>
+                                        </span>
+                                        <span>
+
+                                    
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <div class="card-body py-3">
+
+                                    <div class="row">
+
+
+
+
+                                        <div class="col-lg-12">
+                                            <div class="card-header head d-flex justify-content-between p-0">
+                                                <span>
+                                                    <span class="card-header-txt"> From Employee </span><br>
+                                                    <span class="card-header-blue-txt">`+ b.first_employee_name + `</span><br>
+                                                    <span class="card-header-blue-txt">`+ b.Shiftdate + `</span><br>
+                                                    <span class="card-header-blue-txt">`+ b.Shiftname + ` </span>
+                                                </span>
+                                                <span>
+                                                                <span class="card-header-txt"></span><br>
+                                                                <span class="card-header-txt">
+                                                                <img style="width:20px;" src="`+frontendURL+`/static/assets/images/swap.svg">    
+                                                                    
+                                                                </span><br>
+                                                                <span class="card-header-blue-txt">
+                                                                </span>
+                                                </span>
+                                                <span>
+                                                
+                                                    <span class="card-header-txt">To Employee </span><br>
+                                                    <span class="card-header-blue-txt">`+ b.second_employee_name + `</span><br>
+                                                    <span class="card-header-blue-txt">`+ b.Swapshiftdate + `</span><br>
+
+                                                    <span class="card-header-blue-txt">`+ b.Swapshiftname + ` </span>
+                                            
+                                                    
+                                                </span>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                                
+                
+
+                
+                                            <div class="card-header p-0">
+
+                                                <span class="card-header-txt">
+                                                    
+                                                    Reason :</span><br>
+
+                                                <span class="my-3 card-body-reason-text addReadMore showlesscontent "
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                    title="not available">`+ b.Reason + `.</span>
+                                            </div>
+                                                                
+               
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer cardfooter mt-auto">
+                                    <div class="row">
+
+                                        <div class="col-lg-12 conclusion-box my-2">
+                                            <div class="py-2 d-flex justify-content-between">
+                                                <span class="image-list card-header-txt py-1 col-lg-8 col-md-6 col-sm-12"
+                                                    style="display: flex; align-items: center;">
+
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.ActionTaken === 'Pending' ?
+                `
+                                                                <img class="manager-pic manager-pic-Pending  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="⏳ ${l.manager_name}" />                                                            
+                                                                `
+                : `
+                                                        
+                                                            `}
+                                                        `).join("\n")}
+
+                                                    <span class="ps-1">This application is `+ b.Status + `.</span>
+                                                </span>
+
+                                                <span
+                                                    class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.ActionTaken === 'Approved' ?
+                    `
+                                                                <img class="manager-pic manager-pic-Approved  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="✅ ${l.manager_name}" />                                                            
+                                                                `
+                    : ``}
+
+                                                        `).join("\n")}
+                                                            
+                                                        ${b.managers.map((l, index) => `
+                                                            ${l.ActionTaken === 'Rejected' ?
+                        `
+                                                                <img class="manager-pic manager-pic-Rejected  manager-image-picture1"
+                                                                src="${l.manager_image}" data-bs-placement="top"
+                                                                data-bs-toggle="tooltip" title="❌ ${l.manager_name}" />                                                          
+                                                                `
+                        : ``}
+
+                                                        `).join("\n")}
+
+                                                        
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    ${ b.Status === 'Pending' &&  b.manager_action === null? ` 
+
+                                        <div class="row mt-2 ButttonStatus`+ b.id + `">
+                                            <div class="col-lg-6 col-md-12 col-sm-12 px-1">
+                                                <button class="btn w-100  btn-danger" onclick="reject_application(`+ b.id + `)">Reject</button>
+                                            </div>
+                          
+                                            <div class="col-lg-6 col-md-12 col-sm-12 px-1">
+                                                <button class="btn w-100   btn-success" onclick="approve_application(`+ b.id + `)">Approve</button>
+                                            </div>
+                                        </div>
+                                    ` : ``}
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+                        </div>
+
+                    `
+          });
+          $('#' + status + '-applications').html(col_div)
+
+
+          AddReadMore();
+          AddReadMore1();
+
+          var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+          var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) { return new bootstrap.Tooltip(tooltipTriggerEl) });
+
+
+        }
+        else {
+          col_div += ` 
+                    <div class="noappdiv">
+                        <div class="text-center py-4 ">No Applications Found!</div>
+                    </div>`
+          $('#' + status + '-applications').html(col_div)
+
+
+
+        }
+
+      }
+    });
+
+
+
+
+
+  }
+
+  function AddReadMore() {
+    //This limit you can set after how much characters you want to show Read More.
+    var carLmt = 95;
+    // Text to show when text is collapsed
+    var readMoreTxt = " ... Read More";
+    // Text to show when text is expanded
+    var readLessTxt = " Read Less";
+
+
+    //Traverse all selectors with this class and manupulate HTML part to show Read More
+    $(".addReadMore").each(function () {
+      if ($(this).find(".firstSec").length)
+        return;
+
+      var allstr = $(this).text();
+      if (allstr.length > carLmt) {
+        var firstSet = allstr.substring(0, carLmt);
+        var secdHalf = allstr.substring(carLmt, allstr.length);
+        var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+        $(this).html(strtoadd);
+      }
+
+    });
+    //Read More and Read Less Click Event binding
+
+  }
+  
+  function AddReadMore1() {
+    //This limit you can set after how much characters you want to show Read More.
+    var carLmt = 15;
+    // Text to show when text is collapsed
+    var readMoreTxt = " ... Read More";
+    // Text to show when text is expanded
+    var readLessTxt = " Read Less";
+
+
+    //Traverse all selectors with this class and manupulate HTML part to show Read More
+    $(".addReadMore1").each(function () {
+      if ($(this).find(".firstSec").length)
+        return;
+
+      var allstr = $(this).text();
+      if (allstr.length > carLmt) {
+        var firstSet = allstr.substring(0, carLmt);
+        var secdHalf = allstr.substring(carLmt, allstr.length);
+        var strtoadd = firstSet + "<span class='SecSec1'>" + secdHalf + "</span><span class='readMore1'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess1' title='Click to Show Less'>" + readLessTxt + "</span>";
+        $(this).html(strtoadd);
+      }
+
+    });
+    //Read More and Read Less Click Event binding
+
+  }
+
+  $(document).on("click", ".readMore,.readLess", function () {
+    $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+  });
+  
+  $(document).on("click", ".readMore1,.readLess1", function () {
+    $(this).closest(".addReadMore1").toggleClass("showlesscontent1 showmorecontent1");
+  });
+
+
+
+
+
+
+
+
+  function getdepartmentlist() {
+    var html = ''
+    var fd = new FormData();
+    fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "getdepartmentlist",
+      data: fd,
+      processData: false,
+      contentType: false,
+
+      success: function (response) {
+        var numberToCheck = '';
+
+
+
+        html += `<option value="" >Select Department</option>`
+
+        $(response.data).each(function (a, b) {
+          html += `<option value="` + b.id + `">` + b.DepartmentName + `</option>`
+        })
+        $("#searchdept").html(html);
+
+      },
+    });
+  }
+
+  function approve_application(id) {
+    swal({
+      title: "Are you sure?",
+      text: "you want to approve application",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            url: frontendURL + "shift/approve_application",
+            type: 'POST',
+            headers: {
+              'Authorization': 'Token {{token}}'
+            },
+            data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              'id': id
+            },
+            dataType: 'json',
+            beforeSend: function () {
+
+              var PendingDivButttonStatus = ""
+              PendingDivButttonStatus = `
+                                <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                <button class="btn w-100   btn-primary" >Loading...</button>
+                                </div>
+                            `
+
+              $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+            },
+            success: function (response) {
+
+              if (response['response']['n'] == 1) {
+                swal({
+                  icon: "success",
+                  title: "",
+                  text: response['response']['msg'],
+                  button: "Close",
+                })
+
+                var PendingDivButttonStatus = ""
+                PendingDivButttonStatus = `
+                                    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                        <button class="btn w-100   btn-success" >Approved</button>
+                                    </div>
+                                `
+                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+
+              }
+              else {
+                swal({
+                  icon: "error",
+                  title: "",
+                  text: response['response']['msg'],
+                  button: "Close",
+                })
+
+              var PendingDivButttonStatus = ""
+              PendingDivButttonStatus = `
+                                       
+                                        <div class="col-lg-6 col-md-12 col-sm-12 px-1">
+                                            <button class="btn w-100  btn-danger" onclick="reject_application(`+ id + `)">Reject</button>
+                                        </div>
+                      
+                                        <div class="col-lg-6 col-md-12 col-sm-12 px-1">
+                                            <button class="btn w-100   btn-success" onclick="approve_application(`+ id + `)">Approve</button>
+                                        </div>
+                    
+                            `
+
+              $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+              }
+
+
+
+
+            }
+          });
+
+        }
+      })
+  }
+
+  function reject_application(id) {
+    swal({
+      title: "Are you sure?",
+      text: "you want to reject application",
+
+      content: {
+        element: "input",
+        attributes: {
+          placeholder: "Enter rejection reason",
+          type: "text",
+        },
+      },
+      icon: "warning",
+      buttons: true,
+      dangerMode: true
+
+
+    })
+      .then((reason) => {
+        if (reason != null) {
+
+          $.ajax({
+            url: frontendURL + "shift/reject_application",
+            type: 'POST',
+            headers: {
+              'Authorization': 'Token {{token}}'
+            },
+            data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              'id': id,
+              'reason': reason,
+            },
+            dataType: 'json',
+            beforeSend: function () {
+
+              var PendingDivButttonStatus = ""
+              PendingDivButttonStatus = `
+                            <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                <button class="btn w-100   btn-primary" >Loading...</button>
+                            </div>
+                            `
+
+              $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+            },
+            success: function (response) {
+
+              if (response['response']['n'] == 1) {
+
+                swal({
+                  icon: "success",
+                  title: "",
+                  text: response['response']['msg'],
+                  button: "Close",
+                })
+                var PendingDivButttonStatus = ""
+                PendingDivButttonStatus = `
+                                    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                                    <button class="btn w-100   btn-danger" >Rejected</button>
+                                    </div>
+                                `
+                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+
+
+
+              }
+              else {
+
+
+
+
+
+
+                swal({
+                  icon: "error",
+                  title: "",
+                  text: response['response']['msg'],
+                  buttons: true,
+                  dangerMode: true
+                }).then((willDelete) => {
+                  if (willDelete) {
+                    reject_application(id)
+
+                  }
+
+                });
+                var PendingDivButttonStatus = ""
+                PendingDivButttonStatus = `
+                                    <div class="col-lg-6 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100  btn-danger" onclick="reject_application(`+ id + `)">Reject</button>
+                                    </div>
+     
+                                    <div class="col-lg-6 col-md-12 col-sm-12 px-1">
+                                        <button class="btn w-100   btn-success" onclick="approve_application(`+ id + `)">Approve</button>
+                                    </div>
+                                `
+                $(".ButttonStatus" + id).html(PendingDivButttonStatus)
+              }
+
+
+
+
+            }
+          });
+
+
+        }
+      })
+  }
+
+
+
+
+</script>
+
+
+{% endblock %}

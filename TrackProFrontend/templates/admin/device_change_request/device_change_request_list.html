@@ -1,0 +1,1176 @@
+{% extends "index.html" %}
+{% load static %} 
+{% load encryption_filters %}
+
+{% block headercontent %}
+<div class="nav-item newheading">
+ Device Requests
+</div>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+
+.trackproBtn{
+  cursor:pointer;
+}
+      .trash-btn{
+        color: #ff0000;
+        font-size:16px;
+      }
+      .noappdiv{
+        background-color: #fff;
+        color: #174fa3;
+        border:1px solid #fff;
+        border-radius:15px;
+        padding:30px 0px;
+        /* width:400px; */
+        /* margin-top:1rem ; */
+      }
+      .cross{
+        color:red;
+      }
+      .checkicon{
+        color:green;
+      }
+      #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: lightgreen;
+        color: black;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 60%;
+        top: 90px;
+        font-size: 17px;
+      }
+
+      #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+      .nav-pills .nav-link {
+        background-color:transparent !important;
+        padding-right: 12px;
+        padding-left: 12px;
+        color:rgba(0, 0, 0, 0.626) !important;
+      }
+
+      .noapp{
+        display:flex;
+        justify-content: center;
+      }
+      @-webkit-keyframes fadein {
+        from {
+          top: 0;
+          opacity: 0;
+        }
+        to {
+          top: 90px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein {
+        from {
+          top: 0;
+          opacity: 0;
+        }
+        to {
+          top: 90px;
+          opacity: 1;
+        }
+      }
+
+      @-webkit-keyframes fadeout {
+        from {
+          top: 90px;
+          opacity: 1;
+        }
+        to {
+          top: 0;
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          top: 90px;
+          opacity: 1;
+        }
+        to {
+          top: 0;
+          opacity: 0;
+        }
+      }
+      .nav-item{
+        display:flex;
+        justify-content: center;
+      }
+
+      .card-header {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0;
+        background-color:white; 
+        border-bottom: none;
+        color: #403f3f;
+      }
+      .card{
+        border-radius: 6px;
+        background: #FFF;
+        box-shadow: 0px 4px 8px #00000029;
+      }
+
+      .btn-outline-success {
+        --bs-btn-color: #019d00;
+        --bs-btn-border-color: #019d00;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #019d00;
+        --bs-btn-hover-border-color: #019d00;
+        --bs-btn-focus-shadow-rgb: 25,135,84;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #019d00;
+        --bs-btn-active-border-color: #019d00;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #019d00;
+        --bs-btn-disabled-bg: transparent;
+        --bs-btn-disabled-border-color: #019d00;
+        --bs-gradient: none;
+    }
+    .btn-success {
+      --bs-btn-color: #fff;
+      --bs-btn-bg: #019d00;
+      --bs-btn-border-color: #019d00;
+      --bs-btn-hover-color: #fff;
+      --bs-btn-hover-bg: #157347;
+      --bs-btn-hover-border-color: #146c43;
+      --bs-btn-focus-shadow-rgb: 60,153,110;
+      --bs-btn-active-color: #fff;
+      --bs-btn-active-bg: #146c43;
+      --bs-btn-active-border-color: #13653f;
+      --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+      --bs-btn-disabled-color: #fff;
+      --bs-btn-disabled-bg: #019d00;
+      --bs-btn-disabled-border-color: #019d00;
+    }
+    .searchbar-input-feild{
+
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #bdbdbd;
+      margin: 0px 10px 0 10px;
+      outline: none;
+      padding:13px 0px;
+      font-size: 14px;
+      width:100%;
+    }
+      .fa{
+      font-size:18px;
+      }
+      .cross {
+        color:red;
+      }
+      .fa-check {
+        color:#56c600;
+      }
+      .fa-info-circle{
+        color:#0062ff;
+      }
+      .btn-font{
+        font-size:14px;
+      }
+      .btn-width{
+        width:100%;
+      }
+
+      
+    /*--------read more /less css -----*/
+    .addReadMore.showlesscontent .SecSec,
+        .addReadMore.showlesscontent .readLess {
+            display: none;
+        }
+
+        .addReadMore.showmorecontent .readMore {
+            display: none;
+        }
+
+        .addReadMore .readMore,
+        .addReadMore .readLess {
+            margin-left: 2px;
+            color: #174fa3;
+            cursor: pointer;
+        }
+
+        .addReadMoreWrapTxt.showmorecontent .SecSec,
+        .addReadMoreWrapTxt.showmorecontent .readLess {
+            display: block;
+        }
+        .tab-icon-button {
+          padding-top: 15px;
+        }
+
+    /*    ------------------------------------------*/
+        .card-body-reason-text {
+          font-size: 12px;
+          color: #000000;
+          padding-bottom: 10px 0px;
+        }
+        .card-header-txt {
+        font-size: 12px;
+        }
+        .card-header-title {
+          font-size: 12px;
+          font-weight: 500;
+        }
+        .card-header-blue-txt{
+          color: #00AEEF;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        .conclusion-box{
+          border-radius: 12px;
+        
+          background-color: #ECF1F2;
+          color: #403f3f;
+        }
+        .manager-profile-picture1,.manager-profile-picture2,.manager-profile-picture3 {
+          height: 25px;
+          width: 25px;
+        
+        }
+        .manager-profile-picture-rejected {
+          height: 25px;
+          width: 25px;
+          border-radius: 50%;
+          position: relative;
+          z-index: 10 !important;
+        }
+        .card-header-name-txt {
+          color: #403f3f;
+          font-size: 18px;
+          padding-bottom: 16px;
+        }
+        .card-body-comment-text {
+          font-size: 12px;
+          height: 18px;
+          padding-bottom: 10px 0px;
+        }
+        
+        .dropdown-toggle{
+          cursor: pointer;
+        }
+        .dropdwn {
+            cursor: pointer;
+            min-width: 10px !important;
+            right: 0 !important;
+            left: initial !important;
+        }
+        .dropdwn.show {
+            display:flex;
+            transform: translate(0px, 23px) !important;
+        }
+        .disabled-icon {
+          color: gray !important; /* Change icon color to indicate it's disabled */
+          opacity: 0.5; /* Reduce opacity for a faded look */
+        }
+        .manager-pic-Pending{
+          border: 1px solid orange;
+        }
+        .manager-pic-Approved{
+          border: 1px solid green;
+        }
+        .manager-pic-Rejected{
+          border: 1px solid red;
+        }
+        .cardfooter{
+          background: white;
+          border: none;
+        }
+        .managers-imgs{
+          text-align: right;
+          padding: 4px 30px 4px 0;
+        }
+        
+        
+        
+        
+        /*--------read more /less css -----*/
+        .addReadMore1.showlesscontent1 .SecSec1,
+          .addReadMore1.showlesscontent1 .readLess1 {
+              display: none;
+          }
+        
+          .addReadMore1.showmorecontent1 .readMore1 {
+              display: none;
+          }
+        
+          .addReadMore1 .readMore1,
+          .addReadMore1 .readLess1 {
+              margin-left: 2px;
+              color: #174fa3;
+              cursor: pointer;
+          }
+        
+          .addReadMore1WrapTxt.showmorecontent1 .SecSec1,
+          .addReadMore1WrapTxt.showmorecontent1 .readLess1 {
+              display: block;
+          }
+          .manager-image-picture1{
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+        }
+        .manager-image-picture2{
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+
+        
+        }
+
+        .manager-image-picture3{
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+
+        
+        }
+        .image-list img:not(:first-child) {
+          margin-left: -21.5px;
+        }
+        .image-list img:hover {
+          transform: scale(1.5); /* Scale up on hover */
+          
+      
+        }
+        .image-list {
+          display: flex;
+          gap: 15px;
+          margin:auto;
+
+      }
+      .card-body{
+        padding-top:0px ;
+        padding-bottom:0px ;
+      }
+      .rejected-application {
+        gap: 13px;
+
+      }
+      .manager-pic {
+        cursor: pointer;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+    }
+    .btn-primary {
+      --bs-btn-color: #fff;
+      --bs-btn-bg: #174fa3 ;
+      --bs-btn-border-color: #174fa3 ;
+      --bs-btn-hover-color: #fff;
+      --bs-btn-hover-bg: #0b5ed7;
+      --bs-btn-hover-border-color: #174fa3;
+      --bs-btn-focus-shadow-rgb: 49,132,253;
+      --bs-btn-active-color: #fff;
+      --bs-btn-active-bg: #174fa3;
+      --bs-btn-active-border-color: #0a53be;
+      --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+      --bs-btn-disabled-color: #fff;
+      --bs-btn-disabled-bg: #174fa3 ;
+      --bs-btn-disabled-border-color: #174fa3 ;
+  }
+  .application-filter-box {
+    width: 100%;
+    margin-top: auto;
+    margin-left: 5px;
+}
+.fa-plus {
+  font-size: 24px;
+
+}
+</style>
+
+
+<main class="main-wrapper">
+  <div id="snackbar"></div>
+  {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  <div id="snackbar"></div>
+
+
+
+  <div class="leads-div">
+
+    <!-- Card-Box_Nav-Bar_Nav-Pills -->
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-all" aria-selected="true">All Application</button>
+        </li>
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab" aria-controls="pills-pending" aria-selected="true">Pending Application</button>
+        </li>
+
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-approved-tab" data-bs-toggle="pill" data-bs-target="#pills-approved" type="button" role="tab" aria-controls="pills-approved" aria-selected="false">Approved Application</button>
+        </li>
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">Rejected Application</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="pills-tabContent">
+
+
+        <!-- 1st-Pane -->
+        <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab" tabindex="0">
+            
+            <div class="row" id="allapplicationslist">
+
+
+              {% for i in all_applications %}
+
+
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                    <div id="card" class="card text-start h-100">
+
+                      <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                        <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                      </div>
+                      <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">Device Name</span><br>
+                                <span class="card-header-txt" title="{{i.device_name}}">{{i.device_name}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                                <span class="text-left">                                   
+                                    <span class="card-header-txt">Device ID </span><br>
+                                    <span class="card-header-txt" title="{{i.unique_device_id}}">{{i.unique_device_id}}</span> 
+                                </span>
+
+                            </span>
+
+                            <span>
+                                <span>                                   
+                                    <span class="card-header-txt">Applied Date</span><br>
+                                    <span class="card-header-txt" title="{{i.created_at}}">{{i.created_at}}</span> 
+                                </span>
+                            </span>
+                      </div>
+
+                      <div class="card-body">
+
+                          <div class="row">
+
+
+
+
+
+                            <div class="col-lg-12">
+                              <div class="card-header p-0">
+
+                              <span class="card-header-txt">Reason :</span><br>
+
+                              <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.remark}}">{{i.remark}}.</span>
+                              </div>
+                            </div>
+
+
+                          </div>
+
+                      </div>
+
+                      <div class="card-footer cardfooter mt-auto">
+                        <div class="row">
+
+
+                          <div class="col-lg-12 conclusion-box my-2">
+                            <div  class="py-2 row">
+                              <span class="card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex;">
+
+                                <span class="ps-1">This application is {{i.status}}.</span>
+                              </span>  
+                              
+
+                            </div>
+                          </div>
+                        </div>
+
+                        {%if i.status == "Pending" %}
+
+                        <div class="row mt-2" id="allapplicationsButttonStatus{{i.id}}">
+                          <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                            <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}">Reject</button>
+                          </div>
+                          <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                            <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal{{i.id}}">Approve</button>
+                          </div>
+                        </div>
+                        {%endif%}
+
+                      </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                {%empty%}
+                <div class="noappdiv">
+                  <div class="text-center py-4 ">No Applications Recieved!</div>
+                </div>
+              {%endfor%}
+
+
+
+
+
+
+              
+
+            </div>
+            
+        </div>
+        <!-- 2nd Pane -->
+
+        <div class="tab-pane fade show " id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab" tabindex="0">
+            
+          <div class="row" id="pendingleaves">
+            {% for i in pending_applications %}
+
+            <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                <div id="card" class="card text-start h-100">
+
+                  <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                    <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                  </div>
+                  <div class="card-header head d-flex justify-content-between align-items-center">
+                      <span>                                   
+                          <span class="card-header-txt">Device Name</span><br>
+                          <span class="card-header-txt" title="{{i.device_name}}">{{i.device_name}}</span> 
+                      </span>
+                      <span class="d-flex justify-content-between">
+                        <span class="text-left">                                   
+                          <span class="card-header-txt">Device ID </span><br>
+                          <span class="card-header-txt" title="{{i.unique_device_id}}">{{i.unique_device_id}}</span> 
+                        </span>
+                        <span>
+
+                        </span>
+                      </span>
+                      <span>
+                        <span>                                   
+                            <span class="card-header-txt">Applied Date</span><br>
+                            <span class="card-header-txt" title="{{i.created_at}}">{{i.created_at}}</span> 
+                        </span>
+                    </span>
+                  </div>
+
+                  <div class="card-body">
+
+                      <div class="row">
+
+
+
+
+
+                        <div class="col-lg-12">
+                          <div class="card-header p-0">
+
+                          <span class="card-header-txt">Reason :</span><br>
+
+                          <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.remark}}">{{i.remark}}.</span>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+                  </div>
+
+                  <div class="card-footer cardfooter mt-auto">
+                    <div class="row">
+
+
+                      <div class="col-lg-12 conclusion-box my-2">
+                        <div  class="py-2 row">
+                          <span class="card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex;">
+
+                            <span class="ps-1">This application is {{i.status}}.</span>
+                          </span>  
+                          
+
+                        </div>
+                      </div>
+                    </div>
+
+                    {%if i.status == "Pending" %}
+
+                    <div class="row mt-2" id="PendingDivButttonStatus{{i.id}}">
+                      <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                        <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}">Reject</button>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                        <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal{{i.id}}">Approve</button>
+                      </div>
+                    </div>
+                    {%endif%}
+
+                  </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            {%empty%}
+              <div class="noappdiv">
+                <div class="text-center py-4 ">No Applications Recieved!</div>
+              </div>
+            {%endfor%}
+
+          </div>
+          
+        </div>
+        <!-- 3rd Pane -->
+
+        <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab" tabindex="0">
+            
+          <div class="row" id="approvedleaves">
+            {% for i in approved_applications %}
+
+            <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                <div id="card" class="card text-start h-100">
+
+                  <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                    <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                  </div>
+                  <div class="card-header head d-flex justify-content-between align-items-center">
+                      <span>                                   
+                          <span class="card-header-txt">Device Name</span><br>
+                          <span class="card-header-txt" title="{{i.device_name}}">{{i.device_name}}</span> 
+                      </span>
+                      <span class="d-flex justify-content-between">
+                        <span class="text-left">                                   
+                          <span class="card-header-txt">Device ID </span><br>
+                          <span class="card-header-txt" title="{{i.unique_device_id}}">{{i.unique_device_id}}</span> 
+                        </span>
+                        <span>
+
+                        </span>
+                      </span>
+                      <span>
+                        <span>                                   
+                            <span class="card-header-txt">Applied Date</span><br>
+                            <span class="card-header-txt" title="{{i.created_at}}">{{i.created_at}}</span> 
+                        </span>
+                    </span>
+                  </div>
+
+                  <div class="card-body">
+
+                      <div class="row">
+
+
+
+
+
+                        <div class="col-lg-12">
+                          <div class="card-header p-0">
+
+                          <span class="card-header-txt">Reason :</span><br>
+
+                          <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.remark}}">{{i.remark}}.</span>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+                  </div>
+
+                  <div class="card-footer cardfooter mt-auto">
+                    <div class="row">
+
+
+                      <div class="col-lg-12 conclusion-box my-2">
+                        <div  class="py-2 row">
+                          <span class="card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex;">
+
+                            <span class="ps-1">This application is {{i.status}}.</span>
+                          </span>  
+                          
+
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            {%empty%}
+              <div class="noappdiv">
+                <div class="text-center py-4 ">No Applications Recieved!</div>
+              </div>
+            {%endfor%}
+
+          </div>
+
+        </div>
+        <!-- 4th Pane-->
+
+        <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab" tabindex="0">
+            
+            <div class="row" id="rejectedleaves">
+              {% for i in rejected_applications %}
+
+
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                <div id="card" class="card text-start h-100">
+
+                  <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                    <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                  </div>
+                  <div class="card-header head d-flex justify-content-between align-items-center">
+                      <span>                                   
+                          <span class="card-header-txt">Device Name</span><br>
+                          <span class="card-header-txt" title="{{i.device_name}}">{{i.device_name}}</span> 
+                      </span>
+                      <span class="d-flex justify-content-between">
+                        <span class="text-left">                                   
+                          <span class="card-header-txt">Device ID </span><br>
+                          <span class="card-header-txt" title="{{i.unique_device_id}}">{{i.unique_device_id}}</span> 
+                        </span>
+                        <span>
+
+                        </span>
+                      </span>
+                      <span>
+                        <span>                                   
+                            <span class="card-header-txt">Applied Date</span><br>
+                            <span class="card-header-txt" title="{{i.created_at}}">{{i.created_at}}</span> 
+                        </span>
+                    </span>
+                  </div>
+
+                  <div class="card-body">
+
+                      <div class="row">
+
+
+
+
+
+                        <div class="col-lg-12">
+                          <div class="card-header p-0">
+
+                          <span class="card-header-txt">Reason :</span><br>
+
+                          <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.remark}}">{{i.remark}}.</span>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+                  </div>
+
+                  <div class="card-footer cardfooter mt-auto">
+                    <div class="row">
+
+
+                      <div class="col-lg-12 conclusion-box my-2">
+                        <div  class="py-2 row">
+                          <span class="card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex;">
+
+                            <span class="ps-1">This application is {{i.status}}.</span>
+                          </span>  
+                          
+
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+
+                </div>
+
+              
+              {%empty%}
+                <div class="noappdiv">
+                  <div class="text-center py-4 ">No Applications Recieved!</div>
+                </div>
+              {%endfor%}
+
+                
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+  {% for i in pending_applications %}
+    <div class="modal fade" id="editmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg px-5">
+      
+        <div class="modal-content">           
+          <div class="modal-header ps-4">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Reject Application</h5>
+          </div>
+          <div class="modal-body">
+            
+            
+    
+        
+            <div class="row">
+              <div class="col-12 px-4">
+                <label for="reason">Comment </label>
+                <textarea  rows="2" class="input-feild" rows="5" id="reason{{i.id}}" name="comment" ></textarea >
+                  <span id="reasonerror{{i.id}}" class="error-message"></span>
+              </div>
+
+            </div>
+        
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <span type="submit" class="trackproBtn" id="editEmployeeDetails" onclick="rejectapplication({{i.id}})">Submit</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%endfor%}
+
+
+
+
+  
+
+  {% for i in pending_applications %}
+    <div class="modal fade" id="acceptmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+      
+        <div class="modal-content">           
+          <div class="modal-header">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Accept Application</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row py-1">
+              <div> Are you sure you want to Approve Request?
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <span   data-bs-dismiss="modal" onclick="ApplicationApprove({{i.id}})" class="trackproBtn" id="editEmployeeDetails">Approve</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%endfor%}
+
+
+
+</main>
+
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+<script>
+
+  $(document).ready(function () {
+    AddReadMore();
+    AddReadMore1();
+    getdepartmentlist()
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {return new bootstrap.Tooltip(tooltipTriggerEl)});
+    
+    var currentYear = new Date().getFullYear();
+
+    // Populate the select tag with options for the past 50 years
+    for (var year = currentYear+1; year >= currentYear - 49; year--) {
+      $('#search_year').append($('<option>', {
+        value: year,
+        text: year
+      }));
+    }
+
+    $('#search_year').val(currentYear)
+
+
+  });
+
+  function AddReadMore() {
+    //This limit you can set after how much characters you want to show Read More.
+    var carLmt = 95;
+    // Text to show when text is collapsed
+    var readMoreTxt = " ... Read More";
+    // Text to show when text is expanded
+    var readLessTxt = " Read Less";
+
+
+    //Traverse all selectors with this class and manupulate HTML part to show Read More
+    $(".addReadMore").each(function() {
+        if ($(this).find(".firstSec").length)
+            return;
+
+        var allstr = $(this).text();
+        if (allstr.length > carLmt) {
+            var firstSet = allstr.substring(0, carLmt);
+            var secdHalf = allstr.substring(carLmt, allstr.length);
+            var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+            $(this).html(strtoadd);
+        }
+
+    });
+    //Read More and Read Less Click Event binding
+    
+  }
+  function AddReadMore1() {
+    //This limit you can set after how much characters you want to show Read More.
+    var carLmt = 15;
+    // Text to show when text is collapsed
+    var readMoreTxt = " ... Read More";
+    // Text to show when text is expanded
+    var readLessTxt = " Read Less";
+
+
+    //Traverse all selectors with this class and manupulate HTML part to show Read More
+    $(".addReadMore1").each(function() {
+        if ($(this).find(".firstSec").length)
+            return;
+
+        var allstr = $(this).text();
+        if (allstr.length > carLmt) {
+            var firstSet = allstr.substring(0, carLmt);
+            var secdHalf = allstr.substring(carLmt, allstr.length);
+            var strtoadd = firstSet + "<span class='SecSec1'>" + secdHalf + "</span><span class='readMore1'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess1' title='Click to Show Less'>" + readLessTxt + "</span>";
+            $(this).html(strtoadd);
+        }
+
+    });
+    //Read More and Read Less Click Event binding
+    
+  }
+
+  $(document).on("click", ".readMore,.readLess", function() {
+      $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+  });
+  $(document).on("click", ".readMore1,.readLess1", function() {
+    $(this).closest(".addReadMore1").toggleClass("showlesscontent1 showmorecontent1");
+  });
+
+  function rejectapplication(id){
+    var reason = $("#reason"+id).val();
+    if (IsValid(reason)){
+        $('#reasonerror'+id).html('');
+        $('#reasonerror'+id).show().delay(3000).slideUp();
+        $('#reasonerror'+id).html('Valid rejection reason is required');
+        $('#reason'+id).focus();
+        return false;
+    }else if (!/\S/.test(reason)){
+      $('#reasonerror'+id).html('');
+      $('#reasonerror'+id).show().delay(3000).slideUp();
+      $('#reasonerror'+id).html('This field is required');
+      $('#reason'+id).focus();
+        return false;
+    }else{
+      $("#editmodal"+id).modal("toggle");
+
+      $.ajax( {
+        url: frontendURL +"devicechangerequest/rejectdevicechangerequest",
+        type: 'POST',
+        headers: {
+          'Authorization':'Token {{token}}'
+      },
+        data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          'id':id,
+          'rejection_reason':reason,
+          },
+        dataType: 'json',
+        beforeSend: function() {
+
+
+        var PendingDivButttonStatus=""
+        PendingDivButttonStatus=`
+        <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+          <button class="btn w-100  btn-primary" >Loading...</button>
+        </div>
+        `
+        $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+        $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+
+        },
+        success: function(response){
+          $("#rejectmodal").modal("toggle");
+
+          if (response['response']['n'] == 1){
+
+
+              var PendingDivButttonStatus=""
+              PendingDivButttonStatus=`
+              <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                <button class="btn w-100  btn-danger" >Rejected</button>
+              </div>
+              `
+              $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+              $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+
+                }
+          else{
+            swal({
+              icon: "error",
+              title: "",
+              text: response['response']['msg'],  
+              button: "Close",
+              }).then(() => {
+                // Code to execute after the user closes the SweetAlert dialog
+                location.reload(); // Reload the page
+              });
+          }   
+          
+        }
+      });
+    }
+  }
+
+  function ApplicationApprove(id){
+
+      $.ajax( {
+        url: frontendURL +"devicechangerequest/approvedevicechangerequest",
+        type: 'POST',
+        headers: {
+          'Authorization':'Token {{token}}'
+      },
+        data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          'id':id        
+          },
+        dataType: 'json',
+        beforeSend: function() {
+
+        var PendingDivButttonStatus=""
+        PendingDivButttonStatus=`
+        <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+          <button class="btn w-100   btn-primary" >Loading...</button>
+        </div>
+        `
+        $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+        $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+
+
+        },
+        success: function(response){
+          $("#acceptmodal").modal("toggle");
+          //swal.close()
+
+          if (response['response']['n'] == 1){
+
+
+                  var PendingDivButttonStatus=""
+                  PendingDivButttonStatus=`
+                  <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                    <button class="btn w-100   btn-success" >Approved</button>
+                  </div>
+                  `
+                  $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+                  $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+
+
+
+          }
+          else{
+            swal({
+                  icon: "error",
+                  title: "",
+                  text: response['response']['msg'],
+                  button: "Close",
+                  }).then(() => {
+                    // Code to execute after the user closes the SweetAlert dialog
+                   location.reload(); // Reload the page
+                  });
+          }
+
+
+          
+          
+        }
+      });
+    
+  }
+
+
+
+  
+
+</script>
+
+
+  
+  
+{% endblock %}

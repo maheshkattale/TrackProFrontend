@@ -1,0 +1,220 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Role Master
+</div>
+{% endblock %}
+{% block content %}
+<style>
+  .fa-minus-circle{
+    font-size:22px
+  }
+</style>
+
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+      </div>
+  </div>
+  {% endif %}
+    <div id="snackbar"></div>
+    
+
+
+    <div class="title-div">
+        
+      <span class="company-title d-none">Role Master</span>
+      <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModaladd">+ Add Role</span>
+
+      <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+          <div class="modal-content">
+            <div class="modal-header ps-4" style="justify-content: start !important;">
+              <h5 class="modal-title" id="exampleModalLabel"> Add Role</h5>
+            </div>
+            <form class="formstyle" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="row">
+  
+                    <div class="col-12 px-4 pt-4">
+                      <label for="RoleName">Role Name</label>
+                      <input type="text" class="input-feild" id="RoleName" value="" placeholder="Enter Role Name" name="RoleName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <span class="error" id="RoleName_err"></span>
+                    </div>
+                  
+  
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="Role-btn"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">+ Add Role</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+            
+    <div class="table-div">
+      <table class="row-border" style="width:100%" id="myTable">
+          <thead>
+              <th style="width:5%">
+                  Sr.No
+              </th>
+              <th style="width:90%">
+                  Name
+              </th>
+              <th style="width:5%">
+                  Action
+              </th>
+          </thead>
+
+          <tbody>
+            {%for i in rolelist%}
+              <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{i.RoleName}}</td>
+                  <td>
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" aria-hidden="true"></a>
+                    {%if i.Used == True %}
+                    <a class="px-1" onclick="return false;"><i class="fa text-danger fa-minus-circle" aria-hidden="true" title="used"></i>
+                    {%else%}
+                    <a class="px-1" href="{% url 'role:delete_role' i.id %}"><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" title="unused"></a>
+
+                    {%endif%}
+                  </td> 
+              </tr>
+            {%endfor%}
+
+
+          </tbody>
+      </table>
+    </div>
+            
+  {% for i in rolelist %} 
+    <div class="modal fade" id="myModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+          <div class="modal-content">
+            <div class="modal-header ps-4">
+              <h5 class="modal-title" id="exampleModalLabel"> Update Role Details</h5>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12 px-4 pt-4">
+                  <label for="updateRole{{i.id}}">Role Name</label>
+                  <input type="text" class="input-feild" id="updateRole{{i.id}}" value="{{i.RoleName}}" >
+                  <span id="updaterole_e{{i.id}}" class="error-message"></span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  {% endfor %}
+
+       
+       
+    
+
+       
+{% for i in rolelist %} 
+<div class="modal fade" id="myModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel">Role DetailsS</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 px-4">
+              <label for="updateRole{{i.id}}">Role Name</label>
+              <input type="text" id="updateRole{{i.id}}" value="{{i.RoleName}}" >
+              <span id="updaterole_e{{i.id}}" class="error-message"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+          <button class="trackproBtn" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  $( document ).ready(function() {
+    $(".usermapping-form-button").hide()
+    $('#myTable').DataTable();
+    $('.input-feild').on("focus", function () {
+      var label = $('label[for=' + this.id + ']');
+      label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+    });
+  });
+  function formValidation(){
+       
+      var role = $('#RoleName').val(); 
+      if (IsValid(role)) {
+          $('#RoleName').html('');
+          $('#RoleName_err').show().delay(3000).slideUp();
+          $('#RoleName_err').html('Role name is required');
+          $('#RoleName').focus();
+          return false;
+      }
+  }
+
+  function updateRole(id) {
+      var updateRole = $('#updateRole'+id).val();
+
+      if (IsValid(updateRole)) {
+          $('#updateRole'+id).html('');
+          $('#updaterole_e'+id).show().delay(3000).slideUp();
+          $('#updaterole_e'+id).html('Role name is required');
+          $('#updateRole'+id).focus();
+          return false;
+      }else{
+          
+      $.ajax({
+          type: "POST",
+          url: frontendURL + "role/updateRole",
+          data: {
+              'RoleName': updateRole,
+              'roleId':id,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "role/";
+              }else{
+                  window.location = frontendURL + "role/";
+              }
+              
+          }
+      });
+      }
+  }
+</script>
+{% endblock %}

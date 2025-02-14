@@ -1,0 +1,462 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Role</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+
+<style>
+  #myTable>tbody>tr>td {
+
+    padding: 15px !important;
+}
+</style>
+
+<main class="main-wrapper">
+      {% if messages %}
+        <div class="row" style="justify-content: center;">
+          <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    <div id="snackbar"></div>
+
+
+
+
+    
+    <div class="title-div">
+        
+      <span class="company-title">Role Master</span>
+      <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModaladd">+ Add Role</span>
+
+      <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+          <div class="modal-content">
+            <div class="modal-header ps-4" style="justify-content: start !important;">
+              <h5 class="modal-title" id="exampleModalLabel"> Add Role</h5>
+            </div>
+            <form class="formstyle" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="row">
+  
+                    <div class="col-12 px-4 pt-4">
+                      <label for="RoleName">Role Name</label>
+                      <input type="text" class="input-feild" id="RoleName" value="" placeholder="Enter Role Name" name="RoleName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <span class="error" id="RoleName_err"></span>
+                    </div>
+                  
+  
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="Role-btn"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">+ Add Role</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+            
+    <div class="table-div">
+      <table class="row-border" style="width:100%" id="myTable">
+          <thead>
+              <th style="width:5%">
+                  Sr.No
+              </th>
+              <th style="width:90%">
+                  Name
+              </th>
+              <th style="width:5%">
+                  Action
+              </th>
+          </thead>
+
+          <tbody>
+            {%for i in rolelist%}
+              <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{i.RoleName}}</td>
+                  <td>
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" aria-hidden="true"></a>
+                    {% comment %} <a href="javascript:void(0)" onclick="getpermissionbyrole({{i.id}});" data-bs-toggle="modal" data-bs-target="#myModalupdatepermission"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="permission" aria-hidden="true"></a> {% endcomment %}
+                </td>   
+              </tr>
+            {%endfor%}
+
+
+          </tbody>
+      </table>
+    </div>
+            
+
+
+       
+  {% for i in rolelist %} 
+    <div class="modal fade" id="myModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+          <div class="modal-content">
+            <div class="modal-header ps-4">
+              <h5 class="modal-title" id="exampleModalLabel"> Update Role Details</h5>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12 px-4 pt-4">
+                  <label for="updateRole{{i.id}}">Role Name</label>
+                  <input type="text" class="input-feild" id="updateRole{{i.id}}" value="{{i.RoleName}}" >
+                  <span id="updaterole_e{{i.id}}" class="error-message"></span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  {% endfor %}
+
+
+
+  <div class="modal fade" id="myModalupdatepermission" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header ps-4" style="justify-content: start !important;">
+          <h5 class="modal-title" id="exampleModalLabel"> Permissions</h5>
+        </div>
+        <form class="formstyle" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+
+            <div class="row">
+              <div class="col-12 d-flex justify-content-between py-3 px-4">
+              <span>Item</span>
+              <span>Action</span>
+              </div>
+              <input type="text" id="permissionroleID" hidden/>
+              {% for i in menuList  %}
+              {% if i.ParentID == 0%}
+              <div class="col-12 d-flex justify-content-between border-top py-3 px-4">
+                  <span class="Parent-Menuname">{{i.MenuName}}</span>
+                  <span>
+                      <input type="checkbox" class="Checkbox check {{i.MenuID}}Main " id="check{{i.MenuID}}" name="check" value="{{i.MenuID}}">
+                      <label class=""  for="check{{i.MenuID}}"></label>
+                  </span>
+              </div>
+                      
+              <div class="col-12  border-top py-3">
+
+                  <div class="row">
+                      {% for j in menuList  %}
+                      {% if i.MenuID == j.ParentID %}
+
+                          <span class="col-4 d-flex justify-content-between px-4">
+                              <span  class="">{{j.MenuName}}</span>
+                              <span class="checkboxmargin1{{forloop.counter}} py-2">    
+                                  <input type="checkbox" class="Checkbox 1 check {{j.ParentID}}" id="check{{j.MenuID}}" name="check" value="{{j.MenuID}}">
+                                  <label class="" for="check{{j.MenuID}}"></label>
+                              </span>
+                          </span>
+
+                      {% endif %}
+                      {% endfor %}
+                  </div>
+              </div>
+              {% endif %}
+              {% endfor %} 
+          </div>
+
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+            <span class="Role-btn" onclick="permissionValidate();" id="addEmployeeBtn">Submit</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  $( document ).ready(function() {
+    $(".usermapping-form-button").hide()
+    $('#myTable').DataTable();
+    $('.input-feild').on("focus", function () {
+      var label = $('label[for=' + this.id + ']');
+      label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+    });
+  });
+
+  function formValidation(){
+
+      var RoleName = $('#RoleName').val().trim();   
+    
+      if (IsValid(RoleName)) {
+        $('#rolename_err').show().delay(3000).slideUp();
+        $('#rolename_err').html('Role Name is required');
+        $('#RoleName').focus();
+        return false;
+    }
+    }
+
+    function updateRole(id) {
+      var updateRole = $('#updateRole'+id).val();
+  
+
+      if (IsValid(updateRole)) {
+          $('#rolenameerror'+id).show().delay(3000).slideUp();
+          $('#rolenameerror'+id).html('Role Name is required');
+          $('#updateRole'+id).focus();
+          return false;
+      }else{
+
+ 
+      $.ajax({
+          type: "POST",
+          url: frontendURL + "role/updateRole",
+          data: {
+              'RoleName': updateRole,
+              'roleId':id,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {         
+              console.log("reps",response.data.n)
+              if(response.data.n == 1){
+                  window.location = frontendURL + "users/role";
+              }else{
+                  window.location = frontendURL + "users/role";
+              }
+              
+          }
+      });
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+
+function permissionValidate(){
+  var x = document.getElementById("snackbar");
+  x.className = "show";
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+
+  var role = $("#permissionroleID").val();
+  var totalCheckboxes = $('.check:checked').length;
+  var selected = [];
+  $('input[type=checkbox]').each(function() {
+     if ($(this).is(":checked")) {
+
+         selected.push($(this).val());
+     }
+  });
+  console.log("sds",selected)
+
+  if (totalCheckboxes < 1){
+      $('#snackbar').html('');
+      $('#snackbar').html('Please Select Fields');
+      $('.check').focus();
+      return false;
+      
+  }else{
+      $('#snackbar').addClass('validationBox')
+
+      var html;
+      $.ajax({
+          type: "POST",
+          url: backendURL+"users/api/addpermission",
+          headers: {"Authorization": "Token {{token}}"},
+          data: {
+              'RoleID': role,
+              'MenuID':JSON.stringify(selected),
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function(response) {
+            console.log("response",response)
+
+              
+              
+          }
+      });
+  }
+}
+
+function getpermissionbyrole(roleID) {
+  $('.check').prop('checked', false)
+  //      var roleID = $('#roleID').val();
+  console.log('role', roleID)
+  $('#permissionroleID').val(roleID);
+  var html;
+  $.ajax({
+      type: "GET",
+      url: backendURL+"users/api/getPermission",
+      headers: {"Authorization": "Token {{token}}"},
+      data: {
+          'RoleID': roleID,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      success: function(response) {
+              $(response[0].MenuID).each(function(i, o) {
+                      $('#check' + o).prop('checked', true)
+              })
+          
+          
+      }
+  });
+}
+
+$(".1Main").click(function () {
+    $(".1").prop('checked', this.checked);
+});
+
+$(".1").click(function () {
+    var totalCheckboxes = $('.1:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.1Main').prop('checked', false);
+    }else{
+        $('.1Main').prop('checked', true);
+    }
+});
+$(".11Main").click(function () {
+    $(".11").prop('checked', this.checked);
+});
+
+$(".11").click(function () {
+    var totalCheckboxes = $('.11:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.11Main').prop('checked', false);
+    }else{
+        $('.11Main').prop('checked', true);
+    }
+});
+
+$(".16Main").click(function () {
+    $(".16").prop('checked', this.checked);
+});
+
+$(".16").click(function () {
+    var totalCheckboxes = $('.16:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.16Main').prop('checked', false);
+    }else{
+        $('.16Main').prop('checked', true);
+    }
+});
+
+$(".23Main").click(function () {
+    $(".23").prop('checked', this.checked);
+});
+
+$(".23").click(function () {
+    var totalCheckboxes = $('.23:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.23Main').prop('checked', false);
+    }else{
+        $('.23Main').prop('checked', true);
+    }
+});
+
+$(".25Main").click(function () {
+    $(".25").prop('checked', this.checked);
+});
+
+$(".25").click(function () {
+    var totalCheckboxes = $('.25:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.25Main').prop('checked', false);
+    }else{
+        $('.25Main').prop('checked', true);
+    }
+});
+
+$(".27Main").click(function () {
+    $(".27").prop('checked', this.checked);
+});
+
+$(".27").click(function () {
+    var totalCheckboxes = $('.27:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.27Main').prop('checked', false);
+    }else{
+        $('.27Main').prop('checked', true);
+    }
+});
+
+$(".31Main").click(function () {
+    $(".31").prop('checked', this.checked);
+});
+
+$(".31").click(function () {
+    var totalCheckboxes = $('.31:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.31Main').prop('checked', false);
+    }else{
+        $('.31Main').prop('checked', true);
+    }
+});
+
+$(".33Main").click(function () {
+    $(".33").prop('checked', this.checked);
+});
+
+$(".33").click(function () {
+    var totalCheckboxes = $('.33:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.33Main').prop('checked', false);
+    }else{
+        $('.33Main').prop('checked', true);
+    }
+});
+
+$(".38Main").click(function () {
+    $(".38").prop('checked', this.checked);
+});
+
+$(".38").click(function () {
+    var totalCheckboxes = $('.38:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.38Main').prop('checked', false);
+    }else{
+        $('.38Main').prop('checked', true);
+    }
+});
+
+$(".41Main").click(function () {
+    $(".41").prop('checked', this.checked);
+});
+
+$(".41").click(function () {
+    var totalCheckboxes = $('.41:checked').length;
+    if ( totalCheckboxes < 1){
+        $('.41Main').prop('checked', false);
+    }else{
+        $('.41Main').prop('checked', true);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="menu_icon_thin" transform="translate(136 -191)">
+    <rect id="icon_frame" width="32" height="32" transform="translate(-136 191)" fill="none" opacity="0"/>
+    <path id="dashboard_FILL0_wght300_GRAD0_opsz48" d="M20.518,15.541V7H31v8.541ZM7,19.459V7H17.482V19.459ZM20.518,31V18.541H31V31ZM7,31V22.459H17.482V31ZM8.588,17.835h7.306V8.588H8.588ZM22.106,29.412h7.306V20.165H22.106Zm0-15.459h7.306V8.588H22.106ZM8.588,29.412h7.306V24.047H8.588ZM15.894,17.835ZM22.106,13.953ZM22.106,20.165ZM15.894,24.047Z" transform="translate(-139 188)" fill="#282828"/>
+  </g>
+</svg>

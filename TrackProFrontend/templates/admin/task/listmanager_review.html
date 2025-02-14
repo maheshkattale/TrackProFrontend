@@ -1,0 +1,2213 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Manager Review
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+  .datecontainer{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    margin-bottom: 3px;
+
+  }
+  .cursor-pointer:hover{
+    color: #174fa3;
+  }
+  .finalsubmitbtn{
+    font-size:14px;
+    padding:5px 20px;
+    border:none;
+    background-color: var(--fc-main);
+    border-radius: 20px;
+    margin: 0px 8px;
+    color: #fff;
+
+  }
+
+  .cursor-pointer{
+    cursor: pointer;
+    
+  }
+    .task_status_icon{
+      width: 24px !important;
+      height: 24px !important;
+    }
+    .hoverdiv{
+    width:600px;
+    justify-content: space-between; 
+    margin-bottom:10px;
+  
+  }
+  .hovertaskproject{
+    display: flex;
+    flex-direction: column;
+    width:250px;
+    text-align: left;
+  }
+
+  .task_status_td{
+    width: 8%;
+    text-align:center !important;
+    /* vertical-align: middle; */
+  }
+
+
+  .tooltip-inner {
+      max-width: 100% !important;
+  } 
+  .assignbybody {
+      margin: 6px;
+      border: 1px solid lightgrey;
+      border-radius: 10px;
+      padding: 15px 6px;
+  }
+
+  .pagehead{
+      font-size: 20px;
+      font-weight: 500;
+  }
+  ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent; /* make scrollbar transparent */
+  }
+  #myTable>tbody>tr>td{
+      text-transform: capitalize;
+      font-weight: 400;
+      padding: 12px !important;
+      font-size:13px;    
+
+  }
+  .checkedbymanager{
+    vertical-align: middle;
+    text-align: center;
+  }
+  #assignbymanager .select2-container--default .select2-selection--single{
+    width:200px;
+    height:40px;
+  }
+  .pointsdiv{
+      height:40px;
+  }
+  #myTable>tbody>tr>td {
+    border-bottom: 1px solid rgb(186, 186, 186) !important; 
+    vertical-align:top;
+  }
+  #myTable>thead>tr>th{
+      text-transform: capitalize;
+      font-weight: 500;
+      background-color: white !important;
+      font-size:13px;    
+  }
+  #myTable_filter{
+      position: absolute !important;
+      top: -24px !important;
+      right: 180px !important;
+      z-index: 100;
+  }
+  #myTable_length{
+      display: none !important;
+  }
+  .dataTables_wrapper .dataTables_filter label {
+      border-radius: 0px !important;
+      border: none !important;
+      padding: 5px !important;
+      background-color: transparent !important;
+      margin-left: 3px !important;
+      border-bottom: 1px solid rgb(190, 190, 190) !important;
+      outline: none !important;
+      color: rgb(151, 151, 151) !important;
+
+      position: relative !important;
+      top: -50px !important;
+
+  }
+
+  .dataTables_wrapper .dataTables_filter input {
+      border-radius: 0px !important;
+      border: none !important;
+      padding: 5px !important;
+      background-color: transparent !important;
+      margin-left: 3px !important;
+      border-bottom: 1px solid transparent !important;
+      outline: none !important;
+      width: 250px !important;
+
+  }
+
+  .dataTables_wrapper .dataTables_filter label::after {
+      content: '\f002' !important;
+      font-family: FontAwesome !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      text-decoration: inherit !important;
+      color: #000 !important;
+      font-size: 18px !important;
+      padding-right: 0.5em !important;
+
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+      box-sizing: border-box;
+      display: inline-block;
+      min-width: 1.5em;
+      padding: 0px !important;
+      margin:0 2px 0 2px !important;
+      text-align: center;
+      text-decoration: none !important;
+      cursor: pointer;
+      color: inherit !important;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      background: transparent;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button .active:hover{
+      background-color: #b9f7ff !important;
+      outline-color: #b9f7ff !important;
+      border-color: #b9f7ff !important;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+  /* background: white !important;
+  border-radius: 6px !important; */
+
+  box-sizing: border-box !important;
+  display: inline-block !important;
+  min-width: 30px !important;
+  max-height:30px !important;
+  padding: 2px 7px 7px 5px !important;
+  margin: 0 0 0 2px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  color: black !important;
+  border: 1px solid rgb(236, 236, 236) !important;
+  border-radius: 6px !important;
+  background: white !important;
+
+  }
+  /***********************************/
+
+  .chart-inner {padding: 0px;}
+  #BA-chart-job-error {margin: 0 auto;
+    transform: translate(-1.1rem, -6ex);}
+
+
+
+  /***********************************/
+  .viewdt{
+    cursor: pointer;
+  }
+  .page-link{
+      box-sizing: border-box !important;
+      display: inline-block !important;
+      min-width: 30px !important;
+      max-height:30px !important;
+      padding: 5px 7px 7px 4px !important;
+      margin: 0 0 0 2px !important;
+      text-align: center !important;
+      text-decoration: none !important;
+      cursor: pointer !important;
+      color: black !important;
+      border: 1px solid rgb(236, 236, 236) !important;
+      border-radius: 6px !important;
+      background: white !important;
+  }
+  .page-link:hover{
+      color: black !important;
+      background: white !important;
+  }
+  .page-item.active .page-link {
+
+      color: #9b9b9b !important;
+  }
+  .previous{
+      visibility: hidden !important;
+      position: relative !important;
+      cursor: pointer !important;
+      content: " " !important;
+  }
+  .next{
+      visibility: hidden !important;
+      position: relative !important;
+      cursor: pointer !important;
+      content: " " !important;
+  }
+  .previous:after {
+      visibility: visible !important;
+      content: '\f053' !important;
+      font-family: FontAwesome !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      text-decoration: inherit !important;
+      color: #174fa3 !important;
+      font-size: 14px !important;
+      padding-right: 0px !important;
+      margin-right: 15px;
+
+  }
+  .next::before {
+      visibility: visible !important;
+      content: '\f054' !important;
+      font-family: FontAwesome !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      text-decoration: inherit !important;
+      color: #174fa3 !important;
+      font-size: 14px !important;
+      padding-right: 0px !important;
+      margin-left: 15px;
+
+  }
+  .table-div {
+      background-color: white !important;
+      border-radius: 16px !important;
+      margin: 13px 0px !important;
+      padding: 0 15px 15px 15px !important;
+
+  }
+  .finalsbmtbtn{
+      background-color: #174fa3;
+      color:white;
+      border: 1px solid #174fa3;
+      border-radius: 25px;
+      padding: 4px 8px;
+  }
+  .btndiv{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .modal-lg {
+    max-width:95%;
+    height:auto;
+  }
+  /* #baseTaskModal .modal-dialog{
+    max-width:40%;
+    height:auto;
+  } */
+
+  /* trackproreport */
+  .msgdiv {
+      color: red;
+      font-size: 20px;
+    }
+    .checkbox-col{
+      vertical-align: middle;
+    }
+    
+  .btn-secondary{
+    padding:10px 20px;
+  }
+  .assignbytext{
+    font-size:13px;
+    vertical-align: middle;
+    font-weight: 400;
+  }
+  .pointscol .btn{
+    border:none !important;
+  }
+  .btn-check+.buttonradio:hover {
+          border:none !important;
+      }
+  /* .pointsdiv{
+    background-color: #F8F8F8;
+    border: 1px solid transparent;
+    border-radius: 15px;
+  } */
+  .pointscol{
+    width:28%;
+    vertical-align: middle;
+  }
+  .projectdesc{
+    width:24%;
+    vertical-align: middle;
+  }
+
+  .assigndate{
+    vertical-align: middle;
+    font-weight:400;
+  }
+  .totalhours{
+    font-weight:400;
+  }
+  
+  
+  .task-bottom-box{
+    background-color:white;
+    margin-top:15rem;
+    /* margin:0px 20px 20px 20px; */
+  }
+
+  .uppercard{
+    background-color:white;
+    border: 1px solid #f8f1f1;
+    padding :5px;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px #00000029;
+    
+
+  }
+  .select2-container--default .select2-selection--single{
+    border-bottom:1px solid #acacac !important;
+    box-shadow:none !important;
+    border-radius: 0 !important;
+    height:40px;
+  }
+  .task-report-box{
+    margin-top:1rem;
+    padding:0px;
+    border-radius: 0px;
+  }
+  .table thead tr th{
+    background-color: #fff;
+    font-size:14px;
+    color:black;
+    font-weight: 500;
+    border-bottom:1px solid lightgray !important;
+    padding: 5px 10px !important;
+  }
+
+
+  .usertaskreporttable p{
+    margin-bottom:0px;
+  }
+  .trackpropercent{
+    font-size: 12px;
+    color:#7c7b7b;
+  }
+  .pointscard{
+    background-color:white;
+    border: 1px solid #f8f1f1;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px #00000029;
+    padding:5px;
+    display:flex;
+    align-items:center;
+  }
+  .cardtext{
+    font-size:12px;
+  }
+  .pointscard img{
+    height :28px;
+  }
+  .head1{
+    letter-spacing: 0px;
+    color: #282828;
+    opacity: 1;
+    font-size: 14px;
+      font-weight: 500;
+  }
+  .bor_end{
+    border-right:1px solid #acacac;
+  }
+  .togglebtn{
+    border:none;
+    cursor: pointer;
+    background: white;
+  }
+  .main-wrapper{
+    padding-top:2rem !important;
+  }
+  .points{
+  color:#174fa3;
+  font-size:16px;
+  font-weight:500;
+  margin-left:20px;
+  }
+  .greenpoints{
+    color:green;
+    font-weight:500;
+    font-size: 18px;
+  }
+  .yellowpoints{
+    color:#F2B700;
+    font-weight:500;
+    font-size: 18px;
+  }
+  .redpoints{
+    color:#F24B59;
+    font-weight:500;
+    font-size: 18px;
+  }
+  .notdonepoints{
+    color:#ABABAB;
+    font-weight:500;
+    font-size: 18px;
+  }
+  .helppoints{
+  color:#174fa3;
+  font-weight:500;
+    font-size: 18px;
+  }
+  .modal-content {
+      border-radius: 8px;
+  }
+  .bonuspoints{
+    color:#EC9922;
+    font-weight:500;
+    font-size: 18px;
+  }
+  .cancelledpoints{
+    color:black;
+    font-weight:500;
+    font-size: 18px;
+  }
+  .rejectedpoints{
+  color:#F24B59;
+  font-weight:500;
+    font-size: 18px;
+  }
+  .labelspace{
+    margin:8px;
+  }
+  .ndminussign{
+    color:#ABABAB;
+  }
+  .rejminussign{
+    color:#F24B59;
+  }
+  .datetootip {
+    position: relative;
+    display: inline-block;
+    color:black;
+    cursor:pointer;
+    font-size:12px;
+  }
+  span#empname {
+      font-size: 16px;
+      font-weight: 500;
+      margin-left: 9px;
+  }
+  .datetootip .tooltiptext {
+    visibility: hidden;
+    width: 145px;
+    background-color: #fff;
+    color: #056b90;
+    text-align: center;
+    border:1px solid #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size: 10px;
+    /* height:30px; */
+
+    /* Position the datetootip */
+    position: absolute;
+    z-index: 1;
+    top: 95%;
+    left: 0%;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .datetootip:hover{
+    font-size:13px;
+  
+  }
+  .assignbypr{
+    font-weight:500;
+  }
+  .tooltiptext a{
+    text-decoration: none;
+  }
+  .datetootip:hover .tooltiptext {
+    visibility: visible;
+  }
+  #trackprocreditpoints {
+      color: green;
+      font-size: 10px;
+      margin-left: 2px;
+  }
+  .labels div{
+      font-size:12px;
+      margin-bottom:6px;
+  }
+  svg {
+    width:100%;
+    height:100%;
+    max-width:300px;
+    max-height:300px;
+    font-family:'Roboto', sans-serif;
+    font-size:36px;
+    background-color:white;
+    color:black;
+  }
+  g#pieChart {
+      scale: 1.4 !important;
+      transform: none !important;
+      translate: -28% -27% !important;
+  }
+  .submittedbtn{
+      background-color:rgb(0 174 0);
+      color:white;
+      border: 1px solid rgb(0 174 0);
+      border-radius: 25px;
+      padding: 4px 14px;
+  }
+  .square{
+      padding:2px;
+      background: red;
+  }
+
+  .modal-header{
+    border-bottom: 1px solid darkgrey;
+    padding: 12px;
+      margin: 2px 8px;
+  }
+  .empborder{
+    border-bottom: 1px solid darkgrey;
+    margin: 2px 2px;
+    padding: 6px 0px;
+  }
+
+  .blockfinalsubmitspan{
+    pointer-events:none;
+    opacity:0.5;
+  }
+
+  .finalsubmitspan{
+    pointer-events:auto;
+    opacity:1;
+  }
+  .empinfo{font-weight: 500;
+      color: #0a0a0aba;
+      font-size: 14px;
+  }
+  tr td {
+      border-bottom: 1px solid #acacac87 !important;
+  }
+  .tasktable {
+    border-spacing: 0px !important;
+  }
+  /* .tableFixHead { overflow-y: auto;
+  height: 250px;
+  overflow-x: hidden;
+    }
+    .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+    */
+
+    .tableFixHead tbody{
+      display: block;
+      max-height: 200px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding-bottom: 20px;
+    }
+    .tableFixHead thead, .tableFixHead tbody tr{
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    #exampleModalToggle  .modal-dialog{
+      position: fixed;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%)!important;
+      width: 95%;
+    }
+    .form-btn{
+      padding:5px 20px;
+    }
+
+    /* .taskdetails {
+      display: flow;
+      height: 20px !important;
+    } */
+  
+    .taskdetails:hover .tasktooltip {
+      opacity: 1;
+      pointer-events: auto;
+      -webkit-transform: translateY(30px);
+      -moz-transform: translateY(30px);
+      -ms-transform: translateY(30px);
+      -o-transform: translateY(30px);
+      transform: translateY(30px);
+    }
+    .taskdetails .tasktooltip:after {
+      border-left: solid transparent 10px;
+      border-right: solid transparent 10px;
+      border-top: none;
+      border-bottom: solid #174fa3 10px;
+      top: -9px;
+      content: " ";
+      height: 0;
+      left: 50%;
+      margin-left: -13px;
+      position: absolute;
+      width: 0;
+    }
+    .taskdetails  .tasktooltip {
+        margin-left: 0;
+        width: 720px;
+        left: -10px;
+        padding: 4px 4px;
+        font-size: 11px;
+    }
+
+    .tasktooltip {
+  margin-top: -3%;
+  margin-left: -50px;
+  background: #fff;
+  color: #174fa3 ;
+  display: block;
+  margin-bottom: 6px;
+  opacity: 0;
+  padding: 10px;
+  pointer-events: none;
+  width: 180px;
+  -webkit-transform: translateY(10px);
+  -moz-transform: translateY(10px);
+  -ms-transform: translateY(10px);
+  -o-transform: translateY(10px);
+  transform: translateY(10px);
+  -webkit-transition: all .25s ease-out;
+  -moz-transition: all .25s ease-out;
+  -ms-transition: all .25s ease-out;
+  -o-transition: all .25s ease-out;
+  transition: all .25s ease-out;
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+  }
+  .tasktooltip:before {
+  bottom: -20px;
+  content: " ";
+  display: block;
+  height: 20px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  }
+  .tasktooltip:after {
+      border-left: solid transparent 10px;
+      border-right: solid transparent 10px;
+      border-top: solid #174fa3 10px;
+      bottom: -10px;
+      content: " ";
+      height: 0;
+      left: 50%;
+      margin-left: -13px;
+      position: absolute;
+      width: 0;
+    }
+  .fa-table{
+    font-size: 18px;
+    padding-top: 10px;
+    color:black;
+  }
+  .activeremark{
+    color:#174fa3;
+  }
+  .send_icon{
+    height: 40px;
+  }
+  .chat-log_item {
+    background: #eaeaea;
+    padding: 3px 10px;
+    margin: 0 auto 10px;
+    max-width: 95%;
+    min-width: 25%;
+    float: left;
+    font-size: 13px;
+    border-radius: 0 20px 20px 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+    clear: both;
+  }
+  
+  .chat-log_item.chat-log_item-own {
+    float: right;
+    background: #D5F4E7;
+    text-align: right;
+    margin-right: 0.7rem;
+    border-radius: 20px 0 20px 20px;
+  }
+  
+  .chat-form {
+    background: #DDDDDD;
+    padding: 40px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .chat-log_author {
+    margin: 0 auto 0em;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .chat-log_time {
+    margin: 0 auto .5em;
+    direction: rtl;
+    font-size: 12px;
+    opacity: 0.5;
+  }
+</style>
+<main class="main-wrapper">
+    <div class="innercontainer mx-3">
+        <div class="d-flex justify-content-end"><a href="{% url 'task:ManagerReview' %}" title = "table view"><i class="fa fa-table" aria-hidden="true"></i></a></div>
+        <div class="row">
+ <div class="row">
+   
+    
+    <div class="col-2 p-2">
+        <select class="form-select select2dropdown" aria-label="Default select example" id="supervisor" onchange="getmanagerinfo();">
+          <option value="all">All</option>
+            {% for u in managerlist %}
+            {%if u.ManagerID == userID%}
+            <option value="{{u.ManagerID}}" selected>{{u.ManagerIDStr}}</option>
+            {%else%}
+            <option value="{{u.ManagerID}}">{{u.ManagerIDStr}}</option>
+            {%endif%}
+            {% endfor %}
+           </select>
+    </div>
+    
+    <div class="col-2 p-2">
+        <select class="form-select select2dropdown" aria-label="Default select example" id="Year" onchange="getOnChangeWeek();">
+            {% for y in yearlist %}
+              {%if y.Year == currentyear %}
+                <option value="{{y.Year}}" selected>{{y.Year}}</option>
+              {%else%}
+                <option value="{{y.Year}}">{{y.Year}}</option>
+              {%endif%}
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="col-2 p-2">
+        <select class="form-select select2dropdown" aria-label="Default select example" id="Week" onchange="employeeDetail();">
+            {% for y in weeklist %}
+            <option value="{{y.Week}}">{{y.Week}}</option>
+            {% endfor %}
+           </select>
+    </div>
+  
+    <div class="col-4 datecontainer">
+      <!-- <div class="d-flex justify-content-center">
+        <div>
+          <span class="dtlabel ps-3">Start Date:</span>
+          <span class="weekdatestr" id="startdate"></span>
+        </div>
+        <div>
+          <span class="dtlabel ps-3">End Date:</span>
+          <span class="weekdatestr" id="enddate"></span>
+        </div>
+      </div> -->
+    </div>
+    <div class="col-2 p-2 mt-2">
+      <button class="finalsubmitbtn" id="allfinalsubmit" onclick="finalsubmit_all();">Final Submit</button>
+  </div>
+
+ </div>
+
+ 
+
+ <div class="row">
+    <div class="col-12 p-0">
+        <div class="table-div">
+         
+        <table class="employeetable" id="myTable" style="width:100%">
+            <thead>
+            
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Employee Name</th>
+                        <th style="width:10%;">Date</th>
+                        <th class="text-center" style="width:30%;">task detail</th>
+                        <th>Remark</th>
+                        <th>Status</th>
+                        <th class="text-center" style="width:10%;">Assign By</th>
+                        <th class="text-center"  style="width:11%;">Task hours</th>
+                        <th class="text-center" style="width:28%;">Action</th>
+                    </tr>
+                  
+                
+            </thead>
+
+            <tbody class="employeedetails">
+              
+                    
+           
+
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="text-center btndiv">
+          <button class="form-btn" id="savedata" onclick="intermediatesaveTrackProScore();">Save</button>
+          <div class="msgdiv"></div>
+        </div>
+      </div>  
+  
+ </div>
+
+
+ <!---remark modal-->
+
+
+<div class="modal" id="remarkmodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Remarks</h5>
+        <input type="hidden" id="remark_user_id">
+        <input type="hidden" id="remark_task_id">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-2">
+        <div class="container-fluid" id="remark_details">
+         
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <div class="row col-12">
+          <span class="col-11 pe-0">
+            <input type="text" class="form-control form-control-custom ps-4" id="remark_comment" placeholder="Add Remark"
+            name="target_title">
+            <span id="remark_comment_required"></span>
+          </span>
+          <span class="col-1 p-0">
+            <img src="{% static 'assets/svg/send-icon.svg'%}" class="send_icon" onclick="addremark(document.getElementById('remark_user_id').value,document.getElementById('remark_task_id').value);">
+          </span>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-doughnutlabel/2.0.3/chartjs-plugin-doughnutlabel.js"></script>
+
+<!-- <script src="{% static 'js/drawsvg.js'%}"></script> -->
+
+<script>
+$(document).ready(function(){
+    $(".select2dropdown").select2();
+    $('#myTable').DataTable({sDom: 'lrtip',
+    //  autoWidth: false
+    "bLengthChange": false 
+      })
+
+      
+      getmanagerinfo();
+
+
+});
+var backendImageURL = backendURL+"media/" 
+var zoneArray = []
+
+// $('#supervisor').on('input', function (e) {
+//   employeeDetail();
+//   });
+
+  $('#Year').on('input', function (e) {
+    employeeDetail();
+  });
+
+
+function weekdates(){
+  var weeknumber = $('#Week').val();
+  var yearnumber = $('#Year').val();
+
+  $.ajax({
+        type: 'post',
+        url: frontendURL + 'task/weekdates',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'week': weeknumber,
+            'year': yearnumber
+        },
+        dataType: 'json',
+        success: function (response) {
+          console.log("weekresponse",response.data)
+          $('#startdate').text(response.data.startdate)
+          $('#enddate').text(response.data.enddate)
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function getmanagerinfo(){
+  var managerid = $('#supervisor').val();
+  $.ajax({
+        type: 'post',
+        url: frontendURL + 'task/Managertaskinfom',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'managerid': managerid
+        },
+        dataType: 'json',
+        success: function (response) {
+          console.log("das response",response)
+          $('#Year').val(response.data.year).trigger('change');
+          // $('#Week').val(response.data.week).trigger('change');
+          universalweek=response.data.week
+
+          //getAssignData();
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function employeeDetail(){
+    
+        var trHTML = "";
+        var divHTML = "";
+        year = $('#Year').val()
+        week = $('#Week').val()
+        var assignById = $("#supervisor").val()
+
+        weekdates();
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'task/ReviewEmployeetasklist',
+            data: {
+                'Year': year,
+                'Week': week,
+                'AssignBy':assignById,
+                'csrfmiddlewaretoken': '{{csrf_token}}',
+            },
+            dataType: 'json',
+            beforeSend: function() {
+               
+            },
+            success: function(response) {
+              console.log("respppppdatata",response)
+              if (response.data.Currentweek == parseInt(week) && response.data.Currentyear == parseInt(year)){
+                 
+                swal({
+                    title: "",
+                    text: "Selected Week is Current Week !",
+                    button: "ok",
+                });
+              }
+            counter=1
+            $.each(response.data.serdata, function(i,o){
+                taskId.push(o.id)
+                var noodays = o.daywisetime.length 
+                if (noodays > 1){
+                            var noofdays = noodays + " Days"
+                        }
+                        else{
+                            var noofdays = noodays + " Day"
+                        }
+                trHTML+=`<tr>
+                  <td>`+counter+`</td>
+                  <td>`+o.UserIDStr+`</td>
+                  <td>`+o.AssignDate+`</td>
+                  <td class="projectdesc" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom' id="taskdes`+ o.id + `">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `" >
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                    
+                                </td>
+
+                  <td>
+                    <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                      ${ o.taskremark == true ? `
+                      <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                      `:
+                      `
+                      <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                      `}
+                    </span>
+                  </td>
+                  <td>`+o.task_status+`</td>
+                                
+                  <td>`+o.AssignByStr+`</td>
+                  <td class="totalhours"><p class="datetootip">` + o.taskhours+ `(`+ noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+
+                <td class="pointscol">
+                    <div class="d-flex justify-content-between pointsdiv">
+                        <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                        onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                        <label class="btn btn-radio-green labelspace" data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom"  for="zoneG`+ o.id + `"></label>
+
+                        <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                        <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+
+                        <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                        <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+
+                        <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                        <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                        <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                        <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom"
+                        for="zoneC`+ o.id + `"></label>
+
+                        <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                        <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                        <input class="text-center bonuscheck check d-none" type="checkbox" 
+                    id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                    <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                    </div>
+                </td>
+                  
+              </tr>`
+             
+              counter=counter+1;  
+            }) 
+            getTaskId(taskId)
+            
+            initialiseDataTable(trHTML);
+          }
+            
+            });
+    }
+
+
+
+
+
+    function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('#myTable')) {
+        $('#myTable').DataTable().destroy();
+    }
+    $('#myTable tbody').empty();
+    $(".employeedetails").html(trHTML);
+    $('#myTable').DataTable({sDom: 'lrtip',
+        //  autoWidth: false
+        "bLengthChange": false 
+        })
+        }
+
+
+ function finalsubmit_all(){
+   
+  swal({title: "Are you sure?",
+            text: "you want to final submit ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }) 
+    .then((isConfirm) => {
+        if (isConfirm) {
+            var year = $('#Year').val()
+            var week = $('#Week').val()
+            var assignById = $("#supervisor").val()
+
+            $.ajax({
+                type: 'post',
+                url: frontendURL + 'task/finalsubmitall',
+                data: {
+                  'Year': year,
+                  'Week': week,
+                  'AssignBy':assignById,
+                  'csrfmiddlewaretoken': '{{csrf_token}}',
+                },
+                dataType: 'json',
+                beforeSend: function() {
+                  swal({
+                    icon: "info",
+                    title: "",
+                    text: "Loading...",
+                    buttons: false,
+                });
+                },
+                success: function(response) {
+                  if(response.n == 1){
+
+                    swal({
+                      title: "",
+                      icon:"success",
+                      text: "Intermediate report has been submitted!",
+                      button: "ok",
+                  });
+                  employeeDetail();
+                  }
+                  else{
+                    swal({
+                    title: "",
+                    text: response.Msg,
+                    icon: "warning",
+                    button: "Close",
+                    });
+                  }
+                  
+                }
+
+              })
+            }
+            else{
+              swal({title: "Final Submit cancelled",
+              text: "",
+              icon: "error",
+              timer: 3000,
+              dangerMode: true
+            }) 
+            }
+          })
+
+ }
+
+  function getlastYear() {
+    var trHtml = `<option>Select Week</option>`;
+    var trYear = `<option>Select Year</option>`;
+    year = $('#Year').val()
+    employee = $('#CreatedBy').val()
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/getlastTask',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'employee': employee
+        },
+        dataType: 'json',
+        success: function (response) {
+          console.log("das response",response)
+            $.each(response.uniqueWeek, function (a, b) {
+                trHtml += `<option value="${b}">
+                                    ${b}
+                                </option>`
+            });
+            $.each(response.uniqueYear, function (a, b) {
+                trYear += `<option value="${b}">
+                                    ${b}
+                                </option>`
+            });
+            $('#Week').html(trHtml);
+            $('#Year').html(trYear);
+           // getAssignData();
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function getYearWisedata() {
+    var week = [];
+    var Year = [];
+    var trHtml = `<option>Select Week</option>`;
+    var trYear = `<option>Select Year</option>`;
+    var srHtml = `<option>Select Supervisor</option>`;
+    year = $('#Year').val()
+    employee = $('#CreatedBy').val()
+    var assignedBy = parseInt($("#assignById").text());
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/getlastTask',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'year': year,
+            'employee': employee,
+        },
+        dataType: 'json',
+        success: function (response) {
+            console.log("dfdsghd",response.assignBysetlist)
+            $.each(response.uniqueWeek, function (a, b) {
+                trHtml += `<option value="${b}">
+                                    ${b}
+                                </option>`
+            });
+            $.each(response.assignBysetlist, function (a, b) {
+                srHtml += `<option value="`+b.AssignBy+`">
+                                    `+b.AssignByStr+`
+                                </option>`
+            });
+
+           
+
+            $('#Week').html(trHtml);
+            $('#supervisor').html(srHtml);
+           // getAssignData();
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+var taskId = []; 
+var zoneId = [];
+
+function zoneName(data, zonedata,employeeid) {
+  //console.log("zonedatttttttttaaa",zonedata)
+  //console.log("dataaaaaaaaaa",data)
+    $.each(data, function (i, o) {
+        if (o.Zone != null) {
+            disableBonus(o.id, o.Zone, o.Bonus)
+        }
+        if (o.Bonus == true) {
+            $('#bonus' + o.id).attr('checked', true);
+        } else {
+            $('#bonus' + o.id).attr('checked', false);
+        
+        }
+    });
+    getTrackProScore(employeeid);
+}
+
+var a=0
+function changeZone(id,zone){
+    for (var i in zoneArray){
+        console.log("for",zoneArray[i].id,id)
+        if (zoneArray[i].id == id){
+            zoneArray[i].zone = ''
+            zoneArray[i].id = ''
+            // delete zoneArray[i]
+            console.log("id",zoneArray)
+        }
+}
+}
+
+function zone1(id) {
+  
+  // a=0
+  // var Id = $('#zone' + id).val()
+  // console.log("id",Id)
+  var task = parseFloat($("#TotalTask").text())
+  task = task || 0
+  var help = parseFloat($("#Help").text())
+  help = help || 0
+  var greencount = 0;
+  var yellowcount = 0;
+  var redcount = 0;
+  var notdonecount = 0;
+  var cancelledcount = 0;
+  var rejectedcount = 0;
+  // var notchecked = false
+ 
+  
+  var rowcount = $(".taskrow").length
+  
+  var zonevalue = parseInt($('input[name="Zone'+id+'"]:checked').val());
+  var zoneObject = {
+      'id':id,
+      'zone':zonevalue
+  }
+  
+  console.log("befirewarray",zoneArray)
+  changeZone(id,zonevalue)
+ 
+  zoneArray.push(zoneObject)
+  console.log("afterwarray",zoneArray)
+  console.log("a",a,"s",status)
+  console.log("zoneArray",zoneArray)
+  $(zoneArray).each(function (i,o) {    
+     
+      //console.log("vahhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",o.zone)
+      if (o.zone != ""){
+          if (o.zone == 1 && o.id == id) {
+              if ($("#bonus"+id).is(":checked")) {
+                $("#bonus"+id).prop('checked',true);
+                $("#bonus"+id).attr('disabled', false);
+            } else {
+              $("#bonus"+id).attr('disabled',false);
+              $("#bonus"+id).prop('checked',false);
+            }
+      } if (o.zone == 2 && o.id == id) {
+              if ($("#bonus"+id).is(":checked")) {
+                  $("#bonus"+id).prop('checked',true);
+                  $("#bonus"+id).attr('disabled', false);
+              } else {
+                $("#bonus"+id).attr('disabled',false);
+                $("#bonus"+id).prop('checked',false);
+              }
+      } if (o.zone == 3 && o.id == id) {
+          if ($("#bonus"+id).is(":checked")) {
+            console.log("red zone if checked")
+            $("#bonus"+id).prop('checked',false);
+            $("#bonus"+id).attr('disabled', true);
+          } else {
+            console.log("red zone if unchecked")
+              $("#bonus"+id).attr('disabled',true);
+              $("#bonus"+id).prop('checked',false);
+          }
+    
+      } if (o.zone == 4 && o.id == id) {
+      
+          if ($("#bonus"+id).is(":checked")) {
+            $("#bonus"+id).prop('checked',false);
+            $("#bonus"+id).attr('disabled', true);
+          } else {
+              $("#bonus"+id).attr('disabled',true);
+              $("#bonus"+id).prop('checked',false);
+          }
+       
+      } if (o.zone == 5 && o.id == id) {
+          
+          if ($("#bonus"+id).is(":checked")){
+            $("#bonus"+id).prop('checked',false);
+            $("#bonus"+id).attr('disabled', true);
+          } else {
+              $("#bonus"+id).attr('disabled',true);
+              $("#bonus"+id).prop('checked',false);
+          }
+      
+      }  if (o.zone == 6 && o.id == id) {
+         
+          if ($("#bonus"+id).is(":checked")) {
+            $("#bonus"+id).prop('checked',false);
+            $("#bonus"+id).attr('disabled', true);
+          } else {
+              $("#bonus"+id).attr('disabled',true);
+              $("#bonus"+id).prop('checked',false);
+          }
+          // $("#bonus"+id).prop('checked', false);
+         
+        
+      }
+      }else{
+        console.log("else zone 1")
+        $(".bonucheck").prop('checked',false);
+      }
+    
+  });
+
+  $(zoneArray).each(function (i,o) { 
+
+    if (o.zone != ""){
+      if (o.zone == 1 ) {
+       
+          bonus();
+          // $("#bonus"+id).attr('checked', false);
+      greencount++;
+  } if (o.zone == 2) {
+   
+          bonus();
+          // $("#bonus"+id).attr('checked', false);
+          
+      yellowcount++;
+  } if (o.zone == 3) {
+   
+      bonus();
+      redcount++;
+  } if (o.zone == 4) {
+     
+      bonus();
+      notdonecount++;
+  } if (o.zone == 5) {
+      bonus();
+      cancelledcount++;
+  }  if (o.zone == 6) {
+    
+      bonus();
+      rejectedcount++;
+    
+  }
+  }else{
+    console.log("else zone 1")
+    $(".bonucheck").prop('checked',false);
+  }
+  
+  });
+
+  var greencountmultiple = {{markslist.green}}
+  var yellowcountmultiple = {{markslist.yellow}}
+  var redcountmultiple = {{markslist.red}}
+  var notdonecountmultiple = {{markslist.notdone}}
+  var rejectcountmultiple = {{markslist.reject}}
+ 
+
+  $("#Green").text(greencount * greencountmultiple)
+  $("#Yellow").text(yellowcount * yellowcountmultiple)
+  $("#Red").text(redcount * redcountmultiple)
+  $("#NotDone").text(notdonecount * notdonecountmultiple)
+  $("#Cancelled").text(cancelledcount)
+  $("#rejected").text(rejectedcount *(rejectcountmultiple))
+  // $("#Help").val(notcheckedcount)
+  Calculate();
+}
+
+
+
+
+
+Tid = []
+
+function getTaskId(id) {
+    Tid.splice(0, Tid.length)
+    $.each(id, function (a, b) {
+        Tid.push(b)
+    })
+}
+
+function disableBonus(id, value, bonus) {
+  console.log("disablebonus")
+  var greencount = 0;
+  var yellowcount = 0;
+  var redcount = 0;
+  var notdonecount = 0;
+  var cancelledcount = 0;
+  var rejectedcount = 0;
+  var notchecked = false
+  if (value == 1) {
+      greencount++;
+  } else if (value == 2) {
+      yellowcount++;
+      
+  } else if (value == 3) {
+      redcount++;
+      $("#bonus" + id).attr("disabled", true);
+  } else if (value == 4) {
+      notdonecount++;
+      $("#bonus" + id).attr("disabled", true);
+  } else if (value == 5) {
+      cancelledcount++;
+      $("#bonus" + id).attr("disabled", true);
+  } else if (value == 6) {
+      rejectedcount++;
+      $("#bonus" + id).attr("disabled", true);
+  }
+}
+
+
+function bonus(){ 
+  var bonusmultiple = {{markslist.bonus}}
+  var ckName = document.getElementsByClassName('bonuscheck');
+  counter = 0
+  for(var i=0; i < ckName.length; i++){
+
+    if(ckName[i].checked){
+        if(ckName[i].disabled == false){
+          counter +=1
+        };
+    }
+    } 
+    console.log("counter",counter)
+    $("#Bonus").text(counter * bonusmultiple)
+    Calculate()
+}
+
+function Calculate() {
+  var pointspertask = {{markslist.green}}
+  var greendivider = {{markslist.green}}
+  //inputs..
+  var task = parseFloat($("#TotalTask").text())
+  task = task || 0
+
+  var green = parseFloat($("#Green").text())
+  var greencredit = parseInt(green/greendivider)
+  green = green || 0
+  var greencreditcount = greencredit || 0
+
+  var yellow = parseFloat($("#Yellow").text())
+  yellow = yellow || 0
+  var red = parseFloat($("#Red").text())
+  red = red || 0
+  var rejected = parseFloat($("#rejected").text())
+  rejected = rejected || 0
+  var notdone = parseFloat($("#NotDone").text())
+  notdone = notdone || 0
+  var bonus = parseFloat($("#Bonus").text())
+  bonus = bonus || 0
+  var cancelled = parseFloat($("#Cancelled").text())
+  cancelled = cancelled || 0
+
+  //calculations
+  var totaltask = task - (cancelled)
+  var totalscore = (totaltask * 20)
+  console.log("totalscoreeeee",totalscore)
+
+   if (greencreditcount >= 10 && greencreditcount <= 14) {
+      green = (green) + (parseInt(greendivider * 3))
+      $("#Credit").text(parseInt(greendivider * 3))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+3 Credits Awarded');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 3')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount >= 15 && greencreditcount <= 19) {
+      green = (green) + (parseInt(greendivider * 7))
+      $("#Credit").text(parseInt(greendivider * 7))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+7 Credits Awarded');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 7')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount >= 20 && greencreditcount <= 24) {
+      green = (green) + (parseInt(greendivider * 12))
+      $("#Credit").text(parseInt(greendivider * 12))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+12 Credits Awarded');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 12')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount >= 25 && greencreditcount <= 29) {
+      green = (green) + (parseInt(greendivider * 18))
+      $("#Credit").text(parseInt(greendivider * 18))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+18 Credits Awarded').css('color', 'green', 'font-size', 'small');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 18')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount <= 10) {
+      green = (green)
+      $("#Credit").text(0)
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('no-bonus');
+      $('#bonustext').html('');
+      $('#trackprocreditpoints').html('')
+      // $('#TrackProScore').focus();
+  }
+  $("#TotalScore").text(totalscore)
+  $("#TrackProScore").text((green + yellow + red + bonus) - (notdone + rejected))
+  if (totalscore != 0){
+      console.log("totalscore")
+      $("#TrackProPercent").text(((100 * (((green + yellow + red + bonus) - (notdone + rejected)) / totalscore)).toFixed(2)))
+  }
+  
+}
+
+function gettaskmodaldata(taskid){
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'checktrackpro/getassignbytaskdata',
+      data: {
+          'Taskid': taskid,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+          console.log("hhhhhh",response)
+          var trhtml = "<option value=''>Select manager</option>"
+          if (response.response.n == 1) {  
+                  $.each(response.manager_data,function(i,o){
+                    if (response.data.AssignBy == o.ManagerID){
+                      trhtml += `<option value='`+o.ManagerID+`' selected>`+o.ManagerIDStr+`</option>`
+                    }else{
+                      trhtml += `<option value='`+o.ManagerID+`'>`+o.ManagerIDStr+`</option>`
+                    }
+                    
+                  })
+              $("#taskidassignby").val(response.data.id)
+              $("#assignbyproject").html(response.data.ProjectName)
+              $("#assignbytaskdetails").html(response.data.TaskTitle)
+              $("#assignbymanager").html(trhtml)
+          } else {
+           
+          }
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+
+function changeassignby(taskid){
+  var assignby = $('#assignbymanager').val()
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'checktrackpro/updatetaskassignby',
+      data: {
+          'Taskid': taskid,
+          'Taskassignby':assignby,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+         console.log("resssass",response)
+         if (response.n == 1){
+          swal({
+              icon:"success",
+              title: "",
+              text: response.message,
+              button: "ok",
+          })
+          .then((isConfirm) => {
+            if (isConfirm) {
+              $('#assignbymodal').modal('toggle');
+              getAssignData(response.data.AssignTo,response.asstostr)
+            }
+          });
+         
+         }else{
+          swal({
+              title: "",
+              text: response.message,
+              button: "ok",
+          })
+         }
+         
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });  
+}
+
+
+function getTrackProScore(employeeid) {
+  var week = $('#Week').val()
+  var employee = employeeid
+  var Year = $('#Year').val();
+  var assignById = $("#supervisor").val()
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'checktrackpro/getTaskTrackProScore',
+      data: {
+          'Week': week,
+          'Employee': employee,
+          'Year' : Year,
+          'AssignBy' : assignById,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+          console.log("getwa",response)
+          
+          if (response.n == 1) {  
+              if ( response.final_submit == "Yes"){
+                  $('#TotalTask').text(response.score.scoreObjectCount);
+                  $('#Green').text(response.score.GreenZoneTask);
+                  $('#Yellow').text(response.score.YellowZoneTask);
+                  $('#Red').text(response.score.RedZoneTask);
+                  $('#NotDone').text(response.score.NotdoneZoneTask);
+                  $('#Cancelled').text(response.score.cancelledZoneTask);
+                  $('#rejected').text(response.score.rejectedZoneTask);
+                  $('#Bonus').text(response.score.bonus);
+                  $('#TrackProScore').text(response.score.totalTrackProScore);
+                  $('#TotalScore').text(response.score.TotalScore);
+                  $('#TrackProPercent').text(response.score.trackpropercent);
+                  $('.select').prop('disabled', true);
+                  $('.check').prop('disabled', true);
+                //   $('#savedatafinal').hide();
+                  $('#savedata').hide();
+                  $('.ZONE').attr('disabled', true);
+                  $('.bonuscheck').attr('disabled', false);
+                  $('.msgdiv').text('trackpro report for this week is checked!');
+                  Calculate();
+              }else{                        
+                  if ( response.score.ZoneNoneList == "None"){
+                    console.log("asdasdada None")
+                      $('#TotalTask').text(response.score.scoreObjectCount)
+                      $('#Green').text(response.score.GreenZoneTask)
+                      $('#Yellow').text(response.score.YellowZoneTask)
+                      $('#Red').text(response.score.RedZoneTask)
+                      $('#NotDone').text(response.score.NotdoneZoneTask)
+                      $('#Bonus').text(response.score.bonus)
+                      $('#Cancelled').text(response.score.cancelledZoneTask);
+                      $('#rejected').text(response.score.rejectedZoneTask);
+                      $('#TrackProScore').text(response.score.totalTrackProScore)
+                      $('#TotalScore').text(response.score.TotalScore)
+                      $('#TrackProPercent').text(response.score.trackpropercent)
+
+                      $('.select').prop('disabled', true)
+                      $('#savedata').show()
+                    //   $('#savedatafinal').show()
+                    //   $('#savedatafinal').prop('disabled', true)
+                      // $('.bonuscheck').attr('disabled', false);
+                    //   $('#savedatafinal').css({'background-color': 'white','color':'#174fa3','border':'2px solid #174fa3','cursor':'not-allowed'})
+                      $('.msgdiv').text('') 
+                      Calculate();                   
+                  }else{
+                    console.log("asdasdada else  Onenscscsncccn")
+                      $('#TotalTask').text(response.score.scoreObjectCount)
+                      $('#Green').text(response.score.GreenZoneTask)
+                      $('#Yellow').text(response.score.YellowZoneTask)
+                      $('#Red').text(response.score.RedZoneTask)
+                      $('#NotDone').text(response.score.NotdoneZoneTask)
+                      $('#Bonus').text(response.score.bonus)
+                      $('#Cancelled').text(response.score.cancelledZoneTask);
+                      $('#rejected').text(response.score.rejectedZoneTask);
+                      $('#TrackProScore').text(response.score.totalTrackProScore)
+                      $('#TotalScore').text(response.score.TotalScore)
+                      $('#TrackProPercent').text(response.score.trackpropercent)
+                      $('.select').prop('disabled', true)
+                     
+                      $('#savedata').show()
+                    //   $('#savedatafinal').show()
+                    //   $('#savedatafinal').prop('disabled', false);
+                    //   $('#savedatafinal').css({'background-color': '#174fa3','color':'white','border':'2px solid white','cursor':'pointer'})
+                      $('.msgdiv').text('')
+                      Calculate();
+                  }  
+              }
+                         
+              
+          } else {
+            console.log("trackpro score else")
+              $('#TotalTask').text(0)
+              $('#Green').text(0)
+              $('#Yellow').text(0)
+              $('#Red').text(0)
+              $('#NotDone').text(0)
+              $('#Bonus').text(0)
+              $('#Cancelled').text(0)
+              $('#rejected').text(0)
+              $('#TrackProScore').text(0)
+              $('#TotalScore').text(0)
+              $('#TrackProPercent').text(0)
+              $('#savedata').show()
+            //   $('#savedatafinal').show()
+              $('.msgdiv').text('')
+          }
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+
+
+function intermediatesaveTrackProScore() {
+     
+  //adding zone and bonus to task start-------------------------------------------------------------------------------
+  var Year = $('#Year').val();
+  var Week = $('#Week').val();
+  var values = [];
+  console.log("asdsa",Tid)
+  
+  $.each(Tid, function (i, o) {
+      Taskid = parseInt(o)
+      // var zone = parseInt($('#zone' + Taskid).val());
+      var zone = parseInt($('input[name="Zone'+Taskid+'"]:checked').val());
+      console.log("zone",zone)
+      console.log("zone vake",zone)
+      var bonus;
+      if ($('#bonus' + Taskid).is(':checked')) {
+        if ( !$('#bonus' + Taskid).is(':disabled') ){
+          bonus = true
+        }
+        else{
+          bonus = false
+        }
+      } else {
+          bonus = false
+      }
+      var tasktitle = $('#ttitle' + Taskid).text();
+      data = {
+          "Taskid": Taskid,
+          "TaskTitle": tasktitle,
+          "Zone": zone,
+          "Bonus": bonus,
+          
+      }
+      values.push(data)
+  })
+  console.log("values",values)
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'task/updatezone_Tasklist',
+      data: {
+          'values': JSON.stringify(values),
+          'Year': Year,
+          'Week': Week,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      success: function (response) {
+          console.log("finalresp",response)
+          swal({
+              title: "",
+              text: "TrackPro report has been saved intermediately!",
+              button: "ok",
+              timer: 1000
+          })
+          .then((isConfirm) => {
+            if (isConfirm) {
+              $('#exampleModalToggle').modal('toggle');
+              getmanagerinfo();
+            }
+          });
+
+      
+
+        
+
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+  
+}
+
+
+
+function finalsaveTrackProScore(employeeid) {
+    if ($("#Week").val() == "Select") {
+        $("#alertweek").show()
+    } else {
+        var Employee = employeeid;
+        var Year = $('#Year').val();
+        var Week = $('#Week').val();
+      
+        var value = []
+      //   console.log("zonearra",zoneArray)
+
+        $.each(Tid, function (i, o) {
+        Taskid = parseInt(o)
+        
+        var zone = parseInt($('input[name="Zone'+Taskid+'"]:checked').val());
+        console.log("zone",zone)
+        console.log("zone vake",zone)
+        var bonus;
+        if ($('#bonus' + Taskid).is(':checked')) {
+          if ( !$('#bonus' + Taskid).is(':disabled') ){
+            bonus = true
+          }
+          else{
+            bonus = false
+          }
+        } else {
+            bonus = false
+        }
+        var tasktitle = $('#ttitle' + Taskid).text();
+        zonedata = {
+            "Taskid": Taskid,
+            "TaskTitle": tasktitle,
+            "Zone": zone,
+            "Bonus": bonus,
+            
+        }
+        value.push(zonedata)
+    })
+  swal({title: "Are you sure?",
+              text: "you want to final submit ?",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }) 
+  .then((isConfirm) => {
+      if (isConfirm) {
+      
+        $.ajax({
+            type: 'POST',
+            url: frontendURL + 'checktrackpro/addParticualrIntermediateTrackProResult',
+            
+            data: {
+            'Employee': Employee,
+            'Year': Year,
+            'Week': Week,
+            'values':JSON.stringify(value),
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+        },
+            success: function (response) {
+              console.log("responsesssss",response)
+                if (response.n == 0) {
+                    swal({
+                        title: "",
+                        text: response.Msg,
+                        button: "ok",
+                    });
+                } else {
+                    swal({
+                        title: "",
+                        text: "TrackPro report has been submitted!",
+                        button: "ok",
+                    });
+                    employeeDetail();
+                  
+                    $('#savedata').hide();
+                    $('.ZONE').attr('disabled', true);
+                    $('.msgdiv').text('TrackPro report for this week is checked!')
+                    
+                  
+                }
+            },
+            error:function (response){
+              swal("TrackPro Score is not added!", {
+              icon: "error",
+          });
+            }
+        });
+      } else {
+          swal("TrackPro Score is not added!", {
+          icon: "error",
+          });
+      }
+    });
+
+    }
+    
+
+}
+
+var universalweek
+
+function getOnChangeWeek() {
+    var year = $('#Year').val()
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/TrackProResultWeek',
+        data: {
+            'year': year,
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log("weeek respo",response)
+            $('#Week').empty()
+            $.each(response, function(i, o) {
+                $('#Week').append(`<option value="${o.Week}" >${o.Week} </option>`)
+            });
+            selectValueIfExist(universalweek,'Week')
+            employeeDetail();
+        },
+        error: function(error) {
+            console.log('week error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+
+
+function selectValueIfExist(valueToSelect, selectId) {
+  // Check if the value exists in the dropdown
+  if ($('#' + selectId + ' option[value="' + valueToSelect + '"]').length > 0) {
+    // Set the selected attribute for the matching option
+    $('#' + selectId).val(valueToSelect).trigger('change');
+  } else {
+    // Value doesn't exist, handle it accordingly (e.g., show an alert)
+    console.log('Value ' + valueToSelect + ' does not exist in the dropdown.');
+  }
+}
+
+
+function makeChart(BAChartDataValue,piestring){
+
+  var BAChartDataLabel = [
+    'Green', 
+    'Yellow', 
+    'Red', 
+    'Not Done', 
+    'Cancel',
+    'Reject'
+  ]; 
+  var BAChartJobErrColors = [
+  '#3DAB45',
+  '#F2B700',
+    '#F24B59',
+    '#8D8D8D',
+    '#222222',
+  '#E95454'
+  ];
+
+  var BAChartCountTotal = 0;
+  if (BAChartDataValue.length > 0) {
+    BAChartCountTotal = BAChartDataValue.reduce(function(acc, currentVal, currentIdx, arr){
+      return acc + currentVal;
+    }, 0);
+  }
+
+    var BAChartCtx = document.getElementById('BA-chart-job-error').getContext('2d');
+    var BAChartJobErr = new Chart(BAChartCtx, {
+      type: 'doughnut',
+      data: {
+        labels: BAChartDataLabel,
+        datasets: [{
+          data: BAChartDataValue,
+          backgroundColor: BAChartJobErrColors,
+          borderColor: '#fff',
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        title: {
+          display: true,
+          position: 'top',
+          fontSize: 12,
+          fontColor: '#000',
+          fontStyle: 'bold',
+          padding: 24,
+          text: '',
+        },
+        plugins: {
+          labels: [
+            {
+              render: 'label',
+              fontColor: '#000',
+              position: 'outside'
+            },
+            {
+              render: 'percentage',
+              fontColor: '#fff',
+            }
+          ],
+          doughnutlabel: {
+            labels: [
+              {
+                text: piestring ,
+              }
+            ]
+          }
+        },
+        legend: {
+          display: false
+        }
+      }
+    });
+}
+
+function addremark(user_id,task_id){
+   
+  var remark_comment = $("#remark_comment").val().trim();
+  if(remark_comment == "" || remark_comment == undefined){
+
+    $('#remark_comment').html('');
+    $("#remark_comment_required").show().delay(3000).slideUp();
+    $('#remark_comment_required').html('Please add remark!').css('color', 'red');
+    $('#remark_comment').focus();
+    return false;
+
+  }else{
+    var trhtml = ""
+    var fd = new FormData();    
+    fd.append("task_id",task_id);
+    fd.append("remark_comment",remark_comment);
+    fd.append("user_id",user_id);
+    fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "task/addmanagertaskremark",
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        if (response.n == 1){
+          swal({
+            icon: "success",
+            title: "",
+            text: "Remark Added Successfully.",
+            button: false,
+            timer: 500
+            });  
+            $('#remark_comment').val('');
+            remarklist(user_id,task_id)
+        
+        }
+        else{
+          swal({
+            icon: "error",                
+            text: response.Msg,
+            button: false,
+            timer: 1000
+            }); 
+       
+        }
+       
+          
+      }
+  })
+  }
+ 
+
+}
+
+function remarklist(userid,taskid){
+  $("#remark_user_id").val(userid);
+  $("#remark_task_id").val(taskid);
+  $("#activemark"+userid).removeClass("activeremark");
+
+  var trhtml = ""
+  var fd = new FormData();    
+  fd.append("task_id",taskid);
+  fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+  $.ajax({
+    type: "POST",
+    url: frontendURL + "task/dashboardtaskremarklist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      if (response.n == 1){
+        $(response.data).each(function(i,o){
+
+          if (o.ismanager == true){
+            trhtml +=`
+          <div class="chat-log_item chat-log_item z-depth-0">
+            <div class="row justify-content-start mx-1 d-flex">
+              <div class="col-auto px-0">
+                <span class="chat-log_author">
+                  @`+o.created_by_str+`
+                </span>
+              </div>
+              <div class="col-auto px-0">
+              </div>
+            </div>
+            <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+            <div class="chat-log_message">
+              <p class="m-0">`+o.remark_comment+`
+              </p>
+            </div>
+            <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+            <div class="row chat-log_time m-0 p-0 justify-content-end">
+              `+o.created_date+`
+            </div>
+          </div>
+          `
+
+          }else{
+            trhtml += `
+            <div class="chat-log_item chat-log_item-own z-depth-0">
+              <div class="row justify-content-start mx-1 d-flex">
+                <div class="col-auto px-0">
+                  <span class="chat-log_author">
+                    @`+o.created_by_str+`
+                  </span>
+                </div>
+                <div class="col-auto px-0">
+                </div>
+              </div>
+              <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+              <div class="chat-log_message">
+                <p class="m-0">`+o.remark_comment+`
+                </p>
+              </div>
+              <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+              <div class="row chat-log_time m-0 p-0 justify-content-end">
+                `+o.created_date+`
+              </div>
+            </div>
+            `
+          }
+
+          
+
+        })
+
+       $("#remark_details").html(trhtml)
+      }
+      else{
+     
+      }
+     
+        
+    }
+  })
+
+}
+
+   
+</script>
+
+{% endblock %}

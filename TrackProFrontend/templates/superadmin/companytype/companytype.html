@@ -1,0 +1,221 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Company Type Master
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+
+<style>
+    .fa-minus-circle{
+      font-size:22px
+    }
+  </style>
+<main class="main-wrapper">
+ <!-- NavBar -->
+ {% if messages %}
+ <div class="row" style="justify-content: center;">
+     <div class="col-sm-6 col-sm-offset-3">
+     {% for message in messages %}
+     <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+         <span aria-hidden="true">&times;</span>
+         </button>
+         <p style="margin-bottom: 0px;">{{ message }}</p>
+     </div>
+     {% endfor %}
+     </div>
+ </div>
+ {% endif %}
+        
+
+ <div class="title-div">
+    
+    <!-- <span class="company-title">Company Type Master</span>
+    <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModaladd">+ Add Company Type</span> -->
+    
+    <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered w-25">
+        <div class="modal-content py-2">
+          <div class="modal-header py-3">
+            <h5 class="modal-title" id="exampleModalLabel"> Add Company Type</h5>
+          </div>
+          <form class="mt-2" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+
+
+
+
+                <div class="row">
+                    <div class="col-lg-12 mt-3">
+                        <label for="companytype">Company Type Name</label>
+                        <input type="text"  name="companyType" id="companytype" placeholder="Enter company type" class="input-feild" onkeydown="return /[a-z]/i.test(event.key)"/>
+                        <span class="error" id="companytype_e"></span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Cancel</button>
+              <button class="trackproBtn Role-btn"  type="submit" id="addEmployeeBtn" onclick="return formvalidation();">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+          
+<div class="table-div">
+    <table class="row-border w-100" id="myTable">
+        <thead>
+            <th style="width:5%">Sr. no</th>
+            <th style="width:90%">Name</th>
+            <th style="width:5%">Action</th>
+        </thead>
+
+        <tbody>
+            {%for i in companytypelistData%}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.companyType}} </td>
+                    <td>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" aria-hidden="true"></a>
+                    
+                        {%if i.Used == True %}
+                        <a class="px-1" onclick="return false;" href=""><i class="fa text-danger fa-minus-circle" aria-hidden="true" title="used"></i>
+                        {%else%}
+                        <a class="px-1" href="{% url 'company:delete_company_type' i.id %}"><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" title="unused"></a>
+    
+                        {%endif%}
+                    </td>
+
+
+                </tr>
+            {%endfor%}
+
+
+        </tbody>
+    </table>
+</div>  
+
+
+{%for i in companytypelistData%}
+
+
+    <div class="modal fade" id="myModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+            <div class="modal-content py-2">
+                <div class="modal-header py-2">
+                <h5 class="modal-title" id="exampleModalLabel"> Update Company Type</h5>
+                </div>
+                <div class="modal-body">
+
+
+     
+
+                    <div class="row">
+                        <div class="col-lg-12 mt-3">
+                            <label for="companytype{{i.id}}">Company Type Name</label>
+                            <input type="text"  name="companytype" id="companytype{{i.id}}" value="{{i.companyType}}" placeholder="Company Type Name" class="input-feild" onkeydown="return /[a-z]/i.test(event.key)"/>
+                            <span class="error" id="companytype_e{{i.id}}"></span>
+
+                        </div>
+    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="return updatecompany({{i.id}});">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+{%endfor%}
+
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#myModaladd">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Company Type"
+  src="{% static 'assets/svg/designation.svg' %}">
+</a></li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $( document ).ready(function() {
+        $(".usermapping-form-button").hide()
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+    });
+
+    // Company_Type-Name--------------------------------------------------------------------
+    const companytype = document.getElementById("companytype");
+    companytype.addEventListener("focus", function () {
+        companytype.setAttribute("placeholder", "Enter Company Type");
+    });
+    companytype.addEventListener("blur", function () {
+        companytype.removeAttribute("placeholder");
+    });
+
+   
+    function formvalidation(){
+         
+        var companytype = $('#companytype').val().trim(); 
+        if (IsValid(companytype)) {
+            $('#companytype').html('');
+            $('#companytype_e').show().delay(3000).slideUp();
+            $('#companytype_e').html('company type is required');
+            $('#companytype').focus();
+            return false;
+        }
+    }
+
+
+    function updatecompany(id){
+        console.log("idddd",id)
+
+        var companytype = $('#companytype'+id).val().trim();   
+        var id = id;
+      
+        if (IsValid(companytype)) {
+          $('#companytype'+id).html('');
+          $('#companytype_e'+id).show().delay(3000).slideUp();
+          $('#companytype_e'+id).html('company type is required');
+          $('#companytype'+id).focus();
+          return false;
+        }else{
+           $.ajax({
+            type: "POST",
+            url: frontendURL+"company/updatecompanytype",
+            headers: {
+                "Authorization": "Token {{token}}"
+            },
+            data: {
+                'companyType': companytype,
+                'id':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response)
+                $('#myModal'+id).modal('hide');
+                location.reload();
+            }
+        });
+          }
+
+    }
+</script>
+{% endblock %}

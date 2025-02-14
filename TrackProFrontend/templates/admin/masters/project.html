@@ -1,0 +1,480 @@
+
+
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Project
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
+<style>
+  .select2-dropdown {
+    z-index: 111111 !important;
+}
+.fa-minus-circle{
+  font-size:22px
+}
+.dataTables_filter{
+  display:none;
+}
+tr{
+  border-bottom: 1px solid lightgrey;
+}
+.actionicons{
+  display:flex;
+  justify-content: space-around;
+}
+.table-div {
+    margin: 10px 14px !important;
+}
+</style>
+
+
+<main class="main-wrapper">
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+    <form  method="post" class="formstyle" enctype="multipart/form-data">
+     {%csrf_token%}
+      <div class="row form-project-master-div mx-1 mt-2">
+        <div class="col-3">
+          <label for="ProjectName">Project Name</label>
+          <input class="input-feild" type="text" id="ProjectName" oninput="ProjectDetailPagination();" placeholder="Enter Project name" name="ProjectName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+          <p id="ProjectNameerror" class="error"></p>
+        </div>
+        <div class="col-3">
+          <label for="ProjectBA">Project BA</label>
+          <select id='ProjectBA' name="ProjectBA" class="input-feild select2dropdown">
+                <option value=''>Select Project BA</option> 
+                {% for i in employeelist %}
+                <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
+                {% endfor %}
+          </select>
+          <p id="ProjectBAerror" class="error"></p>
+        </div>
+        <div class="col-4">
+          <label for="ProjectCoordinator">Project Coordinator</label>
+          <select id='ProjectCoordinator' name="ProjectCoordinator" class="input-feild select2dropdown" data-placeholder="Select Project Coordinator" multiple >
+            <option value="">Select project coordinator</option>
+
+                {% for i in employeelist %}
+                <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
+                {% endfor %}
+          </select>
+          <p id="ProjectCoordinatorerror" class="error"></p>
+        </div>
+        <div class="col-2 d-flex align-items-center">
+          <button type="submit" class="add-btn" onclick="return formValidation();">+ Add Project</button>
+        </div>
+    
+      </div>
+    </form>
+
+    <div class="table-div">
+      <table class="row-border w-100" id="myTable">
+          <thead>
+
+
+              <th>
+                  Sr.No
+              </th>
+              <th>
+                Project Name
+              </th>
+              <th>
+                Project BA
+              </th>
+              <th>
+                Project Coordinator
+              </th>
+              <th class="text-center">
+                  Action
+              </th>
+          </thead>
+
+          <tbody id="projectbody">
+            
+          </tbody>
+      </table>
+      <div class=" d-flex justify-content-end m-3" id="secondpagination-demo2">
+        <ul id="pagination-demo2" class="pagination-sm"></ul>
+       </div>
+    </div>
+
+    {% for i in projectlist %}
+    <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title" id="exampleModalLabel">Project Details</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-4 px-4">
+                <label for="projectname{{i.id}}">Project Name</label>
+                <input type="text" id="projectname{{i.id}}" value="{{i.ProjectName}}" >
+                <span id="projectnameerror{{i.id}}" class="error-message"></span>
+              </div>
+              <div class="col-4 px-4">
+              <label for="ProjectBA{{i.id}}">Project BA</label>
+              <select id='ProjectBA{{i.id}}' name="ProjectBA" class="select2dropdown">
+                    <option value=''>Select Project BA</option> 
+                    {% for e in employeelist %}
+                      {% if e.id == i.ProjectBA %}
+                      <option value="{{e.id}}" selected>{{e.Firstname}} {{e.Lastname}}</option>
+                      {%else%}
+                      <option value="{{e.id}}">{{e.Firstname}} {{e.Lastname}}</option>
+                      {%endif%}
+                    {% endfor %}
+              </select>
+              <span id="ProjectBAerror{{i.id}}" class="error-message"></span>
+              </div>
+              <div class="col-4 px-4">
+                <label for="ProjectCoordinator{{i.id}}">Project Coordinator</label>
+                <select id='ProjectCoordinator{{i.id}}' name="ProjectCoordinator" class="select2dropdown" style="bottom: 100%;" multiple>
+                      {% for u in employeelist %}
+                      {% if u.id in i.ProjectCoordinator  %}
+                      <option value="{{u.id}}" selected>{{u.Firstname}} {{u.Lastname}}</option>
+                        {%else%}
+                      <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
+                      {%endif%} 
+                      
+                      {% endfor %}
+                </select>
+                <span id="ProjectCoordinatorerror{{i.id}}" class="error-message"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="editEmployeeDetails" onclick="projectname({{i.id}})">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+
+  {% for i in projectlist %}
+  <div class="modal fade" id="deletemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered w-25">
+    
+      <div class="modal-content">           
+        <div class="modal-header ps-3 text-center">
+          <h5 class="modal-title py-2" id="exampleModalLabel">Delete Project</h5>
+        </div>
+        <div class="modal-body">
+          
+          <div class="row">
+            <div> Are you sure you want to delete this?
+
+            </div>
+         
+        
+       
+       
+          </div>
+        
+        </div>
+        <div class="modal-footer row">
+
+
+            <button type="button"  class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+
+            <a href="{% url 'project:delete_project' i.id %}"  class="trackproBtn" id="editEmployeeDetails">Delete</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+ 
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+<script>
+  $(document).ready(function () {
+    //getuserlist()
+    ProjectDetailPagination();
+    
+    //$('#myTable').DataTable();
+    $('.input-feild').on("focus", function () {
+      var label = $('label[for=' + this.id + ']');
+      label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+    });
+    
+  });
+  var emplist=[]
+
+  function getuserlist(){
+    $.ajax({
+      url: frontendURL +"getuserlist",
+      type: 'GET',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+      },
+      dataType: 'json',
+
+      success: function(response){
+        emplist=response.data
+
+
+
+      }  ,
+      error: function (xhr, status, error) {
+        console.error("AJAX request failed:", status, error);
+        // You can handle the error here, e.g., display a message to the user.
+      }
+    });
+  }
+
+
+  function formValidation(){
+    
+      var ProjectName = $('#ProjectName').val().trim();   
+      var ProjectBA = $('#ProjectBA').val();   
+      var ProjectCoordinator = $('#ProjectCoordinator').val();   
+    
+      if (IsValid(ProjectName)) {
+        $('#ProjectName').html('');
+        $('#ProjectNameerror').show().delay(3000).slideUp();
+        $('#ProjectNameerror').html('Project Name is required');
+        $('#ProjectName').focus();
+        return false;
+      }if (IsValid(ProjectBA)) {
+        $('#ProjectBAerror').show().delay(3000).slideUp();
+        $('#ProjectBAerror').html('Please select BA for the project');
+        $('#ProjectBA').focus();
+        return false;
+      }if (IsValid(ProjectCoordinator)) {
+        $('#ProjectCoordinatorerror').show().delay(3000).slideUp();
+        $('#ProjectCoordinatorerror').html('Please select Project Coordinator for the project');
+        $('#ProjectCoordinator').focus();
+        return false;
+      }
+  }
+
+  function projectname(id) {
+    var projectName = $('#projectname'+id).val();
+    var projectBA = $('#ProjectBA'+id).val();
+    var projectCoordiantor = $('#ProjectCoordinator'+id).val();
+    
+
+
+    if (IsValid(projectName)) {
+      $('#projectnameerror'+id).html('');
+      $('#projectnameerror'+id).show().delay(3000).slideUp();
+      $('#projectnameerror'+id).html('This field is required');
+      $('#projectname'+id).focus();
+      return false;
+    }if (IsValid(projectBA)) {
+      $('#ProjectBAerror'+id).html('');
+      $('#ProjectBAerror'+id).show().delay(3000).slideUp();
+      $('#ProjectBAerror'+id).html('This field is required');
+      $('#ProjectBA'+id).focus();
+      return false;
+    }if (IsValid(projectCoordiantor)) {
+      $('#ProjectCoordinatorerror'+id).html('');
+      $('#ProjectCoordinatorerror'+id).show().delay(3000).slideUp();
+      $('#ProjectCoordinatorerror'+id).html('This field is required');
+      $('#ProjectCoordinator'+id).focus();
+      return false;
+    }else{
+
+
+    $.ajax({
+        type: "POST",
+        url: frontendURL + "project/updateproject",
+        data: {
+          'ProjectName' : projectName,
+          'ProjectBA' : projectBA,
+          'ProjectCoordinator' : JSON.stringify(projectCoordiantor),
+          'projectID':id,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (response) {         
+            if(response.data.n == 1){
+                window.location = frontendURL + "project";
+            }else{
+                window.location = frontendURL + "project";
+            }
+            
+        }
+    });
+    }
+}
+
+  function projectlist(p){
+
+
+    var trhtml = ""
+    var ProjectName = $('#ProjectName').val().trim();
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "project/paginationprojectlist",
+      data: {
+        'p':p,
+        'projectname' : ProjectName,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      success: function (response) {         
+        console.log("bloggggg",response)
+
+         counter = 1
+          $.each(response.projectData.data,function(i,o){
+            trhtml += `
+            <tr>
+              <td >`+counter+`</td>
+              <td>`+o.ProjectName+`</td>
+              <td>`+o.ProjectBA+`</td>
+              <td>`+o.ProjectCoordinator+`</td>
+              <td>
+                  <a class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#editmodal`+o.id+`"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon">
+                  </a>   
+
+
+
+
+
+
+
+
+
+                  <div class="modal fade" id="editmodal`+o.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header ps-4">
+                          <h5 class="modal-title" id="exampleModalLabel">Project Details</h5>
+                        </div>
+                        <div class="modal-body">
+                        
+                          <div class="row">
+                            <div class="col-4 px-4">
+                              <label for="projectname`+o.id+`">Project Name</label>
+                              <input type="text" id="projectname`+o.id+`" value="`+o.ProjectName+`" >
+                              <span id="projectnameerror`+o.id+`" class="error-message"></span>
+                            </div>
+                            <div class="col-4 px-4">
+                            <label for="ProjectBA`+o.id+`">Project BA</label>
+                            <select id='ProjectBA`+o.id+`' name="ProjectBA" class="select2dropdown">
+                                  <option value=''>Select Project BA </option> 
+
+
+
+                                  ${response.userlist.data.map((l, index) => `
+                                    <option value="${l.id}" ${l.Firstname.toLowerCase() + " " +l.Lastname.toLowerCase() === o.ProjectBA.toLowerCase() ? 'selected' : ''}>
+                                      ${l.Firstname} ${l.Lastname}
+                                    </option>
+                                  `).join("\n")}
+
+                            </select>
+                            <span id="ProjectBAerror`+o.id+`" class="error-message"></span>
+                            </div>
+                            <div class="col-4 px-4">
+                              <label for="ProjectCoordinator`+o.id+`">Project Coordinator</label>
+                              <select id='ProjectCoordinator`+o.id+`' name="ProjectCoordinator" class="select2dropdown" style="bottom: 100%;" multiple>
+
+
+
+                                    ${response.userlist.data.map((l, index) => `
+                                      <option value="${l.id}" ${o.ProjectCoordinator.includes(`${l.Firstname} ${l.Lastname}`) ? 'selected' : ''}>
+                                        ${l.Firstname} ${l.Lastname}
+                                      </option>
+                                    `).join("\n")}
+
+                              </select>
+                              <span id="ProjectCoordinatorerror`+o.id+`" class="error-message"></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+                          <button class="trackproBtn" id="editEmployeeDetails" onclick="projectname(`+o.id+`)">Update</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+              </td>
+          </tr>
+
+
+
+
+
+
+
+
+            `
+            counter += 1;
+
+
+
+
+
+
+
+          })
+
+          $("#projectbody").html(trhtml);
+
+          var totalfilter = Math.ceil(parseInt(response.projectData.count)/10);
+                      $('#pagination-demo2').twbsPagination({
+          
+                        totalPages: totalfilter,
+                        visiblePages: 3,
+                        next: 'Next',
+                        prev: 'Prev',
+                        onPageClick: function (event, page) {
+                          var testflag=true;
+                            //fetch content and render here
+                            filternamepageno = page
+                            if (testflag==true){
+                              testflag=false;
+                              projectlist(page)
+                            }
+                            $('#page-content').text('Page ' + page) + ' content here';
+          }
+          })
+
+          
+       
+      }
+    });
+  }
+
+  function ProjectDetailPagination(){
+    var testflag =true;
+    $('#secondpagination-demo2').html('<ul id="pagination-demo2" class="pagination-sm"></ul>');
+    projectlist(1);
+    
+  }
+
+
+
+</script>
+
+{% endblock %}

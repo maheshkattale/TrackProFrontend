@@ -1,0 +1,2361 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+TrackPro Check
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+  .cursor-pointer:hover{
+    color: #174fa3;
+  }
+  .cursor-pointer{
+    cursor: pointer;
+    
+  }
+.hoverdiv{
+  width:700px;
+  justify-content: space-between; 
+  margin-bottom:10px;
+ 
+}
+.task_status_icon{
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.task_status_td{
+  width: 8%;
+  text-align:center !important;
+  vertical-align: middle;
+}
+ .hovertaskproject{
+  display: flex;
+  flex-direction: column;
+  width:250px;
+}
+.checkedbymanager{
+    vertical-align: middle;
+    text-align: center;
+  }
+.tooltip-inner {
+    max-width: 100% !important;
+} 
+.assignbybody {
+  margin: 6px;
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  padding: 15px 6px;
+}
+  .msgdiv {
+    color: red;
+    font-size: 20px;
+  }
+  .checkbox-col{
+    vertical-align: middle;
+  }
+  .btndiv{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-secondary{
+  padding:10px 20px;
+}
+.assignbytext{
+  font-size:13px;
+  vertical-align: middle;
+}
+.btn{
+  border:none !important;
+}
+.btn-check+.buttonradio:hover {
+        border:none !important;
+    }
+/* .pointsdiv{
+  background-color: #F8F8F8;
+  border: 1px solid transparent;
+  border-radius: 15px;
+} */
+.pointscol{
+  width:28%;
+  vertical-align: middle;
+}
+.projectdesc{
+  width:24%;
+  vertical-align: middle;
+}
+
+.assigndate{
+  vertical-align: middle;
+}
+
+ 
+ /* .usertable::-webkit-scrollbar-track
+{
+-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+background-color: #F5F5F5;
+}
+
+.usertable::-webkit-scrollbar
+{
+width: 6px;
+background-color: #F5F5F5;
+}
+
+.usertable::-webkit-scrollbar-thumb
+{
+background-color: #c1c1c1;
+} 
+.usertable{
+  margin-top:10px;
+  max-height:250px;
+  overflow-y: scroll;
+  border:1px solid rgb(247, 243, 243);
+  border-radius: 4px;
+  padding:10px 0px 10px 0px;
+  box-shadow: 0 0 10px #0000001f;
+} */
+
+ /* .task-bottom-box{
+  position: -webkit-sticky;
+position: absolute; 
+   bottom: 0;
+}  */
+/* 
+ */
+
+ 
+ .task-bottom-box{
+  background-color:white;
+  margin-top:15rem;
+  /* margin:0px 20px 20px 20px; */
+ }
+
+ /* div.uppercard{
+  position: -webkit-sticky;
+  position: fixed;
+  top: 20%;
+  z-index: 1111111;
+  
+ } */
+ .assignbypr{
+  font-weight:500;
+ }
+ .uppercard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  padding :5px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+  z-index:1;
+  position:fixed;
+  width:100%;
+}
+/* .fixed-top{
+  width:100vw;
+} */
+.send_icon{
+  height: 40px;
+}
+.select2-container--default .select2-selection--single{
+  border-bottom:1px solid #acacac !important;
+  box-shadow:none !important;
+  border-radius: 0 !important;
+
+}
+.table td{
+  font-weight:500 !important;
+}
+.task-report-box{
+  margin-top:13rem;
+}
+.trackpropercent{
+  font-size: 12px;
+  color:#7c7b7b;
+}
+.pointsdiv{
+    height:40px;
+}
+.pointscard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+ padding:5px;
+ display:flex;
+ align-items:center;
+}
+.cardtext{
+  font-size:12px;
+}
+.pointscard img{
+  height :35px;
+}
+.head1{
+  letter-spacing: 0px;
+  color: #282828;
+  opacity: 1;
+  font-size: 14px;
+    font-weight: 500;
+}
+.bor_end{
+  border-right:1px solid #acacac;
+}
+.togglebtn{
+  border:none;
+  cursor: pointer;
+  background: white;
+}
+
+.points{
+ color:#174fa3;
+ font-size:16px;
+ font-weight:500;
+ margin-left:20px;
+ }
+ .greenpoints{
+  color:green;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .yellowpoints{
+  color:#F2B700;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .redpoints{
+  color:#F24B59;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .notdonepoints{
+  color:#ABABAB;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .helppoints{
+ color:#174fa3;
+ font-weight:500;
+  font-size: 18px;
+ }
+ .bonuspoints{
+  color:#EC9922;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .cancelledpoints{
+  color:black;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .rejectedpoints{
+color:#F24B59;
+font-weight:500;
+  font-size: 18px;
+ }
+ .labelspace{
+  margin:8px;
+ }
+ .ndminussign{
+  color:#ABABAB;
+ }
+ .rejminussign{
+  color:#F24B59;
+ }
+ .datetootip {
+  position: relative;
+  display: inline-block;
+  color:black;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.datetootip .tooltiptext {
+  visibility: hidden;
+  width: 145px;
+  background-color: #fff;
+  color: #056b90;
+  text-align: center;
+  border:1px solid #fff;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 10px;
+  /* height:30px; */
+
+  /* Position the datetootip */
+  position: absolute;
+  z-index: 1;
+  top: 95%;
+  left: 0%;
+  box-shadow: 2px 3px 4px #00000029;
+}
+.datetootip:hover{
+  font-size:12px;
+ 
+}
+.tooltiptext a{
+  text-decoration: none;
+}
+.datetootip:hover .tooltiptext {
+  visibility: visible;
+}
+#trackprocreditpoints {
+    color: green;
+    font-size: 10px;
+    margin-left: 2px;
+}
+/* #stickytable tbody {
+  display: block;
+  max-height: 120px;
+  overflow-y: scroll;
+} */
+.chat-log_item {
+  background: #eaeaea;
+  padding: 3px 10px;
+  margin: 0 auto 10px;
+  max-width: 95%;
+  min-width: 25%;
+  float: left;
+  font-size: 13px;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+  clear: both;
+}
+
+.chat-log_item.chat-log_item-own {
+  float: right;
+  background: #D5F4E7;
+  text-align: right;
+  margin-right: 0.7rem;
+  border-radius: 20px 0 20px 20px;
+}
+
+.chat-form {
+  background: #DDDDDD;
+  padding: 40px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.chat-log_author {
+  margin: 0 auto 0em;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.chat-log_time {
+  margin: 0 auto .5em;
+  direction: rtl;
+  font-size: 12px;
+  opacity: 0.5;
+}
+.activeremark{
+  color:#174fa3;
+}
+</style>
+
+<main class="main-wrapper">
+  <!-- ==================Row1================-->
+<div class="uppercard">
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="row justify-content-around mb-3">
+      <div class="col-md-3">
+          <select class="form-select select2dropdown" aria-label="Default select example" id="CreatedBy" onchange="getemployeeinfo();">
+           <option value="" selected>Select Employee</option>
+   
+          </select>
+      </div>
+      <div class="col-md-2">
+          <select class="form-select select2dropdown" aria-label="Default select example" id="Year" onchange="getOnChangeWeek();">
+            <option value="">Select Year</option>
+
+          </select>
+      </div>
+     
+      <div class="col-md-3">
+          <select class="form-select select2dropdown" aria-label="Default select example" id="Week" onchange="getAssignData();">
+            <option value="">Select Week</option>
+
+          </select>
+      </div>
+      
+     <span class="d-none" id="managerid">{{managerid}}</span>
+      <div class="col-md-3">
+          <select class="form-select select2dropdown" aria-label="Default select example" id="supervisor"> 
+            <option value="">All</option>
+
+          </select>
+      </div>
+  </div>
+  <div class="row justify-content-around p-2 trackpropercent">
+    <div class="col-md-2 d-flex align-items-center">
+      <div class="head1">Total Trackpro & Percentage</div>
+    </div>
+    <div class="col-md-10">
+      <div class="row totalscorerow">
+        <div class="col-md-3 bor_end">
+          <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead"> Total Tasks :</span><span class="points" id="TotalTask">0</span></div>
+        </div>
+    <div class="col-md-3 bor_end">
+      <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead"> Trackpro Percent :</span><span class="points" id="TrackProPercent">0</span><span style="color:#174fa3;">%</span></div>
+    </div>
+    <div class="col-md-3 bor_end">
+      <div><img src="/static/Media/taskicons/weektask.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead">TrackPro Score:</span><span class="points" id="TrackProScore">0</span><sup><span id="trackprocreditpoints"></span></sup></div>
+    </div>
+    <div class="col-md-3">
+      <div><img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead">Total :</span><span class="points" id="TotalScore">0</span></div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>   
+  <!-- <div class="col-md-1 mt-1">
+    <button class="togglebtn" id="filterBtn" type="button" data-bs-toggle="collapse" data-bs-target="#filtersRow" aria-expanded="false" aria-controls="filtersRow"><img src="/static/Media/taskicons/toggle.svg"  alt="Paris" onclick=""></button>
+  </div> -->
+  </div>
+
+<div class="row my-2">
+  <div class="d-flex justify-content-around">
+    <div class="row pointscard">
+      <div class="col-md-4 p-0">
+        <img class="rotate-image-360" src="/static/Media/taskicons/activegreen.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Green</div>
+        <!-- <input type="text" id="Green" name="gzone" class="input-box greenpoints"/> -->
+        <div id="Green" class="greenpoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4 p-0">
+        <img class="rotate-image-540" src="/static/Media/taskicons/yellowsvg.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Yellow</div>
+        <div id="Yellow" class="yellowpoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4 p-0">
+        <img class="rotate-image-360" src="/static/Media/taskicons/red_icon.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Red</div>
+        <div id="Red" class="redpoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4">
+        <img class="move-top-down" src="/static/Media/taskicons/notdone.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center " style="padding-right: 0;">
+        <div class="cardtext">Not Done</div>
+        <div id="NotDone" class="notdonepoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard d-none">
+      <div class="col-md-4 p-0">
+        <img class="move-top-down"  src="/static/Media/taskicons/helpicon.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Help</div>
+        <div class="helppoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4 p-0">
+        <img class="rotate-image-30" src="/static/Media/taskicons/activebonus.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Bonus</div>
+        <div id="Bonus" class="bonuspoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4">
+        <img class="rotate-image-70" src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center" style="padding-right: 0;">
+        <div class="cardtext">Credits</div>
+        <div id="Credit" class="creditpoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4 p-0">
+        <img class="rotate-image-90" src="/static/Media/taskicons/upper-rejected.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Rejected</div>
+        <div id="rejected" class="rejectedpoints">0</div>
+      </div>
+    </div>
+    <div class="row pointscard">
+      <div class="col-md-4 p-0">
+        <img class="rotate-image-70" src="/static/Media/taskicons/activecancelled.svg"  alt="Paris" onclick="">
+      </div>
+      <div class="col-md-8 text-center colortext">
+        <div class="cardtext">Cancel</div>
+        <div id="Cancelled" class="cancelledpoints">0</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+  
+
+
+  <div class="task-report-box">
+    <div class="row">
+      
+      <div class="col-md-12 pt-1">
+       
+        <div class="row usertable">
+          <div class="col-md-12">
+            <table id="stickytable" class="table">
+              <thead>
+                <tr>
+                  <th style="text-align: center;">Task Details</th>
+                  <th class="">Remark</th>
+                  <th class="task_status_td">Status</th>
+                  <th>Assign By</th>
+                  <th>Date</th>
+                  <th>Task Hours</th>
+                  <th style="text-align: center;">Actions</th>
+                  <th>Checked By</th>
+                
+                </tr>
+              </thead>
+              <tbody id="usertaskreport" class="usertaskreporttable">
+             
+              </tbody>
+            </table>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+ 
+ 
+  <div class="d-flex justify-content-center">
+    <div class="mt-3 text-center btndiv">
+      <button class="form-btn" id="savedata" onclick="intermediatesaveTrackProScore();">Save</button>
+      <!-- <button class="form-btn" id="savedatafinal" data-bs-toggle="modal" data-bs-target="exampleModal">Final Submit</button> -->
+      <button type="button" id="savedatafinal" class="form-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+        Final Submit
+      </button>
+      <div class="msgdiv"></div>
+    </div>
+  </div>  
+  
+  
+  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          Are you sure you want to submit the details?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" class="btn form-btn " data-bs-dismiss="modal" onclick="finalsaveTrackProScore();">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!---assignby modal-->
+<div class="modal" id="assignbymodal" aria-hidden="true" aria-labelledby="assignbymodallabel" >
+  <div class="modal-dialog  modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="assignbymodallabel">Task Details</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="assignbybody">
+        <div class="row">
+          <div class="col-md-12">
+            <input type="hidden" id="taskidassignby">
+            <div class="py-1"><span class="assignbypr">Project : </span><span id="assignbyproject"></span></div>
+            <div class="pb-2"><span class="assignbypr">Task Description : </span><span id="assignbytaskdetails"></span></div>
+          </div>
+        </div>
+        <div class="d-flex w-100">
+          <div class="pt-2 w-25"><span class="assignbypr">Assign By : </span></div>
+          <div class="px-2 w-50">
+            <select class="form-select select2dropdown"  aria-label="Default select example" id="assignbymanager">
+           
+             </select>
+          </div>
+        </div>
+      </div>   
+      </div>
+    
+      <div class="modal-footer">
+          <div class="d-flex justify-content-center">
+              <div class="text-center btndiv">
+                <button class="form-btn" id="savedata" onclick="changeassignby(document.getElementById('taskidassignby').value);">Save</button>
+                <div class="msgdiv"></div>
+              </div>
+            </div>  
+      </div>
+    </div>
+  </div>
+</div>
+<!---remark modal-->
+
+
+<div class="modal" id="remarkmodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Remarks</h5>
+        <input type="hidden" id="remark_user_id">
+        <input type="hidden" id="remark_task_id">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-2">
+        <div class="container-fluid" id="remark_details">
+         
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <div class="row col-12">
+          <span class="col-11 pe-0">
+            <input type="text" class="form-control form-control-custom ps-4" id="remark_comment" placeholder="Add Remark"
+            name="target_title">
+            <span id="remark_comment_required"></span>
+          </span>
+          <span class="col-1 p-0">
+            <img src="{% static 'assets/svg/send-icon.svg'%}" class="send_icon" onclick="addremark(document.getElementById('remark_user_id').value,document.getElementById('remark_task_id').value);">
+          </span>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="{% static 'js/datatable/datatable.js'%}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script>
+
+  $(document).ready(function () {
+    // getlastYear();
+    $(".select2dropdown").select2();
+    $(".ndminussign").hide();
+    $(".rejminussign").hide();
+    $('#savedata').prop('disabled', true);
+    $('#savedatafinal').prop('disabled', true);
+    $('#savedatafinal').css({'background-color': 'white','color':'#174fa3','border':'2px solid #174fa3','cursor':'not-allowed'})
+    getyearlist();
+    getweeklist();
+    getemployeelist();
+    getsupervisorlist();
+  })
+
+  $('#Year').on('input', function (e) {
+    getAssignData();
+  });
+
+  $('#supervisor').on('input', function (e) {
+    getAssignData();
+  });
+
+
+
+  function initialiseDataTable(trHtml) {
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+        $('#dataTable').DataTable().destroy();
+    }
+    $('#dataTable tbody').empty();
+    $('#usertaskreport').html(trHtml);
+
+    var employeeName = $('#CreatedBy :selected').text()
+    var currentDate = (new Date()).toISOString().split('T')[0];
+    dateArray = currentDate.split('-')
+    year = dateArray[0]
+    month = dateArray[1]
+    day = dateArray[2]
+    todayDate = day +"-"+ month +"-"+ year
+    var excelFileName = employeeName +" "+ todayDate        
+
+    var table = $('#dataTable').DataTable({
+      "order": []
+    });
+
+    var buttons = new $.fn.dataTable.Buttons(table, {
+      buttons: [{
+    title: excelFileName,
+          extend : 'excel',
+          text : '<span class="btn-shadow  btn btn-info exportButton" >Export <i class="fa fa-file-excel-o" aria-hidden="true"></i></span> '        
+        }]
+   }).container().appendTo($('#exportButton'));
+
+}
+ 
+function getemployeeinfo(){
+  var employee = $('#CreatedBy').val();
+  var managerid = $('#supervisor').val();
+  $.ajax({
+        type: 'post',
+        url: frontendURL + 'task/Employeetaskinfom',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'employeeid': employee,
+            'managerid': managerid
+        },
+        dataType: 'json',
+        success: function (response) {
+        
+          $('#Year').val(response.data.year).trigger('change');
+          $('#Week').val(response.data.week).trigger('change');
+          //getAssignData();
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+
+
+  function getlastYear() {
+    var trHtml = `<option>Select Week</option>`;
+    var trYear = `<option>Select Year</option>`;
+    year = $('#Year').val()
+    employee = $('#CreatedBy').val()
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/getlastTask',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'employee': employee
+        },
+        dataType: 'json',
+        success: function (response) {
+            $.each(response.uniqueWeek, function (a, b) {
+                trHtml += `<option value="${b}">
+                                    ${b}
+                                </option>`
+            });
+            $.each(response.uniqueYear, function (a, b) {
+                trYear += `<option value="${b}">
+                                    ${b}
+                                </option>`
+            });
+            $('#Week').html(trHtml);
+            $('#Year').html(trYear);
+           // getAssignData();
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function getYearWisedata() {
+    var week = [];
+    var Year = [];
+    var trHtml = `<option>Select Week</option>`;
+    var trYear = `<option>Select Year</option>`;
+    var srHtml = `<option>Select Supervisor</option>`;
+    year = $('#Year').val()
+    employee = $('#CreatedBy').val()
+    var assignedBy = parseInt($("#assignById").text());
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/getlastTask',
+        data: {
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+            'year': year,
+            'employee': employee,
+        },
+        dataType: 'json',
+        success: function (response) {
+            $.each(response.uniqueWeek, function (a, b) {
+                trHtml += `<option value="${b}">
+                                    ${b}
+                                </option>`
+            });
+            $.each(response.assignBysetlist, function (a, b) {
+                srHtml += `<option value="`+b.AssignBy+`">
+                                    `+b.AssignByStr+`
+                                </option>`
+            });
+
+           
+
+            $('#Week').html(trHtml);
+            $('#supervisor').html(srHtml);
+           // getAssignData();
+        },
+        error: function (error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+var taskId = []; 
+var zoneId = [];
+
+function zoneName(data, zonedata) {
+
+    $.each(data, function (i, o) {
+        if (o.Zone != null) {
+            disableBonus(o.id, o.Zone, o.Bonus)
+            // $('#zone' + o.id).val(o.Zone); 
+        // } else {
+        //     $.each(zonedata, function (a, b) {
+
+        //         if (b.id == 6) {
+        //             trZon += `<option value="` + b.id + `">` + b.ZoneName + `</option>`;
+        //         }
+        //     });
+        //     $('#zone').html(trZon)
+        }
+        if (o.Bonus == true) {
+            $('#bonus' + o.id).attr('checked', true);
+        } else {
+            $('#bonus' + o.id).attr('checked', false);
+        
+        }
+    });
+    getTrackProScore();
+}
+
+var a=0
+function changeZone(id,zone){
+    for (var i in zoneArray){
+        if (zoneArray[i].id == id){
+            zoneArray[i].zone = ''
+            zoneArray[i].id = ''
+            // delete zoneArray[i]
+        }
+}
+}
+function getOnChangeWeek() {
+     
+    var year = $('#Year').val()
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/TrackProResultWeek',
+        data: {
+            'year': year,
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+        },
+        dataType: 'json',
+        success: function(response) {
+            $('#Week').empty()
+            $.each(response, function(i, o) {
+                $('#Week').append(`<option value="${o.Week}" >${o.Week} </option>`)
+            });
+            //populateTable();
+            getAssignData();
+        },
+        error: function(error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+
+function zone1(id) {
+  
+    // a=0
+    // var Id = $('#zone' + id).val()
+    var task = parseFloat($("#TotalTask").text())
+    task = task || 0
+    var help = parseFloat($("#Help").text())
+    help = help || 0
+    var greencount = 0;
+    var yellowcount = 0;
+    var redcount = 0;
+    var notdonecount = 0;
+    var cancelledcount = 0;
+    var rejectedcount = 0;
+    // var notchecked = false
+  
+    
+    var rowcount = $(".taskrow").length
+    
+    var zonevalue = parseInt($('input[name="Zone'+id+'"]:checked').val());
+    var zoneObject = {
+        'id':id,
+        'zone':zonevalue
+    }
+    
+    changeZone(id,zonevalue)
+  
+    zoneArray.push(zoneObject)
+
+    $(zoneArray).each(function (i,o) {    
+      
+        if (o.zone != ""){
+            if (o.zone == 1 && o.id == id) {
+                if ($("#bonus"+id).is(":checked")) {
+                  $("#bonus"+id).prop('checked',true);
+                  $("#bonus"+id).attr('disabled', false);
+              } else {
+                $("#bonus"+id).attr('disabled',false);
+                $("#bonus"+id).prop('checked',false);
+              }
+          } if (o.zone == 2 && o.id == id) {
+                  if ($("#bonus"+id).is(":checked")) {
+                      $("#bonus"+id).prop('checked',true);
+                      $("#bonus"+id).attr('disabled', false);
+                  } else {
+                    $("#bonus"+id).attr('disabled',false);
+                    $("#bonus"+id).prop('checked',false);
+                  }
+          } if (o.zone == 3 && o.id == id) {
+              if ($("#bonus"+id).is(":checked")) {
+                $("#bonus"+id).prop('checked',false);
+                $("#bonus"+id).attr('disabled', true);
+              } else {
+                  $("#bonus"+id).attr('disabled',true);
+                  $("#bonus"+id).prop('checked',false);
+              }
+        
+          } if (o.zone == 4 && o.id == id) {
+          
+              if ($("#bonus"+id).is(":checked")) {
+                $("#bonus"+id).prop('checked',false);
+                $("#bonus"+id).attr('disabled', true);
+              } else {
+                  $("#bonus"+id).attr('disabled',true);
+                  $("#bonus"+id).prop('checked',false);
+              }
+          
+          } if (o.zone == 5 && o.id == id) {
+              
+              if ($("#bonus"+id).is(":checked")){
+                $("#bonus"+id).prop('checked',false);
+                $("#bonus"+id).attr('disabled', true);
+              } else {
+                  $("#bonus"+id).attr('disabled',true);
+                  $("#bonus"+id).prop('checked',false);
+              }
+          
+          }  if (o.zone == 6 && o.id == id) {
+            
+              if ($("#bonus"+id).is(":checked")) {
+                $("#bonus"+id).prop('checked',false);
+                $("#bonus"+id).attr('disabled', true);
+              } else {
+                  $("#bonus"+id).attr('disabled',true);
+                  $("#bonus"+id).prop('checked',false);
+              }
+              // $("#bonus"+id).prop('checked', false);
+            
+            
+          }
+        }else{
+          $(".bonucheck").prop('checked',false);
+        }
+      
+    });
+
+    $(zoneArray).each(function (i,o) { 
+
+      if (o.zone != ""){
+            if (o.zone == 1 ) {
+            
+                bonus();
+                // $("#bonus"+id).attr('checked', false);
+            greencount++;
+        } if (o.zone == 2) {
+        
+                bonus();
+                // $("#bonus"+id).attr('checked', false);
+                
+            yellowcount++;
+        } if (o.zone == 3) {
+        
+            bonus();
+            redcount++;
+        } if (o.zone == 4) {
+          
+            bonus();
+            notdonecount++;
+        } if (o.zone == 5) {
+            bonus();
+            cancelledcount++;
+        }  if (o.zone == 6) {
+          
+            bonus();
+            rejectedcount++;
+          
+        }
+      }else{
+        $(".bonucheck").prop('checked',false);
+      }
+  
+    });
+  
+  var greencountmultiple = {{markslist.green}}
+  var yellowcountmultiple = {{markslist.yellow}}
+  var redcountmultiple = {{markslist.red}}
+  var notdonecountmultiple = {{markslist.notdone}}
+  var rejectcountmultiple = {{markslist.reject}}
+ 
+
+  $("#Green").text(greencount * greencountmultiple)
+  $("#Yellow").text(yellowcount * yellowcountmultiple)
+  $("#Red").text(redcount * redcountmultiple)
+  $("#NotDone").text(notdonecount * notdonecountmultiple)
+  $("#Cancelled").text(cancelledcount)
+  $("#rejected").text(rejectedcount *(rejectcountmultiple))
+ 
+  Calculate();
+}
+
+
+function getAssignData() {
+  $('#trackprocreditpoints').html('')
+  $('.msgdiv').text("");
+  zoneArray = []
+  var zoneObject= '';
+      trZon = '';
+      trHtml = '';
+      trZone = '';
+      year = $('#Year').val()
+      week = $('#Week').val()
+      
+      employee = $('#CreatedBy').val()
+      var assignById = $("#supervisor").val() 
+
+      if (assignById == ""){
+        $('#savedata').attr('disabled',true);
+        $('#savedatafinal').attr('disabled',true);
+      }
+
+      var logedinmanager = $("#managerid").text()
+          $.ajax({
+              type: 'post',
+              url: frontendURL + 'checktrackpro/getAssignTask',
+              data: {
+                  'Year': year,
+                  'Week': week,
+                  'Employee': employee,
+                  'AssignBy':assignById,
+                  'csrfmiddlewaretoken': '{{csrf_token}}',
+              },
+              dataType: 'json',
+
+              success: function (response) {
+                  if ( response.Taskdata.length != 0){
+                    $('#savedata').prop('disabled', false);
+                    $('#savedatafinal').prop('disabled', false);
+                      $.each(response.Taskdata, function (i, o) {
+                     
+                          taskId.push(o.id)
+                          zoneId.push(o.Zone)
+                          Bonus = o.Bonus
+                          var noodays = o.daywisetime.length 
+                          if (noodays > 1){
+                              var noofdays = noodays + " Days"
+                          }
+                          else{
+                              var noofdays = noodays + " Day"
+                          }
+
+                          if (o.Zone == 1){
+                              trHtml += `
+                              <tr class="first-row" id="activerow`+ o.id + `"  data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+                                <td>
+
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+
+                                  
+                                </td>
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                               
+                                <td class="pointscol">
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off" checked="checked" >
+                                    <label class="btn btn-radio-green labelspace" data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom" for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-yellow  labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                                    <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-cancelled labelspace" data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom" for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                    <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom"  for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                
+                                 
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                               
+                              </tr>
+                              `;
+                              
+                          }else if (o.Zone == 2){
+                              trHtml += ` 
+                              <tr class="first-row" id="activerow`+ o.id + `"  data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+
+                                <td>
+
+
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+
+                                  
+                                </td>
+
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                                <td class="pointscol">
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-green labelspace"  data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom" for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off" checked />
+                                    <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                                    <label class="btn btn-radio-red labelspace"   data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom"  for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-rejected labelspace" data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom"  for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                  <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                              </tr>
+                              `;
+                          }else if (o.Zone == 3){
+                              trHtml += `
+                              <tr class="first-row" id="activerow`+ o.id + `" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+                                <td>
+
+
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+                                  
+                                </td>
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                                <td class="pointscol">
+                                 
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-green labelspace"  data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom"  for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check" checked />
+                                    <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom" for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                  <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                              </tr>
+                              `;
+                          }else if (o.Zone == 4){
+                              trHtml += `
+                              <tr class="first-row" id="activerow`+ o.id + `" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+                                <td>
+
+
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+
+                                  
+                                </td>
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                                <td class="pointscol">
+                                  
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-green labelspace"  data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom" for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                                    <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off" checked/>
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom" for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                  <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                              </tr>
+                              `;
+                          }else if (o.Zone == 5){
+                              trHtml += `
+                              <tr class="first-row" id="activerow`+ o.id + `" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+                                <td>
+
+
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+
+                                  
+                                </td>
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                                <td class="pointscol">
+                                 
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-green labelspace"  data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom" for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom"for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                                    <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off" />
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off" checked/>
+                                    <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom" for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                  <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                              </tr>
+                              `;
+                          }else if (o.Zone == 6){
+                              trHtml += `
+                              <tr class="first-row" id="activerow`+ o.id + `" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom' >
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+                                <td>
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+
+                                  
+                                </td>
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                                <td class="pointscol">
+                                
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-green labelspace" data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom"  for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                                    <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off" />
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom" for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off" checked/>
+                                    <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                  <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                              </tr>
+                              `;  
+                          }
+                          else{
+                              
+                              trHtml +=
+                               `
+                              <tr class="first-row" id="activerow`+ o.id+`" data-bs-html="true" data-bs-container="body" data-bs-toggle='tooltip' data-bs-placement='bottom'>
+                                <td class="projectdesc">` + o.ProjectName + `
+                                  <p class="task-detail text-muted" id="ttitle` + o.id + `">
+                                    ` + o.TaskTitle + `
+                                  </p>
+                                </td>
+                                <td>
+
+
+
+                                  <span class="ms-1 cursor-pointer" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)">
+                                    ${ o.taskremark == true ? `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments" aria-hidden="true"></i>
+                                    `:
+                                    `
+                                    <i data-bs-toggle="tooltip" title="Task remark" data-bs-placement="bottom" class="fa fa-comments activeremark" id="activemark`+o.id+`" aria-hidden="true"></i>
+                                    `}
+                                  </span>
+
+                                  
+                                </td>
+                                <td class="task_status_td"><p>` + o.task_status + `</p></td>
+                                <td class="assignbytext cursor-pointer"  onclick="gettaskmodaldata(`+o.id+`)" data-bs-toggle="modal" data-bs-target="#assignbymodal"><p>` + o.AssignByStr + `</p></td>
+                                <td class="assigndate" style="width:10%; font-size:12px;"><p>` + o.AssignDate + `</p></td>
+                                <td class="totalhours" style="vertical-align: middle;"><p class="datetootip">` + o.taskhours + ` (`+noofdays+`)<span class="tooltiptext">
+                                  ${o.daywisetime.map(l => `
+                                      <span> ${l.date} : ${l.time}</span>
+                                  `).join("\n")}
+                                 </span></p> </td>
+                                <td class="pointscol">
+                                
+                                  <div class="d-flex pointsdiv">
+                                    <input type="radio" id='zoneG`+ o.id + `' name="Zone`+ o.id + `" 
+                                    onchange="zone1(` + o.id + `);" value="1" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-green labelspace" data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom"  for="zoneG`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneY`+ o.id + `' name="Zone`+ o.id + `" value="2"  onchange="zone1(` + o.id + `);" class="btn-check" autocomplete="off"/>
+                                    <label class="btn btn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for='zoneY`+ o.id + `' ></label>
+              
+                                    <input type="radio" id='zoneR`+ o.id + `' name="Zone`+ o.id + `" value="3"  onchange="zone1(` + o.id + `);" autocomplete="off" class="btn-check"/>
+                                    <label class="btn btn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="zoneR`+ o.id + `"></label>
+              
+                                    <input type="radio" id='zoneN`+ o.id + `' name="Zone`+ o.id + `" value="4"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="zoneN`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneC`+ o.id + `' name="Zone`+ o.id + `" value="5"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-cancelled labelspace"  data-bs-toggle="tooltip" title="Cancel" data-bs-placement="bottom"
+                                    for="zoneC`+ o.id + `"></label>
+
+                                    <input type="radio" id='zoneRJ`+ o.id + `' name="Zone`+ o.id + `" value="6"  onchange="zone1(` + o.id + `);" class="btn-check"  autocomplete="off"/>
+                                    <label class="btn btn-radio-rejected labelspace"  data-bs-toggle="tooltip" title="Reject" data-bs-placement="bottom" for="zoneRJ`+ o.id + `"></label>
+
+                                    <input class="text-center bonuscheck check d-none" type="checkbox" 
+                                  id="bonus` + o.id + `" onchange="zone1(` + o.id + `); bonus();" >
+                                  <label class="btn btn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus` + o.id + `"></label>
+                                  </div>
+                                </td>
+                                <td class="checkedbymanager"><p>` + o.CheckedBy + `</p></td>
+                              </tr>
+                              `
+                          }
+                        
+                          
+                      });
+                    
+                      $.each(response.zone, function (a, b) {
+                          trZone += `<option value="` + b.id + `">` + b.ZoneName + `</option>`;
+                      });
+                      $('#usertaskreport').html(trHtml);
+                      $.each(response.Taskdata, function (i, o) {
+                      
+                       if (assignById == o.AssignBy){
+                        if (o.IsParent == true){
+                              $('#activerow'+ o.id).css("background-color","rgb(182 206 199 / 67%)");
+                              $('#activerow'+ o.id).css("opacity","1");
+                            }
+                            else if (o.ParentTaskId != ""){
+                              $('#activerow'+ o.id).css("background-color","rgb(216 224 187 / 57%)");
+                              $('#activerow'+ o.id).css("opacity","1");
+                              var tablehtml = `${o.Hovertaskdata.map(l => `
+                                            <div class="d-flex hoverdiv">
+                                              <div class="hovertaskproject">
+                                              <div>
+                                              `+l.ProjectName+`
+                                               </div>
+                                              <div class="task-detail taskdetails text-muted">
+                                                `+l.TaskTitle+`
+                                              </div>
+
+                                              </div> 
+                                              <div style="padding:4px;">`+l.AssignByStr+`</div>
+                                              <div style="padding:4px;">`+l.Changeddate+` </div>
+                                              <div style="padding:4px;">`+l.taskhoursstr+`</div>
+                                              <div style="padding:4px;">`+l.remarkstr+` `+l.bonusstr+`</div>
+
+                                            </div>
+                                            `).join("\n")}  
+                              `
+                              // $("#taskdes"+o.id).attr("title",tablehtml);
+                              $("#activerow"+o.id).attr("title",tablehtml);
+
+                            }
+                            else{
+                              $('#activerow'+ o.id).addClass("managermatched");
+                              $('#activerow'+ o.id).css("opacity","1");
+                            }
+                       }else{
+                       
+                        // $('#activerow'+ o.id).find("input,button,textarea,select").css("pointer-events","none")
+                        // $('#activerow'+ o.id).css("background-color","#d3d3d359");
+                        $('#activerow'+ o.id).css("pointer-events","none");
+                       }
+                      });
+
+
+
+
+                      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl)
+                      })
+                     
+                      $.each(response.othermanagerser, function (i, o) { 
+                       
+                          if ( o.Zone == null){ 
+                              console.log("not done") 
+                          }else{ 
+                            zoneObject = {
+                                  'id':o.id,
+                                  'zone':o.Zone
+                              }
+                              zoneArray.push(zoneObject)
+                             
+                          } 
+                      })
+                    
+
+                      
+                      
+                      $.each(taskId, function (i, o) {
+                          $('#zone' + o).html(trZone);
+                      });
+                     
+                      zoneName(response.Taskdata, response.zone) 
+                      getTaskId(taskId)
+                      zoneId.splice(0, zoneId.length)
+                      taskId.splice(0, taskId.length)
+                     
+                  }else{
+                      $('#TotalTask').text(0)
+                      $('#Green').text(0)
+                      $('#Yellow').text(0)
+                      $('#Red').text(0)
+                      $('#NotDone').text(0)
+                      $('#Bonus').text(0)
+                      $('#Cancelled').text(0)
+                      $('#rejected').text(0)
+                      $('#TrackProScore').text(0)
+                      $('#TotalScore').text(0)
+                      $('#TrackProPercent').text(0)
+                      $("#Credit").text(0)
+
+                      $('#usertaskreport').html("");
+                      $('#savedata').prop('disabled', true);
+                      $('#savedatafinal').prop('disabled', true);
+                      swal({
+                          title: "",
+                          text: "No Task Found",
+                          button: "ok",
+                      });
+                  }
+                  
+                
+              },
+              error: function (error) {
+                  console.log('error; ' + JSON.stringify(error));
+              }
+          });
+      
+      
+  
+}
+
+    Tid = []
+
+    function getTaskId(id) {
+        Tid.splice(0, Tid.length)
+        $.each(id, function (a, b) {
+            Tid.push(b)
+        })
+    }
+
+function disableBonus(id, value, bonus) {
+  var greencount = 0;
+  var yellowcount = 0;
+  var redcount = 0;
+  var notdonecount = 0;
+  var cancelledcount = 0;
+  var rejectedcount = 0;
+  var notchecked = false
+  if (value == 1) {
+      greencount++;
+  } else if (value == 2) {
+      yellowcount++;
+      
+  } else if (value == 3) {
+      redcount++;
+      $("#bonus" + id).attr("disabled", true);
+  } else if (value == 4) {
+      notdonecount++;
+      $("#bonus" + id).attr("disabled", true);
+  } else if (value == 5) {
+      cancelledcount++;
+      $("#bonus" + id).attr("disabled", true);
+  } else if (value == 6) {
+      rejectedcount++;
+      $("#bonus" + id).attr("disabled", true);
+  }
+}
+
+
+function bonus(){ 
+  var bonusmultiple = {{markslist.bonus}}
+  var ckName = document.getElementsByClassName('bonuscheck');
+  counter = 0
+  for(var i=0; i < ckName.length; i++){
+
+    if(ckName[i].checked){
+        if(ckName[i].disabled == false){
+          counter +=1
+        };
+    }
+    } 
+    $("#Bonus").text(counter * bonusmultiple)
+    Calculate()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Calculate() {
+  var pointspertask = {{markslist.green}}
+  var greendivider = {{markslist.green}}
+  //inputs..
+  var task = parseFloat($("#TotalTask").text())
+  task = task || 0
+
+  var green = parseFloat($("#Green").text())
+  var greencredit = parseInt(green/greendivider)
+  green = green || 0
+  var greencreditcount = greencredit || 0
+  
+
+  var yellow = parseFloat($("#Yellow").text())
+  yellow = yellow || 0
+  var red = parseFloat($("#Red").text())
+  red = red || 0
+  var rejected = parseFloat($("#rejected").text())
+  rejected = rejected || 0
+  var notdone = parseFloat($("#NotDone").text())
+  notdone = notdone || 0
+  var bonus = parseFloat($("#Bonus").text())
+  bonus = bonus || 0
+  var cancelled = parseFloat($("#Cancelled").text())
+  cancelled = cancelled || 0
+
+  //calculations
+  var totaltask = task - (cancelled)
+  var totalscore = (totaltask * pointspertask)
+
+  if (greencreditcount >= 10 && greencreditcount <= 14) {
+      green = (green) + (parseInt(greendivider * 3))
+      $("#Credit").text(parseInt(greendivider * 3))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+3 Credits Awarded');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 3')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount >= 15 && greencreditcount <= 19) {
+      green = (green) + (parseInt(greendivider * 7))
+      $("#Credit").text(parseInt(greendivider * 7))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+7 Credits Awarded');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 7')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount >= 20 && greencreditcount <= 24) {
+      green = (green) + (parseInt(greendivider * 12))
+      $("#Credit").text(parseInt(greendivider * 12))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+12 Credits Awarded');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 12')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount >= 25 && greencreditcount <= 29) {
+      green = (green) + (parseInt(greendivider * 18))
+      $("#Credit").text(parseInt(greendivider * 18))
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('has-bonus');
+      $('#bonustext').html('+18 Credits Awarded').css('color', 'green', 'font-size', 'small');
+      $('#trackprocreditpoints').html('<i class="fa fa-asterisk" aria-hidden="true"></i> 18')
+      // $('#TrackProScore').focus();
+  } else if (greencreditcount <= 10) {
+      green = (green)
+      $("#Credit").text(0)
+      $('.bonusspan').html('');
+      $('#forbonustext').addClass('no-bonus');
+      $('#bonustext').html('');
+      $('#trackprocreditpoints').html('')
+      // $('#TrackProScore').focus();
+  }
+  $("#TotalScore").text(totalscore)
+  $("#TrackProScore").text((green + yellow + red + bonus) - (notdone + rejected))
+  if (totalscore != 0){
+      $("#TrackProPercent").text(((100 * (((green + yellow + red + bonus) - (notdone + rejected)) / totalscore)).toFixed(2)))
+  }
+  
+}
+
+
+
+function gettaskmodaldata(taskid){
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'checktrackpro/getassignbytaskdata',
+      data: {
+          'Taskid': taskid,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+          var trhtml = "<option value=''>Select manager</option>"
+          if (response.response.n == 1) {  
+                  $.each(response.manager_data,function(i,o){
+                    if (response.data.AssignBy == o.ManagerID){
+                      trhtml += `<option value='`+o.ManagerID+`' selected>`+o.ManagerIDStr+`</option>`
+                    }else{
+                      trhtml += `<option value='`+o.ManagerID+`'>`+o.ManagerIDStr+`</option>`
+                    }
+                    
+                  })
+              $("#taskidassignby").val(response.data.id)
+              $("#assignbyproject").html(response.data.ProjectName)
+              $("#assignbytaskdetails").html(response.data.TaskTitle)
+              $("#assignbymanager").html(trhtml)
+          } else {
+           
+          }
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+
+function changeassignby(taskid){
+  var assignby = $('#assignbymanager').val()
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'checktrackpro/updatetaskassignby',
+      data: {
+          'Taskid': taskid,
+          'Taskassignby':assignby,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function (response) {
+         if (response.n == 1){
+          swal({
+              icon:"success",
+              title: "",
+              text: response.message,
+              button: "ok",
+          })
+          .then((isConfirm) => {
+            if (isConfirm) {
+              $('#assignbymodal').modal('toggle');
+              getAssignData(response.data.AssignTo,response.asstostr)
+            }
+          });
+         
+         }else{
+          swal({
+              title: "",
+              text: response.message,
+              button: "ok",
+          })
+         }
+         
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });  
+}
+
+function getTrackProScore() {
+  var week = $('#Week').val()
+  var employee = $('#CreatedBy').val()
+  var Year = $('#Year').val();
+  var assignById = $("#supervisor").val()
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'checktrackpro/getTaskTrackProScore',
+      data: {
+          'Week': week,
+          'Employee': employee,
+          'Year' : Year,
+          'AssignBy' : assignById,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+
+      success: function (response) {
+          
+          if (response.n == 1) {  
+              if ( response.final_submit == "Yes"){
+                  $('#TotalTask').text(response.score.scoreObjectCount);
+                  $('#Green').text(response.score.GreenZoneTask);
+                  $('#Yellow').text(response.score.YellowZoneTask);
+                  $('#Red').text(response.score.RedZoneTask);
+                  $('#NotDone').text(response.score.NotdoneZoneTask);
+                  $('#Cancelled').text(response.score.cancelledZoneTask);
+                  $('#rejected').text(response.score.rejectedZoneTask);
+                  $('#Bonus').text(response.score.bonus);
+                  $('#TrackProScore').text(response.score.totalTrackProScore);
+                  $('#TotalScore').text(response.score.TotalScore);
+                  $('#TrackProPercent').text(response.score.trackpropercent);
+                  $('.select').prop('disabled', true);
+                  $('.check').prop('disabled', true);
+                  $('#savedatafinal').hide();
+                  $('#savedata').hide();
+                  $('.ZONE').attr('disabled', true);
+                  $('.bonuscheck').attr('disabled', false);
+                  $('.msgdiv').text('trackpro report for this week is checked!');
+                  Calculate();
+              }else{                        
+                  if ( response.score.ZoneNoneList == "None"){
+                      $('#TotalTask').text(response.score.scoreObjectCount)
+                      $('#Green').text(response.score.GreenZoneTask)
+                      $('#Yellow').text(response.score.YellowZoneTask)
+                      $('#Red').text(response.score.RedZoneTask)
+                      $('#NotDone').text(response.score.NotdoneZoneTask)
+                      $('#Bonus').text(response.score.bonus)
+                      $('#Cancelled').text(response.score.cancelledZoneTask);
+                      $('#rejected').text(response.score.rejectedZoneTask);
+                      $('#TrackProScore').text(response.score.totalTrackProScore)
+                      $('#TotalScore').text(response.score.TotalScore)
+                      $('#TrackProPercent').text(response.score.trackpropercent)
+
+                      $('.select').prop('disabled', true)
+                      $('#savedata').show()
+                      $('#savedatafinal').show()
+                      $('#savedatafinal').prop('disabled', true)
+                      // $('.bonuscheck').attr('disabled', false);
+                      $('#savedatafinal').css({'background-color': 'white','color':'#174fa3','border':'2px solid #174fa3','cursor':'not-allowed'})
+                      $('.msgdiv').text('') 
+                      Calculate();                   
+                  }else{
+                      $('#TotalTask').text(response.score.scoreObjectCount)
+                      $('#Green').text(response.score.GreenZoneTask)
+                      $('#Yellow').text(response.score.YellowZoneTask)
+                      $('#Red').text(response.score.RedZoneTask)
+                      $('#NotDone').text(response.score.NotdoneZoneTask)
+                      $('#Bonus').text(response.score.bonus)
+                      $('#Cancelled').text(response.score.cancelledZoneTask);
+                      $('#rejected').text(response.score.rejectedZoneTask);
+                      $('#TrackProScore').text(response.score.totalTrackProScore)
+                      $('#TotalScore').text(response.score.TotalScore)
+                      $('#TrackProPercent').text(response.score.trackpropercent)
+                      $('.select').prop('disabled', true)
+                     
+                      $('#savedata').show()
+                      $('#savedatafinal').show()
+                      $('#savedatafinal').prop('disabled', false);
+                      $('#savedatafinal').css({'background-color': '#174fa3','color':'white','border':'2px solid white','cursor':'pointer'})
+                      $('.msgdiv').text('')
+                      Calculate();
+                  }  
+              }
+                         
+              
+          } else {
+              $('#TotalTask').text(0)
+              $('#Green').text(0)
+              $('#Yellow').text(0)
+              $('#Red').text(0)
+              $('#NotDone').text(0)
+              $('#Bonus').text(0)
+              $('#Cancelled').text(0)
+              $('#rejected').text(0)
+              $('#TrackProScore').text(0)
+              $('#TotalScore').text(0)
+              $('#TrackProPercent').text(0)
+              $('#savedata').show()
+              $('#savedatafinal').show()
+              $('.msgdiv').text('')
+          }
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+
+function intermediatesaveTrackProScore() {
+   
+  //adding zone and bonus to task start-------------------------------------------------------------------------------
+  var Employee = $('#CreatedBy').val();
+  var Year = $('#Year').val();
+  var Week = $('#Week').val();
+  var values = [];
+  $.each(Tid, function (i, o) {
+      Taskid = parseInt(o)
+      // var zone = parseInt($('#zone' + Taskid).val());
+      var zone = parseInt($('input[name="Zone'+Taskid+'"]:checked').val());
+      var bonus;
+      if ($('#bonus' + Taskid).is(':checked')) {
+        if ( !$('#bonus' + Taskid).is(':disabled') ){
+          bonus = true
+        }
+        else{
+          bonus = false
+        }
+      } else {
+          bonus = false
+      }
+      var tasktitle = $('#ttitle' + Taskid).text();
+      data = {
+          "Taskid": Taskid,
+          "TaskTitle": tasktitle,
+          "Zone": zone,
+          "Bonus": bonus,
+          
+      }
+      values.push(data)
+  })
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'task/updateTaskZoneMultiple',
+      data: {
+          'values': JSON.stringify(values),
+          'Employee': Employee,
+          'Year': Year,
+          'Week': Week,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      success: function (response) {
+          if (response.submitdata.n){
+              $('#savedatafinal').prop('disabled', false);
+              $('#savedatafinal').css({'background-color': '#174fa3','color':'white','border':'2px solid white','cursor':'pointer'});
+            
+          }
+          swal({
+              title: "",
+              text: "TrackPro report has been saved intermediately!",
+              button: "ok",
+          });
+          getemployeeinfo();
+      },
+      error: function (error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+  //
+  //adding zone and bonus to task end-----------------------------------
+}
+
+function finalsaveTrackProScore() {
+  if ($("#Week").val() == "Select") {
+      $("#alertweek").show()
+  } else {
+      var Employee = $('#CreatedBy').val();
+      var Year = $('#Year').val();
+      var Week = $('#Week').val();
+     
+
+      var value = []
+
+      $.each(Tid, function (i, o) {
+      Taskid = parseInt(o)
+      // var zone = parseInt($('#zone' + Taskid).val());
+      var zone = parseInt($('input[name="Zone'+Taskid+'"]:checked').val());
+      var bonus;
+      if ($('#bonus' + Taskid).is(':checked')) {
+        if ( !$('#bonus' + Taskid).is(':disabled') ){
+          bonus = true
+        }
+        else{
+          bonus = false
+        }
+      } else {
+          bonus = false
+      }
+      var tasktitle = $('#ttitle' + Taskid).text();
+      zonedata = {
+          "Taskid": Taskid,
+          "TaskTitle": tasktitle,
+          "Zone": zone,
+          "Bonus": bonus,
+          
+      }
+      value.push(zonedata)
+  })
+    
+      $.ajax({
+          type: 'POST',
+          url: frontendURL + 'checktrackpro/addParticualrIntermediateTrackProResult',
+          
+          data: {
+          'Employee': Employee,
+          'Year': Year,
+          'Week': Week,
+          'values':JSON.stringify(value),
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+          success: function (response) {
+              if (response.n == 0) {
+                  swal({
+                      title: "",
+                      text: response.Msg,
+                      button: "ok",
+                  });
+              } else {
+                  swal({
+                      title: "",
+                      text: "TrackPro report has been submitted!",
+                      button: "ok",
+                  });
+                  $('#savedatafinal').hide();
+                  $('#savedata').hide();
+                  $('.ZONE').attr('disabled', true);
+                  $('.msgdiv').text('TrackPro report for this week is checked!')
+                  
+                  //
+
+                  //adding zone and bonus to task end-------------------------------------------------------
+              }
+          },
+          complete: function () {
+              //adding zone and bonus to task start----------------------------------------------------
+
+
+          }
+      });
+  }
+  //else statement of validation
+
+}
+function addremark(user_id,task_id){
+   
+  var remark_comment = $("#remark_comment").val().trim();
+  if(remark_comment == "" || remark_comment == undefined){
+
+    $('#remark_comment').html('');
+    $("#remark_comment_required").show().delay(3000).slideUp();
+    $('#remark_comment_required').html('Please add remark!').css('color', 'red');
+    $('#remark_comment').focus();
+    return false;
+
+  }else{
+    var trhtml = ""
+    var fd = new FormData();    
+    fd.append("task_id",task_id);
+    fd.append("remark_comment",remark_comment);
+    fd.append("user_id",user_id);
+    fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "task/addmanagertaskremark",
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        if (response.n == 1){
+          swal({
+            icon: "success",
+            title: "",
+            text: "Remark Added Successfully.",
+            button: false,
+            timer: 500
+            });  
+            $('#remark_comment').val('');
+            remarklist(user_id,task_id)
+        
+        }
+        else{
+          swal({
+            icon: "error",                
+            text: response.Msg,
+            button: false,
+            timer: 1000
+            }); 
+       
+        }
+       
+          
+      }
+  })
+  }
+ 
+
+}
+
+function remarklist(userid,taskid){
+  $("#remark_user_id").val(userid);
+  $("#remark_task_id").val(taskid);
+  $("#activemark"+userid).removeClass("activeremark");
+
+  var trhtml = ""
+  var fd = new FormData();    
+  fd.append("task_id",taskid);
+  fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+  $.ajax({
+    type: "POST",
+    url: frontendURL + "task/dashboardtaskremarklist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      if (response.n == 1){
+        $(response.data).each(function(i,o){
+
+          if (o.ismanager == true){
+            trhtml +=`
+          <div class="chat-log_item chat-log_item z-depth-0">
+            <div class="row justify-content-start mx-1 d-flex">
+              <div class="col-auto px-0">
+                <span class="chat-log_author">
+                  @`+o.created_by_str+`
+                </span>
+              </div>
+              <div class="col-auto px-0">
+              </div>
+            </div>
+            <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+            <div class="chat-log_message">
+              <p class="m-0">`+o.remark_comment+`
+              </p>
+            </div>
+            <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+            <div class="row chat-log_time m-0 p-0 justify-content-end">
+              `+o.created_date+`
+            </div>
+          </div>
+          `
+
+          }else{
+            trhtml += `
+            <div class="chat-log_item chat-log_item-own z-depth-0">
+              <div class="row justify-content-start mx-1 d-flex">
+                <div class="col-auto px-0">
+                  <span class="chat-log_author">
+                    @`+o.created_by_str+`
+                  </span>
+                </div>
+                <div class="col-auto px-0">
+                </div>
+              </div>
+              <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+              <div class="chat-log_message">
+                <p class="m-0">`+o.remark_comment+`
+                </p>
+              </div>
+              <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+              <div class="row chat-log_time m-0 p-0 justify-content-end">
+                `+o.created_date+`
+              </div>
+            </div>
+            `
+          }
+
+          
+
+        })
+
+       $("#remark_details").html(trhtml)
+      }
+      else{
+     
+      }
+     
+        
+    }
+  })
+
+}
+
+
+
+
+
+function getyearlist(){
+  var html=''
+  var fd = new FormData();    
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"task/getyearlist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+      html += `<option value="" >Select Year</option>`
+
+      $(response.yearlist).each(function(a, b) {
+          html += `<option value="` + b.Year + `">` + b.Year + `</option>`
+      })
+      $("#Year").html(html);
+
+    },
+  });
+}
+
+
+function getweeklist(){
+  var html=''
+  var fd = new FormData();    
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"task/getweeklist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+      html += `<option value="" >Select Week</option>`
+
+      $(response.weeklist).each(function(a, b) {
+          html += `<option value="` + b.Week + `">` + b.Week + `</option>`
+      })
+      $("#Week").html(html);
+
+    },
+  });
+}
+
+function getemployeelist(){
+  var html=''
+  var fd = new FormData();    
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"task/getemployeelist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+      html += `<option value="" >Select Employee</option>`
+
+      $(response.employeelist).each(function(a, b) {
+          html += `<option value="` + b.id + `">` + b.Firstname + ` ` + b.Lastname + `</option>`
+      })
+      $("#CreatedBy").html(html);
+
+    },
+  });
+}
+
+function getsupervisorlist(){
+  var html=''
+  var fd = new FormData();    
+  fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+  $.ajax({
+    type: "POST",
+    url: frontendURL+"task/getsupervisorlist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    
+    success: function(response) {
+      html += `<option value="" >All</option>`
+
+      $(response.managerList).each(function(a, b) {
+          if (b.ManagerID == response.managerid){
+            html += `<option value="` + b.ManagerID + `" selected>` + b.ManagerIDStr + `</option>`
+
+          }else{
+            html += `<option value="` + b.ManagerID + `">` + b.ManagerIDStr + `</option>`
+
+          }
+
+      })
+      $("#supervisor").html(html);
+
+    },
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">Warning Mail</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+
+.select2-container--default .select2-selection--single {
+    height: 34px;
+    border:none !important;
+    }
+#warningForm{
+    margin-top: 10px;
+    padding: 3px 9px;
+    background-color:white;
+    border-radius: 10px;
+}
+.datarow{
+    border-bottom: 1px solid lightgray;
+    margin: 2px;
+}
+.labelrow{
+    padding-top:8px;
+    font-size: 14px;
+}
+.subcontainer{
+    width:100%;
+    border:0;
+}
+.subcontainer:focus{
+    outline: none;
+}
+.mailcontent{
+    min-height: calc(100vh - 400px);
+    width: 100%;
+    border:none;
+    overflow-y: scroll;
+}
+.mailcontent:focus{
+    outline:none;
+}
+.historycol{
+    background-color:white;
+}
+.chatgpt_btn {
+    background-color: green;
+    color: white;
+    font-size: 14px;
+    padding: 4px;
+    margin-top: 10px;
+}
+.submitbtn{
+    background-color:blue;
+    color: white;
+    font-size: 14px;
+    padding: 4px;
+    margin-top: 10px;
+}
+.escdiv{
+    border:1px solid rgb(255, 111, 0);
+    border-radius: 4px;
+    background-color: rgb(239 165 109 / 30%);
+    color:rgb(255, 111, 0);
+    font-size:14px;
+    text-align: center;
+}
+</style>
+
+<main class="main-wrapper">
+    <div id="snackbar"></div>
+    <div class="row">
+        <div class="col-9">
+            <form method="POST" id="warningForm">
+                {% csrf_token %}
+                <div style="font-weight: 500;"> New Mail</div>
+                <!--employee to-->
+                <div class="row datarow g-0">
+                        <label class="col-sm-1  text-start labelrow" for="mailtoemp">To :<span style="color:red">*</span></label>
+                        <div class="col-sm-11">
+                            <!-- {{employeelist}} -->
+                            <select id="mailtoemp" class="input-feild select2dropdown form-select" name="mailtoemp" onchange="gethistory();">
+                                <option value=''>Select Employee</option> 
+                                {% for r in employeelist %}
+                                <option value="{{r.id}}">{{r.Firstname}} {{r.Lastname}}</option>
+                                {% endfor %}
+                            </select>
+                            <span id="mailtoemp_err" class="error"></span>
+                        </div>
+                </div>
+
+                 <!-- from-->
+                <div class="row datarow g-0">
+                    <label class="col-sm-1 text-start labelrow" id="mailfrom">From :<span style="color:red">*</span></label>
+                    <div class="col-sm-11">
+                        <div style="padding-top: 8px;">onerooftechnologies.com</div>
+                        <span id="mailfrom_err" class="error"></span>
+                    </div>
+                </div>
+                
+                 <!--Category-->
+                 <div class="row datarow g-0">
+                    <label class="col-sm-1  text-start labelrow" for="mailType">Category:<span style="color:red">*</span></label>
+                    <div class="col-sm-11 ps-4">
+                        <select id="mailType" class="input-feild select2dropdown form-select" name="mailType">
+                            <option value=''>Select Category</option> 
+                            <option value="Concern" >Concern</option>
+                            <option value="Escalation" >Escalation</option>
+                            <option value="Warning" >Warning</option>
+                        </select>
+                        <span id="Category_err" class="error"></span>
+                    </div>
+                </div>
+
+                <!----cc-->
+                     <div class="row datarow g-0">
+                        <label class="col-sm-1  text-start labelrow" id="mailcc">CC :<span style="color:red">*</span></label>
+                        <div class="col-sm-11">
+                            <div></div>
+                            <span id="mailcc_err" class="error"></span>
+                        </div>
+                    </div>
+
+                
+
+                 <!----subject-->
+                 <div class="row datarow g-0">
+                    <label class="col-sm-1  text-start labelrow" id="">Subject:<span style="color:red">*</span></label>
+                    <div class="col-sm-11">
+                        <div class="ps-4">
+                            <input type="text" class="subcontainer" id="mailsubject" placeholder="" name="mailsubject" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        </div>
+                        <span id="subject_err" class="error"></span>
+                    </div>
+                </div>
+
+                <!----mailcontent-->
+
+                <div class="row datarow g-0">
+                    <div class="col-sm-12">
+                        <div class="chatgpt_btn btn">Chatgpt</div>
+                        <div class="ps-4">
+                            <textarea id="mailcontent" class="mailcontent" name="mailcontent"></textarea>
+                        </div>
+                        <span id="mailcontent_err" class="error"></span>
+                        
+                    </div>
+                </div>
+
+                <div class="submitbtn btn" onclick="sendmail();">send</div>
+
+
+            </form>
+        </div>
+        <div class="col-3 historycol">
+            <!-- <div id="esclist">
+                <h6>Escalation</h6>
+            </div>
+            <div id="conlist">
+                <h6>Concern</h6>
+            </div>
+            <div id="warninglist">
+                <h6>Warning</h6>
+            </div> -->
+  <div id="lists">
+               
+            </div>
+            
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+
+function gethistory(){
+     
+    var eschtml;
+    eschtml="";
+    var conhtml;
+    conhtml = "";
+    var empid = $("#mailtoemp").val();
+    console.log("eee",empid)
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    fd.append("employeeid",empid);
+
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "GetMailHistory",
+        data:fd,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {   
+          console.log("-----",response) 
+          $(response.data).each(function(a, b) {
+            if(b.mailType == 'Escalation'){
+                eschtml +=  
+                `
+                <div class="col-12 escalationcol">
+                  <div class="col-12 escdiv">
+                    <div class="ps-1">Escalation : `+b.mail_date+`</div>
+                    </div>
+                </div>
+                `
+            }
+            else if(b.mailType == 'Concern'){
+                conhtml +=  
+                `
+                <div class="col-12 concerncol">
+                  <div class="col-12 concerndiv">
+                    <div class="ps-1">Concern : `+b.mail_date+`</div>
+                    </div>
+                </div>
+                `
+            }
+
+              })
+              if(eschtml != ""){
+                $('#lists').append(`<h6>Escalation</h6> `)
+                $('#lists').append(eschtml)
+              }
+              if(conhtml != ""){
+              $('#lists').append(`<h6 class="pt-2">Concern</h6> `)
+              $('#lists').append(conhtml)
+              }
+            
+            }
+
+          })
+
+          
+        }
+     
+
+
+function sendmail(){
+     
+    var html;
+    html="";
+    var empid = $("#mailtoemp").val();
+    var mailsubject = $("#mailsubject").val();
+    var mailcontent = $("#mailcontent").val();
+    var mailtype = $("#mailType").val();
+
+    console.log("eee",empid)
+    var fd = new FormData();    
+    fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+    fd.append("empid",empid);
+    fd.append("mailsubject",mailsubject);
+    fd.append("mailcontent",mailcontent);
+    fd.append("mailtype",mailtype);
+
+      $.ajax({
+        type: "POST",
+        url: frontendURL + "warningmail",
+        data:fd,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {   
+          console.log("----wewqd-",response) 
+
+          
+        }
+      });
+}
+</script>
+{% endblock %}

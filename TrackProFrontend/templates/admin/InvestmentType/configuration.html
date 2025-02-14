@@ -1,0 +1,430 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+  Configuration Master
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+<style>
+  .fa-minus-circle{
+    font-size:22px
+  }
+  .form-floating .form-control {
+    border: none;
+    border-bottom: 1px solid #c2c2c2;
+    box-shadow:None;
+    border-radius: 0px;
+    outline:none;
+}
+.form-floating>label {
+    padding: 10px 0;
+}
+
+#addEmployeeForm input {
+    width: 100%;
+    font-size: 14px;
+    color: black; 
+
+}
+
+.select2-container--default .select2-selection--single {
+    border-bottom: 1px solid rgb(214, 214, 214) !important;
+    border: none;
+    height: 50px;
+    box-shadow: none;
+    border-radius: 0px;
+}
+
+.trackproBtn {
+    width: 150px !important;
+    height: 38px !important;
+    margin: 0px !important;
+}
+.Role-btn{
+    width: 18% !important;
+    height: 31px !important;
+    border-radius: 24px;
+}
+.radiostyle{
+  border:1px solid #000 !important;
+}
+.modal-body select{
+    font-size: var(--f-lg);
+    color: var(--fc-md-dark);
+    width: 100%;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: transparent;
+    margin-top: 6px;
+    margin-bottom: 28px;
+}
+.modal-body select:focus{
+  outline:none;
+  box-shadow:none;
+}
+
+.inputstyle{
+    border: 1px solid grey !important; 
+    border-radius: 5px !important;
+    padding: 3px 10px;
+    display: flex;
+    height: 30px;
+    font-size: 14px !important;
+    margin-top:0px !important;
+}
+.inputstyle:focus{
+    outline:none;
+    box-shadow:none;
+}
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+    <form  method="POST" id="" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="title-div">
+          <span class="company-title d-none">Configuration Master</span>
+          <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add Configuration</span>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header ps-4">
+                <h5 class="modal-title my-3" id="exampleModalLabel">Add Configuration</h5>
+              </div>
+              <div class="modal-body">
+                
+
+                    {% comment %} <div class="row my-4 px-4">
+                        <div class="col p-0">
+                            <h2 class="company-title">Investment Type</h2>
+                        </div>
+                    </div> {% endcomment %}
+                    <div id="snackbar"></div>
+                    <form method="POST" id="addEmployeeForm1">
+                      {% csrf_token %}
+                      <div class="row g-4 mb-5">
+                          <div class="col-md-12">
+                              <div class="row mb-3">
+                                  <div class="col-md-6">
+                                    <label for="sectionId">Section<span style="color:red">*</span></label>
+                                    <select  class="select2dropdown" name="sectionId">
+                                      <option value=''>Select an option</option> 
+                                      {%for i in section_list%}
+                                      <option value="{{i.id}}" >{{i.Name}}</option>
+                                      {%endfor%}
+                                    </select>
+                                    <span id="Name_err" class="error"></span>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="sectionId">Investype Type<span style="color:red">*</span></label>
+                                    <select  class="select2dropdown" name="sectionId">
+                                      <option value=''>Select an option</option> 
+                                      {%for i in section_list%}
+                                      <option value="{{i.id}}" >{{i.Name}}</option>
+                                      {%endfor%}
+                                    </select>
+                                      <span id="Nameerror" class="error"></span>
+                                  </div>
+                                  </div>
+                                  <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="sectionId">Field Type<span style="color:red">*</span></label>
+                                        <select  class="select2dropdown" name="sectionId">
+                                        <option value=''>Select an option</option> 
+                                        {%for i in section_list%}
+                                        <option value="{{i.id}}" >{{i.Name}}</option>
+                                        {%endfor%}
+                                        </select>
+                                        <span id="Name_err" class="error"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="sectionId">Lender Type<span style="color:red">*</span></label>
+                                        <select id='sectionId' class="select2dropdown" name="sectionId">
+                                          <option value=''>Select an option</option> 
+                                          {%for i in section_list%}
+                                          <option value="{{i.id}}" >{{i.Name}}</option>
+                                          {%endfor%}
+                                        </select>
+                                       </div> 
+                                       
+                                </div>
+                              </div>
+                            
+                                <div class="row mt-4">
+                                    <div class="col-md-6 d-flex">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input radiostyle" type="checkbox" value="" id="InvestmentSingleBatch" name="InvestmentSingleBatch">
+                                                <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Pollcy/Certification/PAN no. 
+                                                </label>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" id="Name" class="inputstyle" placeholder="Pollcy/Certification/PAN no" name="Name" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                                {% comment %} <label for="Name">Investype Type<span style="color:red;">*</span></label> {% endcomment %}
+                                                <span id="Nameerror" class="error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input radiostyle" type="checkbox" value="" id="InvestmentSingleBatch" name="InvestmentSingleBatch">
+                                                <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Receipt Number 
+                                                </label>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" id="Name" class="inputstyle" placeholder="Receipt Number" name="Name" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                                {% comment %} <label for="Name">Investype Type<span style="color:red;">*</span></label> {% endcomment %}
+                                                <span id="Nameerror" class="error"></span>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            {% comment %} </div> {% endcomment %}
+                            <div class="row">
+                                 <div class="col-md-6 d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input radiostyle" type="checkbox" value="" id="LTA_slabApplicable" name="LTA_slabApplicable">
+                                        <label class="form-check-label mx-2" for="flexCheckDefault">
+                                          Period
+                                        </label>
+                                      </div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" value="" id="InvestmentSingleBatch" name="InvestmentSingleBatch">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                            Possession Date 
+                                            </label>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="date" id="Name" class="inputstyle" placeholder="Possession Date" name="Name" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            {% comment %} <label for="Name">Investype Type<span style="color:red;">*</span></label> {% endcomment %}
+                                            <span id="Nameerror" class="error"></span>
+                                        </div>
+                                    </div> 
+                                </div> 
+                                
+
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                   <div class="form-check">
+                                       <input class="form-check-input radiostyle" type="checkbox" value="" id="LTA_slabApplicable" name="LTA_slabApplicable">
+                                       <label class="form-check-label mx-2" for="flexCheckDefault">
+                                        Share Percentage
+                                       </label>
+                                     </div>
+                               </div>
+                               <div class="col-md-6  d-flex align-items-center">
+                                   <div class="form-check">
+                                       <input class="form-check-input radiostyle" type="checkbox" value="" id="HideOnDeclaration" name="HideOnDeclaration">
+                                       <label class="form-check-label mx-2" for="flexCheckDefault">
+                                        Metro-NonMetro
+                                       </label>
+                                     </div>
+                               </div> 
+                           </div>
+                           <div class="row mt-3">
+                            <div class="col-md-6">
+                               <div class="form-check">
+                                   <input class="form-check-input radiostyle" type="checkbox" value="" id="LTA_slabApplicable" name="LTA_slabApplicable">
+                                   <label class="form-check-label mx-2" for="flexCheckDefault">
+                                    Lender Form Applicable
+                                   </label>
+                                 </div>
+                           </div>
+                           
+
+                       </div>
+                            
+                          </div>
+                      </div>
+              
+                      {% comment %} <div class="row justify-content-end">
+                          <div class="col-auto">
+                              <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
+                              <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>
+              
+                          </div>
+                          <div class="col-auto">
+                              <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+                          </div>
+                      </div> {% endcomment %}
+                      <div class="modal-footer">
+                          <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails"  onclick="return formValidation();">Submit</button>
+                        </div>
+                  </form>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>        
+
+    </form>
+
+    <div class="table-div">
+        <table id="myTable" class="row-border" style="width:100%">
+          <thead>
+            <tr class="tableHeadings roleTableheadings">
+              <th>Sr. No</th>
+              <th>Section</th>
+              <th>Investype Type</th>
+              <th>Lender Type</th>
+              <th>Receipt Number</th>
+              <th>Possession Date</th>
+              <th>Active Status</th> 
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>   
+            {% for i in listInvestment %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              
+              <td>{{i.Name}}</td>
+              <td>{{i.sectionId}}</td>
+              <td>{{i.Max_limit}}</td>
+              <td>{{i.ProofRequired}}</td> 
+              <td>{{i.SortOrder}}</td>
+              {% if i.Is_Active == 1 %}
+              <td>Active</td>
+              {%else%}
+              <td>In Active</td>
+              {%endif%}
+              <td>
+                <a data-bs-toggle="modal" data-bs-target="#updateexampleModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" title="Edit"></a> 
+                <a class="edit-center" data-bs-toggle="modal" data-bs-target="#viewexampleModal{{i.id}}"><i class="fa fa-regular fa-eye" title="View"></i></a>
+              </td>
+            </tr>
+           
+            
+            {% endfor %}
+          </tbody>                 
+        </table>
+      </div>
+
+    
+      
+   
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $("#addEmpRole").select2();
+        $("#addEmpRole1").select2();
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+
+
+    function formValidation(){
+
+        var DesignationName = $('#DesignationName').val().trim();   
+      
+        if (IsValid(DesignationName)) {
+          $('#DesignationNameerror').show().delay(3000).slideUp();
+          $('#DesignationNameerror').html('Designation Name  is required');
+          $('#DesignationName').focus();
+          return false;
+      }
+      }
+
+      function updateinvestment(id) {
+         
+        var sectionId = $('#sectionId'+id).val();
+        var Name = $('#Name'+id).val();
+        var Description = $('#Description'+id).val();
+        var Max_limit = $('#Max_limit'+id).val();
+        var ProofRequired = $('#ProofRequired'+id).is(':checked');
+        var Exemption_Limit = $('#Exemption_Limit'+id).val();
+        var DocRequired = $('#DocRequired'+id).val();
+        var InvestmentSingleBatch = $('#InvestmentSingleBatch'+id).is(':checked');
+        var SortOrder = $('#SortOrder'+id).val();
+        var Invest_TypeCode = $('#Invest_TypeCode'+id).val();
+        var ExemptSection = $('#ExemptSection'+id).val();
+        var No_Projection = $('#No_Projection'+id).is(':checked');
+        var HideOnDeclaration = $('#HideOnDeclaration'+id).is(':checked');
+        var NewTaxRegimeApp = $('#NewTaxRegimeApp'+id).val();
+        var LTA_slabApplicable = $('#LTA_slabApplicable'+id).is(':checked');
+        var status = $('#status'+id).is(':checked');
+        
+         
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "/investment-type/update-investment",
+            data: {
+                'sectionId': sectionId,
+                'Name': Name,
+                'Description':Description,
+                'Max_limit':Max_limit,
+                'ProofRequired':ProofRequired,
+                'Exemption_Limit':Exemption_Limit,
+                'DocRequired':DocRequired,
+                'InvestmentSingleBatch':InvestmentSingleBatch,
+                'SortOrder':SortOrder,
+                'Invest_TypeCode':Invest_TypeCode,
+                'ExemptSection':ExemptSection,
+                'No_Projection':No_Projection,
+                'HideOnDeclaration':HideOnDeclaration,
+                'NewTaxRegimeApp':NewTaxRegimeApp,
+                'LTA_slabApplicable':LTA_slabApplicable,
+                'status':status,
+                'id':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {         
+                console.log("reps",response)
+                if(response.data.n == 1){
+                    window.location = frontendURL + "/investment-type/investment-list";
+                }else{
+                    window.location = frontendURL + "/investment-type/investment-list";
+                }
+                
+            }
+        });
+        }
+</script>
+{% endblock %}

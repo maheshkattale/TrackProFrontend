@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+
+
+<!-- Mirrored from demo.dashboardpack.com/architectui-html-pro/pages-login-boxed.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 03 Nov 2020 11:10:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  {%load static%}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Login</title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="ArchitectUI HTML Bootstrap 4 Dashboard Template">
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+<link href="{% static 'main.d810cf0ae7f39f28f336.css'%}" rel="stylesheet">
+<link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
+<style>
+    #examplePassword{
+        position: relative;
+    }
+    .toggle-password {
+        cursor: pointer;
+        position: absolute;
+        display: block;
+        right: 1rem;
+        margin-top: -1.5rem;
+    }
+</style>
+</head>
+
+<body style="overflow-y:hidden">
+    <div class="app-container app-theme-white body-tabs-shadow">
+        <div class="app-container">
+            <div class="h-100 bg-plum-plate bg-animation">
+                <div class="d-flex h-100 justify-content-center align-items-center">
+                    <div class="mx-auto app-login-box col-md-8">
+                        <div class="app-logo-inverse mx-auto mb-3"></div>
+                        <form class="login-form" method="POST" id="login_page">
+                          {% csrf_token %}
+                          {% if messages %}
+                          <div class="row" style="justify-content: center;">
+                            <div class="col-sm-6 col-sm-offset-3">
+                              {% for message in messages %}
+                              <div style="margin:15px 0px" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                                <p style="margin-bottom: 0px;">{{ message }}</p>
+                              </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+                        <div class="modal-dialog w-100 mx-auto">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="h5 modal-title text-center">
+                                        <h4 class="mt-2">
+                                            <span>Please sign in to your account below.</span>
+                                        </h4>
+                                    </div>
+                                    
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="position-relative form-group">
+                                                    <input name="Username" id="exampleEmail" placeholder="Email here..." type="email" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="position-relative form-group">
+                                                    <input name="password" id="examplePassword" placeholder="Password here..." type="password" class="form-control">
+                                                    <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="position-relative form-check">
+                                            <input name="check" id="exampleCheck" type="checkbox" class="form-check-input">
+                                            <label for="exampleCheck" class="form-check-label">Keep me logged in</label>
+                                        </div> -->
+                                    
+                                </div>
+                                <div class="modal-footer clearfix">
+                                  
+                                    <div class="float-right">
+                                        <button class="btn btn-primary btn-lg" type="submit">Login</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                              </form>
+                            </div>
+                        </div>
+                        <div class="text-center text-white opacity-8 mt-3">Copyright © ArchitectUI 2022</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/jquerry/jquery.js'%}"></script>
+    <script src="{% static 'js/jquerry/jquery.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'assets/scripts/main.d810cf0ae7f39f28f336.js'%}"></script>
+<script>
+    $(".alert").slideDown("slow").delay(3000).slideUp();
+
+    $(".toggle-password").click(function() {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        input = $(this).parent().find("input");
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    })
+</script>
+</body>
+
+
+<!-- Mirrored from demo.dashboardpack.com/architectui-html-pro/pages-login-boxed.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 03 Nov 2020 11:10:42 GMT -->
+</html>

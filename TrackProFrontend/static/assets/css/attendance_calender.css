@@ -1,0 +1,899 @@
+.emp-dropdown{
+    width:170px;
+  }
+  .cursor-pointer{
+    cursor:pointer;
+  }
+  .error{
+    font-size:12px;
+  }
+  .holidaydiv{
+    display: flex;
+    align-items: center;
+    margin: 0px 4px 8px 4px;
+  }
+    /* Custom tab styling */
+  .custom-tabs .nav-link {
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #333;
+      background-color: transparent;
+      transition: border-color 0.3s;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .custom-tabs .nav-link.active {
+      border-color: #174fa3;
+
+    }
+    .nav-fill .nav-item, .nav-fill>.nav-link {
+
+      padding: 10px;
+      font-weight: 500;
+   }
+    .currentmnth td{
+      color:green;
+      font-weight:500;
+    }
+
+    .custom-tabs .nav-link:hover {
+      border-color: #007bff;
+    }
+      .tab-content>.active {
+        padding: 23px 0 0 0;
+    }
+    .first-container{
+      display:flex;
+    }
+    .inner-date-font-size-wf {
+      font-size: 14px;
+    }
+
+
+    .popup>.card1>.table >tbody>tr>td {
+        height: 100px !important;
+        width: 150px !important;
+    }
+    .date-count-text{
+      font-size:15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .inner-date-font-size{
+      font-size:12px;
+    }
+      .daySlider {
+        padding: 20px;
+      }
+      .clndr-controls {
+        font-family: "Arial", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+          Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin: 0 auto;
+        max-width: 500px;
+        text-align: center;
+      }
+      .clndr-control-button:before{
+        content: "\f137";
+        font-family: FontAwesome;
+      }
+      
+      .clndr-controls {
+        align-items: initial;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        align-items: center;
+      }
+      
+
+      .clndr-control-button.rightalign {
+        transform: rotate(180deg);
+      }
+      .clndr-control-button .clndr-next-button,
+      .clndr-control-button .clndr-previous-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+      
+
+      
+      .clndr-table,
+      .clndr-table thead,
+      .clndr-table tbody,
+      .clndr-table tr,
+      .clndr-table td {
+        display: inline-block;
+        background: transparent;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        vertical-align: baseline;
+      }
+      
+      .clndr-table {
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        padding:10px 0px;
+        margin-bottom: 50px;
+
+      }
+      
+
+      
+      .clndr-table tr {
+        padding-bottom: 58px;
+        position: relative;
+      }
+      .clndr-table tr td {
+        display: inline-block;
+        text-align: center;
+      }
+      .clndr-table tr td + td {
+        margin-left: 25px;
+      }
+      .clndr-table tr + tr {
+        margin-left: 25px;
+      }
+      
+      .clndr-table:after {
+        bottom: 0;
+        content: "";
+        display: block;
+        height: 58px;
+        left: 50%;
+        margin-left: -570px;
+        opacity: 0.7;
+        position: absolute;
+        width: 1140px;
+      }
+      
+      .clndr-table .day {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1em;
+        display: inline-block;
+        color: #b1b1b1;
+
+        padding: 15px 0;
+      }
+
+      .clndr-table tr{
+        padding: 0px 22px 0 0px;
+        border-right:1px solid grey;
+
+      }
+        .clndr-table .day.today {
+          color: #ffffff;
+          padding: 14px 11px;
+          background: #8ccaff;
+          border-radius: 10px;
+        }
+      .clndr-table .day.event {
+        color: #54659c;
+        cursor: pointer;
+      }
+      .clndr-table .day.selected {
+        padding: 10px 5px;
+      }
+      .clndr-table .day.selected.event {
+        background:#174fa3;
+        color:white;
+        border-radius:5px;
+      }
+      .clndr-table .day.past {
+        color: #bebebe;
+      }
+      .leave-btn {
+      padding: 8px 10px 8px 10px !important;
+      margin-top: 8px !important;
+      margin-right:5px;
+      background: #174fa3 !important;
+      /* margin: 0px !important; */
+      border-radius: 24px !important;
+      font-size: 13px !important;
+      color: white !important;
+      min-width: 130px !important;
+      text-align: center;
+      border: none;
+      }
+    
+    .holiday-btn{
+      padding: 8px 10px 8px 10px !important;
+      margin-top: 8px !important;
+      background: green !important;
+      /* margin: 0px !important; */
+      border-radius: 24px !important;
+      font-size: 13px !important;
+      color: white !important;
+      min-width: 130px !important;
+      text-align: center;
+      border: none;
+    }
+    .request-btn{
+      padding: 8px 10px 8px 10px !important;
+      margin-top: 8px !important;
+      background: #174fa3 !important;
+      /* margin: 0px !important; */
+      border-radius: 24px !important;
+      font-size: 13px !important;
+      color: white !important;
+      min-width: 130px !important;
+      text-align: center;
+      border: none;
+    }
+      .col-2 {
+        flex: 0 0 auto;
+        width: 16.66666667%;
+        height: 340px;
+      }
+
+
+        
+      .header-day {
+        background: transparent;
+        width: 150px;
+        height: 34px;
+        border-radius: 5px;
+        padding: 6px !important;
+        margin: 20px !important;
+        color: #a0a0a0;
+        border: 1px solid #a0a0a0!important;
+      }
+      .modal-dialog {
+        max-width: 60%;
+    
+    }
+    .clndr-control-button {
+      background: url("http://lorempixel.com/26/26/abstract/") no-repeat 0 0;
+      cursor: pointer;
+      height: 24px;
+      width: 24px;
+      position: relative;
+    }
+    .calendarIcon-img {
+      top: -36px;
+      left: 90%;
+      cursor:pointer;
+
+    }
+    .clndr-table .empty {
+      display: none;
+    } 
+    .header-days{
+      position: absolute !important;
+      top: 35%;
+      left:7%;
+      border: none !important;
+
+    }
+    .selected-weekday{
+      background-color: #8ccaff !important;
+      border:1px solid #8ccaff !important;
+      outline:1px solid #8ccaff !important;
+      color: whitesmoke !important;
+    }
+
+
+
+    .week_off_colorbox{
+      height:20px;
+      background:red;
+      width:20px;
+      margin:0 10px;
+    }
+    .Half_Day_colorbox{
+      height:20px;
+      background:grey;
+      width:20px;
+      margin:0 10px;
+    }
+    .Leave_colorbox{
+      height:20px;
+      background:rgb(158 219 255);
+      width:20px;
+      margin:0 10px;
+    }
+    .Wfh_day_colorbox {
+      height:20px;
+      background:yellow;
+      width:20px;
+      margin:0 10px;
+    }
+    .Holiday_colorbox{
+      height:20px;
+      background:green;
+      width:20px;
+      margin:0 10px;
+    }
+    .height_100px{
+      height:100px
+    }
+    .bg-acblue{
+      background: aliceblue;
+      border-radius: 12px;
+    }
+    .attandance_heading_bar {
+      border-radius: 12px;
+      margin: 10px;
+      height: 100px;
+      box-shadow: 0 4px 8px #0000001f;
+    }
+
+.holidayimg{
+  width:100%;
+  height:28px;
+}
+
+
+
+    .month1 {
+      display: inline-block;
+      vertical-align: top;
+      margin: 10px 8px;
+      padding: 10px 6px;
+      opacity:0.5;
+      cursor: pointer;
+      height: 260px;
+      box-shadow: 0px 0px 10px #0000001F;
+
+    }
+    .popup>.card1>.table >tbody>tr>th{
+        padding: 10px;
+    }
+    .popup>.card1>.table >tbody>tr>td{
+        padding: 10px 5px;
+    }
+
+    .month1.selected {
+      border: 2px solid #174fa3;
+      opacity:1;
+    }
+    .table-bordered1{
+        border-collapse: collapse; /* Remove cell spacing */
+        margin: auto;
+
+    }
+    .popup {
+        background-color: #fff;
+        padding: 5px;
+        z-index: 9999;
+    }
+
+    table tr.week-row th {
+      color: #fff;
+      background-color: #174fa3;
+      font-weight: 500;
+      padding: 5px;
+
+
+    }
+
+    table td.sunday {
+      color: #fff;
+      background-color: red;
+    }
+
+    .month1 table td.second-saturday,
+    .month1 table td.fourth-saturday {
+      color: #fff;
+      background-color: red;
+    }
+    .card-header1{
+        text-align: center;
+        margin: 10px 0;
+        font-size: 16px;
+
+    }
+    .table-bordered1>tbody>tr>td{
+        text-align: center;
+        padding: 2px 5px;
+    }
+
+    .currentYear{
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) { 
+
+      .attandance_heading_bar {
+          height: 200px;
+      }
+    }
+    @media only screen and (max-device-width : 1380px) { 
+      
+
+
+      .header-day {
+          width: 115px !important;
+      }
+      .leave-status {
+        width: 100%;
+      }
+      .manager-box {
+        margin: 14px;
+
+      }
+      .viewEmpDeetsBtn {
+
+        font-size: 12px;
+      }
+      .leave-days {
+        font-size: 12px;
+      }
+      .radio-div >label {
+        font-size: 12px;
+        cursor:pointer;
+
+      }
+      .leave-reason {
+        font-size: 12px;
+      }
+      .clndr-table .day {
+        font-size: 12px;
+      }
+    }
+    @media only screen and (max-device-width: 1100px){
+      .first-container{
+        display:block;
+      }
+      .header-day {
+          width: 80px !important;
+          font-size: 12px;
+      }
+      .leave-Employee-name {
+        font-size: 12px;
+      }
+      .leave-days {
+        font-size: 12px;
+      }
+      .radio-div >label {
+        font-size: 12px;
+
+      }
+      .leave-reason {
+        font-size: 12px;
+      }
+      .leave-status {
+
+        font-size: 10px;
+      }
+      .leave-date{
+
+        font-size: 10px;
+      }
+      .clndr-table .day {
+        font-size: 12px;
+      }
+
+    }
+
+    @media only screen and (max-device-width: 768px){
+      .first-container{
+        display:block;
+      }
+      .table-bordered1>tbody>tr>td {
+        padding: 2px 4px;
+      }
+      .leave-date{
+
+        font-size: 10px;
+      }
+      .leave-status {
+
+        font-size: 10px;
+      }
+      .header-day {
+        width: 58px !important;
+        font-size: 10px;
+      }
+
+      .leave-Employee-name {
+        font-size: 10px;
+      }
+      .leave-days {
+        font-size: 10px;
+      }
+      .leave-reason {
+        font-size: 10px;
+      }
+      .radio-div >label {
+        font-size: 10px;
+
+      }
+      .header-days {
+
+        top: 25%;
+        left: 5%;
+
+      }
+      .clndr-table .day {
+        font-size: 12px;
+      }
+
+    }
+
+
+
+    tr td {
+      border-bottom: none !important;
+    }
+    .border_box{
+      border:1px solid grey !important;
+      border-bottom: 1px solid grey !important;
+      border-top: 1px solid grey !important;
+    }
+    #prev-year:before {
+      content: "\f0a8";
+      font-family: FontAwesome;
+      font-style: normal;
+      font-size: 18px;
+      cursor:pointer;
+    }
+    #next-year:before {
+      content: "\f0a9";
+      font-family: FontAwesome;
+      font-style: normal;
+      font-size: 18px;
+      cursor:pointer;
+
+    }
+    .selectdrop{
+      width:200px;
+    }
+
+    .progress-section {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    .progress-section .progress-range {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      border: none;
+      border-radius: 10px;
+      height: 10px;
+    }
+    .progress-section .progress-range::-webkit-progress-bar {
+      background-color: #f0f0f0;
+    }
+    .progress-section .progress-range::-webkit-progress-bar,
+    .progress-section .progress-range::-webkit-progress-value {
+      border-radius: 10px;
+    }
+
+    .progress-section .progress1::-webkit-progress-value {
+      background: #56b6ff;
+    }
+      
+
+    @media screen and (min-width: 1000px) and (max-width: 1400px) {
+      /* Your styles for screens with width 1280px and height 720px or smaller */
+      /* Add your CSS rules here */
+      .month1>.card1>.table-bordered1>tbody>tr>td{
+        font-size: 8px !important;
+        font-weight: 400 !important;
+      }
+      .month1>.card1>.table-bordered1>tbody>.week-row>th{
+        font-size:8px;
+      }
+      .month1 {
+            height: 200px;
+      }
+      .inner-text-font-size{
+        font-size:10px;
+      }
+      .inner-date-font-size{
+        font-size:10px;
+      }
+      .inner-date-font-size-wf {
+        font-size: 14px;
+      }
+      #prev-year{
+        cursor:pointer;
+      }
+      #next-year{
+        cursor:pointer;
+      }
+
+      .week_off_colorbox {
+        height: 15px;
+        width: 15px;
+    }
+    .Half_Day_colorbox {
+      height: 15px;
+      width: 15px;
+    }
+    .Wfh_day_colorbox {
+      height: 15px;
+      width: 15px;
+    }
+    .Leave_colorbox {
+      height: 15px;
+    
+      width: 15px;
+    }
+    .Holiday_colorbox {
+      height: 15px;
+      width: 15px;
+    }
+  }
+
+
+  .image-container {
+    align-items: center;
+  }
+
+  .image-list {
+    display: flex;
+    gap: 10px;
+    padding:10px 0px;
+  }
+
+  .image-list img {
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Adding transition effect */
+  }
+
+  .image-list img:hover {
+    transform: scale(1.3); /* Scale up on hover */
+    margin-top: -7.5px;
+
+  }
+
+  .image-selected {
+    border-color: #174fa3 !important;
+    transform: scale(1.3); /* Scale up on hover */
+    margin-top: -7.5px;
+
+
+  }
+  .image-list img:not(:first-child) {
+    margin-left: -21.5px;
+  }
+
+  .modal-footer {
+    border-top: none;
+    justify-content: center;
+  }
+  .form-control {
+    width: 175px;
+
+}
+
+.user_name_atcal {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.infobtn{
+  font-size:18px;
+  color:#174fa3;
+  cursor:pointer;
+}
+.modal-lg {
+  max-width:95%;
+  height:auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.borderdiv{
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  height: 150px;
+  overflow-y: scroll;
+}
+.reastext{
+  color:grey;
+  font-size:14px;
+  padding:4px;
+  word-wrap: break-word;
+
+}
+.lheadlabel{
+  font-size:14px;
+  font-weight:500;
+}
+.parent {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-template-rows: repeat(2, 1fr);
+padding: 2px 0 2px 16px;
+grid-row-gap: 15px;
+}
+.colcontainer{
+  display:table;
+  width:100%;
+}
+.coldiv{
+  display: table-cell;
+}
+
+.div1 { grid-area: 1 / 1 / 2 / 2;padding: 15px 0 0 0; }
+.div2 { grid-area: 1 / 2 / 2 / 3;padding: 15px 0 0 0; }
+.div3 { grid-area: 2 / 1 / 3 / 2;padding: 15px 0 0 0; }
+.div4 { grid-area: 2 / 2 / 3 / 3;padding: 15px 0 0 0; }
+
+
+.activeleavedetails{
+  font-size: 12px;
+  color:grey;
+  font-weight: 500;
+
+}
+.activeleavedetailscolored{
+  color: var(--fc-main);
+  font-weight: 500;
+  font-size: 12px;
+
+}
+.imagediv{
+  width:45px;
+  height:45px;
+  border-radius: 50%;
+  margin:0px 6px;
+}
+.pasthistorycard{
+  background:white;
+  border:1px solid transparent;
+  box-shadow: 0px 4px 8px #00000029;
+  height:600px;
+  border-radius:15px;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+      padding-top: 2px;
+  }
+.select2-container--default .select2-selection--single {
+  height: 40px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+      top: 2px;
+  }
+  .cardheadding {
+      font-size: 18px;
+      font-weight: 500;
+      padding: 8px;
+      padding-bottom: 16px;
+
+
+  }
+  .innercardheading {
+      font-size: 16px;
+      color: grey;
+  }
+  .application_titles{
+      font-size: 12px;
+      color: grey;
+  }
+  .application_values{
+      font-size: 14px;
+      font-weight: 500;
+
+  }
+  .Application_div {
+      border: 1px solid #dadada;
+      margin: 12px;
+      border-radius: 6px;
+      background: #f9f9f9;
+
+  }
+  .Application_reason_div {
+      border: 1px solid #dadada;
+      height: 80px;
+      margin: 12px;
+      border-radius: 6px;
+      color: grey;
+      font-size: 14px;
+      word-wrap: break-word;
+
+  }
+  .pastleaves{
+      overflow-y: auto;
+      height: 500px;
+
+  }
+  .myTrackProScore{
+      cursor: pointer;
+      margin: 0 10px;
+      font-size: 16px;
+
+  }
+  .manager_heading{
+      margin: 0 0 10px 0;
+      font-size:14px;
+  }
+  .manager_reason {
+    padding: 0px 0 0 35px;
+    color: grey;
+    font-size: 12px;
+}
+  .modaltogglebtn {
+      height: 24px;
+      width: 24px;
+  }
+  .ApplicationWithdraw{
+    color: #ff8000;
+  }
+  .ApplicationApproved{
+    color: green;
+  }
+  .ApplicationRejected{
+    color: red;
+  }
+  .ApplicationPending{
+    color: orange;
+  }
+  @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) { 
+    .Activeleavecard{
+      height: 450px;
+      padding: 15px;
+  
+  }
+  .scalable-div{
+    margin: 10px 0px;
+  }
+      
+
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #d1e2fc;
+  border: 1px solid #c9c9c9;
+}
+
+.accordion-button {
+  color: var(--fc-dark);
+  background-color: #f1f8ff;
+}
+.extradays{
+  color: red;
+  font-size: 12px;
+  position: relative;
+  top: -10px;
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_16729" data-name="Group 16729" transform="translate(15216 23399)">
+    <g id="Group_16924" data-name="Group 16924" transform="translate(-3956 -8804)">
+      <g id="Rectangle_10124" data-name="Rectangle 10124" transform="translate(-11260 -14595)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+        <rect width="24" height="24" stroke="none"/>
+        <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+      </g>
+      <path id="delete_FILL0_wght400_GRAD0_opsz48_2_" data-name="delete_FILL0_wght400_GRAD0_opsz48 (2)" d="M10.806,26a1.709,1.709,0,0,1-1.667-1.667V8.5H8.833a.833.833,0,1,1,0-1.667h4.389A.808.808,0,0,1,14.056,6h5.667a.808.808,0,0,1,.833.833h4.389a.833.833,0,1,1,0,1.667h-.306V24.333A1.709,1.709,0,0,1,22.972,26Zm0-17.5V24.333H22.972V8.5ZM13.75,21.111a.833.833,0,1,0,1.667,0V11.694a.833.833,0,1,0-1.667,0Zm4.611,0a.833.833,0,1,0,1.667,0V11.694a.833.833,0,1,0-1.667,0ZM10.806,8.5v0Z" transform="translate(-11265 -14599)" fill="#fb4242"/>
+    </g>
+  </g>
+</svg>

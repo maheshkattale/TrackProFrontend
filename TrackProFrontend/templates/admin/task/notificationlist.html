@@ -1,0 +1,479 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+  Notifications
+</div>
+{% endblock %}
+{% block content %}
+
+<style>
+  .uppercard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  padding :5px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+
+}
+.select2-container--default .select2-selection--single{
+  border:none;
+  border-bottom:1px solid #acacac !important;
+  box-shadow:none !important;
+  border-radius: 0 !important;
+ 
+  background-color: transparent !important;
+
+}
+.heading{
+  color: var(--unnamed-color-888888);
+text-align: left;
+font-size:12px;
+letter-spacing: 0px;
+color: #888888;
+}
+.table-div {
+    background-color: white !important;
+    border-radius: 18px;
+    padding: 20px;
+
+}
+#notfTable>tbody>tr>td{
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 12px !important;
+    font-size:13px;    
+
+}
+#notfTable>thead>tr>th{
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size:13px;   
+    border-top:1px solid  rgba(0, 0, 0, 0.3);
+}
+#notfTable_filter{
+    margin-bottom: 10px;
+  
+}
+
+/* .dataTables_wrapper .dataTables_filter label {
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    margin-left: 3px !important;
+    border-bottom: 1px solid rgb(190, 190, 190) !important;
+    outline: none !important;
+    color: rgb(151, 151, 151) !important;
+
+} */
+
+/* .dataTables_wrapper .dataTables_filter input {
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    margin-left: 3px !important;
+    border-bottom: 1px solid transparent !important;
+    outline: none !important;
+    width: 250px !important;
+
+} */
+
+/* .dataTables_wrapper .dataTables_filter label::after {
+    content: '\f002' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #000 !important;
+    font-size: 18px !important;
+    padding-right: 0.5em !important;
+
+} */
+.dataTables_filter input[type="search"] {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0px !important;
+    margin:0 2px 0 2px !important;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button .active:hover{
+    background-color: #b9f7ff !important;
+    outline-color: #b9f7ff !important;
+    border-color: #b9f7ff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+/* background: white !important;
+border-radius: 6px !important; */
+
+box-sizing: border-box !important;
+display: inline-block !important;
+min-width: 30px !important;
+max-height:30px !important;
+padding: 2px 7px 7px 5px !important;
+margin: 0 0 0 2px !important;
+text-align: center !important;
+text-decoration: none !important;
+cursor: pointer !important;
+color: black !important;
+border: 1px solid rgb(236, 236, 236) !important;
+border-radius: 6px !important;
+background: white !important;
+
+}
+
+.page-link{
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height:30px !important;
+    padding: 5px 7px 7px 4px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+}
+.page-link:hover{
+    color: black !important;
+    background: white !important;
+}
+.page-item.active .page-link {
+
+    color: #9b9b9b !important;
+}
+.previous{
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+}
+.next{
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+}
+
+.previous:after {
+    visibility: visible !important;
+    content: '\f053' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-right: 15px;
+
+}
+.next::before {
+    visibility: visible !important;
+    content: '\f054' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-left: 15px;
+
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+.main-wrapper {
+padding-top:3rem !important;
+}
+
+.pageheading{
+  color: var(---282828);
+text-align: left;
+font-size:18px;
+font-weight:500;
+letter-spacing: 0px;
+color: #282828;
+}
+/* .taskdet{
+  max-width: 20vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+} */
+
+.maindetails{
+  font-weight:500;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  border:none;
+  border-radius: 0px; 
+
+}
+.dataTables_filter input[type="search"] {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  outline:none;
+}
+.notification-action-button{
+  padding: 5px;
+  width: 15%;
+}
+.reason-date-box {
+  border: 1px solid #c2c5c7;
+  padding: 3px;
+  margin-right: 5px;
+  border-radius: 10px;
+  background: #fbfbfb;
+  height: 55px;
+  overflow: auto;
+  word-wrap: break-word;
+  width:100%;
+}
+</style>
+
+    
+    <!-- Main page -> Manage Task -->
+    <main class="main-wrapper">
+      <!-- ==================Row1======================= -->
+      <div class="">
+
+        <div class="row mb-4">
+         
+          <div class="col-md-4">
+            <div class="p-2 pageheading d-none">Notification List</div>
+          </div>
+          <div class="col-md-5">
+         
+          </div>
+         
+          <div class="col-md-3 ">
+            <select id='notftype' name="notftype" class="select2dropdown" onchange="notftypefilter();">
+            <option value="" selected> All Notifications</option>
+              {% for i in notftypelist%}
+              <option value="{{i.id}}">{{i.Type}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          </div>
+        
+        </div>
+
+       <div class="tablecard">
+        <div class="table-div">
+          <table class="row-border w-100"  id="notfTable" >
+              <thead>
+                  <th style="width:10%">
+                   Sr No.
+                  </th>
+                  <th  style="width:10%">
+                     Date
+                  </th>
+                  <th style="width:15%">
+                    Notification Type
+                   </th>
+                  <th>
+                   Notification Msg
+                  </th>
+
+              </thead>
+  
+              <tbody class="notflistbody">
+               
+              </tbody>
+          </table>
+      </div>
+
+       </div> 
+    </main>
+  {%endblock%}{%block script%}{{block.super}}
+
+
+
+  <script>
+
+  $(document).ready(function () {
+
+notftypefilter()
+ $('.input-feild').on("focus", function () {
+ var label = $('label[for=' + this.id + ']');
+ label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+ });
+ 
+ 
+ });
+     
+    function notftypefilter(){
+        var trHTML = "";
+        notiftype = $("#notftype").val();
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'filternotificationslist',
+            data: {
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'notificationtype': notiftype
+            },
+            dataType: 'json',
+            beforeSend: function() {
+            },
+            success: function(response) {
+                console.log("list",response)
+              if (response.response.n==1){
+                    var counter= 1
+                    $.each(response.data, function(i,o){
+                     console.log("0",o)
+
+                    if(o.To_manager == true  && o.action_Taken == false){
+                      if (o.leaveID != 0) {
+
+                      var encrypted_leave_id = btoa(o.leaveID.toString());
+                      var encrypted_id = btoa(o.leaveapprovalid.toString());
+                      var applicationdetailsurl = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+
+                      trHTML+=`
+                      <tr>
+                        <td>`+counter+`</td>
+                        <td >`+o.notfdate+`</td>
+                        <td>`+o.NotificationType+`</td>
+                        <td>
+
+
+                          <div class="notftextdiv">
+                            <div>` +o.NotificationMsg  +`</div>
+                          </div>
+
+                          <div class='reason-date-box overflow-hidden'>
+                            <div class='notfleavereason'>` +o.leavemanager.reason+ `</div>
+                            <div class='leavedate'>`  +o.newleavestartdate+ `  to  ` +o.newleaveenddate+`</div>
+                          </div>
+
+                          <div class="d-flex justify-content-between">
+                            <div class="appdate">`+o.applieddate+ `</div>
+                            <div class="apptime">`+o.appliedtime+ `</div>
+                          </div>
+
+                          <div class='notfleaveactionflex py-0'>
+                            <a class='notfviewbutton notification-action-button'  href="`+applicationdetailsurl+`">View</a>
+  
+                            <div class='notfapprovebutton notification-action-button' data-bs-toggle='modal' data-bs-target='#notfapprovemodal`+o.leaveapprovalid+`'>Approve</div>
+  
+                            <div class='notfrejectbutton notification-action-button' data-bs-toggle='modal' data-bs-target='#notfrejectmodal`+o.leaveapprovalid+`'>Reject</div>
+                          </div>
+
+
+                        </td>   
+                    </tr>`    
+                  }
+                    }
+
+                    else if (o.To_manager == false  && o.action_Taken == false && o.NotificationTitle == 'Working Status'){
+                      var timername='loadingtime'+o.id;
+
+
+                      trHTML += `
+                      <tr>
+                      <td>`+counter+`</td>
+                      <td >`+o.notfdate+`</td>
+                      <td>`+o.NotificationType+`</td>
+                      <td>
+
+                        <div class="notftextdiv">
+                          <div>` +o.NotificationMsg  +`</div>
+                        </div>
+
+
+
+
+  
+
+  
+
+                            ${ o.action_Taken == false
+                              ?`<div id="working_status_actions`+o.id+`" class='d-flex justify-content-left my-2'>
+
+                              <div class='notfapprovebutton notification-action-button' onclick="workingstatus('yes','working_status_actions`+o.id+`','`+o.id+`')">Yes</div>
+                              <div class='notfrejectbutton notification-action-button'  onclick="workingstatus('no','working_status_actions`+o.id+`','`+o.id+`')">No</div>
+
+
+
+
+    
+    
+
+                              </div>
+                            `
+                            :`<div></div>`
+                            }
+
+
+
+
+
+
+                      </td>   
+
+                      </tr>
+                        `
+                    }
+                    
+                    else{
+                      trHTML+=`
+                        <tr>
+                          <td>`+counter+`</td>
+                          <td>`+o.notfdate+`</td>
+                          <td>`+o.NotificationType+`</td>
+                          <td>`+o.NotificationMsg+`</td>   
+
+                        </tr>`    
+                    }
+                    
+
+                        counter += 1
+                    }) 
+
+
+                    initialiseDataTable(trHTML);
+          
+            }
+            else{
+              $(".notflistbody").html('');
+            }
+          }
+            });
+    }
+
+
+    function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('#notfTable')) {
+        $('#notfTable').DataTable().destroy();
+    }
+    $('#notfTable tbody').empty();
+    $(".notflistbody").html(trHTML);
+    var table = $('#notfTable').DataTable({
+   
+        })
+       
+    }
+
+
+
+
+        </script>
+ {%endblock%}

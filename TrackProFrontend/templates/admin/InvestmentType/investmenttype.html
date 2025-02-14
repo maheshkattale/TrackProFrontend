@@ -1,0 +1,902 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+ Investment Type
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+<style>
+  .fa-minus-circle{
+    font-size:22px
+  }
+
+
+#addEmployeeForm input {
+    width: 100%;
+    font-size: 14px;
+    color: black; 
+
+}
+{% comment %} #addEmployeeForm1 input {
+    width: 100%;
+    font-size: 14px;
+    color: black; 
+
+} {% endcomment %}
+.modal-body input {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.modal-body input:focus {
+  outline:none;
+  box-shadow:none;
+}
+.select2-container--default .select2-selection--single {
+    border-bottom: 1px solid rgb(214, 214, 214) !important;
+    border: none;
+    height: 50px;
+    box-shadow: none;
+    border-radius: 0px;
+}
+
+.trackproBtn {
+    width: 150px !important;
+    height: 38px !important;
+    margin: 0px !important;
+}
+.Role-btn{
+    width: 18% !important;
+    height: 31px !important;
+    border-radius: 24px;
+}
+.radiostyle{
+  border:1px solid #000 !important;
+}
+.modal-body select{
+    font-size: var(--f-lg);
+    color: var(--fc-md-dark);
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: transparent;
+    padding-bottom: 8px;
+    margin-top: 6px;
+    margin-bottom: 28px;
+}
+.modal-body select:focus{
+  outline:none;
+  box-shadow:none;
+}
+.centstyle{
+  justify-content: start;
+  display: flex;
+  align-items: end;
+}
+.form-floating .form-control {
+  border: none;
+  border-bottom: 1px solid #ccc;
+   box-shadow: 0 0 10px transparent; 
+  border-radius: 0;
+  background: transparent !important;
+}
+textarea{
+  resize: none;
+}
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+      <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% for message in messages %}
+          <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+    <form  method="POST" id="" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="title-div">
+          <span class="company-title d-none">Investment Type Master</span>
+          <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Add Investment Type</span>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header ps-4">
+                <h5 class="modal-title my-3" id="exampleModalLabel">Add Investment Type</h5>
+              </div>
+              <div class="modal-body">
+                
+
+                    {% comment %} <div class="row my-4 px-4">
+                        <div class="col p-0">
+                            <h2 class="company-title">Investment Type</h2>
+                        </div>
+                    </div> {% endcomment %}
+                    <div id="snackbar"></div>
+                    <form method="POST" id="addEmployeeForm1">
+                      {% csrf_token %}
+                      <div class="row g-4 mb-5">
+                          <div class="col-md-12">
+                              <div class="row mb-3">
+                                  <div class="col-md-4">
+                                    <label for="sectionId">Section<span style="color:red">*</span></label>
+                                    <select id='sectionId' class="select2dropdown" name="sectionId">
+                                      <option value=''>Select Section</option> 
+                                      {%for i in section_list%}
+                                      <option value="{{i.id}}" >{{i.Name}}</option>
+                                      {%endfor%}
+                                    </select>
+                                    <span id="Name_err" class="error"></span>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-floating">
+                                      <input type="text" id="Name" class="form-control" placeholder="Enter Name" name="Name" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                      <label for="Name">Investment Name<span style="color:red;">*</span></label>
+                                      <span id="Nameerror" class="error"></span>
+                                  </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-floating">
+                                      <input type="text" id="NewTaxRegimeApp" class="form-control" placeholder="Enter NewTaxRegimeApp" name="NewTaxRegimeApp" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                      <label for="NewTaxRegimeApp">NewTaxRegimeApp<span style="color:red;">*</span></label>
+                                      <span id="DepartmentNameerror" class="error"></span>
+                                  </div>
+                                  </div>
+                                  
+                              </div>
+                              
+                              <div class="row mb-3">
+                                  <div class="col-md-4">
+                                    <div class="form-floating">
+                                      <input type="text" id="SortOrder" class="form-control" placeholder="Enter SortOrder" name="SortOrder" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                      <label for="SortOrder">SortOrder<span style="color:red;">*</span></label>
+                                      <span id="SortOrdererror" class="error"></span>
+                                  </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-floating">
+                                      <input type="text" id="Invest_TypeCode" class="form-control" placeholder="Enter Invest_TypeCode" name="Invest_TypeCode" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                      <label for="Invest_TypeCode">Invest_TypeCode<span style="color:red;">*</span></label>
+                                      <span id="Invest_TypeCodeerror" class="error"></span>
+                                  </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-floating">
+                                      <input type="text" id="ExemptSection" class="form-control" placeholder="Enter ExemptSection" name="ExemptSection" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                      <label for="ExemptSection">ExemptSection<span style="color:red;">*</span></label>
+                                      <span id="ExemptSectionerror" class="error"></span>
+                                  </div>
+                                  </div>
+                              </div>
+                              <div class="row mb-3">
+                                <div class="col-md-6">
+                                  <div class="form-floating">
+                                    <input type="text" id="Max_limit" class="form-control" placeholder="Enter Max_limit" name="Max_limit" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                    <label for="Max_limit">Investment Max_limit<span style="color:red;">*</span></label>
+                                    <span id="Max_limiterror" class="error"></span>
+                                </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-floating">
+                                    <input type="text" id="Exemption_Limit" class="form-control" placeholder="Enter Exemption_Limit" name="Exemption_Limit" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                    <label for="Exemption_Limit">Exemption limit<span style="color:red;">*</span></label>
+                                    <span id="Exemption_Limiterror" class="error"></span>
+                                </div>
+                                </div>
+                                
+                            </div>
+                              <div class="row mb-3">
+                                <div class="col-md-6">
+                                  <div class="form-floating">
+                                    <textarea type="text" id="Description" class="form-control" placeholder="Enter Description" name="Description" style="height: 100px;" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');"></textarea>
+                                    <label for="Description">Description<span style="color:red;">*</span></label>
+                                    <span id="Descriptionerror" class="error"></span>
+                                  </div>
+                                
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-floating">
+                                    <textarea type="text" id="DocRequired" class="form-control" placeholder="Enter DocRequired" name="DocRequired" style="height: 100px;" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');"></textarea>
+                                    <label for="DocRequired">Document Required<span style="color:red;">*</span></label>
+                                    <span id="DocRequiredrror" class="error"></span>
+                                </div>
+                                </div>
+                                <div class="row mt-5">
+                                <div class="col-md-4 centstyle">
+                                    <div class="form-check">
+                                        <input class="form-check-input radiostyle" type="checkbox" value="" id="InvestmentSingleBatch" name="InvestmentSingleBatch">
+                                        <label class="form-check-label mx-2" for="flexCheckDefault">
+                                          Single Batch
+                                        </label>
+                                      </div>
+                                </div>
+                                <div class="col-md-4 centstyle">
+                                    <div class="form-check">
+                                        <input class="form-check-input radiostyle" type="checkbox" value="" id="No_Projection" name="No_Projection">
+                                        <label class="form-check-label mx-2" for="flexCheckDefault">
+                                          No Projection
+                                        </label>
+                                      </div>
+                                </div>
+                                <div class="col-md-4 centstyle">
+                                  <div class="form-check">
+                                      <input class="form-check-input radiostyle" type="checkbox" value="" id="No_Projection" name="No_Projection">
+                                      <label class="form-check-label mx-2" for="flexCheckDefault">
+                                        Proof Required
+                                      </label>
+                                    </div>
+                              </div>
+                            </div>
+                          </div>
+                            <div class="row mt-5">
+                                 <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input radiostyle" type="checkbox" value="" id="LTA_slabApplicable" name="LTA_slabApplicable">
+                                        <label class="form-check-label mx-2" for="flexCheckDefault">
+                                          LTA Slab Applicable
+                                        </label>
+                                      </div>
+                                </div>
+                                <div class="col-md-4 p-0">
+                                    <div class="form-check">
+                                        <input class="form-check-input radiostyle" type="checkbox" value="" id="HideOnDeclaration" name="HideOnDeclaration">
+                                        <label class="form-check-label mx-2" for="flexCheckDefault">
+                                          Hide On Declaration
+                                        </label>
+                                      </div>
+                                </div> 
+                                <div class="col-md-4 p-0">
+                                  <div class="form-check">
+                                      <input class="form-check-input radiostyle" type="checkbox" value="" id="status" name="status">
+                                      <label class="form-check-label mx-2" for="flexCheckDefault">
+                                        Active
+                                      </label>
+                                    </div>
+                              </div>
+
+                            </div>
+                            
+                          </div>
+                      </div>
+              
+                      {% comment %} <div class="row justify-content-end">
+                          <div class="col-auto">
+                              <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
+                              <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>
+              
+                          </div>
+                          <div class="col-auto">
+                              <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+                          </div>
+                      </div> {% endcomment %}
+                      <div class="modal-footer">
+                          <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails"  onclick="return formValidation();">Submit</button>
+                        </div>
+                  </form>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>        
+
+    </form>
+
+    <div class="table-div">
+        <table id="myTable" class="row-border" style="width:100%">
+          <thead>
+            <tr class="tableHeadings roleTableheadings">
+              <th>Sr. No</th>
+              
+              <th>Investment Name</th>
+              <th>Section</th>
+              <th>Max_limit</th>
+              <th>Proof Required</th>
+              <th>Sort Order</th>
+              <th>Active Status</th> 
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>   
+            {% for i in listInvestment %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              
+              <td>{{i.Name}}</td>
+              <td>{{i.sectionId}}</td>
+              <td>{{i.Max_limit}}</td>
+              <td>{{i.ProofRequired}}</td>
+              <td>{{i.SortOrder}}</td>
+              {% if i.Is_Active == 1 %}
+              <td>Active</td>
+              {%else%}
+              <td>In Active</td>
+              {%endif%}
+              <td>
+                <a data-bs-toggle="modal" data-bs-target="#updateexampleModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" title="Edit"></a> 
+                <a class="edit-center" data-bs-toggle="modal" data-bs-target="#viewexampleModal{{i.id}}"><i class="fa fa-regular fa-eye" title="View"></i></a>
+              </td>
+            </tr>
+            <div class="modal fade" id="updateexampleModal{{i.id}}" tabindex="-1" aria-labelledby="updateexampleModal" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header ps-4">
+                    <h5 class="modal-title my-3" id="updateexampleModal">Update Investment Type</h5>
+                  </div>
+                  <div class="modal-body">
+                    
+      
+                        {% comment %} <div class="row my-4 px-4">
+                            <div class="col p-0">
+                                <h2 class="company-title">Investment Type</h2>
+                            </div>
+                        </div> {% endcomment %}
+                        <div id="addEmployeeForm1">
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-12">
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                          <label for="sectionId">Section<span style="color:red">*</span></label>
+                                          <select id='sectionId{{i.id}}' class="select2dropdown">
+                                            <option value=''>Select Section</option> 
+                                            {% for p in section_list %}
+                                            {% if p.Name == i.sectionId %}
+                                            <option value="{{p.id}}" selected>{{p.Name}}</option>
+                                            {%else%}
+                                            <option value="{{p.id}}" >{{p.Name}}</option>
+                                            {%endif%}
+                                            {% endfor %}
+                                          </select>
+                                          <span id="addEmpRole_err" class="error"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" id="Name{{i.id}}" class="form-control" placeholder="Enter Name" name="Name{{i.id}}" value="{{i.Name}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="Name">Investment Name<span style="color:red;">*</span></label>
+                                            <span id="DepartmentNameerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" id="NewTaxRegimeApp{{i.id}}" class="form-control" placeholder="Enter NewTaxRegimeApp" name="NewTaxRegimeApp{{i.id}}" value="{{i.NewTaxRegimeApp}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="NewTaxRegimeApp">NewTaxRegimeApp<span style="color:red;">*</span></label>
+                                            <span id="DepartmentNameerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" id="SortOrder{{i.id}}" class="form-control" placeholder="Enter SortOrder" name="SortOrder{{i.id}}" value="{{i.SortOrder}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="SortOrder">SortOrder<span style="color:red;">*</span></label>
+                                            <span id="SortOrdererror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" id="Invest_TypeCode{{i.id}}" class="form-control" placeholder="Enter Invest_TypeCode" name="Invest_TypeCode{{i.id}}" value="{{i.Invest_TypeCode}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="Invest_TypeCode">Invest_TypeCode<span style="color:red;">*</span></label>
+                                            <span id="Invest_TypeCodeerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" id="ExemptSection{{i.id}}" class="form-control" placeholder="Enter ExemptSection" name="ExemptSection{{i.id}}" value="{{i.ExemptSection}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="ExemptSection">ExemptSection<span style="color:red;">*</span></label>
+                                            <span id="ExemptSectionerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <input type="text" id="Max_limit{{i.id}}" class="form-control" placeholder="Enter Max_limit" name="Max_limit{{i.id}}" value="{{i.Max_limit}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                          <label for="Max_limit">Investment Max_limit<span style="color:red;">*</span></label>
+                                          <span id="Max_limiterror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <input type="text" id="Exemption_Limit{{i.id}}" class="form-control" placeholder="Enter Exemption_Limit" name="Exemption_Limit{{i.id}}" value="{{i.Exemption_Limit}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                          <label for="Exemption_Limit">Exemption limit<span style="color:red;">*</span></label>
+                                          <span id="Exemption_Limiterror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      
+                                  </div>
+                                    <div class="row mb-3">
+                                      <div class="col-md-6">
+                                        {% comment %} <div class="form-floating">
+                                          <textarea type="text" id="Description{{i.id}}" class="form-control" rows="10" cols="50" placeholder="Enter Description" name="Description{{i.id}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">{{i.Description}}</textarea>
+                                          <label for="Description">Description<span style="color:red;">*</span></label>
+                                          <span id="Descriptionerror" class="error"></span>
+                                      </div> {% endcomment %}
+                                      <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a comment here" id="Description{{i.id}}" style="height: 100px;">{{i.Description}}</textarea>
+                                        <label for="Description">Description<span style="color:red;">*</span></label>
+                                        <span id="Descriptionerror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <textarea type="text" id="DocRequired{{i.id}}" style="height: 100px;" class="form-control" placeholder="Enter DocRequired" name="DocRequired{{i.id}}"oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">{{i.DocRequired}}</textarea>
+                                          <label for="DocRequired">Document Required<span style="color:red;">*</span></label>
+                                          <span id="DocRequiredrror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      <div class="row mt-5">
+                                      <div class="col-md-4 centstyle">
+                                        {% if i.InvestmentSingleBatch == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" id="InvestmentSingleBatch{{i.id}}" name="InvestmentSingleBatch{{i.id}}" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Single Batch
+                                              </label>
+                                            </div>
+                                          {%else%}
+                                          <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" id="InvestmentSingleBatch{{i.id}}" name="InvestmentSingleBatch{{i.id}}" value="">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Single Batch
+                                            </label>
+                                          </div>
+                                          {%endif%}
+                                      </div>
+                                      <div class="col-md-4 centstyle">
+                                        {% if i.No_Projection == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" id="No_Projection{{i.id}}" name="No_Projection{{i.id}}" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                No Projection
+                                              </label>
+                                            </div>
+                                            {%else%}
+                                            <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" id="No_Projection{{i.id}}" name="No_Projection{{i.id}}" value="">
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                No Projection
+                                              </label>
+                                            </div>
+                                            {%endif%}
+                                      </div>
+                                      <div class="col-md-4">
+                                        {% if i.ProofRequired == True%}
+                                        <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" id="ProofRequired{{i.id}}" name="ProofRequired{{i.id}}" value="" checked>
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Proof Required
+                                            </label>
+                                          </div>
+                                          {%else%}
+                                          <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" id="ProofRequired{{i.id}}" name="ProofRequired{{i.id}}" value="">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Proof Required
+                                            </label>
+                                          </div>
+                                          {%endif%}
+                                    </div>
+                                  </div>
+                                </div>
+                                  <div class="row mt-5">
+                                    
+                                       <div class="col-md-4">
+                                        {% if i.LTA_slabApplicable == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" id="LTA_slabApplicable{{i.id}}" name="LTA_slabApplicable" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                LTA Slab Applicable
+                                              </label>
+                                            </div>
+                                            {%else%}
+                                              <div class="form-check">
+                                                  <input class="form-check-input radiostyle" type="checkbox" id="LTA_slabApplicable{{i.id}}" name="LTA_slabApplicable" value="">
+                                                  <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                    LTA Slab Applicable
+                                                  </label>
+                                                </div>
+                                                {% endif %}
+                                      </div>
+                                      <div class="col-md-4">
+                                        {% if i.HideOnDeclaration == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" id="HideOnDeclaration{{i.id}}" name="HideOnDeclaration{{i.id}}" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Hide On Declaration
+                                              </label>
+                                            </div>
+                                            {%else%}
+                                            <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" id="HideOnDeclaration{{i.id}}" name="HideOnDeclaration{{i.id}}" value="">
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Hide On Declaration
+                                              </label>
+                                            </div>
+                                            {%endif%}
+
+                                      </div>
+                                      <div class="col-md-4">
+                                        {% if i.Is_Active == True%}
+                                        <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" id="status{{i.id}}" name="status{{i.id}}" value="" checked>
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Active
+                                            </label>
+                                          </div>
+                                          {%else%}
+                                          <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" id="status{{i.id}}" name="status{{i.id}}" value="">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Active
+                                            </label>
+                                          </div>
+                                          {%endif%}
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                    
+                            {% comment %} <div class="row justify-content-end">
+                                <div class="col-auto">
+                                    <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
+                                    <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>
+                    
+                                </div>
+                                <div class="col-auto">
+                                    <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+                                </div>
+                            </div> {% endcomment %}
+                            <div class="modal-footer">
+                                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                <button onclick="updateinvestment({{i.id}});" class="trackproBtn Role-btn" id="editEmployeeDetails">Submit</button>
+                              </div>
+                            </div>
+                    
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="viewexampleModal{{i.id}}" tabindex="-1" aria-labelledby="viewexampleModal" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header ps-4">
+                    <h5 class="modal-title my-3" id="viewexampleModal{{i.id}}">View Investment Type</h5>
+                  </div>
+                  <div class="modal-body">
+                    
+                        <div id="addEmployeeForm1">
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-12">
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                          <label for="sectionId">Section<span style="color:red">*</span></label>
+                                          <select disabled>
+                                            <option value=''>Select Section</option> 
+                                            {% for p in section_list %}
+                                            {% if p.Name == i.sectionId %}
+                                            <option value="{{p.id}}" selected>{{p.Name}}</option>
+                                            {%else%}
+                                            <option value="{{p.id}}" >{{p.Name}}</option>
+                                            {%endif%}
+                                            {% endfor %}
+                                          </select>
+                                          <span id="addEmpRole_err" class="error"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" class="form-control" placeholder="Enter Name" disabled name="Name{{i.id}}" value="{{i.Name}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="Name">Investment Name<span style="color:red;">*</span></label>
+                                            <span id="DepartmentNameerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" class="form-control" disabled placeholder="Enter NewTaxRegimeApp" name="NewTaxRegimeApp{{i.id}}" value="{{i.NewTaxRegimeApp}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="NewTaxRegimeApp">NewTaxRegimeApp<span style="color:red;">*</span></label>
+                                            <span id="DepartmentNameerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" class="form-control" disabled placeholder="Enter SortOrder" name="SortOrder{{i.id}}" value="{{i.SortOrder}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="SortOrder">SortOrder<span style="color:red;">*</span></label>
+                                            <span id="SortOrdererror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" class="form-control" disabled placeholder="Enter Invest_TypeCode" name="Invest_TypeCode{{i.id}}" value="{{i.Invest_TypeCode}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="Invest_TypeCode">Invest_TypeCode<span style="color:red;">*</span></label>
+                                            <span id="Invest_TypeCodeerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="form-floating">
+                                            <input type="text" class="form-control" disabled placeholder="Enter ExemptSection" name="ExemptSection{{i.id}}" value="{{i.ExemptSection}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                            <label for="ExemptSection">ExemptSection<span style="color:red;">*</span></label>
+                                            <span id="ExemptSectionerror" class="error"></span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <input type="text" class="form-control" placeholder="Enter Max_limit" disabled name="Max_limit{{i.id}}" value="{{i.Max_limit}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                          <label for="Max_limit">Investment Max_limit<span style="color:red;">*</span></label>
+                                          <span id="Max_limiterror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <input type="text" class="form-control" disabled placeholder="Enter Exemption_Limit" name="Exemption_Limit{{i.id}}" value="{{i.Exemption_Limit}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                          <label for="Exemption_Limit">Exemption limit<span style="color:red;">*</span></label>
+                                          <span id="Exemption_Limiterror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      
+                                  </div>
+                                    <div class="row mb-3">
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <textarea type="text" class="form-control" disabled placeholder="Enter Description" name="Description{{i.id}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">{{i.Description}}</textarea>
+                                          <label for="Description">Description<span style="color:red;">*</span></label>
+                                          <span id="Descriptionerror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-floating">
+                                          <input type="text" class="form-control" disabled placeholder="Enter DocRequired" name="DocRequired{{i.id}}"  value="{{i.DocRequired}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                                          <label for="DocRequired">Document Required<span style="color:red;">*</span></label>
+                                          <span id="DocRequiredrror" class="error"></span>
+                                      </div>
+                                      </div>
+                                      <div class="row mt-5">
+                                      <div class="col-md-4 centstyle">
+                                        {% if i.InvestmentSingleBatch == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" disabled name="InvestmentSingleBatch{{i.id}}" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Single Batch
+                                              </label>
+                                            </div>
+                                          {%else%}
+                                          <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" disabled name="InvestmentSingleBatch{{i.id}}" value="">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Single Batch
+                                            </label>
+                                          </div>
+                                          {%endif%}
+                                      </div>
+                                      <div class="col-md-4 centstyle">
+                                        {% if i.No_Projection == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" disabled  name="No_Projection{{i.id}}" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                No Projection
+                                              </label>
+                                            </div>
+                                            {%else%}
+                                            <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" disabled  name="No_Projection{{i.id}}" value="">
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                No Projection
+                                              </label>
+                                            </div>
+                                            {%endif%}
+                                      </div>
+                                      <div class="col-md-4">
+                                        {% if i.ProofRequired == True%}
+                                        <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" disabled  name="ProofRequired{{i.id}}" value="" checked>
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Proof Required
+                                            </label>
+                                          </div>
+                                          {%else%}
+                                          <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" disabled  name="ProofRequired{{i.id}}" value="">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Proof Required
+                                            </label>
+                                          </div>
+                                          {%endif%}
+                                    </div>
+                                  </div>
+                                </div>
+                                  <div class="row mt-5">
+                                    
+                                       <div class="col-md-4">
+                                        {% if i.LTA_slabApplicable == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" disabled  name="LTA_slabApplicable" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                LTA Slab Applicable
+                                              </label>
+                                            </div>
+                                            {%else%}
+                                              <div class="form-check">
+                                                  <input class="form-check-input radiostyle" type="checkbox" disabled  name="LTA_slabApplicable" value="">
+                                                  <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                    LTA Slab Applicable
+                                                  </label>
+                                                </div>
+                                                {% endif %}
+                                      </div>
+                                      <div class="col-md-4">
+                                        {% if i.HideOnDeclaration == True%}
+                                          <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" disabled  name="HideOnDeclaration{{i.id}}" value="" checked>
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Hide On Declaration
+                                              </label>
+                                            </div>
+                                            {%else%}
+                                            <div class="form-check">
+                                              <input class="form-check-input radiostyle" type="checkbox" disabled  name="HideOnDeclaration{{i.id}}" value="">
+                                              <label class="form-check-label mx-2" for="flexCheckDefault">
+                                                Hide On Declaration
+                                              </label>
+                                            </div>
+                                            {%endif%}
+
+                                      </div>
+                                      <div class="col-md-4">
+                                        {% if i.Is_Active == True%}
+                                        <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox"  disabled  name="status{{i.id}}" value="" checked>
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Active
+                                            </label>
+                                          </div>
+                                          {%else%}
+                                          <div class="form-check">
+                                            <input class="form-check-input radiostyle" type="checkbox" disabled  name="status{{i.id}}" value="">
+                                            <label class="form-check-label mx-2" for="flexCheckDefault">
+                                              Active
+                                            </label>
+                                          </div>
+                                          {%endif%}
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                    
+                            {% comment %} <div class="row justify-content-end">
+                                <div class="col-auto">
+                                    <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
+                                    <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>
+                    
+                                </div>
+                                <div class="col-auto">
+                                    <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+                                </div>
+                            </div> {% endcomment %}
+                            <div class="modal-footer">
+                                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                {% comment %} <button onclick="updateinvestment({{i.id}});" class="trackproBtn Role-btn" id="editEmployeeDetails">Submit</button> {% endcomment %}
+                              </div>
+                            </div>
+                    
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </tbody>                 
+        </table>
+      </div>
+
+    
+      
+   
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $("#addEmpRole").select2();
+        $("#addEmpRole1").select2();
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+
+
+    function formValidation(){
+
+        var DesignationName = $('#DesignationName').val().trim();   
+      
+        if (IsValid(DesignationName)) {
+          $('#DesignationNameerror').show().delay(3000).slideUp();
+          $('#DesignationNameerror').html('Designation Name  is required');
+          $('#DesignationName').focus();
+          return false;
+      }
+      }
+
+      function updateinvestment(id) {
+         
+        var sectionId = $('#sectionId'+id).val();
+        var Name = $('#Name'+id).val();
+        var Description = $('#Description'+id).val();
+        var Max_limit = $('#Max_limit'+id).val();
+        var ProofRequired = $('#ProofRequired'+id).is(':checked');
+        var Exemption_Limit = $('#Exemption_Limit'+id).val();
+        var DocRequired = $('#DocRequired'+id).val();
+        var InvestmentSingleBatch = $('#InvestmentSingleBatch'+id).is(':checked');
+        var SortOrder = $('#SortOrder'+id).val();
+        var Invest_TypeCode = $('#Invest_TypeCode'+id).val();
+        var ExemptSection = $('#ExemptSection'+id).val();
+        var No_Projection = $('#No_Projection'+id).is(':checked');
+        var HideOnDeclaration = $('#HideOnDeclaration'+id).is(':checked');
+        var NewTaxRegimeApp = $('#NewTaxRegimeApp'+id).val();
+        var LTA_slabApplicable = $('#LTA_slabApplicable'+id).is(':checked');
+        var status = $('#status'+id).is(':checked');
+        
+         
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "/investment-type/update-investment",
+            data: {
+                'sectionId': sectionId,
+                'Name': Name,
+                'Description':Description,
+                'Max_limit':Max_limit,
+                'ProofRequired':ProofRequired,
+                'Exemption_Limit':Exemption_Limit,
+                'DocRequired':DocRequired,
+                'InvestmentSingleBatch':InvestmentSingleBatch,
+                'SortOrder':SortOrder,
+                'Invest_TypeCode':Invest_TypeCode,
+                'ExemptSection':ExemptSection,
+                'No_Projection':No_Projection,
+                'HideOnDeclaration':HideOnDeclaration,
+                'NewTaxRegimeApp':NewTaxRegimeApp,
+                'LTA_slabApplicable':LTA_slabApplicable,
+                'status':status,
+                'id':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {         
+                console.log("reps",response)
+                if(response.data.n == 1){
+                    window.location = frontendURL + "/investment-type/investment-list";
+                }else{
+                    window.location = frontendURL + "/investment-type/investment-list";
+                }
+                
+            }
+        });
+        }
+</script>
+{% endblock %}

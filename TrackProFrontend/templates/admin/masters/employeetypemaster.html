@@ -1,0 +1,329 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Employee Type Master
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+  .fa-minus-circle{
+    font-size:22px
+  }
+  .savebtn {
+    background: #00a1ff !important;
+    padding: 5px 25px !important;
+    margin: 0px !important;
+    border-radius: 24px !important;
+    font-size: 15px !important;
+    color: white !important;
+    text-align: center;
+    border: none;
+}
+.del-icon{
+  cursor:pointer;
+}
+
+.modal-body label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #174fa3;
+}
+.modal-body input {
+    width: 100%;
+    font-size: 16px;
+    color: #5f5b5b;
+    border: none;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: transparent;
+    height: 30px;
+    transition: border 0.4s ease;
+    margin-bottom:12px;
+}
+.modal-body input:focus{
+    width: 100%;
+    font-size: 16px;
+    color: #5f5b5b;
+    border: none;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    background: transparent;
+    height: 30px;
+    transition: border 0.4s ease;
+    margin-bottom:12px;
+    outline:none;
+}
+.currentmonth{
+  color:Green;
+}
+#calendarIcon {
+
+  bottom: 30px;
+  right: 30px;
+}
+
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+
+ 
+     
+
+        <div class="table-div">
+            <table id="myTable" class="row-border w-100" >
+              <thead>
+                <tr class="">
+                  <th style="width:10%" class="">Sr. No</th>
+                  <th style="width:80%" class="">Employee Type</th>
+                  <th style="width:10%" class="">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%for i in employeetypes %}
+
+                <tr>
+                  <td>{{forloop.counter}}</td>
+
+                  <td>{{i.employeetype}}</td>
+                  <td>
+                      <a class="viewEmpDeetsBtn" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updatemodal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>   
+                      <a class="px-1 deleteholbtn" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#deletemodal{{i.id}}"><img class="del-icon" src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+                    
+                  </td>
+              </tr>
+              {%endfor%}
+              </tbody>                 
+            </table>
+        </div>
+  
+        <div class="modal fade" id="addmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+              <form class="formstyle" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+              <div class="modal-header ps-4">
+                <h5 class="modal-title py-2" id="exampleModalLabel">Add Employee Type</h5>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-12 px-4" style="position:relative;">
+                      <label for="employeetype">Employee Type<span style="color:red;">*</span></label>
+                        <input type="text" class="" id="employeetype" value=""  name="employeetype"  placeholder="Enter Employee Type">
+                        <span id="employeetypeerror" class="error"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="trackproBtn" id="addEmployeeBtn"  onclick="return formValidation();">Submit</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+
+
+    {% for i in employeetypes %}
+    <div class="modal fade" id="updatemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Update Employee Type</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+
+              <div class="col-12 px-4">
+                  <label for="updateemployeetype{{i.id}}">Employee Type</label>
+                  <input type="text" class="" id="updateemployeetype{{i.id}}" value="{{i.employeetype}}">
+                  <span id="updateemployeetypeerror{{i.id}}" class="error-message"></span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="addEmployeeBtn" onclick="updateemployeetype({{i.id}})">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="deletemodal{{i.id}}"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+            Are you sure you want to delete?
+            </div>
+            <div class="modal-footer">
+              <a href="javascript:void(0)" onclick="delete_employeetype({{i.id}})" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+<li><a data-bs-toggle="modal" data-bs-target="#addmodal">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Employee Type"
+  src="{% static 'assets/svg/assigntaskicon.svg' %}">
+</a></li>
+{% endblock %}
+
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+
+        $("#Date").datepicker({ 
+          dateFormat: 'dd-mm-yy',
+          changeYear:true,
+          changeMonth: true,
+      });
+      $(".updateholiday_date").datepicker({ 
+          dateFormat: 'dd-mm-yy',
+          changeYear:true,
+          changeMonth: true,
+      });
+
+
+      
+    });
+
+    function formValidation(){
+
+       
+     
+        var employeetype = $('#employeetype').val().trim();   
+
+       
+        if(IsValid(employeetype)) {
+          $('#employeetype').html('');
+          $('#employeetypeerror').show().delay(3000).slideUp();
+          $('#employeetypeerror').html('employee type is required');
+          $('#employeetype').focus();
+          return false;
+        }
+       
+    }
+
+
+
+    function updateemployeetype(id) {
+         
+        var employeetype = $('#updateemployeetype'+id).val().trim();   
+
+        if(IsValid(employeetype)) {
+          $('#updateemployeetype'+id).html('');
+          $('#updateemployeetypeerror'+id).show().delay(3000).slideUp();
+          $('#updateemployeetypeerror'+id).html('employee type is required');
+          $('#updateemployeetype'+id).focus();
+          return false;
+        }else{
+
+          $.ajax({
+              type: "POST",
+              url: frontendURL + "updateemployeetype",
+              data: {
+                  'id':id,
+                  'employeetype':employeetype,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+              },
+              success: function (response) {         
+                  console.log("reps",response)
+                  if(response.n == 1){
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                        }).then(() => {
+                          // Code to execute after the user closes the SweetAlert dialog
+                          location.reload(); // Reload the page
+                        });
+                  }else{
+                    swal({
+                        icon: "error",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                        }).then(() => {
+                          // Code to execute after the user closes the SweetAlert dialog
+                          location.reload(); // Reload the page
+                        });
+                    
+                }
+                  
+              }
+          });
+        }
+    }
+
+
+
+    function delete_employeetype(id) {
+        var id = id;
+        
+          $.ajax({
+              type: "POST",
+              url: frontendURL + "delete_employeetype",
+              data: {
+                  'id':id,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+              },
+              success: function (response) {         
+                  console.log("response",response)
+                  if(response.n == 1){
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                        }).then(() => {
+                          // Code to execute after the user closes the SweetAlert dialog
+                          location.reload(); // Reload the page
+                        });
+                  }else{
+                    swal({
+                        icon: "error",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                        }).then(() => {
+                          // Code to execute after the user closes the SweetAlert dialog
+                          location.reload(); // Reload the page
+                        });
+                    
+                }
+                  
+              }
+          });
+        
+      }
+</script>
+{% endblock %} 

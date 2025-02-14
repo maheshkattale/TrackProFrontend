@@ -1,0 +1,2724 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+ Apply Leave
+</div>
+{% endblock %}
+{% block content %}
+
+
+
+
+
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/apply_leave.css' %}">
+<style>
+  label{
+    font-size: 14px !important;
+  }
+  .custom-select-feild {
+    width: 100% !important;
+    border: 1px solid #cacaca !important;
+    padding: 10px;
+    color: #343434 !important;
+    text-transform: capitalize;
+    border-radius: 6px;
+    margin: 5px 0 !important;
+    outline: none;
+    font-size: 14px !important;
+}
+.balance_leave_div{
+    align-content: center;
+    padding: 20px 0 0 0;
+    font-size: 14px;
+}
+
+.calender-icon-div{
+  height: 0px;
+}
+.calendarIcon-img {
+    height: 18px;
+    width: 18px;
+    background-size: cover;
+    filter: invert(0) grayscale(1);
+    position: relative;
+    top: -40px;
+    left: 80%;
+    cursor: pointer;
+}
+.modalClose{
+  font-size: 14px;
+}
+</style>
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div id="snackbar"></div>
+      
+  <div class="title-div ">
+          
+   
+
+    <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered w-25">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+            <h5 class="modal-title" id="exampleModalLabel"> New Application</h5>
+          </div>
+            <div class="modal-body">
+              <div class="row">
+
+                  <div class="col-12 px-4 pt-2">
+                    <label for="Type">Select Type</label>
+                    <select class="input-feild select2dropdown" id="Type">
+                      <option value="" selected disabled>Select Type</option>
+                      <option value="1">Apply for leave</option>
+                      <option value="2">Apply for Work from home</option>
+                    </select>
+                    <span class="error" id="Type_err"></span>
+                    <input type="text" id="WFH" value="False" hidden/>
+                  </div>
+                
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="Role-btn" onclick="modalopen();" id="addEmployeeBtn" >Submit</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="ApplyLeave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered width-applyleave">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: center !important;">
+            <h5 class="modal-title" id="exampleModalLabel"> Apply For Leave</h5>
+          </div>
+            <div class="modal-body pb-0">
+              <div class="row p-2">
+
+                
+                <div class="col-lg-3">
+                  <label class="m-0 p-0" for="leavetype">Leave Type</label>
+                  <select name="leavetype" id="leavetype" class="custom-select-feild">
+                    {% for leavetype in leavetypes %}
+                      <option value="{{leavetype.id}}">{{leavetype.TypeName}}</option>
+                    {%endfor%}
+                  </select>
+                  
+                  <span class="error" id="leavetype_error"></span>
+
+                </div>
+                <div class="col-lg-3 balance_leave_div">
+                  <span><span>Balance Leave :</span><span id="balance_leave"> 5</span></span>
+                </div>
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-3">
+                  <label class="m-0 p-0" for="start_date">From</label>
+                  <input type="text" placeholder="Choose Date" id="start_date" name="start_date" autocomplete="off" class="custom-select-feild" readonly>
+                  <div class="calender-icon-div"> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('start_date');" /></div>
+                  <span class="error" id="start_date_error"></span>
+                </div>
+                <div class="col-lg-3">
+                  <label class="m-0 p-0" for="StartDayLeaveType">Day Type</label>
+                  <select name="StartDayLeaveType" id="StartDayLeaveType" class="custom-select-feild">
+                      <option value="FirstHalf">First Half</option>
+                      <option value="SecondHalf">Second Half</option>
+                      <option value="Fullday">Full day</option>
+                  </select>
+                  <span class="error" id="StartDayLeaveType_error"></span>
+
+                </div>
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-3">
+                </div>
+                <div class="col-lg-3">
+                  <label for="end_date" class="m-0 p-0">To</label>
+                  <input type="text" placeholder="Choose Date" id="end_date"  name="end_date" autocomplete="off" class="custom-select-feild" readonly>
+                  <div class="calender-icon-div">
+                    <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('end_date');" />
+                  </div>
+                  <span class="error" id="end_date_error"></span>
+        
+                </div>
+                <div class="col-lg-3">
+                  <label class="m-0 p-0" for="EndDayLeaveType">Day Type</label>
+                  <select name="EndDayLeaveType" id="EndDayLeaveType" class="custom-select-feild">
+                      <option value="FirstHalf">First Half</option>
+                      <option value="SecondHalf">Second Half</option>
+                      <option value="Fullday">Full day</option>
+                  </select>
+                  <span class="error" id="EndDayLeaveType_error"></span>
+
+                </div>
+                <div class="col-lg-3">
+                  <label class="m-0 p-0" for="totaldays">Total Days</label>
+                  <input type="text" placeholder="" id="totaldays"   name="totaldays" autocomplete="off" class="custom-select-feild" disabled value="2">
+        
+                </div>
+                <div class="col-lg-3">
+                </div>
+        
+                <span  class="error" id="leavefunctionerror"></span>
+                <div class="col-lg-12 my-3">
+                  <p class="label-title"> I Want To Inform</p>
+                  <div class="d-flex border-bottom">
+                    <div class="my-managers-title">
+                      <span> My Managers</span>
+                    </div>
+                    {%for manager in managerlist%}
+                    <div class="my-auto">
+                      <span class="manager-box" data-bs-toggle="tooltip" title="{{manager.Firstname}} {{manager.Lastname}} ">{{manager.position}} ) {{manager.Firstname}} {{manager.Lastname}}</span>
+                    </div>
+                    {%endfor%}
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <label for="reason">Reason:</label>
+                  <textarea type="text" id="reason" name="reason" autocomplete="off" class="custom-select-feild" placeholder="Please explain the application reason in detail (minimum 150 characters)"></textarea>
+                <span class="error" id="reason_error"></span>
+        
+                </div>
+                <div class="col-lg-12">
+                  <label class="m-0 p-0" for="leave_attachment">Attach File</label>
+                  <input type="file" onchange="validateFile(this)" id="leave_attachment" name="leave_attachment" autocomplete="off" class="w-100 mb-0" style="border: none;">
+                  <span class="error" id="leave_attachment_error"></span>
+                </div>
+
+                
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="w-100 d-flex justify-content-center">
+                <button type="button" class="Role-btn modalClose mx-4" data-bs-dismiss="modal">Close</button>
+                <button class="Role-btn btn border btn-light mx-0" onclick="validation('Draft');"  id="" >Save</button>
+                <button class="Role-btn mx-4" onclick="validation('Normal');"  id="addEmployeeBtn" >Submit</button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="WorkFromHome" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header ps-4 " style="padding-top:15px !important; justify-content: start !important;">
+            <h5 class="modal-title" id="exampleModalLabel"> Apply For WFH</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row p-2">
+              <div class="col-lg-6">
+                <span class="label-title"> Application Status</span>
+                <span class="d-flex radio-div py-2">
+                <input type="radio" id="wfhNormal" name="wfhleavestatus"  value="Normal">
+                <label for="wfhNormal">Normal</label>
+                <input type="radio" id="wfhDraft" name="wfhleavestatus" value="Draft">
+                <label for="wfhDraft">Draft</label>
+                </span>
+                <span class="error" id="wfhleavestatus_error"></span>
+
+              </div>
+              <div class="col-lg-6">
+                <span class="label-title"> WFH Type</span>
+                <span class="d-flex radio-div py-2">
+                <input type="radio" id="WFHFullday" onchange="WFHcheckleavetype();" name="WFHleavetype" value="Fullday">
+                <label for="WFHFullday">Full day</label>
+                <input type="radio" id="WFHfirsthalf" onchange="WFHcheckleavetype();" name="WFHleavetype" value="FirstHalf">
+                <label for="WFHfirsthalf">First Half</label>
+                <input type="radio" id="WFHsecondhalf" onchange="WFHcheckleavetype();" name="WFHleavetype" value="SecondHalf">
+                <label for="WFHsecondhalf">Second Half</label>
+                </span>
+                <span class="error" id="WFHleavetype_err"></span>
+              </div>
+
+
+
+              <div class="col-lg-6">
+                <label class="m-0 p-0" for="WFHsdate">From:</label>
+                <input type="text" id="WFHsdate" onchange="WFHleavedate();" placeholder="Enter start date"  name="WFHsdate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                <div> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('WFHsdate');"/></div>
+                <span class="error" id="WFHsdate_error"></span>
+
+              </div>
+              
+                <div class="col-lg-6">
+                  <label for="WFHedate" class="m-0 p-0">To:</label>
+                  <input type="text" id="WFHedate" onchange="WFHleavedate();" placeholder="Enter end date" name="WFHedate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                  <div> <img class="calendarIcon-img" src="{% static 'Media/Employee_Master/calendarLogo.svg' %}" onclick="toggledate('WFHedate');"/></div>
+                  <span class="error" id="WFHedate_error"></span>
+
+                </div>
+                <span  class="error" id="WFHleavefunctionerror"></span>
+
+                <div class="col-lg-12 my-3 ">
+                  <p class="label-title"> I Want To Inform</p>
+                  <div class="d-flex border-bottom">
+                    <div class="my-managers-title">
+                      <span> My Managers</span>
+                    </div>
+                    {%for manager in managerlist%}
+                      <div class="my-auto">
+                        <span class="manager-box">{{manager.position}} ) {{manager.Firstname}} {{manager.Lastname}}</span>
+                      </div>
+                    {%endfor%}
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <label class="m-0 p-0" for="wfh_attachment">Attach File</label>
+                  <input type="file" onchange="validateFile(this)" id="wfh_attachment" name="wfh_attachment" autocomplete="off" class="input-feild">
+                  <span class="error" id="wfh_attachment_error"></span>
+                </div>
+                <div class="col-12">
+                  <label for="WFHreason">Reason:</label>
+                  <textarea type="text" id="WFHreason" name="WFHreason" autocomplete="off" class="input-feild" placeholder="Please explain the application reason in detail (minimum 150 characters)"></textarea>
+                  <span class="error" id="WFHreason_error"></span>
+                </div>
+
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-50 justify-content-center">
+              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button class="Role-btn" onclick="WFHApplyleave();"  id="addEmployeeBtn" >Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="leads-div">
+    
+    
+      <ul class="nav nav-pills mb-3 overflow-auto" id="pills-tab" role="tablist">
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link active" id="pills-draft-tab" data-bs-toggle="pill" data-bs-target="#pills-draft" type="button" role="tab" aria-controls="pills-draft" aria-selected="true">Draft Application</button>
+        </li>
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-pending-tab" data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab" aria-controls="pills-pending" aria-selected="false">Pending Application</button>
+        </li>
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-approved-tab" data-bs-toggle="pill" data-bs-target="#pills-approved" type="button" role="tab" aria-controls="pills-approved" aria-selected="false">Approved Application</button>
+        </li>
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">Rejected Application</button>
+        </li>
+        <li class="nav-item p-0 m-0" role="presentation">
+          <button class="nav-link" id="pills-withdraw-tab" data-bs-toggle="pill" data-bs-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Withdraw Application</button>
+        </li>
+      </ul>
+
+
+      <div class="tab-content" id="pills-tabContent">
+
+
+        <div class="tab-pane fade show active" id="pills-draft" role="tabpanel" aria-labelledby="pills-draft-tab" tabindex="0">
+            <div class="row">
+              {% for i in Draft_list %}
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+    
+                        <div id="card" class="card text-start h-100">
+    
+                            <div class="card-header head d-flex justify-content-between align-items-center">
+                                <span>                                   
+                                    <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                    <span class="card-header-txt">Draft</span> 
+                                </span>
+                                <span class="d-flex justify-content-end">
+                                  <span class="text-left">                                   
+                                    <span class="card-header-txt">Application Date </span><br>
+                                    <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                                  </span>
+                                  <span>
+
+
+
+                                      <div class="dropdown">
+ 
+                                        <span class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none">
+                                            <path d="M13.9955 23.8334C13.6093 23.8334 13.2802 23.6959 13.0079 23.4209C12.7357 23.146 12.5996 22.8154 12.5996 22.4293C12.5996 22.0431 12.7371 21.714 13.0121 21.4417C13.287 21.1695 13.6176 21.0334 14.0038 21.0334C14.3899 21.0334 14.7191 21.1709 14.9913 21.4459C15.2635 21.7209 15.3996 22.0514 15.3996 22.4376C15.3996 22.8237 15.2621 23.1529 14.9871 23.4251C14.7122 23.6973 14.3816 23.8334 13.9955 23.8334ZM13.9955 15.9001C13.6093 15.9001 13.2802 15.7626 13.0079 15.4876C12.7357 15.2126 12.5996 14.8821 12.5996 14.4959C12.5996 14.1098 12.7371 13.7806 13.0121 13.5084C13.287 13.2362 13.6176 13.1001 14.0038 13.1001C14.3899 13.1001 14.7191 13.2376 14.9913 13.5126C15.2635 13.7875 15.3996 14.1181 15.3996 14.5042C15.3996 14.8904 15.2621 15.2195 14.9871 15.4917C14.7122 15.764 14.3816 15.9001 13.9955 15.9001ZM13.9955 7.96675C13.6093 7.96675 13.2802 7.82926 13.0079 7.55427C12.7357 7.27931 12.5996 6.94875 12.5996 6.56261C12.5996 6.17648 12.7371 5.8473 13.0121 5.57508C13.287 5.30286 13.6176 5.16675 14.0038 5.16675C14.3899 5.16675 14.7191 5.30424 14.9913 5.57922C15.2635 5.85419 15.3996 6.18474 15.3996 6.57089C15.3996 6.95702 15.2621 7.28619 14.9871 7.55841C14.7122 7.83064 14.3816 7.96675 13.9955 7.96675Z" fill="#8F9597"/>
+                                          </svg>
+                                        </span>
+
+
+                                          <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton1">
+
+
+                                            <li><span class="dropdown-item" title="Edit"  data-bs-toggle="modal" data-bs-target="#draftmodal{{i.id}}" onclick="durationfunct('{{i.id}}');"><i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> </span>
+                                            </li>
+                                            <li><span class="dropdown-item" title="Delete"   data-bs-toggle="modal"  data-bs-target="#draftdeletemodal{{i.id}}"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                                            </li>
+                                            <li><span class="dropdown-item" title="Apply"   data-bs-toggle="modal" data-bs-target="#applymodal{{i.id}}"><i class="fa fa-solid fa-paper-plane text-success" aria-hidden="true"></i></span>
+                                            </li>
+
+                                            {% if i.attachment is not None  %}
+                                              <li><span class="dropdown-item" title="Attachment"   data-bs-toggle="modal" data-bs-target="#attachmentmodal{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                                              </li>                
+                                          {% endif %}
+
+
+
+                                            </ul>
+
+                                        </ul>
+                                      </div>
+                                  </span>
+                                </span>
+                            </div>
+    
+                            <div class="card-body">
+    
+                                <div class="row">
+    
+    
+    
+
+                                  <div class="col-lg-12">
+                                    <div class="card-header head d-flex justify-content-between p-0">
+                                        <span>                                   
+                                            <span class="card-header-txt">From</span><br>
+                                            <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                        </span>
+                                        <span class="d-flex justify-content-between">
+                                            <span>                                   
+                                              <span class="card-header-txt">To</span><br>
+                                              <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                            </span>
+    
+    
+                                        </span>
+                                        <span>                                   
+                                          <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                          <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                        </span>
+                                    </div>
+    
+                                  </div>
+    
+                                  <div class="col-lg-12">
+                                    <div class="card-header p-0">
+
+                                    <span class="card-header-txt">Reason :</span><br>
+
+                                    <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                    </div>
+                                  </div>
+    
+
+
+                                </div>
+    
+                            </div>
+
+                            <div class="card-footer cardfooter mt-auto">
+                              <div class="row">
+
+                                <div class="col-lg-12 conclusion-box my-2">
+                                  <div  class="py-2 d-flex justify-content-between">
+                                    <span class="card-header-txt py-1" style="display: flex; align-items: center;">This application is in Draft.</span>  
+                                    <span class="managers-imgs">
+
+
+
+
+                                    </span>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+    
+    
+                        </div>
+    
+                    </div>
+                    <div class="modal fade" id="attachmentmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+    
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+    
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+              {%empty%}
+                <div class="noappdiv">
+                  <div class="text-center py-4 ">No Applications Recieved!</div>
+                </div>
+
+                
+              
+              {%endfor%}
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab" tabindex="0">
+          <div class="row">
+
+            {% for i in pending_list %}
+
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+    
+                  <div id="card" class="card text-start h-100">
+
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                              </span>
+                              <span>
+
+
+
+                                  <div class="dropdown">
+
+                                    <span class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none">
+                                        <path d="M13.9955 23.8334C13.6093 23.8334 13.2802 23.6959 13.0079 23.4209C12.7357 23.146 12.5996 22.8154 12.5996 22.4293C12.5996 22.0431 12.7371 21.714 13.0121 21.4417C13.287 21.1695 13.6176 21.0334 14.0038 21.0334C14.3899 21.0334 14.7191 21.1709 14.9913 21.4459C15.2635 21.7209 15.3996 22.0514 15.3996 22.4376C15.3996 22.8237 15.2621 23.1529 14.9871 23.4251C14.7122 23.6973 14.3816 23.8334 13.9955 23.8334ZM13.9955 15.9001C13.6093 15.9001 13.2802 15.7626 13.0079 15.4876C12.7357 15.2126 12.5996 14.8821 12.5996 14.4959C12.5996 14.1098 12.7371 13.7806 13.0121 13.5084C13.287 13.2362 13.6176 13.1001 14.0038 13.1001C14.3899 13.1001 14.7191 13.2376 14.9913 13.5126C15.2635 13.7875 15.3996 14.1181 15.3996 14.5042C15.3996 14.8904 15.2621 15.2195 14.9871 15.4917C14.7122 15.764 14.3816 15.9001 13.9955 15.9001ZM13.9955 7.96675C13.6093 7.96675 13.2802 7.82926 13.0079 7.55427C12.7357 7.27931 12.5996 6.94875 12.5996 6.56261C12.5996 6.17648 12.7371 5.8473 13.0121 5.57508C13.287 5.30286 13.6176 5.16675 14.0038 5.16675C14.3899 5.16675 14.7191 5.30424 14.9913 5.57922C15.2635 5.85419 15.3996 6.18474 15.3996 6.57089C15.3996 6.95702 15.2621 7.28619 14.9871 7.55841C14.7122 7.83064 14.3816 7.96675 13.9955 7.96675Z" fill="#8F9597"/>
+                                      </svg>
+                                    </span>
+
+
+                                      <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton1">
+
+
+                                        <li>
+                                        
+                                          {%if i.editable ==  True%}
+                                            <a class="dropdown-item" href =""  title="Edit" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}" onclick="durationfunct('{{i.id}}');"><i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> </a>
+
+                                          {%else%}
+                                            <span class="dropdown-item" href =""  data-bs-toggle="tooltip" title="manager  performed actions unable to edit"><i class="fa fa-pencil-square-o text-primary disabled-icon"  aria-hidden="true"></i> </span>
+
+                                          {%endif%}
+                                        </li>
+
+
+
+
+
+
+                                        <li>
+                                          
+                                          {%if i.Withraw_status ==  True%}
+                                            <a class="dropdown-item" href=""  title="Withdraw" data-bs-toggle="modal" data-bs-target="#pendingwithdrawmodal{{i.id}}"><i class="fa fa-solid fa-rotate-left text-warning" aria-hidden="true"></i></a>
+
+                                          {%else%}
+                                          <span class="dropdown-item" href=""  data-bs-toggle="tooltip" title="The withdrawal time has passed. You cannot withdraw your application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                                          {%endif%}
+                                        </li>
+
+
+                                        {% if i.attachment is not None  %}
+                                        <li><span class="dropdown-item" title="Attachment"   data-bs-toggle="modal" data-bs-target="#attachmentmodal{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                                        </li>                
+                                    {% endif %}
+
+                                        </ul>
+
+                                    </ul>
+                                  </div>
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                      <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                <span class="card-header-txt">Reason :</span><br>
+
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                </div>
+                              </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span class="image-list card-header-txt py-1 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  {%for manager in i.managerstatus %}
+                                  {%if manager.approvedBy  and not manager.rejectedBy %}
+                                    {%if manager.managerimage != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                    {%endif%}
+              
+  
+                                  {%endif%}
+              
+                                  {%endfor%}
+                                  <span class="ps-1">This application is pending.</span>
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+  
+  
+  
+                                  {%for manager in i.managerstatus %}
+                                  {%if not manager.approvedBy and not manager.rejectedBy %}
+                                  
+                                    {%if manager.managerimage != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                    {%endif%}
+              
+                                  {%elif not manager.approvedBy and manager.rejectedBy%}
+              
+                                    {%if manager.managerimage != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                    {%endif%}
+                                  {%endif%}
+              
+                                  {%endfor%}
+  
+                                </span>
+                              </div>
+                            </div>
+
+
+                          </div>
+                        </div>
+
+
+                  </div>
+                </div>
+
+
+                
+                <div class="modal fade" id="attachmentmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                  
+                    <div class="modal-content">           
+                      <div class="modal-header ps-4">
+                        <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                      </div>
+                      <div class="modal-header ps-4">
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          {% if i.attachment is not None  %}
+                            <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                          {%else%}
+                          <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+
+                            <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+
+                          {% endif %}
+                        </div>
+                      
+                      </div>
+                      <div class="modal-footer">
+        
+                        <div class="w-50 text-center">
+                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                        </div>
+        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {%empty%}
+              <div class="noappdiv">
+              <div class="text-center py-4 ">No Applications Recieved!</div>
+              </div>
+            {%endfor%}
+
+          </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab" tabindex="0">
+          <div class="row">
+            
+            
+            {% for i in Approved_list %}
+
+    
+
+
+
+
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+    
+                  <div id="card" class="card text-start h-100">
+
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                              </span>
+
+                              <span>
+                                  <div class="dropdown">
+
+                                    <span class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none">
+                                        <path d="M13.9955 23.8334C13.6093 23.8334 13.2802 23.6959 13.0079 23.4209C12.7357 23.146 12.5996 22.8154 12.5996 22.4293C12.5996 22.0431 12.7371 21.714 13.0121 21.4417C13.287 21.1695 13.6176 21.0334 14.0038 21.0334C14.3899 21.0334 14.7191 21.1709 14.9913 21.4459C15.2635 21.7209 15.3996 22.0514 15.3996 22.4376C15.3996 22.8237 15.2621 23.1529 14.9871 23.4251C14.7122 23.6973 14.3816 23.8334 13.9955 23.8334ZM13.9955 15.9001C13.6093 15.9001 13.2802 15.7626 13.0079 15.4876C12.7357 15.2126 12.5996 14.8821 12.5996 14.4959C12.5996 14.1098 12.7371 13.7806 13.0121 13.5084C13.287 13.2362 13.6176 13.1001 14.0038 13.1001C14.3899 13.1001 14.7191 13.2376 14.9913 13.5126C15.2635 13.7875 15.3996 14.1181 15.3996 14.5042C15.3996 14.8904 15.2621 15.2195 14.9871 15.4917C14.7122 15.764 14.3816 15.9001 13.9955 15.9001ZM13.9955 7.96675C13.6093 7.96675 13.2802 7.82926 13.0079 7.55427C12.7357 7.27931 12.5996 6.94875 12.5996 6.56261C12.5996 6.17648 12.7371 5.8473 13.0121 5.57508C13.287 5.30286 13.6176 5.16675 14.0038 5.16675C14.3899 5.16675 14.7191 5.30424 14.9913 5.57922C15.2635 5.85419 15.3996 6.18474 15.3996 6.57089C15.3996 6.95702 15.2621 7.28619 14.9871 7.55841C14.7122 7.83064 14.3816 7.96675 13.9955 7.96675Z" fill="#8F9597"/>
+                                      </svg>
+                                    </span>
+
+
+                                      <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton1">
+
+
+                                        <li>
+                                        
+                                          {%if i.editable ==  True%}
+                                            <a class="dropdown-item" href =""  title="Edit" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}" onclick="durationfunct('{{i.id}}');"><i class="fa fa-pencil-square-o text-primary"  aria-hidden="true"></i> </a>
+
+                                          {%else%}
+                                            <span class="dropdown-item" href =""  data-bs-toggle="tooltip" title="manager  performed actions unable to edit"><i class="fa fa-pencil-square-o text-primary disabled-icon"  aria-hidden="true"></i> </span>
+
+                                          {%endif%}
+                                        </li>
+
+
+                                        <li>
+                                          
+                                          {%if i.Withraw_status ==  True%}
+                                            <a class="dropdown-item" href=""  title="Withdraw" data-bs-toggle="modal" data-bs-target="#pendingwithdrawmodal{{i.id}}"><i class="fa fa-solid fa-rotate-left text-warning" aria-hidden="true"></i></a>
+
+                                          {%else%}
+                                          <span class="dropdown-item" href=""  data-bs-toggle="tooltip" title="The withdrawal time has passed. You cannot withdraw your application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                                          {%endif%}
+                                        </li>
+                                        {% if i.attachment is not None  %}
+                                        <li><span class="dropdown-item" title="Attachment"   data-bs-toggle="modal" data-bs-target="#attachmentmodal{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                                        </li>                
+                                    {% endif %}
+
+
+                                        </ul>
+
+                                    </ul>
+                                  </div>
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                      <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                <span class="card-header-txt">Reason :</span><br>
+
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                </div>
+                              </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span class="image-list card-header-txt py-1 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  {%for manager in i.managerstatus %}
+                                  {%if manager.approvedBy  and not manager.rejectedBy %}
+                                    {%if manager.managerimage != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                    {%endif%}
+              
+        
+                                  {%endif%}
+              
+                                  {%endfor%}
+                                  <span class="ps-1">Your application is approved.</span>
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+        
+        
+        
+                                  {%for manager in i.managerstatus %}
+                                  {%if not manager.approvedBy and not manager.rejectedBy %}
+                                  
+                                    {%if manager.managerimage != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                    {%endif%}
+              
+                                  {%elif not manager.approvedBy and manager.rejectedBy%}
+              
+                                    {%if manager.managerimage != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                    {%endif%}
+                                  {%endif%}
+              
+                                  {%endfor%}
+        
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+
+
+                  </div>
+                </div>
+
+
+                <div class="modal fade" id="attachmentmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                  
+                    <div class="modal-content">           
+                      <div class="modal-header ps-4">
+                        <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                      </div>
+                      <div class="modal-header ps-4">
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          {% if i.attachment is not None  %}
+                            <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                          {%else%}
+                          <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+
+                            <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+
+                          {% endif %}
+                        </div>
+                      
+                      </div>
+                      <div class="modal-footer">
+        
+                        <div class="w-50 text-center">
+                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                        </div>
+        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {%empty%}
+            <div class="noappdiv">
+            <div class="text-center py-4 ">No Applications Recieved!</div>
+            </div>
+
+
+
+
+
+
+            {%endfor%}
+            
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab" tabindex="0">
+          <div class="row">
+            
+            {% for i in Rejected_list %}
+
+
+
+
+
+
+            <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+    
+              <div id="card" class="card text-start h-100">
+
+                    <div class="card-header head d-flex justify-content-between align-items-center">
+                        <span>                                   
+                            <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                            <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                        </span>
+                        <span class="d-flex justify-content-between">
+                          <span class="text-left">                                   
+                            <span class="card-header-txt">Application Date </span><br>
+                            <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                          </span>
+     
+
+                          {% if i.attachment is not None  %}
+                          <span>
+                            <div class="dropdown">
+
+                              <span class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none">
+                                  <path d="M13.9955 23.8334C13.6093 23.8334 13.2802 23.6959 13.0079 23.4209C12.7357 23.146 12.5996 22.8154 12.5996 22.4293C12.5996 22.0431 12.7371 21.714 13.0121 21.4417C13.287 21.1695 13.6176 21.0334 14.0038 21.0334C14.3899 21.0334 14.7191 21.1709 14.9913 21.4459C15.2635 21.7209 15.3996 22.0514 15.3996 22.4376C15.3996 22.8237 15.2621 23.1529 14.9871 23.4251C14.7122 23.6973 14.3816 23.8334 13.9955 23.8334ZM13.9955 15.9001C13.6093 15.9001 13.2802 15.7626 13.0079 15.4876C12.7357 15.2126 12.5996 14.8821 12.5996 14.4959C12.5996 14.1098 12.7371 13.7806 13.0121 13.5084C13.287 13.2362 13.6176 13.1001 14.0038 13.1001C14.3899 13.1001 14.7191 13.2376 14.9913 13.5126C15.2635 13.7875 15.3996 14.1181 15.3996 14.5042C15.3996 14.8904 15.2621 15.2195 14.9871 15.4917C14.7122 15.764 14.3816 15.9001 13.9955 15.9001ZM13.9955 7.96675C13.6093 7.96675 13.2802 7.82926 13.0079 7.55427C12.7357 7.27931 12.5996 6.94875 12.5996 6.56261C12.5996 6.17648 12.7371 5.8473 13.0121 5.57508C13.287 5.30286 13.6176 5.16675 14.0038 5.16675C14.3899 5.16675 14.7191 5.30424 14.9913 5.57922C15.2635 5.85419 15.3996 6.18474 15.3996 6.57089C15.3996 6.95702 15.2621 7.28619 14.9871 7.55841C14.7122 7.83064 14.3816 7.96675 13.9955 7.96675Z" fill="#8F9597"/>
+                                </svg>
+                              </span>
+
+
+                                <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton1">
+
+                                  
+                                  <li><span class="dropdown-item" title="Attachment"   data-bs-toggle="modal" data-bs-target="#attachmentmodal{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                                  </li>                
+                                  
+
+
+                                  </ul>
+
+                              </ul>
+                            </div>
+                          </span>
+                          {% endif %}
+
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+
+
+
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                                <span>                                   
+                                    <span class="card-header-txt">From</span><br>
+                                    <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                </span>
+                                <span class="d-flex justify-content-between">
+                                    <span>                                   
+                                      <span class="card-header-txt">To</span><br>
+                                      <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                    </span>
+
+
+                                </span>
+                                <span>                                   
+                                  <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                  <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                </span>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="card-header p-0">
+
+                            <span class="card-header-txt">Reason :</span><br>
+
+                            <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+
+
+                        <div class="col-lg-12  conclusion-box my-2">
+                          <div  class="row p-2 d-flex justify-content-between ">
+    
+    
+                              
+                              {% if i.universel_comment == "" %}
+                              <span class="image-list col-lg-8 py-1 col-md-8 col-sm-12 card-header-txt d-flex">
+    
+                                  {%for manager in i.managerstatus %}
+                                    {%if not manager.approvedBy and manager.rejectedBy%}
+                                    <span class="me-2">
+                                      {%if manager.managerimage != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture-rejected"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture-rejected"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                      {%endif%}
+                                      </span>
+    
+    
+                                      <span>
+                                        <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{manager.comment}}">{{manager.comment}}.</span>
+    
+                                      </span>
+    
+    
+    
+                                    
+                                    {%endif%}
+            
+                                  {%endfor%}
+                              </span>
+    
+                              {% else %}
+                              <span class="image-list col-lg-8 col-md-8 col-sm-12 card-header-txt d-flex rejected-application">
+    
+    
+                                  {%for manager in i.managerstatus %}
+                                        {%if not manager.approvedBy and manager.rejectedBy%}
+                                            {%if manager.managerimage != None%}
+                                              <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                            {%else%}
+                                              <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                            {%endif%}
+                                        {%endif%}
+                                          
+                                  {%endfor%}
+    
+                                  <span>
+                                    <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.universal_comment}}">{{i.universel_comment}}.</span>
+    
+                                  </span>
+                                </span>
+                              {% endif %}
+                            
+                            
+                            <span class="col-lg-4 image-list d-flex justify-content-end col-md-4 col-sm-12 managers-imgs">
+    
+    
+    
+                              {%for manager in i.managerstatus %}
+                              {%if manager.approvedBy  and not manager.rejectedBy %}
+                                {%if manager.managerimage != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                {%endif%}
+          
+                              {%elif not manager.approvedBy and not manager.rejectedBy %}
+                              
+                                {%if manager.managerimage != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                {%endif%}
+                              
+    
+                              {%endif%}
+          
+                              {%endfor%}
+    
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+
+              </div>
+            </div>
+            <div class="modal fade" id="attachmentmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+              
+                <div class="modal-content">           
+                  <div class="modal-header ps-4">
+                    <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                  </div>
+                  <div class="modal-header ps-4">
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      {% if i.attachment is not None  %}
+                        <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                      {%else%}
+                      <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+
+                        <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+
+                      {% endif %}
+                    </div>
+                  
+                  </div>
+                  <div class="modal-footer">
+    
+                    <div class="w-50 text-center">
+                      <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    </div>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+            {%empty%}
+            <div class="noappdiv">
+            <div class="text-center py-4 ">No Applications Recieved!</div>
+            </div>
+            {%endfor%}
+          
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="pills-withdraw" role="tabpanel" aria-labelledby="pills-withdraw-tab" tabindex="0">
+          <div class="row">
+            
+            {% for i in Withdraw_list %}
+
+
+
+
+
+
+
+
+            <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+    
+              <div id="card" class="card text-start h-100">
+
+                    <div class="card-header head d-flex justify-content-between align-items-center">
+                        <span>                                   
+                            <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                            <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                        </span>
+                        <span class="d-flex justify-content-between">
+                          <span class="text-left">                                   
+                            <span class="card-header-txt">Application Date </span><br>
+                            <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                          </span>
+                          {% if i.attachment is not None  %}
+                          <span>
+                            <div class="dropdown">
+
+                              <span class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none">
+                                  <path d="M13.9955 23.8334C13.6093 23.8334 13.2802 23.6959 13.0079 23.4209C12.7357 23.146 12.5996 22.8154 12.5996 22.4293C12.5996 22.0431 12.7371 21.714 13.0121 21.4417C13.287 21.1695 13.6176 21.0334 14.0038 21.0334C14.3899 21.0334 14.7191 21.1709 14.9913 21.4459C15.2635 21.7209 15.3996 22.0514 15.3996 22.4376C15.3996 22.8237 15.2621 23.1529 14.9871 23.4251C14.7122 23.6973 14.3816 23.8334 13.9955 23.8334ZM13.9955 15.9001C13.6093 15.9001 13.2802 15.7626 13.0079 15.4876C12.7357 15.2126 12.5996 14.8821 12.5996 14.4959C12.5996 14.1098 12.7371 13.7806 13.0121 13.5084C13.287 13.2362 13.6176 13.1001 14.0038 13.1001C14.3899 13.1001 14.7191 13.2376 14.9913 13.5126C15.2635 13.7875 15.3996 14.1181 15.3996 14.5042C15.3996 14.8904 15.2621 15.2195 14.9871 15.4917C14.7122 15.764 14.3816 15.9001 13.9955 15.9001ZM13.9955 7.96675C13.6093 7.96675 13.2802 7.82926 13.0079 7.55427C12.7357 7.27931 12.5996 6.94875 12.5996 6.56261C12.5996 6.17648 12.7371 5.8473 13.0121 5.57508C13.287 5.30286 13.6176 5.16675 14.0038 5.16675C14.3899 5.16675 14.7191 5.30424 14.9913 5.57922C15.2635 5.85419 15.3996 6.18474 15.3996 6.57089C15.3996 6.95702 15.2621 7.28619 14.9871 7.55841C14.7122 7.83064 14.3816 7.96675 13.9955 7.96675Z" fill="#8F9597"/>
+                                </svg>
+                              </span>
+
+
+                                <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton1">
+
+                                  
+                                  <li><span class="dropdown-item" title="Attachment"   data-bs-toggle="modal" data-bs-target="#attachmentmodal{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                                  </li>                
+                                  
+
+
+                                  </ul>
+
+                              </ul>
+                            </div>
+                          </span>
+                          {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+
+
+
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                                <span>                                   
+                                    <span class="card-header-txt">From</span><br>
+                                    <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                </span>
+                                <span class="d-flex justify-content-between">
+                                    <span>                                   
+                                      <span class="card-header-txt">To</span><br>
+                                      <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                    </span>
+
+                                </span>
+                                <span>                                   
+                                  <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                  <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                </span>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="card-header p-0">
+
+                            <span class="card-header-txt">Reason :</span><br>
+
+                            <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+
+
+
+                        <div class="col-lg-12 conclusion-box my-2">
+                          <div  class="py-2 row">
+                            <span class="image-list card-header-txt py-1 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                              {%for manager in i.managerstatus %}
+                              {%if manager.approvedBy  and not manager.rejectedBy %}
+                                {%if manager.managerimage != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                {%endif%}
+          
+    
+                              {%endif%}
+          
+                              {%endfor%}
+                              <span class="ps-1">This application is Withdrawn.</span>
+                            </span>  
+                            
+                            <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+    
+    
+    
+                              {%for manager in i.managerstatus %}
+                              {%if not manager.approvedBy and not manager.rejectedBy %}
+                              
+                                {%if manager.managerimage != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                {%endif%}
+          
+                              {%elif not manager.approvedBy and manager.rejectedBy%}
+          
+                                {%if manager.managerimage != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.managerimage}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                {%endif%}
+                              {%endif%}
+          
+                              {%endfor%}
+    
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+              </div>
+            </div>
+
+            <div class="modal fade" id="attachmentmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+              
+                <div class="modal-content">           
+                  <div class="modal-header ps-4">
+                    <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                  </div>
+                  <div class="modal-header ps-4">
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      {% if i.attachment is not None  %}
+                        <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                      {%else%}
+                      <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+
+                        <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+
+                      {% endif %}
+                    </div>
+                  
+                  </div>
+                  <div class="modal-footer">
+    
+                    <div class="w-50 text-center">
+                      <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    </div>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+            {%empty%}
+            <div class="noappdiv">
+              <div class="text-center py-4 ">No Applications Recieved!</div>
+            </div>
+            {%endfor%}
+          
+            </div>
+        </div>
+      </div>
+
+
+
+
+      <!-- Draft_listupdate form-->
+      
+      {% for i in Draft_list %}
+        <div class="modal fade" id="draftmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+          
+            <div class="modal-content">           
+              <div class="modal-header ps-4">
+                <h5 class="modal-title py-2" id="exampleModalLabel">Update Application</h5>
+              </div>
+              <div class="modal-header ps-4">
+                <span class="label-title py-2">Application Type : {% if i.WorkFromHome == True %}Work From Home{%else%}Leave{%endif%} </span>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-6 ps-4">
+                    <span class="label-title"> Leave Type </span>
+                    <span class="d-flex radio-div py-2">
+                    {%if i.leavetype == 'Fullday'%}
+
+                    <input type="radio" id="updateFullday{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');"  name="Updateleavetype{{i.id}}" value="Fullday" checked="checked">
+                    <label for="updateFullday{{i.id}}">Full day</label>
+                    <input type="radio" id="updatefirsthalf{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="FirstHalf">
+                    <label for="updatefirsthalf{{i.id}}">First Half</label>
+                    <input type="radio" id="updatesecondhalf{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="SecondHalf">
+                    <label for="updatesecondhalf{{i.id}}">Second Half</label>
+
+                    {%elif i.leavetype == 'FirstHalf' %}
+
+                    <input type="radio" id="updateFullday{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="Fullday">
+                    <label for="updateFullday{{i.id}}">Full day</label>
+                    <input type="radio" id="updatefirsthalf{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="FirstHalf" checked="checked">
+                    <label for="updatefirsthalf{{i.id}}">First Half</label>
+                    <input type="radio" id="updatesecondhalf{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="SecondHalf">
+                    <label for="updatesecondhalf{{i.id}}">Second Half</label>
+
+                    {%elif i.leavetype == 'SecondHalf' %}
+
+                    <input type="radio" id="updateFullday{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="Fullday">
+                    <label for="updateFullday{{i.id}}">Full day</label>
+                    <input type="radio" id="updatefirsthalf{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="FirstHalf">
+                    <label for="updatefirsthalf{{i.id}}">First Half</label>
+                    <input type="radio" id="updatesecondhalf{{i.id}}" onchange="draftcheckleavetype('{{i.id}}');" name="Updateleavetype{{i.id}}" value="SecondHalf" checked="checked">
+                    <label for="updatesecondhalf{{i.id}}">Second Half</label>
+                    
+                    {%endif%}
+
+                    </span>
+                    <span class="error" id="dupdateleavetype_error{{i.id}}"></span>
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6 px-4">
+                    <label for="start_date{{i.id}}">Start Date</label>
+                    <input type="text" class="input-feild alldatepicker draftupdatestartdate" onchange="draftenddate('{{i.id}}')" id="draftstart_date{{i.id}}" placeholder="Select Start Date" name="start_date" autocomplete="off" value="{{i.fstart_date}}" readonly>
+                    <span class="error" id="dupdatestart_date_error{{i.id}}"></span>
+                  </div>
+                  <div class="col-6 px-4">
+                    <label for="end_date{{i.id}}">End Date</label>
+                    <input type="text" class="input-feild alldatepicker draftupdateenddate" onchange="draftenddate('{{i.id}}')" id="draftend_date{{i.id}}" placeholder="Select End Date" name="end_date" autocomplete="off" value="{{i.fend_date}}" readonly>
+                    <span class="error" id="dupdateend_date_error{{i.id}}"></span>
+                  </div>
+
+                  <span class="error" id="draftleavefunctionerror{{i.id}}"></span>
+                <div class="row">
+                  <div class="col-lg-12 px-4">
+                    <label class="m-0 p-0 py-2" for="dupdate_attachment">Attach File</label>
+                    <input type="file" onchange="validateFile(this)" id="dupdate_attachment" name="dupdate_attachment" autocomplete="off" class="input-feild">
+                    <span class="error" id="dupdate_attachment_error"></span>
+                  </div>
+                  <div class="col-12 px-4">
+                    <label class="py-2" for="reason">Reason</label>
+                    <textarea class="form-control" rows="5" id="reason{{i.id}}" name="reason" placeholder="Please explain the application reason in detail (minimum 150 characters)">{{i.reason}}</textarea>
+                    <span class="error" id="dupdatereason_error{{i.id}}"></span>
+                  </div>
+
+                </div>
+                </div>
+              
+              </div>
+              <div class="modal-footer">
+
+                <div class="w-50 justify-content-center">
+                  <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="Role-btn" onclick="Updateappliedleave('{{i.id}}');" id="addEmployeeBtn">Update</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      {%endfor%}
+
+
+      {% for i in Approved_list %}
+
+      <div class="modal fade" id="pendingwithdrawmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+        
+          <div class="modal-content">           
+            <div class="modal-header ps-3 text-center">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Withdraw Application</h5>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row">
+                <div> Are you sure you want to withdraw this application?
+
+                </div>
+             
+            
+           
+           
+              </div>
+            
+            </div>
+            <div class="modal-footer row">
+              <span class="col-lg-5">
+
+              <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">No</button>
+            </span>
+            <span class="col-lg-5">
+              <span onclick="withrawapplication('{{i.id}}')" data-bs-dismiss="modal" style="margin:0px !important; cursor: pointer;" class="trackproBtn" data-bs-dismiss="modal" id="editEmployeeDetails">Yes</span>
+
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+
+      <!-- pending_list update form-->
+      {% for i in pending_list %}
+        <div class="modal fade" id="editmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">           
+              <div class="modal-header ps-4">
+                <h5 class="modal-title py-2" id="exampleModalLabel">Update Application</h5>
+              </div>
+              <div class="modal-header ps-4">
+                <span class="label-title py-2">Application Type : {% if i.WorkFromHome == True %}Work From Home{%else%}Leave{%endif%} </span>
+                <span class="label-title py-2"></span>
+              </div>
+              <div class="modal-body">
+                
+
+
+
+
+
+                <div class="row">
+
+                  <div class="col-6 ps-4">
+                    <span class="label-title"> Leave Type </span>
+                    <span class="d-flex radio-div py-2">
+                    {%if i.leavetype == 'Fullday'%}
+
+                    <input type="radio" id="pendingupdateFullday{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');"  name="pendingUpdateleavetype{{i.id}}" value="Fullday" checked="checked">
+                    <label for="pendingupdateFullday{{i.id}}">Full day</label>
+                    <input type="radio" id="pendingupdatefirsthalf{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="FirstHalf">
+                    <label for="pendingupdatefirsthalf{{i.id}}">First Half</label>
+                    <input type="radio" id="pendingupdatesecondhalf{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="SecondHalf">
+                    <label for="pendingupdatesecondhalf{{i.id}}">Second Half</label>
+
+                    {%elif i.leavetype == 'FirstHalf' %}
+
+                    <input type="radio" id="pendingupdateFullday{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="Fullday">
+                    <label for="pendingupdateFullday{{i.id}}">Full day</label>
+                    <input type="radio" id="pendingupdatefirsthalf{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="FirstHalf" checked="checked">
+                    <label for="pendingupdatefirsthalf{{i.id}}">First Half</label>
+                    <input type="radio" id="pendingupdatesecondhalf{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="SecondHalf">
+                    <label for="pendingupdatesecondhalf{{i.id}}">Second Half</label>
+
+                    {%elif i.leavetype == 'SecondHalf' %}
+
+                    <input type="radio" id="pendingupdateFullday{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="Fullday">
+                    <label for="pendingupdateFullday{{i.id}}">Full day</label>
+                    <input type="radio" id="pendingupdatefirsthalf{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="FirstHalf">
+                    <label for="pendingupdatefirsthalf{{i.id}}">First Half</label>
+                    <input type="radio" id="pendingupdatesecondhalf{{i.id}}" onchange="pendingcheckleavetype('{{i.id}}');" name="pendingUpdateleavetype{{i.id}}" value="SecondHalf" checked="checked">
+                    <label for="pendingupdatesecondhalf{{i.id}}">Second Half</label>
+                    
+                    {%endif%}
+
+                    </span>
+                    <span class="error" id="pendingupdateleavetype_error{{i.id}}"></span>
+
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="row py-2">
+                  <div class="col-6 px-4">
+                    <input type="text"  id="pndleavetype{{i.id}}"  autocomplete="off" value="{{i.leavetype}}" hidden>
+
+                    <label for="pndstart_date{{i.id}}">Start Date</label>
+                    <input type="text" class="alldatepicker input-feild" id="pndstart_date{{i.id}}"  onchange="pendingenddate('{{i.id}}')" placeholder="Select Start Date" name="start_date" autocomplete="off" value="{{i.fstart_date}}" readonly>
+                    <span id="start_dateerror{{i.id}}" class="error-message"></span>
+                  </div>
+                    <div class="col-6 px-4">
+                    <label for="pndend_date{{i.id}}">End Date</label>
+                    <input type="text" class="alldatepicker input-feild"  id="pndend_date{{i.id}}"  onchange="pendingenddate('{{i.id}}')" placeholder="Select End Date" name="end_date" autocomplete="off" value="{{i.fend_date}}" readonly>
+                    <span id="end_dateerror{{i.id}}" class="error-message"></span>
+                  </div>
+                </div> 
+        
+                <span class="error" id="pendingleavefunctionerror{{i.id}}"></span>
+
+                <div class="row">
+                  <div class="col-lg-12 px-4">
+                    <label class="m-0 p-0 py-2" for="pnd_attachment{{i.id}}">Attach File</label>
+                    <input type="file" onchange="validateFile(this)"  id="pnd_attachment{{i.id}}" name="pnd_attachment{{i.id}}" autocomplete="off" class="input-feild">
+                    <span class="error" id="pnd_attachment_error{{i.id}}"></span>
+                  </div>
+                  <div class="col-12 px-4">
+                    <label for="reason">Reason </label>
+                    <textarea class="form-control" rows="5" id="reason{{i.id}}" name="reason" placeholder="Please explain the application reason in detail (minimum 150 characters)">{{i.reason}}</textarea >
+                      <span id="reasonerror{{i.id}}" class="error-message"></span>
+                  </div>
+                </div>
+            
+              
+              </div>
+              <div class="modal-footer">
+                <div class="w-50 justify-content-center">
+                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="Role-btn" id="addEmployeeBtn" onclick="updateleave('{{i.id}}')">Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {%endfor%}
+
+      {% for i in Draft_list %}
+      <div class="modal fade" id="draftdeletemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+        
+          <div class="modal-content">           
+            <div class="modal-header ps-3 text-center">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Delete Application</h5>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row">
+                <div> Are you sure you want to delete this?
+
+                </div>
+             
+            
+           
+           
+              </div>
+            
+            </div>
+            <div class="modal-footer row">
+              <span class="col-lg-5">
+                <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+              </span>
+              <span class="col-lg-5">
+              <a href="{% url 'leave:deleteleave' i.id %}" style="margin:0px !important;"  class="trackproBtn" id="editEmployeeDetails">Delete</a>
+
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+
+      {% for i in pending_list %}
+
+
+      <div class="modal fade" id="pendingdeletemodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+        
+          <div class="modal-content">           
+            <div class="modal-header ps-3 text-center">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Delete Application</h5>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row">
+                <div> 
+                  Are you sure you want to delete this?
+                </div>
+             
+            
+           
+           
+              </div>
+            
+            </div>
+            <div class="modal-footer row">
+              <span class="col-lg-5">
+
+              <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">No</button>
+            </span>
+            <span class="col-lg-5">
+              <a href="{% url 'leave:deleteleave' i.id %}" style="margin:0px !important;" class="trackproBtn"  id="editEmployeeDetails">Yes</a>
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="pendingwithdrawmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+        
+          <div class="modal-content">           
+            <div class="modal-header ps-3 text-center">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Withdraw Application</h5>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row">
+                <div> Are you sure you want to withdraw this application?
+
+                </div>
+             
+            
+           
+           
+              </div>
+            
+            </div>
+            <div class="modal-footer row">
+              <span class="col-lg-5">
+
+              <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">No</button>
+            </span>
+            <span class="col-lg-5">
+              <span onclick="withrawapplication('{{i.id}}')" style="margin:0px !important; cursor: pointer;" class="trackproBtn" data-bs-dismiss="modal" id="editEmployeeDetails">Yes</span>
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+
+      {% for i in Draft_list %}
+      <div class="modal fade" id="applymodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+        
+          <div class="modal-content">           
+            <div class="modal-header ps-3 text-center">
+              <h5 class="modal-title py-2" id="exampleModalLabel">Apply Application</h5>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row">
+                <div> Are you sure you want to Apply ?
+                </div>
+              </div>            
+            </div>
+            <div class="modal-footer row">
+              <span class="col-lg-5">
+                <button type="button" class="trackproBtn modalClose" style="margin:0px !important;" data-bs-dismiss="modal">Close</button>
+              </span>
+              <span class="col-lg-5">
+                <span onclick="applyfromdraftapplication('{{i.id}}');" class="trackproBtn" style="margin:0px !important;"  data-bs-dismiss="modal" id="editEmployeeDetails">Apply</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+      
+
+
+
+
+
+    </div>
+
+
+</main>
+
+
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li>
+  <a data-bs-toggle="modal" data-bs-target="#myModaladd">
+    <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Apply Leave"
+    src="{% static 'assets/svg/applyleaveicon.svg' %}">
+  </a>
+</li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+
+  $(document).ready(function () {
+    AddReadMore();
+    AddReadMore1();
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {return new bootstrap.Tooltip(tooltipTriggerEl)})
+
+
+    $(".alldatepicker").datepicker({ 
+
+      dateFormat: 'dd-mm-yy',
+      minDate: 0,
+      changeYear:true,
+      maxDate: +90,
+      changeMonth: true,
+ 
+    });
+    $('#start_date').datepicker('option', 'minDate', new Date());
+    $('#end_date').datepicker('option', 'minDate', new Date());
+    $('#WFHsdate').datepicker('option', 'minDate', new Date());
+    $('#WFHedate').datepicker('option','minDate', new Date());
+    $(".durationdiv").hide()
+  })
+  function AddReadMore() {
+    //This limit you can set after how much characters you want to show Read More.
+    var carLmt = 95;
+    // Text to show when text is collapsed
+    var readMoreTxt = " ... Read More";
+    // Text to show when text is expanded
+    var readLessTxt = " Read Less";
+
+
+    //Traverse all selectors with this class and manupulate HTML part to show Read More
+    $(".addReadMore").each(function() {
+        if ($(this).find(".firstSec").length)
+            return;
+
+        var allstr = $(this).text();
+        if (allstr.length > carLmt) {
+            var firstSet = allstr.substring(0, carLmt);
+            var secdHalf = allstr.substring(carLmt, allstr.length);
+            var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+            $(this).html(strtoadd);
+        }
+
+    });
+    //Read More and Read Less Click Event binding
+    
+  }
+  function toggledate(idvalue){
+    $('#'+idvalue).focus();
+  }
+  function AddReadMore1() {
+    //This limit you can set after how much characters you want to show Read More.
+    var carLmt = 15;
+    // Text to show when text is collapsed
+    var readMoreTxt = " ... Read More";
+    // Text to show when text is expanded
+    var readLessTxt = " Read Less";
+
+
+    //Traverse all selectors with this class and manupulate HTML part to show Read More
+    $(".addReadMore1").each(function() {
+        if ($(this).find(".firstSec1").length)
+            return;
+
+        var allstr = $(this).text();
+        if (allstr.length > carLmt) {
+            var firstSet = allstr.substring(0, carLmt);
+            var secdHalf = allstr.substring(carLmt, allstr.length);
+            var strtoadd = firstSet + "<span class='SecSec1'>" + secdHalf + "</span><span class='readMore1'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess1' title='Click to Show Less'>" + readLessTxt + "</span>";
+            $(this).html(strtoadd);
+        }
+
+    });
+    //Read More and Read Less Click Event binding
+    
+  }
+  $(document).on("click", ".readMore,.readLess", function() {
+      $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+  });
+  $(document).on("click", ".readMore1,.readLess1", function() {
+    $(this).closest(".addReadMore1").toggleClass("showlesscontent1 showmorecontent1");
+});
+  function durationfunct(id){
+
+    var startDate = document.getElementById("draftstart_date"+id).value;
+    var endDate = document.getElementById("draftend_date"+id).value;
+
+    if (startDate == endDate){
+      $("#updatedurationdiv"+id).show()
+    } 
+    else{
+      $("#updatedurationdiv"+id).hide()
+    }
+  }
+
+  function Updateappliedleave(id){
+    var start_date = $("#draftstart_date"+id).val();
+    var end_date = $("#draftend_date"+id).val();
+    var reason = $("#reason"+id).val();
+    var nameobj="Updateleavetype"+id
+    var leavetype =  $('input[name='+nameobj+']:checked').val();
+    var attachment =$('#dupdate_attachment')[0].files[0]
+
+
+    var leavestatus = "Draft";
+  
+    var leaveduration = $('input[name='+nameobj+']:checked').val();
+  
+    if(IsValid(leavetype)){
+      $('#updateleavetype_error'+id).show().delay(3000).slideUp();
+      $('#updateleavetype_error'+id).html('This field is required');
+      $('#updateleavetype_error'+id).focus();
+        return false;
+        
+    }
+    else if (IsValid(start_date)) {
+      $('#dupdatestart_date_error'+id).html('');
+      $('#dupdatestart_date_error'+id).show().delay(3000).slideUp();
+      $('#dupdatestart_date_error'+id).html('This field is required');
+      $('#dupdatestart_date_error'+id).focus();
+        return false;
+    }else if (IsValid(end_date)){
+      $('#dupdateend_date_error'+id).html('');
+      $('#dupdateend_date_error'+id).show().delay(3000).slideUp();
+      $('#dupdateend_date_error'+id).html('This field is required');
+      $('#dupdateend_date_error'+id).focus();
+        return false;
+
+
+
+    }else if(IsValid(reason)){
+        $('#dupdatereason_error'+id).html('');
+        $('#dupdatereason_error'+id).show().delay(3000).slideUp();
+        $('#dupdatereason_error'+id).html('This field is required');
+        $('#dupdatereason_error'+id).focus();
+          return false;
+    }else if(reason.length < 150 ){
+        $('#dupdatereason_error'+id).html('');
+        $('#dupdatereason_error'+id).show().delay(3000).slideUp();
+        $('#dupdatereason_error'+id).html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#dupdatereason_error'+id).focus();
+          return false;
+    }
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('start_date', start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('leavetype', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('leaveduration', leaveduration);
+    formData.append('duration', leaveduration);
+    formData.append('attachment', attachment);
+
+    $.ajax( {
+        url: frontendURL +"leave/updateapplyleave/"+ id,
+        type: 'POST',
+        data:formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function() {
+          swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+  
+        });
+        },
+        success: function(response){
+          console.log("response",response)
+          if (response.response.status == 'success'){   
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              });  
+              location.reload();  
+          }
+          else{
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              }); 
+          }
+        
+        }
+      });
+  }
+  function draftenddate(id){
+    
+    var startDate = document.getElementById("draftstart_date"+id).value;
+      console.log(startDate,typeof(startDate))
+      var endDate = document.getElementById("draftend_date"+id).value;
+      console.log("endssss",endDate)
+
+      splitdate = startDate.split("-");
+      newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+      splitenddate = endDate.split("-");
+      newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+      var sdate = new Date(newstartdate)
+      console.log("sdate",sdate)
+      var edate = new Date(newenddate)
+      console.log("edate",edate)
+
+  
+        if (( edate < sdate)) {
+          swal({
+                icon: "warning",
+                title: "",
+                text: "End date should be greater than or equal to Start date",
+                button: "Close",
+            });
+            document.getElementById("draftend_date"+id).value = "";
+        
+        }
+        if (startDate === endDate){
+              // document.getElementsByClassName('durationdiv').style.display = 'block';
+              console.log("helllo")
+              $("#updatedurationdiv"+id).show()
+            }
+            else{
+              $("#updatedurationdiv"+id).hide()
+              var durationid = 'duration'+id ;
+              $("input[name="+durationid+"]:checked").val('');
+
+        }
+        draftcheckleavetype(id);
+  }
+
+  function draftcheckleavetype(id){
+    var nameobj="Updateleavetype"+id
+    var leavetype =  $('input[name='+nameobj+']:checked').val();
+    var startdate = $("#draftstart_date"+id).val();
+    var enddate = $("#draftend_date"+id).val();
+
+    if(IsValid(leavetype)){
+      $('#updateleavetype_error'+id).show().delay(3000).slideUp();
+      $('#updateleavetype_error'+id).html('This field is required');
+      $('#updateleavetype_error'+id).focus();
+        return false;
+    }else{
+      if(leavetype!="Fullday"){
+        if(startdate !="" && enddate!="")  {
+
+          if(startdate!=enddate){
+            $("#draftend_date"+id).val("");
+            $('#draftleavefunctionerror'+id).show().delay(3000).slideUp();
+            $('#draftleavefunctionerror'+id).html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#draftleavefunctionerror'+id).focus();
+            return false;
+            }
+        }
+      }
+    }
+
+  }
+
+
+
+
+
+
+  function WFHleavedate() {
+    WFHcheckleavetype();
+    var startDate = document.getElementById("WFHsdate").value;
+    console.log(startDate)
+    var endDate = document.getElementById("WFHedate").value;
+    console.log(endDate)
+
+    splitdate = startDate.split("-");
+    newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+    splitenddate = endDate.split("-");
+    newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+    var sdate = new Date(newstartdate)
+    console.log("sdate",sdate)
+    var edate = new Date(newenddate)
+    console.log("edate",edate)
+
+    if (( edate < sdate)) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "End date should be greater than or equal to Start date",
+            button: "Close",
+        });
+        document.getElementById("WFHedate").value = "";
+    }
+
+    if (startDate === endDate){
+      $(".durationdiv").show()
+    }
+    else{
+      $(".durationdiv").hide()
+    }
+  }
+  function WFHApplyleave(){
+    var start_date = $("#WFHsdate").val();
+    var end_date = $("#WFHedate").val();
+    var reason = $("#WFHreason").val();
+    var leavetype = $('input[name="WFHleavetype"]:checked').val();
+    var leavestatus = $('input[name="wfhleavestatus"]:checked').val();
+    var leaveduration = $("input[name='WFHleavetype']:checked").val();
+    var attachment= $("#wfh_attachment")[0].files[0];
+
+    var WFH=$("#WFH").val();
+
+    WFHcheckleavetype();
+
+    if(IsValid(leavestatus)){
+      $('#wfhleavestatus_error').show().delay(3000).slideUp();
+      $('#wfhleavestatus_error').html('Application status is required');
+      $('#wfhleavestatus_error').focus();
+        return false;
+    }else if(IsValid(leavetype)){
+      $('#WFHleavetype_err').show().delay(3000).slideUp();
+      $('#WFHleavetype_err').html('Application Type is required');
+      $('#WFHleavetype_err').focus();
+        return false;
+        
+    }else if (IsValid(start_date)) {
+      $('#WFHsdate').html('');
+      $('#WFHsdate_error').show().delay(3000).slideUp();
+      $('#WFHsdate_error').html('Application start date is required');
+      $('#WFHsdate').focus();
+        return false;
+    }else if (IsValid(end_date)){
+      $('#WFHedate').html('');
+      $('#WFHedate_error').show().delay(3000).slideUp();
+      $('#WFHedate_error').html('Application end date is required');
+      $('#WFHedate').focus();
+        return false;
+    }else if(IsValid(reason)){
+        $('#WFHreason').html('');
+        $('#WFHreason_error').show().delay(3000).slideUp();
+        $('#WFHreason_error').html('Application reason is required');
+        $('#WFHreason').focus();
+          return false;
+    }else if(!/\S/.test(reason)){
+      $('#WFHreason').html('');
+      $('#WFHreason_error').show().delay(3000).slideUp();
+      $('#WFHreason_error').html('Application reason is required');
+      $('#WFHreason').focus();
+        return false;
+    }else if(reason.length < 150 ){
+        $('#WFHreason_error').html('');
+        $('#WFHreason_error').show().delay(3000).slideUp();
+        $('#WFHreason_error').html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#WFHreason').focus();
+          return false;
+    }
+    var start_datedateParts = start_date.split("-");
+    start_date = start_datedateParts[2] + "-" + start_datedateParts[1] + "-" + start_datedateParts[0];
+
+    var end_datedateParts = end_date.split("-");
+    end_date = end_datedateParts[2] + "-" + end_datedateParts[1] + "-" + end_datedateParts[0];
+    var formData = new FormData();
+    formData.append('start_date',start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('leavetype', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('duration',leaveduration);
+    formData.append('leaveduration',leaveduration);
+    formData.append('attachment', attachment);
+    formData.append('WFH', WFH);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+    $.ajax({
+      url: frontendURL + "leave/",
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
+      beforeSend: function () {
+          swal({
+              icon: "info",
+              title: "",
+              text: "Loading...",
+              buttons: false,
+          });
+      },
+      success: function (response) {
+          console.log("response", response);
+          if (response.response.status == 'success') {
+              swal({
+                  icon: response.response.status,
+                  title: "",
+                  text: response.response.msg,
+                  button: "Close",
+              });
+              location.reload();
+          } else {
+              swal({
+                  icon: response.response.status,
+                  title: "",
+                  text: response.response.msg,
+                  button: "Close",
+              });
+          }
+      }
+    });
+    
+  }
+  function WFHcheckleavetype(){
+    var leavetype = $('input[name="WFHleavetype"]:checked').val();
+    var startdate=$("#WFHsdate").val();
+    var enddate=$("#WFHedate").val();
+
+    if(IsValid(leavetype)){
+      $('#WFHleavetype_err').show().delay(3000).slideUp();
+      $('#WFHleavetype_err').html('Application Type is required');
+      $('#WFHleavetype_err').focus();
+      return false;
+    }else{
+      if(leavetype!="Fullday"){
+        if(startdate !="" && enddate!="")  {
+          if(startdate!=enddate){
+            $('#WFHedate').val("");
+            $('#WFHleavefunctionerror').show().delay(3000).slideUp();
+            $('#WFHleavefunctionerror').html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#WFHleavefunctionerror').focus();
+            return false;
+          }
+        }
+      }
+    }
+
+  }
+
+
+
+
+
+  function validation(leavestatus) {
+    debugger
+    var leavetype = $('#leavetype').val();
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+
+    var StartDayLeaveType = $('#StartDayLeaveType').val();
+    var EndDayLeaveType = $('#EndDayLeaveType').val();
+    var number_of_days = $("#totaldays").val();
+    var attachment = $("#leave_attachment")[0].files[0];
+    var reason = $("#reason").val();
+    // checkleavetype();
+
+    if (!leavetype) {
+        $('#leavetype_error').show().delay(3000).slideUp();
+        $('#leavetype_error').html('Please select leave type');
+        $('#leavetype').focus();
+        return false;
+    }
+    else if (!start_date) {
+        $('#start_date').html('');
+        $('#start_date_error').show().delay(3000).slideUp();
+        $('#start_date_error').html('Leave start date is required');
+        $('#start_date').focus();
+        return false;
+    }
+    else if (!StartDayLeaveType) {
+        $('#StartDayLeaveType').html('');
+        $('#StartDayLeaveType_error').show().delay(3000).slideUp();
+        $('#StartDayLeaveType_error').html('Leave start date day type is required');
+        $('#StartDayLeaveType').focus();
+        return false;
+    } 
+    else if (!end_date) {
+        $('#end_date').html('');
+        $('#end_date_error').show().delay(3000).slideUp();
+        $('#end_date_error').html('Leave end date is required');
+        $('#end_date').focus();
+        return false;
+    } 
+    else if (!EndDayLeaveType) {
+        $('#EndDayLeaveType').html('');
+        $('#EndDayLeaveType_error').show().delay(3000).slideUp();
+        $('#EndDayLeaveType_error').html('Leave end date day type is required');
+        $('#EndDayLeaveType').focus();
+        return false;
+    } 
+    else if (!reason || !/\S/.test(reason)) {
+        $('#reason').html('');
+        $('#reason_error').show().delay(3000).slideUp();
+        $('#reason_error').html('leave reason is required');
+        $('#reason').focus();
+        return false;
+    }
+    else if(reason.length < 150 ){
+        $('#reason_error').html('');
+        $('#reason_error').show().delay(3000).slideUp();
+        $('#reason_error').html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#reason').focus();
+        return false;
+    }
+
+    var start_dateParts = start_date.split("-");
+    start_date = start_dateParts[2] + "-" + start_dateParts[1] + "-" + start_dateParts[0];
+
+    var end_dateParts = end_date.split("-");
+    end_date = end_dateParts[2] + "-" + end_dateParts[1] + "-" + end_dateParts[0];
+
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('start_date', start_date);
+    formData.append('end_date', end_date);
+    formData.append('reason', reason);
+    formData.append('LeaveTypeId', leavetype);
+    formData.append('leavestatus', leavestatus);
+    formData.append('attachment', attachment);
+    formData.append('leavetype', StartDayLeaveType);
+    formData.append('StartDayLeaveType', StartDayLeaveType);
+    formData.append('EndDayLeaveType', EndDayLeaveType);
+
+    $.ajax({
+        url: frontendURL + "leave/apply_leave_front",
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function () {
+            swal({
+                icon: "info",
+                title: "",
+                text: "Loading...",
+                buttons: false,
+            });
+        },
+        success: function (response) {
+            console.log("response", response);
+            if (response.response.status == 'success') {
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+                location.reload();
+            } else {
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+            }
+        }
+    });
+}
+
+function validateFile(input) {
+  const file = input.files[0];
+  const allowedExtensions = /(\.png|\.jpg)$/i;
+  if (!allowedExtensions.test(file.name)) {
+      swal({
+        icon: "info",
+        title: "",
+        text: "Please select a file with a .png or .jpg extension.",
+        buttons: false,
+        
+
+    });
+      input.value = ''; // Clear the file input
+  }
+}
+
+
+
+  function applyleavedate() {
+    checkleavetype();
+    var startDate = document.getElementById("start_date").value;
+    console.log(startDate)
+    var endDate = document.getElementById("end_date").value;
+    console.log(endDate)
+
+    splitdate = startDate.split("-");
+    newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+    splitenddate = endDate.split("-");
+    newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+    var sdate = new Date(newstartdate)
+    console.log("sdate",sdate)
+    var edate = new Date(newenddate)
+    console.log("edate",edate)
+
+    if (( edate < sdate)) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "End date should be greater than or equal to Start date",
+            button: "Close",
+        });
+        document.getElementById("end_date").value = "";
+    }
+
+    if (startDate === endDate){
+      $(".durationdiv").show()
+    }
+    else{
+      $(".durationdiv").hide()
+    }
+  }
+  function checkleavetype(){
+    var leavetype = $('#leavetype').val();
+    var startdate=$('#start_date').val();
+    var enddate=$('#end_date').val();
+    if(IsValid(leavetype)){
+      $('#leavetype_error').show().delay(3000).slideUp();
+      $('#leavetype_error').html('Leave Type is required');
+      $('#leavetype').focus();
+        return false;
+    }else{
+      if(leavetype!="Fullday"){
+
+
+        if(startdate !="" && enddate!="")  {
+          if(startdate!=enddate){
+            $('#end_date').val("");
+            $('#leavefunctionerror').show().delay(3000).slideUp();
+            $('#leavefunctionerror').html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#leavefunctionerror').focus();
+            return false;
+            }
+        }
+      }
+    }
+
+  }
+
+
+  function pendingenddate(id){
+    var startDate = document.getElementById("pndstart_date"+id).value;
+      console.log(startDate)
+      var endDate = document.getElementById("pndend_date"+id).value;
+      console.log(endDate)
+
+      splitdate = startDate.split("-");
+      newstartdate=[splitdate[1], splitdate[0], splitdate[2]].join('-');
+
+      splitenddate = endDate.split("-");
+      newenddate=[splitenddate[1], splitenddate[0], splitenddate[2]].join('-');
+
+
+      var sdate = new Date(newstartdate)
+      console.log("sdate",sdate)
+      var edate = new Date(newenddate)
+      console.log("edate",edate)
+  
+      if (( edate < sdate)) {
+        swal({
+              icon: "warning",
+              title: "",
+              text: "End date should be greater than or equal to Start date",
+              button: "Close",
+          });
+          document.getElementById("pndend_date"+id).value = "";
+      
+      }
+      pendingcheckleavetype(id);
+
+  }
+  function updateleave(id){
+
+    var start_date = $("#pndstart_date"+id).val();
+    var end_date = $("#pndend_date"+id).val();
+    var reason = $("#reason"+id).val();
+    var nameobj="pendingUpdateleavetype"+id
+    var leavetype =  $('input[name='+nameobj+']:checked').val();
+    var attachment = $('#pnd_attachment'+id)[0].files[0]
+    pendingcheckleavetype(id);
+    if (IsValid(start_date)) {
+      $('#start_dateerror'+id).html('');
+      $('#start_dateerror'+id).show().delay(3000).slideUp();
+      $('#start_dateerror'+id).html('Start date is required');
+      $('#start_date'+id).focus();
+        return false;
+    }else if (IsValid(end_date)){
+        $('#end_dateerror'+id).html('');
+        $('#end_dateerror'+id).show().delay(3000).slideUp();
+        $('#end_dateerror'+id).html('End date is required');
+        $('#end_date'+id).focus();
+          return false;
+    }else if (IsValid(reason)){
+        $('#reasonerror'+id).html('');
+        $('#reasonerror'+id).show().delay(3000).slideUp();
+        $('#reasonerror'+id).html('reason is required');
+        $('#reason'+id).focus();
+          return false;
+    }else if(reason.length < 150 ){
+        $('#reasonerror'+id).html('');
+        $('#reasonerror'+id).show().delay(3000).slideUp();
+        $('#reasonerror'+id).html('Please explain the application reason in detail (minimum 150 characters)');
+        $('#reason'+id).focus();
+          return false;
+    }else{
+      var formData = new FormData();
+      formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+      formData.append('start_date', start_date);
+      formData.append('end_date', end_date);
+      formData.append('reason', reason);
+      formData.append('leavetype', leavetype);
+      formData.append('attachment', attachment);
+
+      $.ajax( {
+        url: frontendURL +"leave/updateleave/"+ id,
+        type: 'POST',
+        data:formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function() {
+          swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+  
+        });
+        },
+        success: function(response){
+          console.log("----",response)
+          if (response.response.status == 'success'){   
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              });  
+              location.reload();  
+          }
+          else{
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              }); 
+          }
+    
+         
+        }
+      });
+    }
+  }
+  function pendingcheckleavetype(id){
+    var nameobj="pendingUpdateleavetype"+id
+    var leavetype =  $('input[name='+nameobj+']:checked').val();
+    var startdate = $("#pndstart_date"+id).val();
+    var enddate = $("#pndend_date"+id).val();
+
+
+      if(leavetype!="Fullday"){
+        if(startdate !="" && enddate!="")  {
+
+          if(startdate!=enddate){
+            $('#pndend_date'+id).val("");
+            $('#pendingleavefunctionerror'+id).show().delay(3000).slideUp();
+            $('#pendingleavefunctionerror'+id).html('Start date and End date must be same on ' +leavetype+ '  leave');
+            $('#pendingleavefunctionerror'+id).focus();
+            return false;
+            }
+        }
+      }
+  }
+  function withrawapplication(id){
+      $.ajax( {
+        url: frontendURL +"leave/widhrawapplication",
+        type: 'POST',
+        data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          'id':id,
+          },
+        dataType: 'json',
+        beforeSend: function() {
+          swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+  
+        });
+        },
+        success: function(response){
+          console.log("----",response)
+          if (response.response.status == 'success'){   
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              });  
+              location.reload();  
+          }
+          else{
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              }); 
+          }
+    
+         
+        }
+      });
+    
+  }
+  function applyfromdraftapplication(id){
+      $.ajax( {
+        url: frontendURL +"leave/statustypeleaveajax/"+id,
+        type: 'POST',
+        data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          'id':id,
+          },
+        dataType: 'json',
+        beforeSend: function() {
+          swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+  
+        });
+        },
+        success: function(response){
+          console.log("---- draft apply",response)
+          if (response.response.status == 'success'){   
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              });  
+              location.reload();  
+          }
+          else{
+            swal({
+              icon: response.response.status,
+              title: "",
+              text: response.response.msg,
+              button: "Close",
+              }); 
+          }
+    
+         
+        }
+      });
+    
+  }
+  function modalopen(){
+    var val =$("#Type").val();
+    console.log("val",val)
+    if(IsValid(val)){
+      $('#Type_err').show().delay(3000).slideUp();
+      $('#Type_err').html('Application Type is required');
+      $('#Type').focus();
+        return false;
+    }else{
+      swal({
+              icon: "info",
+              title: "",
+              text: 'We hope you had a word with your immediate leave manager on call ,if not then please communicate with them.',
+              button: "Ok",
+              }).then(() => {
+                if(val == 1){
+                  $('#WFH').val("False")
+                  $('#ApplyLeave').modal('toggle');
+                  $('#myModaladd').modal('hide');
+                }else if(val==2){
+                  $('#WFH').val("True")
+                  $('#WorkFromHome').modal('toggle');
+                  $('#myModaladd').modal('hide');
+                }
+      });
+    }
+
+
+  }
+
+  
+  $( "#start_date" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+   });
+  $( "#end_date" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+   });
+  $( "#WFHsdate" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+   });
+  $( "#WFHedate" ).datepicker({ 
+    dateFormat: 'dd-mm-yy',
+    minDate: 0,
+    changeYear:true,
+    maxDate: +90,
+    changeMonth: true,
+   });
+
+
+
+
+
+</script>
+
+{% endblock %}

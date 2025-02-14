@@ -1,0 +1,408 @@
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Attendance Report
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+
+<style>
+
+    .move{
+        text-align: center !important;
+        justify-content: center !important;
+        display:flex;
+        margin-top: 12rem;
+        background-color: white;
+        padding:40px;
+    }
+    .generate{
+        text-align: center !important;
+        justify-content: center !important;
+        display:flex;
+        box-shadow: 0 0 10px #0000001f;
+        border-radius: 1rem;
+        margin: 2rem auto;
+        background-color: white;
+        padding:20px;
+    }
+    .fileinput{
+       border:2px solid #00c0ef;
+       padding-right: 10rem;
+    }
+    .btns{
+        padding-top:30px;
+    }
+    .btn{
+        font-weight: bold;
+    }
+    .messages{
+        color:red;
+    }
+    input[type=button]{
+        padding: 4px;
+        background: #476f8b;
+        color: white;
+        font-size: 16px;
+    
+    }
+    
+    input[type=file]{
+        border:1px solid blue;
+        padding:5px;
+    }
+    /* input#btnFileUpload {
+        margin-right: 16rem;
+    } */
+    
+    h4{
+        margin: 0px;
+        padding-bottom: 32px;
+    }
+    .attbuttons{
+        padding:10px;
+        text-align: center;
+        margin:0px 10px 0px 10px;
+
+    }
+    .btnFile{
+        padding: 10px;
+        color: #fff;
+        background-color:var(--fc-main);
+        box-shadow: 0 0 10px #0000001f;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        margin-top: 10px;
+        width: 150px;
+        padding: 5px 10px;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+    #spnFilePath{
+        color: #aaa;
+        margin-top: 5px;
+    }
+    .attbuttons{
+        border: none;
+        background-color: var(--fc-main);
+        color: #fff;
+        height: 44px;
+        border-radius: 24px;
+        padding: 10px 25px;
+    }
+    .attbuttons:hover , .attbuttons:visited{
+        background-color: var(--fc-main);
+        color: #fff;
+    }
+    
+    .reportbutton{
+        border: none;
+        background-color: #174fa3;
+        color: #fff;
+        height: 40px;
+        border-radius: 24px;
+        padding:0px 18px 0px 18px;
+    }
+    .reportbutton:hover , .rereportbutton:visited{
+        background-color: var(--fc-main);
+        color: #fff;
+    }
+    .table-div{
+        margin-top:0px !important;
+    }
+</style>
+
+
+
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+        <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+      
+    <div class="mx-4 mt-3">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% comment %} web view {% endcomment %}
+            <div class="d-flex justify-content-end ">
+               
+                {% csrf_token %}
+                
+                <div class="d-flex justify-content-between mbview ">
+
+                    <span class="mx-2 span-width-100">
+                        <label class="m-0 p-0" for="sdate">From:</label>
+                        <input type="text" id="sdate" name="sdate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                        <div> <img class="calendarIcon-img" src="{% static "Media/Employee_Master/calendarLogo.svg" %}"/></div>
+                        <p id="sdate_e" class="error"></p>
+                    </span>
+                    <span  class="mx-2 span-width-100">                
+                        <label for="edate" class="m-0 p-0">To:</label>
+                        <input type="text" id="edate" name="edate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                        <div> <img class="calendarIcon-img" src="{% static "Media/Employee_Master/calendarLogo.svg" %}"/></div>
+                        <p id="edate_e" class="error"></p>
+                    </span>
+                    <span>
+                        <button onclick="monthly_report()" type="button" class="reportbutton generatereportbutton">Generate Report</button>      
+                    </span>
+                   
+                </div>
+            </div>
+            
+            {% comment %} mobile View {% endcomment %}
+            {% comment %} <div class="d-flex justify-content-between vertical-center d-block d-sm-none d-md-none d-lg-none">
+                <span class="company-title pb-2">Attendance</span>
+                <button onclick="monthly_report()" type="button" class="reportbutton ms-4">Generate Report</button> 
+                {% csrf_token %}
+            </div>
+            <div class="d-flex justify-content-between vertical-center d-block d-sm-none d-md-none d-lg-none">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="col-sm-6">
+                            <label for="sdate">From:</label>
+                            <input type="text" id="sdate" name="sdate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                            <div> <img class="calendarIcon-img" src="{% static "Media/Employee_Master/calendarLogo.svg" %}"/></div>
+                            <p id="sdate_e" class="error"></p>
+                        </div>
+                        <div  class="col-sm-6">                
+                            <label for="edate">To:</label>
+                            <input type="text" id="edate" name="edate" autocomplete="off" class="input-feild date-feild-bg" readonly>
+                            <div> <img class="calendarIcon-img" src="{% static "Media/Employee_Master/calendarLogo.svg" %}"/></div>
+                            <p id="edate_e" class="error"></p>
+                        </div>
+
+                    </div>
+                </div>    
+            </div>   {% endcomment %}
+        </form>
+    </div>
+            
+        
+    
+    <div class="table-div">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="p-3">
+                <h6>Add Attendance File:</h6>
+            </div>
+            
+
+            <span class="attendance-box">
+                <div class="d-flex justify-content-center">
+                    <div class="file-upload-box">
+                        <div class="file-upload-btn">
+                            <p id="filename" class="text-secondary p-0 m-0"></p>
+
+                            <label type="button" class="btnFile my-4" id="btnFileUpload">Upload File
+                                <input id="datafile"  name="datafile"  type="file"  accept=".dat, .txt" hidden>
+                                
+                            </label>
+
+                            <p class="p-0 m-0">Drop your file here </p>
+                            <p id="spnFilePath"></p>
+                            <span id="file_e" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+    
+    
+                <div id="msgsuccess"></div>
+                
+                <div class="d-flex justify-content-center mblviewbutton py-5 mb-5">
+                    <button type="submit" onclick="return validation();" class="reportbutton btn-width-100 mx-2">New</button>
+                    <button onclick="return loaddata()" class="reportbutton btn-width-100 mx-2">Append</button>
+                </div>
+            </span>
+            
+        </form>
+    </div>
+</main>
+{% endblock %}{%block script%}{{block.super}}
+  <!-- ==================================================================================================================================================== -->
+<script src="{% static 'assets/js/validation/validations.js'%}"></script>
+
+
+
+<script>
+
+    $(document).ready(function() {
+  
+
+        $("#sdate").datepicker({ 
+            dateFormat: 'dd-mm-yy',
+        })
+
+        $("#edate").datepicker({ 
+            dateFormat: 'dd-mm-yy',
+        });
+    });
+    
+    // $('#sdate').datepicker({
+    //     onSelect: function(dateText, inst){
+    //         $('#edate').datepicker('option', 'minDate', new Date(dateText));
+    
+    //     },
+    // });
+    
+    // $('#edate').datepicker({
+    //     onSelect: function(dateText, inst){
+    //         $('#sdate').datepicker('option', 'maxDate', new Date(dateText));
+    //     }
+    // });    
+
+
+
+
+    function validation(){
+        var filereq = $("#datafile").val();
+        
+        console.log("filereq",filereq)
+
+        if (IsValid(filereq)) {
+            $('#file_e').show().delay(3000).slideUp();
+            $('#file_e').html('please select file');
+            return false;
+        }
+
+
+    }
+    
+    function loaddata(){
+        var fd = new FormData();
+        fd.append('file', $('#datafile')[0].files[0]);
+        fd.append('csrfmiddlewaretoken','{{csrf_token}}');
+        console.log(fd)
+        
+        var filereq = $("#datafile").val();
+        console.log("filereq",filereq)
+
+        if (filereq=="") {
+            $('#file_e').show().delay(3000).slideUp();
+            $('#file_e').html('please select file').css("color","red");
+            return false;
+        }
+        else{
+            $.ajax({
+                url:frontendURL+"appendfiledata",
+                data: fd,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success:function(response){
+                    console.log("hiiiii")
+
+
+                    if(response.n==1){
+                        swal({
+                            icon: response.response.status,
+                            title: "",
+                            text: response.response.msg,
+                            button: "Close",
+                        });
+
+                    }else{
+                        swal({
+                            icon: response.response.status,
+                            title: "",
+                            text: response.response.msg,
+                            button: "Close",
+                        });
+
+                    }         
+                }
+            })
+        }
+    }
+
+    function monthly_report(){
+        var sDate=$("#sdate").val();
+        console.log("sDate",sDate);
+        var eDate=$("#edate").val();
+        console.log("eDate",eDate);
+        if (sDate!="" && eDate==""){
+            $('#edate').html('');
+                $('#edate_e').show().delay(3000).slideUp();
+                $('#edate_e').html('End Date is required');
+                $('#edate').focus();
+                return false;
+        }
+        else if (sDate=="" && eDate!=""){
+            $('#sdate').html('');
+                $('#sdate_e').show().delay(3000).slideUp();
+                $('#sdate_e').html('Start Date is required');
+                $('#sdate').focus();
+                return false;
+       
+            
+        }
+        else{
+            $.ajax({
+                url:frontendURL+"monthlydata",
+                data:{
+                    csrfmiddlewaretoken:'{{ csrf_token }}',
+                    'sdate':sDate,
+                    'edate':eDate,
+                    },
+                type: 'POST',
+                dataType: 'json',
+                success:function(response){
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: "Report Generated",
+                        button: "Close",
+                    });
+                    console.log(response)
+                    urlpath = response.response.url
+                    window.location.href = urlpath;
+                }
+            })
+        }
+    }
+
+
+
+    $("#datafile").on("change", function(e){
+        $('#filename').text(e.target.files[0].name);
+
+        var file = $(this).prop('files')[0]; // Get the selected file
+        var fileName = file.name;
+        var fileExtension = fileName.split('.').pop().toLowerCase(); // Get the file extension
+        
+        // Validating the file extension
+        if (fileExtension === 'dat' || fileExtension === 'txt') {
+          // File is valid, proceed with further logic
+          console.log('Selected file is valid: ' + fileName);
+        } else {
+          // Invalid file, display an error message or take appropriate action
+          $('#file_e').show().delay(3000).slideUp();
+          $('#file_e').html('please select valid  file extension .dat or .txt').css("color","red");
+          // Clear the file input value
+          $(this).val('');
+          $('#filename').text('')
+        }
+    })
+</script>
+
+
+    
+    
+{%endblock%}

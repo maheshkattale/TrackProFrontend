@@ -1,0 +1,901 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+TrackPro Rank
+</div>
+{% endblock %}
+{% block content %}
+<style>
+.innertable {
+    width: 100%;
+    position: relative;
+    overflow-x: auto;
+    display: block;
+    max-height:400px;
+    overflow-y: scroll;
+    
+}
+.table-div {
+    background-color: white !important;
+    border-radius: 12px !important;
+    margin: 27px 14px !important;
+    padding: 12px 15px 15px 15px !important;
+    box-shadow: 0 4px 8px #0000001f;
+}
+.maindepttable{
+    margin: 15px 10px;
+    box-shadow: 2px 3px 4px #00000029;
+}
+.maintable table {
+  border-collapse: collapse;
+}
+
+
+.maintable thead tr th {
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 170px !important;
+    text-align:center;
+}
+
+.maintable thead{
+  position: sticky;
+  top: 0;
+  background: #000;
+  color: black;
+  left: 0;
+  z-index: 100;
+}
+
+
+.maintable tbody th {
+  position: -webkit-sticky; /* for Safari */
+  position: sticky;
+  left: 0;
+  background: #FFF;
+  border-right: 1px solid #CCC;
+  z-index: 10;
+}
+
+.maintable thead th:nth-child(1){
+   position: sticky;
+  left: 0;
+  z-index: 10 !important;
+  background: lightgrey;
+}
+.dephead{
+    background-color: white !important;
+    min-width: 190px;
+}
+.activetdbutton {
+    font-size: 12px;
+    background: #fff;
+    border-radius: 10px;
+    color: black;
+    border: 1px solid lightgrey;
+    cursor:pointer;
+}
+.disabletdbutton{
+    font-size: 12px;
+    background: #fff;
+    border-radius: 10px;
+    color: black;
+    border: 1px solid lightgrey;
+    opacity: 0.4;
+    cursor:none;
+}
+.viewrankbtn{
+    font-size: 12px;
+    background: #174fa3;
+    border-radius: 10px; 
+    color:white;
+    border: 1px solid #174fa3;
+    cursor:pointer;
+}
+.viewrankbtn:hover{
+    font-size: 12px;
+    background: #174fa3;
+    border-radius: 10px;
+    color:white;
+    border: 1px solid #174fa3;
+    cursor:pointer;
+}
+.activetdbutton:hover{
+    background:#174fa3;
+    border:1px solid #174fa3;
+    color:white;
+}
+.disabletdbutton:hover{
+    font-size: 12px;
+    background: #fff;
+    border-radius: 10px;
+    color: black;
+    border: 1px solid lightgrey;
+    opacity: 0.4;
+    cursor:none;
+}
+
+
+
+.successbutton{
+    font-size: 12px;
+    background: green;
+    border: none;
+    border-radius: 10px;
+    color:white;
+}
+.pageheading {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 10px;
+}
+.overallbutton{
+    font-size: 12px;
+    background: #174fa3;
+    border-radius: 10px;
+    color: #fff;
+    border: 1px solid lightgrey;
+}
+.iconsinfo{
+    display: flex;
+    align-items: center;
+  justify-content: center;
+}
+.fa-info-circle{
+    font-size:19px;
+    color: #626060;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ebebeb;
+    border:none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: lightgrey; 
+}
+.large-table-fake-top-scroll-container-3 {
+  max-width: 100%;
+  overflow-x: scroll;
+  overflow-y: auto;
+  max-height:10px;
+}
+.large-table-fake-top-scroll-container-3 div {
+  background-color: #fff;
+  font-size: 1px;
+  line-height: 1px;
+}
+.select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #acacac !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: transparent;
+    width: 200px;
+    border: none;
+}
+@media (min-width: 576px)
+{
+    #weeklywardetails>.modal-dialog {
+        max-width: 70%;
+    }
+}
+</style>
+<main class="main-wrapper ">
+  <!-- ==================Row1======================= -->
+  <div class="">
+    <div class="firstdiv d-flex justify-content-end">
+   
+        <div class=" me-2">
+          <select class="form-select select2dropdown" aria-label="Default select example" id="Year" onchange="gettableinfo();">
+              {% for y in yearlist %}
+              {%if currentyear == y.Year%}
+              <option value="{{y.Year}}" selected>{{y.Year}}</option>
+              {%else%}
+              <option value="{{y.Year}}">{{y.Year}}</option>
+              {%endif%}
+              {% endfor %}
+            </select>
+        </div>
+    </div>
+  
+   <div class="maindepttable">
+     
+  </div>
+  <div class="modal" id="overallavg" aria-hidden="true" aria-labelledby="overallavgLabel" >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="overallavgLabel">Employee Avg Rank</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="container-fluid">
+              <div class="row">
+                  <div id="emprankdata">
+                      <table class="table" >
+                          <thead>
+                            <tr>
+                              <th style="width: 20%;">Sr No</th>
+                              <th>Employee Name</th>
+                              <th>Avg Percentage</th>
+                              <th>Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody id="empavgrankdatatable">
+                         
+                          </tbody>
+                        </table>
+  
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  
+  <div class="modal" id="weeklywardetails" aria-hidden="true" aria-labelledby="weeklywardetailsLabel" >
+      <div class="modal-dialog modal-dialog-centered w-100" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="weeklywardetailsLabel">Weekly Details  </h5>
+            <span>Week : <span id="weekno"></span>   Year : <span id="yearno"></span>           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </span>
+          </div>
+          <div class="modal-body p-0">
+            <div class="container-fluid">
+              <div class="row">
+                  <div id="emprankdata">
+                      <table class="table" >
+                          <thead>
+                            <tr>
+                              <th>Sr No</th>
+                              <th>Employee Name</th>
+                              <th>TrackPro Score</th>
+                              <th> Week Percent</th>
+                              <th>Yearly Trackpro Percnt</th>
+                              <th>Department  Rank</th>
+                              <th>Rank</th>
+                             
+                              <th>Prev  Rank</th>
+                              <th>Rank differnce</th>
+  
+  
+                            </tr>
+                          </thead>
+                          <tbody id="weeklywardetailsbody">
+                         
+                          </tbody>
+                        </table>
+  
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal" id="deptweekinfomodal" aria-hidden="true" aria-labelledby="deptweekinfomodalLabel" >
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="deptweekinfomodalLabel">Employee Rank</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+          <div class="container-fluid">
+          <div class="row">
+              <div id="emprankdata">
+                  <table class="table" >
+                      <thead>
+                          <tr>
+                          <th style="width: 20%;">Sr No</th>
+                          <th>Employee Name</th>
+                          <th>Percentage</th>
+                          <th>Rank</th>
+                          </tr>
+                      </thead>
+                      <tbody id="emprankdatatable">
+                      
+                      </tbody>
+                      </table>
+  
+              </div>
+          </div>
+          </div>
+      </div>
+      </div>
+  </div>
+  </div>
+  
+  </div>
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+<script>
+
+    
+    $(document).ready(function() {
+        gettableinfo();
+    });     
+    
+
+
+    function getweek(){
+
+    }
+
+        
+    var d = new Date();
+    Date.prototype.getWeek = function() {
+        var onejan = new Date(this.getFullYear(), 0, 1);
+        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    }
+    var currWeek = (new Date()).getWeek() - 1;
+    var currYear = d.getFullYear()
+
+
+    function gettableinfo(){
+        var year = $('#Year').val()
+        var data = {
+            'Year': year,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        }
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/gettableinfo',
+            data: data,
+            dataType: "json",
+
+            success: function(response) {
+                console.log("responresponsese",response)
+                var trhtml = "";
+                trhtml = 
+                    ` <div class="large-table-fake-top-scroll-container-3">
+                            <div>&nbsp;</div>
+                        </div>
+                    <div class="innertable">
+                        <table style="width:100%;" class="maintable table table-striped">
+                        <thead>
+                            <tr>
+                            <th></th>
+                            <th></th>
+                            ${response.weeklist.map(l => `
+
+                                ${ l.weekbtnstatus == false
+                                    ?
+                                    `
+                                    <th class=""><span class="btn btn-success successbutton disabletdbutton"  aria-hidden="true" >Week Rank</span></th>
+                                    `
+                                    :
+                                    `
+                                    <th class=""><span class="btn btn-success successbutton" aria-hidden="true"  data-bs-toggle="modal" href="#weeklywardetails" onclick="getweeklywarrank(${l.Week})">Week Rank</span></th>`
+                                }
+                                
+                                    `).join("\n")}
+                            
+                            </tr>
+                            <tr>
+                                <th>Department</th>
+                                <th></th>
+                        
+                                ${response.weeklist.map(l => `
+                                    <th>Week ${l.Week}</th>
+                                    `).join("\n")}
+                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${response.deptdata.map(l => `
+                            <tr height="70px">
+                            <th class="dephead">${l.DepartmentName}</th>
+                            <td><span class="btn btn-primary overallbutton" onclick="getempavgrankData(${l.id})" aria-hidden="true"  data-bs-toggle="modal" href="#overallavg">Overall Rank</span></td>
+                            ${l.weeklist.map(w => `
+                            <td> 
+                                ${ w.viewrankbtn == true
+                                    ?
+                                    `
+                                    <div class="d-flex justify-content-center">
+                                    <span class="btn viewrankbtn" data-bs-toggle="modal" onclick="viewemprankData(${w.week},${l.id})" href="#deptweekinfomodal" >View Rank</span>
+                                    </div>
+                                    `
+                                :
+                                `
+                                <div class="iconsinfo" id="iconsinfo${w.year}${w.week}${l.id}">
+                                    ${ w.btnstatus == false
+                                        ?
+                                        `<span class="btn btn-primary disabletdbutton">Publish Rank</span>`
+                                        :
+                                        `
+                                        <span class="btn btn-primary activetdbutton" onclick="publishdeptrank(${w.week},${l.id})">Publish Rank</span>`
+                                    }
+                                    <i class="fa fa-info-circle ps-1" onclick="getemprankData(${w.week},${l.id})" aria-hidden="true" data-bs-toggle="modal" href="#deptweekinfomodal"></i>
+                                </div>`
+                            }
+                            </td>
+                            `).join("\n")}
+                            </tr>
+                            `).join("\n")}
+                        </tbody>
+                        </table>
+                    </div>`
+
+                    $('.maindepttable').html(trhtml);
+
+                    var tableContainer = $(".innertable");
+                    var table = $(".innertable table");
+                    var fakeContainer = $(".large-table-fake-top-scroll-container-3");
+                    var fakeDiv = $(".large-table-fake-top-scroll-container-3 div");
+
+                    var tableWidth = table.width();
+                    fakeDiv.width(tableWidth);
+
+                    fakeContainer.scroll(function () {
+                        tableContainer.scrollLeft(fakeContainer.scrollLeft());
+                    });
+                        tableContainer.scroll(function () {
+                        fakeContainer.scrollLeft(tableContainer.scrollLeft());
+                    });
+            }
+            
+
+        })
+    }
+
+    $(function () {
+    
+    });
+
+    function getemprankData(weekid,deptid){
+        var year = $('#Year').val()
+            var data = {
+                'Year': year,
+                'Week':weekid,
+                'departmentid':deptid,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            }
+            $.ajax({
+                type: 'post',
+                url: frontendURL + 'checktrackpro/getweeklyempinfo',
+                data: data,
+                dataType: "json",
+
+                success: function(response) {
+                    var trHTML="";
+                    var counter = 1;
+                    $.each(response.data, function(i,o){
+                    trHTML+=`<tr>
+                    <td>`+counter+`</td>
+                    <td>`+o.empname+`</td>
+                    <td>`+o.status+`</td>
+                    <td>`+o.rank+`</td>
+                </tr>`
+                counter=counter+1;  
+                    })
+                $('#emprankdatatable').html(trHTML);
+                }
+            })
+    }
+
+    function getempavgrankData(deptid){
+            var data = {
+    
+                'departmentid':deptid,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            }
+            $.ajax({
+                type: 'post',
+                url: frontendURL + 'checktrackpro/getavgempinfo',
+                data: data,
+                dataType: "json",
+
+                success: function(response) {
+                    var trHTML="";
+                    var counter = 1;
+                    $.each(response.data, function(i,o){
+                    trHTML+=`<tr>
+                    <td>`+counter+`</td>
+                    <td>`+o.Name+`</td>
+                    <td class="text-center">`+o.Percentage+`</td>
+                    <td class="text-center">`+counter+`</td>
+                </tr>`
+                counter=counter+1;  
+                    })
+                $('#empavgrankdatatable').html(trHTML);
+                }
+            })
+    }
+
+
+
+
+    function getweeklywarrank(Week){
+        var Year=$("#Year").val();
+        var data = {
+
+            'Week':Week,
+            'Year':Year,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        }
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/publishrank',
+            data: data,
+            dataType: "json",
+
+            success: function(response) {
+                console.log("response of weekly",response);
+                var trHTML="";
+                var counter = 1;
+                $.each(response.data, function(i,o){
+                trHTML+=`
+                <tr>
+                <td class="text-center">`+counter+`</td>
+                <td>`+o.Employee+`</td>
+                <td class="text-center">`+o.TrackProScore+`/`+o.TotalScore+`</td>
+                <td class="text-center">`+o.TrackProPercent+`</td>
+                <td class="text-center">`+o.yearlywarpercnt+`</td>
+                <td class="text-center">`+o.DepartmentwiseRank+`</td>
+                <td class="text-center">`+o.Rank+`</td>
+                <td class="text-center">`+o.prevweekrank+`</td>
+                <td class="text-center">`+o.Rank_diffstr+`</td>
+
+
+
+            </tr>`
+            counter=counter+1;  
+                })
+            $('#weeklywardetailsbody').html(trHTML);
+            $('#weekno').html(Week);
+            $('#yearno').html(Year);
+            },    error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        })
+    }
+
+
+    function publishdeptrank(weekid,deptid){
+        var submithtml
+        submithtml=""
+        var year = $('#Year').val()
+            var data = {
+                'Year': year,
+                'Week':weekid,
+                'departmentid':deptid,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            }
+            $.ajax({
+                type: 'post',
+                url: frontendURL + 'checktrackpro/publishdeptwiserank',
+                data: data,
+                dataType: "json",
+                success: function(response) {
+                    console.log("dddd",response,response.n)
+                    swal({
+                        title: "",
+                        text: response.Msg,
+                        button: "ok",
+                    });
+                    if (response.n == 1){
+                        console.log("dddd11",'#iconsinfo'+year+weekid+deptid)
+
+                        submithtml = `<span class="btn viewrankbtn" data-bs-toggle="modal" onclick="viewemprankData(${weekid},${deptid})" href="#deptweekinfomodal" >View Rank</span>`
+                        $('#iconsinfo'+year+weekid+deptid).html(submithtml);
+
+                    }
+                }
+            })
+    }
+
+
+    function viewemprankData(weekid,deptid){
+        var year = $('#Year').val()
+            var data = {
+                'Year': year,
+                'Week':weekid,
+                'departmentid':deptid,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            }
+            $.ajax({
+                type: 'post',
+                url: frontendURL + 'checktrackpro/viewweeklyempinfo',
+                data: data,
+                dataType: "json",
+
+                success: function(response) {
+                    var trHTML="";
+                    var counter = 1;
+                    $.each(response.data, function(i,o){
+                    trHTML+=`<tr>
+                    <td>`+counter+`</td>
+                    <td>`+o.empname+`</td>
+                    <td>`+o.status+`</td>
+                    <td>`+o.rank+`</td>
+                </tr>`
+                counter=counter+1;  
+                    })
+                $('#emprankdatatable').html(trHTML);
+                }
+            })
+    }
+
+    function publishranks() {
+        var Year = $('#Year').val();
+        var Week = $('#Week').val();
+        console.log("Year",Year)
+        console.log("Week",Week)
+        var trHTML = "";
+        counter=1
+        var data = {
+            'Year': Year,
+            'Week': Week
+        };
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/publishrank',
+            data: data,
+            dataType: "json",
+
+            success: function(response) {
+                console.log("resp",response)
+                if (response.n == 0) {
+                    swal({
+                        title: "",
+                        text: response.Msg,
+                        button: "ok",
+                    });
+                } else if (response.n == 1) {
+                    $('.selectedweek').html(response.context.selectedweek);
+                    $('.prevweek').html(response.context.prevweek);
+
+                    $.each(response.data, function(i,o){
+
+              
+              trHTML+=`<tr>
+                            <td>`+counter+`</td>
+                            <td>`+o.userstr+`</td>
+                            <td>
+                                <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">`+o.TrackProScore+`</td>
+                            <td class="text-center">`+o.TotalScore+`</td>
+                            <td class="text-center">`+o.yearlywarpercnt+`</td>
+                            <td class="text-center">`+o.prevweekpercent+`</td>
+                            <td class="text-center">`+o.TrackProPercent+`</td>
+                            <td class="text-center">`+o.prevweekrank+`</td>
+                            <td class="d-flex justify-content-around"><div class="">`+o.Rank+` </div>
+                                <span>`+o.Rank_diffstr+`</span></td>
+                         
+                        </tr>`   
+                        counter += 1 
+              }) 
+              
+              initialiseDataTable(trHTML);
+
+                    
+                    swal({
+                        title: "",
+                        type: "success",
+                        text: 'Ranks published',
+                        timer: 2000,
+                        buttons: true,
+                        showConfirmButton: false,
+                        dangerMode: true,
+                      });
+                   
+                        // window.location.reload(true);
+
+                }
+
+            },
+        });
+    }
+
+    function publishemployeeinfo() {
+        var Year = $('#Year').val();
+        var Week = $('#Week').val();
+        var employee = $('#Employee').val();
+        var trHTML = "";
+        counter=1
+        var data = {
+            'Year': Year,
+            'Week': Week,
+            'employee':employee
+        };
+        $('#publishrank').prop('disabled', false).css({'opacity':'1','cursor':'pointer'});
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/Getemployeerankinformation',
+            data: data,
+            dataType: "json",
+
+            success: function(response) {
+                console.log("resp",response)
+                if (response.n == 0) {
+                    swal({
+                        title: "",
+                        text: response.Msg,
+                        button: "ok",
+                    });
+                } else if (response.n == 1) {
+                    $('.selectedweek').html(response.context.selectedweek);
+                    $('.prevweek').html(response.context.prevweek);
+
+                    $.each(response.data, function(i,o){
+                        if (o.in_Intermediate == "Present"){
+                        trHTML+=`<tr>
+                            <td>`+counter+`</td>
+                            <td>`+o.userstr+`</td>
+                            <td>
+                                <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">`+o.TrackProScore+`</td>
+                            <td class="text-center">`+o.TotalScore+`</td>
+                            <td class="text-center">`+o.yearlywarpercnt+`</td>
+                            <td class="text-center">`+o.prevweekpercent+`</td>
+                            <td class="text-center">`+o.TrackProPercent+`</td>
+                            <td class="text-center">`+o.prevweekrank+`</td>
+                            <td class="d-flex justify-content-around"><div class="">`+o.Rank+` </div>
+                                <span>`+o.Rank_diffstr+`</span></td>
+                         
+                        </tr>`   
+                    }
+                    else if(o.in_Intermediate == "Absent"){
+                        
+                        $('#publishrank').prop('disabled', true).css({'opacity':'0.6','cursor':'not-allowed'});
+                        trHTML+=`<tr class="absentinint">
+                            <td>`+counter+`</td>
+                            <td>`+o.userstr+`</td>
+                            <td>
+                                <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">`+o.TrackProScore+`</td>
+                            <td class="text-center">`+o.TotalScore+`</td>
+                            <td class="text-center">`+o.yearlywarpercnt+`</td>
+                            <td class="text-center">`+o.prevweekpercent+`</td>
+                            <td class="text-center">`+o.TrackProPercent+`</td>
+                            <td class="text-center">`+o.prevweekrank+`</td>
+                            <td class="d-flex justify-content-around"><div class="">`+o.Rank+` </div>
+                                <span>`+o.Rank_diffstr+`</span></td>
+                         
+                        </tr>`   
+                    }
+                    else{
+
+                    }
+
+                        counter += 1 
+              }) 
+              
+              initialiseDataTable(trHTML);
+
+                    
+                 
+                }
+
+            },
+        });
+    }
+
+    function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('.rankdatatable')) {
+        $('.rankdatatable').DataTable().destroy();
+    }
+    $('.rankdatatable tbody').empty();
+    $(".rankdatatabletbody").html(trHTML);
+    $('.rankdatatable').DataTable({
+      // sDom: 'lrtip',
+        //  autoWidth: false
+        "ordering": false,
+        // "bLengthChange": false 
+        })
+        }
+
+</script>
+
+{% endblock %}

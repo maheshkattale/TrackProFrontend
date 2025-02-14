@@ -1,0 +1,735 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+Events
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
+<style>
+  #Eventtable>tbody>tr>td {
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 15px !important;
+    border-bottom: none !important;
+  }
+
+  #Eventtable>thead>tr>th {
+    text-transform: capitalize;
+    font-weight: 500;
+    color: black;
+    padding: 15px;
+    background-color: white !important;
+  }
+
+  input [type=radio] {
+    display: none;
+  }
+
+  .remarkbtn-check {
+    border: none !important;
+    display: none !important;
+  }
+
+  .modaladdbtn {
+    background-color: #174fa3 !important;
+    color: white;
+    padding: 10px 50px;
+    text-align: center;
+    border: none;
+    border-radius: 20px;
+  }
+
+  .modalClosebtn {
+    margin-left: 16px;
+    color: red;
+    ;
+    padding: 6px 41px;
+    text-align: center;
+    border-radius: 20px;
+    border: 1px solid red;
+    background-color: transparent !important;
+  }
+  .remarksicons{
+    display: flex;
+    justify-content: space-around;
+  }
+  .remarksicons img{
+    width:25px;
+    height:25px;
+  }
+</style>
+
+
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div
+        style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;"
+        class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+          style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <div id="snackbar"></div>
+
+
+  <div class="title-div">
+    <span class="company-title">Events/Milestones</span>
+    <span>
+      <button type="button" class="add-btn" data-bs-toggle="modal" data-bs-target="#Addeventmodal">+ Add Event</button>
+    </span>
+  </div>
+
+
+
+
+
+
+  <div class="table-div">
+    <table class="row-border w-100" id="Eventtable">
+      <thead>
+        <th>
+          Sr.No
+        </th>
+        <th>
+          Client
+        </th>
+        <th>
+          Project
+        </th>
+        <th>
+          AssignTo
+        </th>
+        <th style="width:20%;">
+          Task Description
+        </th>
+        <th>
+          AssignBy
+        </th>
+        <th>
+          FilledBy
+        </th>
+        <th>
+          Remark
+        </th>
+        <th>
+          Extra Note
+        </th>
+        <th class="text-center">
+          Action
+        </th>
+      </thead>
+
+      <tbody id="Eventlistbody">
+        {%for i in eventlist %}
+        <tr>
+          <td>{{forloop.counter}}</td>
+          <td>{{i.clientstr}}</td>
+          <td>{{i.projectstr}}</td>
+          <td>{{i.Assign_Tostr}}</td>
+          <td>{{i.TaskDescription}}</td>
+          <td>{{i.Assign_Bystr}}</td>
+          <td>{{i.FilledBystr}}</td>
+          <td>
+            <div class="remarksicons">
+              <div>{{i.remarkstr|safe}}</div>
+              <div>{{i.bonusstr|safe}}</div>
+            </div>
+          </td>
+          <td>{{i.AddNote}}</td>
+          <td class="actionicons">
+            <a onclick="updategetclientdata({{i.id}},{{i.ClientId}},{{i.Assign_To}},{{i.Assign_By}},{{i.Project}});"
+              class="viewEmpDeetsBtn" data-bs-toggle="modal" data-bs-target="#updateeventmodal{{i.id}}"><img
+                class="edit-icon" src="{% static '/Media/taskicons/edit.svg' %}" height="20px" alt="edit icon"> </a>
+            <a class="viewEmpDeetsBtn" href="{%url 'ClientMaster:deleteevent' i.id %}"><img class="edit-icon"
+                src="{% static '/Media/taskicons/delete.svg' %}" height="20px" alt="edit icon"> </a>
+          </td>
+
+        </tr>
+        {%endfor%}
+
+
+      </tbody>
+    </table>
+  </div>
+
+  {% for i in eventlist %}
+  <div class="modal fade" id="updateeventmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel">Update Event</h5>
+        </div>
+        <div class="modal-body">
+            <form method="post" class="formstyle" enctype="multipart/form-data">
+                {% csrf_token %}
+          <div class="row mt-4">
+            <div class="col-3 px-4">
+              <input type="hidden" name="eventid" value="{{i.id}}">
+              <label for="upclientname{{i.id}}">Client Name</label>
+                <select id='upclientname{{i.id}}' name="Updateclient" class="select2dropdown"
+                  onchange="updategetclientdata({{i.id}},this.value,{{i.Assign_To}},{{i.Assign_By}},{{i.Project}});">
+                  <option value=''>  Select Client </option>
+                  {% for c in clientlist %}
+                    {%if c.id == i.ClientId%}
+                      <option value="{{c.id}}" selected>{{c.ClientName}}</option>
+                      {%else%}
+                      <option value="{{c.id}}">{{c.ClientName}}</option>
+                      {%endif%}
+                  {% endfor %}
+                </select>
+              <span id="clientnameerror{{i.id}}" class="error-message"></span>
+            </div>
+
+            <div class="col-3 px-4">
+              <label for="clientproject{{i.id}}">Project</label>
+              <select id='clientproject{{i.id}}' name="updateclientproject" class="select2dropdown">
+                <option value=''>Select Project</option>
+              </select>
+              <span id="clientprojecterror{{i.id}}" class="error-message"></span>
+            </div>
+
+            <div class="col-3 px-4">
+              <label for="AssignTo{{i.id}}">AssignTo</label>
+              <select id='AssignTo{{i.id}}' name="UpdateAssign_To" class="select2dropdown">
+                <option value=''>Select Team Member</option>
+              </select>
+              <span id="AssignToerror{{i.id}}" class="error-message"></span>
+            </div>
+            <div class="col-3 px-4">
+              <label for="AssignBy{{i.id}}">AssignBy</label>
+              <select id='AssignBy{{i.id}}' name="UpdateAssign_By" class="select2dropdown">
+                <option value=''>Select Client-side Manager</option>
+              </select>
+              <span id="AssignByerror{{i.id}}" class="error-message"></span>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-6 px-4">
+              <label for="Taskdescription{{i.id}}">Task Description :</label>
+              <textarea id="Taskdescription{{i.id}}" name="UpdateTaskDescription"
+                style="width:100%;">{{i.TaskDescription}}</textarea>
+                <div id="Taskdescriptionrerror{{i.id}}" class="error-message"></div>
+            </div>
+            <div class="col-6 px-4">
+              <label for="extranote{{i.id}}">Add Note :</label>
+              <textarea id="extranote{{i.id}}" name="Updateextranote" style="width:100%;">{{i.AddNote}}</textarea>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-10 px-4">
+              <label for="Taskdescription">Task Remark :</label>
+              <div class="d-flex remarkflex">
+
+                {%if i.TaskValidation == 1 %}
+
+                <input type="radio" id='green{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="1" class="remarkbtn-check"
+                  autocomplete="off" checked>
+                <label class="btn remarkbtn-radio-green labelspace" data-bs-toggle="tooltip" title="Green"
+                  data-bs-placement="bottom" for="green{{i.id}}"><span class="mx-4">Green</span></label>
+
+                <input type="radio" id='yellow{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="2" class="remarkbtn-check"
+                  autocomplete="off" >
+                <label class="btn remarkbtn-radio-yellow labelspace" data-bs-toggle="tooltip" title="Yellow"
+                  data-bs-placement="bottom" for="yellow{{i.id}}"><span class="mx-4">Yellow</span></label>
+
+                <input type="radio" id='red{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="3" autocomplete="off"
+                  class="remarkbtn-check" >
+                <label class="btn remarkbtn-radio-red labelspace" data-bs-toggle="tooltip" title="Red"
+                  data-bs-placement="bottom" for="red{{i.id}}"><span class="mx-4">Red</span></label>
+
+                <input type="radio" id='notdone{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="4" class="remarkbtn-check"
+                  autocomplete="off" >
+                <label class="btn remarkbtn-radio-none labelspace" data-bs-toggle="tooltip" title="Not Done"
+                  data-bs-placement="bottom" for="notdone{{i.id}}"><span class="mx-4">Not Done</span></label>
+            
+                {%elif i.TaskValidation == 2 %}
+                <input type="radio" id='green{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="1" class="remarkbtn-check"
+                  autocomplete="off" >
+                <label class="btn remarkbtn-radio-green labelspace" data-bs-toggle="tooltip" title="Green"
+                  data-bs-placement="bottom" for="green{{i.id}}"><span class="mx-4">Green</span></label>
+
+                <input type="radio" id='yellow{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="2" class="remarkbtn-check"
+                  autocomplete="off" checked>
+                <label class="btn remarkbtn-radio-yellow labelspace" data-bs-toggle="tooltip" title="Yellow"
+                  data-bs-placement="bottom" for="yellow{{i.id}}"><span class="mx-4">Yellow</span></label>
+
+                <input type="radio" id='red{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="3" autocomplete="off"
+                  class="remarkbtn-check" >
+                <label class="btn remarkbtn-radio-red labelspace" data-bs-toggle="tooltip" title="Red"
+                  data-bs-placement="bottom" for="red{{i.id}}"><span class="mx-4">Red</span></label>
+
+                <input type="radio" id='notdone{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="4" class="remarkbtn-check"
+                  autocomplete="off" >
+                <label class="btn remarkbtn-radio-none labelspace" data-bs-toggle="tooltip" title="Not Done"
+                  data-bs-placement="bottom" for="notdone{{i.id}}"><span class="mx-4">Not Done</span></label>
+
+                {%elif i.TaskValidation == 3 %}
+                <input type="radio" id='green{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="1" class="remarkbtn-check"
+                autocomplete="off" >
+              <label class="btn remarkbtn-radio-green labelspace" data-bs-toggle="tooltip" title="Green"
+                data-bs-placement="bottom" for="green{{i.id}}"><span class="mx-4">Green</span></label>
+
+              <input type="radio" id='yellow{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="2" class="remarkbtn-check"
+                autocomplete="off" >
+              <label class="btn remarkbtn-radio-yellow labelspace" data-bs-toggle="tooltip" title="Yellow"
+                data-bs-placement="bottom" for="yellow{{i.id}}"><span class="mx-4">Yellow</span></label>
+
+              <input type="radio" id='red{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="3" autocomplete="off"
+                class="remarkbtn-check"  checked>
+              <label class="btn remarkbtn-radio-red labelspace" data-bs-toggle="tooltip" title="Red"
+                data-bs-placement="bottom" for="red{{i.id}}"><span class="mx-4">Red</span></label>
+
+              <input type="radio" id='notdone{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="4" class="remarkbtn-check"
+                autocomplete="off" >
+              <label class="btn remarkbtn-radio-none labelspace" data-bs-toggle="tooltip" title="Not Done"
+                data-bs-placement="bottom" for="notdone{{i.id}}"><span class="mx-4">Not Done</span></label>
+
+                {%elif i.TaskValidation == 4 %}
+
+                <input type="radio" id='green{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="1" class="remarkbtn-check"
+                  autocomplete="off" >
+                <label class="btn remarkbtn-radio-green labelspace" data-bs-toggle="tooltip" title="Green"
+                  data-bs-placement="bottom" for="green{{i.id}}"><span class="mx-4">Green</span></label>
+
+                <input type="radio" id='yellow{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="2" class="remarkbtn-check"
+                  autocomplete="off" >
+                <label class="btn remarkbtn-radio-yellow labelspace" data-bs-toggle="tooltip" title="Yellow"
+                  data-bs-placement="bottom" for="yellow{{i.id}}"><span class="mx-4">Yellow</span></label>
+
+                <input type="radio" id='red{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="3" autocomplete="off"
+                  class="remarkbtn-check" >
+                <label class="btn remarkbtn-radio-red labelspace" data-bs-toggle="tooltip" title="Red"
+                  data-bs-placement="bottom" for="red{{i.id}}"><span class="mx-4">Red</span></label>
+
+                <input type="radio" id='notdone{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="4" class="remarkbtn-check"
+                  autocomplete="off" checked>
+                <label class="btn remarkbtn-radio-none labelspace" data-bs-toggle="tooltip" title="Not Done"
+                  data-bs-placement="bottom" for="notdone{{i.id}}"><span class="mx-4">Not Done</span></label>
+
+                {%else%}
+                <input type="radio" id='green{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="1" class="remarkbtn-check"
+                autocomplete="off" >
+              <label class="btn remarkbtn-radio-green labelspace" data-bs-toggle="tooltip" title="Green"
+                data-bs-placement="bottom" for="green{{i.id}}"><span class="mx-4">Green</span></label>
+
+              <input type="radio" id='yellow{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="2" class="remarkbtn-check"
+                autocomplete="off" >
+              <label class="btn remarkbtn-radio-yellow labelspace" data-bs-toggle="tooltip" title="Yellow"
+                data-bs-placement="bottom" for="yellow{{i.id}}"><span class="mx-4">Yellow</span></label>
+
+              <input type="radio" id='red{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="3" autocomplete="off"
+                class="remarkbtn-check"  >
+              <label class="btn remarkbtn-radio-red labelspace" data-bs-toggle="tooltip" title="Red"
+                data-bs-placement="bottom" for="red{{i.id}}"><span class="mx-4">Red</span></label>
+
+              <input type="radio" id='notdone{{i.id}}' onclick="updatecheckbonus({{i.id}});" name="updateremarkzone{{i.id}}" value="4" class="remarkbtn-check"
+                autocomplete="off" >
+              <label class="btn remarkbtn-radio-none labelspace" data-bs-toggle="tooltip" title="Not Done"
+                data-bs-placement="bottom" for="notdone{{i.id}}"><span class="mx-4">Not Done</span></label>
+                {%endif%}
+
+
+                {%if i.Bonus == True %}
+                <input class="text-center bonuscheck check d-none" type="checkbox" id="bonus{{i.id}}"
+                  name="updatebonuszone" checked>
+                <label class="btn remarkbtn-radio-bonus labelspace" data-bs-toggle="tooltip" title="Bonus"
+                  data-bs-placement="bottom" for="bonus{{i.id}}"> <span class="mx-4">Bonus</span></label>
+                {%else%}
+                <input class="text-center bonuscheck check d-none" type="checkbox" id="bonus{{i.id}}"
+                  name="updatebonuszone">
+                <label class="btn remarkbtn-radio-bonus labelspace" data-bs-toggle="tooltip" title="Bonus"
+                  data-bs-placement="bottom" for="bonus{{i.id}}"> <span class="mx-4">Bonus</span></label>
+                {%endif%}
+              </div>
+              <span id="remarkerror{{i.id}}" class="error-message px-3"></span>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="modaladdbtn" name="updateform" onclick="return UpdateformValidation({{i.id}});">Update</button>
+            <button type="button" class="modalClosebtn " data-bs-dismiss="modal">Close</button>
+          </div>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+
+  <div class="modal fade" id="Addeventmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header ps-4">
+          <h5 class="modal-title" id="exampleModalLabel">Add Event/Milestone</h5>
+        </div>
+        <div class="modal-body">
+          <form method="post" class="formstyle" enctype="multipart/form-data">
+            {% csrf_token %}
+          <div class="row mt-4">
+            <div class="col-3 px-4">
+              <label for="clientname">Client Name <span style="color:red;">*</span></label>
+              <select id='clientname' name="ClientId" class="select2dropdown" onchange="getclientdata();">
+                <option value=''>Select Client </option> 
+                {% for c in clientlist %}
+                <option value="{{c.id}}">{{c.ClientName}}</option>
+                {% endfor %}
+              </select>
+              <span id="clientnameerror" class="error-message"></span>
+            </div>
+
+            <div class="col-3 px-4">
+              <label for="clientproject">Project <span style="color:red;">*</span></label>
+              <select id='clientproject' name="clientproject" class="select2dropdown">
+                <option value=''>Select Project </option> 
+
+              </select>
+              <span id="clientprojecterror" class="error-message"></span>
+            </div>
+
+
+            <div class="col-3 px-4">
+            <label for="AssignTo">AssignTo <span style="color:red;">*</span></label>
+            <select id='AssignTo' name="Assign_To" class="select2dropdown">
+                  <option value=''>Select Team Member</option> 
+            </select>
+            <span id="AssignToerror" class="error-message"></span>
+            </div>
+
+            <div class="col-3 px-4">
+              <label for="AssignBy">AssignBy <span style="color:red;">*</span></label>
+              <select id='AssignBy' name="Assign_By" class="select2dropdown">
+                <option value=''>Select Client-side Manager</option> 
+              </select>
+              <span id="AssignByrerror" class="error-message"></span>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-6 px-4">
+                <label for="Taskdescription">Task Description <span style="color:red;">*</span></label>
+                <textarea id="Taskdescription" name="TaskDescription" rows="3" cols="50"></textarea>
+                <div id="Taskdescriptionrerror" class="error-message"></div>
+            </div>
+            <div class="col-6 px-4">
+                <label for="extranote">Add Note </label>
+                <textarea id="extranote" name="extranote" rows="3" cols="50"></textarea>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+            <div class="col-10 px-4">
+                <label for="remarkzone">Task Remark <span style="color:red;">*</span></label>
+               <div class="d-flex remarkflex">
+                
+                    <input type="radio" id='green' name="remarkzone" onclick="checkbonus();"
+                    value="1" class="remarkbtn-check" autocomplete="off"/>
+                   <label class="btn remarkbtn-radio-green labelspace" data-bs-toggle="tooltip" title="Green" data-bs-placement="bottom"  for="green"><span class="mx-4">Green</span></label>
+   
+                <input type="radio" id='yellow' name="remarkzone" onclick="checkbonus();" value="2" class="remarkbtn-check" autocomplete="off"/>
+                <label class="btn remarkbtn-radio-yellow labelspace"  data-bs-toggle="tooltip" title="Yellow" data-bs-placement="bottom" for="yellow"><span class="mx-4">Yellow</span></label>
+                
+                <input type="radio" id='red' name="remarkzone" onclick="checkbonus();" value="3" autocomplete="off" class="remarkbtn-check"/>
+                <label class="btn remarkbtn-radio-red labelspace"  data-bs-toggle="tooltip" title="Red" data-bs-placement="bottom" for="red"><span class="mx-4">Red</span></label>
+
+                <input type="radio" id='notdone' name="remarkzone" onclick="checkbonus();" value="4" class="remarkbtn-check"  autocomplete="off"/>
+                <label class="btn remarkbtn-radio-none labelspace"  data-bs-toggle="tooltip" title="Not Done" data-bs-placement="bottom" for="notdone"><span class="mx-4">Not Done</span></label>
+
+                <input class="text-center bonuscheck check d-none" type="checkbox"  id="bonus" name="bonuszone" >
+              <label class="btn remarkbtn-radio-bonus labelspace"  data-bs-toggle="tooltip" title="Bonus" data-bs-placement="bottom" for="bonus"> <span class="mx-4">Bonus</span></label>
+              </div>
+              <span id="remarkerror" class="error-message px-3"></span>
+                
+               </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="modaladdbtn" name="addform"  onclick="return formValidation();">Add</button>
+                <button type="button" class="modalClosebtn " data-bs-dismiss="modal">Close</button>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+  $(document).ready(function () {
+    $('#Eventtable').DataTable();
+
+    $('.input-feild').on("focus", function () {
+      var label = $('label[for=' + this.id + ']');
+      label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+    });
+  });
+
+  function getclientdata() {
+    var clientid = $("#clientname").val();
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "ClientMaster/getclientdata",
+      data: {
+        'ClientID': clientid,
+        csrfmiddlewaretoken: '{{csrf_token}}',
+      },
+      success: function (response) {
+        console.log("reps", response)
+        if (response.n == 1) {
+          var opthtml = ""
+          var manhtml = ""
+          var prohtml = ""
+          $(response.data).each(function (i, o) {
+
+            $(o.teamlist).each(function (m, n) {
+              opthtml += `<option value="` + n.id + `">` + n.empname + `</option>`
+            })
+
+            $(o.managerlist).each(function (a, b) {
+              manhtml += `<option value="` + b.id + `">` + b.managername + `</option>`
+            })
+            $(o.projectlist).each(function (a, b) {
+              prohtml += `<option value="` + b.id + `">` + b.ProjectName + `</option>`
+            })
+          })
+          $("#AssignTo").html(opthtml)
+          $("#AssignBy").html(manhtml)
+          $("#clientproject").html(prohtml)
+        } else {
+
+        }
+
+      }
+    });
+  }
+
+  function updategetclientdata(eventid,clientid, assignto, assignby, project) {
+    var clientid = clientid;
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "ClientMaster/getclientdata",
+      data: {
+        'ClientID': clientid,
+        csrfmiddlewaretoken: '{{csrf_token}}',
+      },
+      success: function (response) {
+        console.log("repsgetclientdata", response)
+        if (response.n == 1) {
+          var opthtml = ""
+          var manhtml = ""
+          var prohtml = ""
+          $(response.data).each(function (i, o) {
+            $(o.teamlist).each(function (m, n) {
+              if (n.id == assignto) {
+                opthtml += `<option value="` + n.id + `" selected>` + n.empname + `</option>`
+              } else {
+                opthtml += `<option value="` + n.id + `">` + n.empname + `</option>`
+              }
+
+            })
+            $(o.managerlist).each(function (a, b) {
+              if (b.id == assignby) {
+                manhtml += `<option value="` + b.id + `" selected>` + b.managername + `</option>`
+              } else {
+                manhtml += `<option value="` + b.id + `">` + b.managername + `</option>`
+              }
+
+            })
+            $(o.projectlist).each(function (a, b) {
+              if (b.id == project) {
+                prohtml += `<option value="` + b.id + `" selected>` + b.ProjectName + `</option>`
+              } else {
+                prohtml += `<option value="` + b.id + `">` + b.ProjectName + `</option>`
+              }
+
+            })
+          })
+          $("#AssignTo" + eventid).html(opthtml)
+          $("#AssignBy" + eventid).html(manhtml)
+          $("#clientproject" + eventid).html(prohtml)
+
+        } else {
+
+        }
+
+      }
+    });
+  }
+
+  function eventdelete(id) {
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "ClientMaster/deleteevent",
+      data: {
+        'ID': id,
+        'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      success: function (response) {
+        console.log("reps", response)
+        if (response.n == 1) {
+
+
+        } else {
+
+        }
+
+      }
+    });
+  }
+
+  function checkbonus(){
+   var zonevalue = parseInt($('input[name="remarkzone"]:checked').val());
+    if (zonevalue == 1 || zonevalue == 2){
+      if ($("#bonus").is(":checked")) {
+          $("#bonus").prop('checked',true);
+      }
+    }
+    else{
+      if ($("#bonus").is(":checked")) {
+          $("#bonus").prop('checked',false);
+      }
+    }
+ }
+
+ function updatecheckbonus(id){
+  var zonevalue = parseInt($('input[name="updateremarkzone'+id+'"]:checked').val());
+    if (zonevalue == 1 || zonevalue == 2){
+      if ($("#bonus"+id).is(":checked")) {
+          $("#bonus"+id).prop('checked',true);
+      }
+    }
+    else{
+      if ($("#bonus"+id).is(":checked")) {
+          $("#bonus"+id).prop('checked',false);
+      }
+    }
+ }
+
+
+
+
+
+function formValidation(){
+    
+    var clientname = $('#clientname').val().trim();   
+    var clientproject = $('#clientproject').val().trim();   
+    var AssignTo = $('#AssignTo').val();   
+    var AssignBy = $('#AssignBy').val();   
+    var Taskdescription = $('#Taskdescription').val();   
+    var remark = $('input[name="remarkzone"]:checked').val();
+
+    if (IsValid(clientname)){
+    //   $('#clientname').html('');
+      $('#clientnameerror').show().delay(3000).slideUp();
+      $('#clientnameerror').html('Client  is required');
+      $('#clientname').focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(clientprojectlientname)){
+        $('#clientprojecterror').show().delay(3000).slideUp();
+        $('#clientprojecterror').html('Project  is required');
+        $('#clientproject').focus();
+        event.preventDefault()
+        return false;
+    }if (IsValid(AssignTo)){
+      $('#AssignToerror').show().delay(3000).slideUp();
+      $('#AssignToerror').html('Please select Assign To Field');
+      $('#AssignTo').focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(AssignBy)){
+      $('#AssignByrerror').show().delay(3000).slideUp();
+      $('#AssignByrerror').html('Please select Assign By field');
+      $('#AssignBy').focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(Taskdescription)){
+      $('#Taskdescriptionrerror').show().delay(3000).slideUp();
+      $('#Taskdescriptionrerror').html('Task description is required');
+      $('#Taskdescription').focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(remark)){
+      $('#remarkerror').show().delay(3000).slideUp();
+      $('#remarkerror').html('Please select Task Validation');
+      $('#AssignBy').focus();
+      event.preventDefault()
+      return false;
+    }
+  }
+
+  
+function UpdateformValidation(id){
+    
+    var clientname = $('#upclientname'+id).val().trim();   
+    var clientproject = $('#clientproject'+id).val().trim();   
+    var AssignTo = $('#AssignTo'+id).val();   
+    var AssignBy = $('#AssignBy'+id).val();   
+    var Taskdescription = $('#Taskdescription'+id).val();   
+    var remark = $('input[name="updateremarkzone'+id+'"]:checked').val();
+
+    if (IsValid(clientname)){
+    //   $('#clientname').html('');
+      $('#clientnameerror'+id).show().delay(3000).slideUp();
+      $('#clientnameerror'+id).html('Client Name is required');
+      $('#upclientname'+id).focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(clientproject)){
+        $('#clientprojecterror'+id).show().delay(3000).slideUp();
+        $('#clientprojecterror'+id).html('Project is required');
+        $('#upclientproject'+id).focus();
+        event.preventDefault()
+        return false;
+    }if (IsValid(AssignTo)){
+      $('#AssignToerror'+id).show().delay(3000).slideUp();
+      $('#AssignToerror'+id).html('Please select Assign To Field');
+      $('#AssignTo'+id).focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(AssignBy)){
+      $('#AssignByrerror'+id).show().delay(3000).slideUp();
+      $('#AssignByrerror'+id).html('Please select Assign By field');
+      $('#AssignBy'+id).focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(Taskdescription)){
+      $('#Taskdescriptionrerror'+id).show().delay(3000).slideUp();
+      $('#Taskdescriptionrerror'+id).html('Task description is required');
+      $('#Taskdescription'+id).focus();
+      event.preventDefault()
+      return false;
+    }if (IsValid(remark)){
+      $('#remarkerror'+id).show().delay(3000).slideUp();
+      $('#remarkerror'+id).html('Please select Task Validation');
+      $('#AssignBy'+id).focus();
+      event.preventDefault()
+      return false;
+    }
+  }
+
+</script>
+
+{% endblock %}

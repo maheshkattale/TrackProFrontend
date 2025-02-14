@@ -1,0 +1,441 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+
+<div class="nav-item newheading">
+Dashboard
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<style>
+    .select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 5px;
+    padding-top: 3px;
+    }
+    .select2-container--default .select2-selection--single {
+    height: 30px;
+    border:none;
+    box-shadow: none;
+    border-radius:none;
+    }
+    .select2-results__option {
+    padding: 2px;
+    font-size: 12px;
+    }
+    .select2-search--dropdown .select2-search__field {
+    padding: 0px 5px;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered {
+    font-size: 14px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        top:24%;
+    }
+    .dataTables_wrapper .dataTables_filter label {
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    margin-left: 3px !important;
+    border-bottom: 1px solid rgb(190, 190, 190) !important;
+    outline: none !important;
+    color: rgb(151, 151, 151) !important;
+
+} 
+
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    margin-left: 3px !important;
+    border-bottom: 1px solid transparent !important;
+    outline: none !important;
+    width: 250px !important;
+
+} 
+
+.dataTables_wrapper .dataTables_filter label::after {
+    content: '\f002' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #000 !important;
+    font-size: 18px !important;
+    padding-right: 0.5em !important;
+
+} 
+.dataTables_filter input[type="search"] {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+table.dataTable thead th {
+    font-weight: 500;
+    font-size:14px;
+}
+</style>
+<main class="main-wrapper mx-2">
+    <div class="row mt-3">
+       <div class="col-md-7 firstcol">
+        <div class="row pt-2 px-2">
+            <div class="col-md-3 px-1">
+                <div class="supadcard">
+                    <div class="d-flex pt-1">
+                        <div class="imagecontainer"><img src="/static/Media/dashboardicons/totalcompanies.svg" width='80%' alt="Paris" onclick=""></div>
+                        <div class="cardtext pt-1">Total Companies</div>
+                    </div>
+                    <div class="adminnumber ps-2" style="color:#174fa3">{{countdata.totalcompanies}}</div>
+                </div>
+            </div>
+            <div class="col-md-3 px-1">
+                <div class="supadcard">
+                    <div class="d-flex pt-1">
+                        <div class="imagecontainer"><img src="/static/Media/dashboardicons/activecompanies.svg"  width='80%' alt="Paris" onclick=""></div>
+                        <div class="cardtext pt-1">Active Companies</div>
+                    </div>
+                    <div class="adminnumber ps-2" style="color:#3DAB45">{{countdata.activecompanies}}</div>
+                </div>
+            </div>
+            <div class="col-md-3 px-1">
+                <div class="supadcard">
+                    <div class="d-flex pt-1">
+                        <div class="imagecontainer"><img src="/static/Media/dashboardicons/inactivecompanies.svg"  width='80%' alt="Paris" onclick=""></div>
+                        <div class="cardtext pt-1">Inactive Companies</div>
+                    </div>
+                    <div class="adminnumber ps-2" style="color:#EC9922">{{countdata.inactivecompanies}}</div>
+                </div>
+            </div>
+            <div class="col-md-3 px-1">
+                <div class="supadcard">
+                    <div class="d-flex pt-1">
+                        <div class="imagecontainer"><img src="/static/Media/dashboardicons/incompletecompanies.svg"  width='80%' alt="Paris" onclick=""></div>
+                        <div class="cardtext">Incomplete companies</div>
+                    </div>
+                    <div class="adminnumber ps-2" style="color:#E95454">{{countdata.incompletecompanies}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-2">
+            <div class="col-md-12">
+                <div class="supadcard">
+                    <div class="d-flex justify-content-between px-2">
+                        <div class="cardsheadtext">Company package</div>
+                        <div class="plandiv">
+                        <select id='plan' name="plan" class="form-control select2dropdown" aria-label="Floating label select example" onchange="getpackagedata()">
+                            <option value="" selected>All Plans</option>
+                            {% for u in planlist %}
+                            <option value="{{u.period}}">{{u.period}}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                    </div>
+                    <div class="companytable">
+                        <table class="row-border w-100 " id="myTable3" >
+                            <thead>
+                                <th>
+                                    Sr.No
+                                </th>
+                                <th style="width:60%;">
+                                   Company Name
+                                </th>
+                                <th>
+                                   Package Details
+                                </th>
+                            </thead>
+                
+                            <tbody class="companytbody">
+                              
+                                    
+                           
+                
+                            </tbody>
+                        </table>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+       </div>
+       <div class="col-md-5 secondcol">
+        <div class="row pt-2">
+            <div class="col-md-12">
+                <div class="supadcard">
+                    <div class="cardsheadtext">Income Yearly</div>
+                    <canvas id="incomechart"  height="170"></canvas>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row pt-2">
+            <div class="col-md-12">
+            <div class="supadcard">
+                <div class="d-flex justify-content-between">
+                    <div class="cardsheadtext">Company Leads</div>
+                    <div class="d-flex me-2">
+                        <div class="m-2" id="year">{{currentyear}}</div>
+                        <div>
+                            <div class="arrowimage"><img onclick="nextyear();" src="/static/Media/taskicons/up-arrow.png"></div>
+                            <div class="arrowimage"><img onclick="previousyear();" src="/static/Media/taskicons/down-arrow.png"></div>
+                        </div>
+                    </div>
+                </div>
+            
+            <canvas id="myleadsbarChart"  height="150"></canvas>
+            </div>
+            </div>
+         </div>
+       </div>
+    </div>
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script> 
+<script>
+    $(document).ready(function() {
+        getpackagedata();
+        getincomepoints();
+        thisyear();
+        
+    })
+
+function thisyear(){
+    var year =  $('#year').text();
+    getleadspointsdata(year);
+}
+
+function nextyear(){
+    var year =  $('#year').text();
+    nexyear = parseInt(year)+1
+    $('#year').text(nexyear);
+    getleadspointsdata(nexyear);
+}
+
+function previousyear(){
+    var year =  $('#year').text();
+    prevyear = parseInt(year)-1
+    $('#year').text(prevyear);
+    getleadspointsdata(prevyear);
+}
+
+function getpackagedata() {
+    var companyperiod =  $('#plan').val();
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'getcompanypackages',
+      data: {
+          'companyperiodfilter': companyperiod,
+          'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function(response) {
+        console.log("response",response)
+        var trHTML = "";
+        counter = 1
+          if (response.n != 0) {
+            $.each(response.data, function(i,o){
+            if (o.period != null){
+                period = `<div class="coloredpackage">`+o.period+`</div>`
+            }else{
+                period = `<div class="nopackage">No Packages</div>`
+            }
+              
+            trHTML+=`<tr>
+                            <td>`+counter+`</td>
+                            <td>
+                                <div class="d-flex cominfodiv">
+                                    <div class="companyimagecontainer"><img class="companylogo" width="100%" src="`+o.companyphoto+`" ></div>
+                                    <div class="cmpanyname">`+o.companyName+`</div>
+                                </div>
+                            </td>
+                            <td>`+period+`</td>
+                        </tr>`    
+
+                        counter = counter+1
+              }) 
+              initialiseDataTable(trHTML);
+          } else {
+              swal({
+                  icon: "warning",
+                  title: "",
+                  text: "",
+                  button: "Close",
+              });
+          }
+
+      },
+      error: function(error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+
+function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('#myTable3')) {
+        $('#myTable3').DataTable().destroy();
+    }
+    $('#myTable3 tbody').empty();
+    $(".companytbody").html(trHTML);
+    $('#myTable3').DataTable({
+      // sDom: 'lrtip',
+        //  autoWidth: false
+        "ordering": false,
+        "bLengthChange": false ,
+        scrollY: '500px',
+        scrollCollapse: true,
+        })
+        }
+
+
+function getincomepoints(){
+    $.ajax({
+      type: 'get',
+      url: frontendURL + 'getSAincomepoints',
+      dataType: 'json',
+      success: function(response) {
+        console.log("dataaa",response)
+        dataarray = response.data.paymentlist
+        labelarray =  response.data.yearrlist
+        getincomepointgraph(dataarray,labelarray)
+      }
+    })
+}
+
+
+function getincomepointgraph(dataarray,labelarray){
+        var ctx = document.getElementById("incomechart").getContext('2d');
+        var grd = ctx.createLinearGradient(0, 0, 0, 170);
+        grd.addColorStop(0, "#2196f3");
+        grd.addColorStop(1, "white");
+
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels: labelarray,
+        datasets: [{
+        label: 'Series 1', // Name the series
+        data: dataarray, // Specify the data values array
+        fill: true,
+        borderColor: '#2196f3', // Add custom color border (Line)
+        backgroundColor: grd, // Add custom color background (Points and Fill)
+        borderWidth: 1 // Specify bar border width
+        }]
+        },
+        options: {
+            legend: {
+        display: false
+    },
+        responsive: true, // Instruct chart js to respond nicely.
+        maintainAspectRatio: false, // Add to prevent default behaviour of full-width/height 
+        scales:{
+                xAxes: [{
+                gridLines: {
+                    drawOnChartArea: false
+                    }
+                }] ,
+                yAxes: [{
+                    ticks: {
+                        suggestedMax:100,
+                        beginAtZero: true
+                      },
+                    gridLines: {
+                        drawOnChartArea: false
+                    }   
+                }]
+            }
+        }
+    });  
+}
+
+
+
+function getleadspointsdata(){
+    var year =  $('#year').text();
+    $.ajax({
+      type: 'post',
+      url: frontendURL + 'getcompanyleadspoints',
+      data:{
+        'year':year,
+        'csrfmiddlewaretoken': '{{csrf_token}}',
+      },
+      dataType: 'json',
+      success: function(response) {
+        console.log("leadsdataaa",response)
+        leadsdataarray = response.data.leadslist
+        leadslabelarray =  response.data.monthlabellist
+        getleadsgraph(leadsdataarray,leadslabelarray);
+      }
+    })
+}
+
+
+
+
+function argMax(array) {
+  return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+}
+
+function getleadsgraph(leadsdataarray,leadslabelarray){
+
+// dummy data
+var data = leadsdataarray;
+var labels = leadslabelarray; 
+
+// other data color
+var color = data.map(x => '#D3D3D3');
+
+// change max color
+color[argMax(data)] = '#00aeef';
+
+var ctx = document.getElementById("myleadsbarChart");
+var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                    data: data,
+                    backgroundColor: color,
+                    barThickness: 30 
+            }] 
+           
+        },
+        options:{ 
+            legend: {
+        display: false
+    },
+            scales:{
+                xAxes: [{
+                categoryPercentage: 1.0,
+                barPercentage: 1.0,
+                gridLines: {
+                    drawOnChartArea: false
+                    }
+                }] ,
+                yAxes: [{
+                    ticks: {
+                    min: 0,
+                    beginAtZero: true,
+                    stepSize: 1
+                    },  
+                    scaleLabel: {
+                        display: true,
+                    },
+                    gridLines: {
+                        drawOnChartArea: false
+                    }   
+                }]
+            }
+        }
+});   
+}
+
+</script>
+{% endblock %}

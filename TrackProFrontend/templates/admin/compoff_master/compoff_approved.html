@@ -1,0 +1,3575 @@
+{% extends "index.html" %}
+{% load static %} 
+{% load encryption_filters %}
+
+  {% block headercontent %}
+    <div class="nav-item newheading">
+        Compoff Granted
+    </div>
+  {% endblock %}
+
+  {% block content %}
+    <link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/leave_request.css' %}">
+
+    <main class="main-wrapper">
+      <div id="snackbar"></div>
+      {% if messages %}
+        <div class="row" style="justify-content: center;">
+          <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      <div id="snackbar"></div>
+
+      <div class="title-div py-3">
+
+        <span class="company-title">Compoff Granted</span>
+
+      </div> 
+ 
+      <div class="leads-div">
+
+        <!-- Card-Box_Nav-Bar_Nav-Pills -->
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-all" aria-selected="true">All Application</button>
+            </li>
+
+
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link" id="pills-approved-tab" data-bs-toggle="pill" data-bs-target="#pills-approved" type="button" role="tab" aria-controls="pills-approved" aria-selected="false">Approved Application</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">Rejected Application</button>
+            </li>
+
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link" id="pills-expired-tab" data-bs-toggle="pill" data-bs-target="#pills-expired" type="button" role="tab" aria-controls="pills-expired" aria-selected="false">Expired Application</button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="pills-tabContent">
+
+
+            <!-- 1st-Pane -->
+            <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab" tabindex="0">
+                
+                <div class="row" id="allapplicationslist">
+
+
+                  {% for i in pending_list %}
+
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                        <div id="card" class="card text-start h-100">
+
+                          <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                            <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+
+                            <span class="d-flex">
+
+                              {% if i.attachment is not None %}
+                                <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodelall{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                              {% endif %}
+
+
+                              <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+      
+
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                                <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                                </svg>
+                              </a>
+                            </span>
+
+
+                          </div>
+                          <div class="card-header head d-flex justify-content-between align-items-center">
+                              <span>                                   
+                                  <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                  <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                              </span>
+                              <span class="d-flex justify-content-between">
+                                <span class="text-left">                                   
+                                  <span class="card-header-txt">Application Date </span><br>
+                                  <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                                </span>
+                                <span>
+
+                                </span>
+                              </span>
+                          </div>
+
+                          <div class="card-body">
+
+                              <div class="row">
+
+
+
+
+                                <div class="col-lg-12">
+                                  <div class="card-header head d-flex justify-content-between p-0">
+                                      <span>                                   
+                                          <span class="card-header-txt">From</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                      </span>
+                                      <span class="d-flex justify-content-between">
+                                          <span>                                   
+                                            <span class="card-header-txt">To</span><br>
+                                            <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                          </span>
+
+
+                                      </span>
+                                      <span>                                   
+                                        <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                        <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                      </span>
+                                  </div>
+
+                                </div>
+
+                                <div class="col-lg-12">
+                                  <div class="card-header p-0">
+
+                                  <span class="card-header-txt">Reason :</span><br>
+
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                  </div>
+                                </div>
+
+
+                              </div>
+
+                          </div>
+
+                          <div class="card-footer cardfooter mt-auto">
+                            <div class="row">
+
+
+                              <div class="col-lg-12 conclusion-box my-2">
+                                <div  class="py-2 row">
+                                  <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                    {%for manager in i.allleavedata %}
+                                    {%if manager.approvedBy  and not manager.rejectedBy %}
+                                      {%if manager.Photo != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                      {%endif%}
+                
+
+                                    {%endif%}
+                
+                                    {%endfor%}
+                                    <span class="ps-1">This application is pending.</span>
+                                  </span>  
+                                  
+                                  <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+
+
+
+                                    {%for manager in i.allleavedata %}
+                                    {%if not manager.approvedBy and not manager.rejectedBy %}
+                                    
+                                      {%if manager.Photo != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                      {%endif%}
+                
+                                    {%elif not manager.approvedBy and manager.rejectedBy%}
+                
+                                      {%if manager.Photo != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                      {%endif%}
+                                    {%endif%}
+                
+                                    {%endfor%}
+
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row mt-2" id="allapplicationsButttonStatus{{i.id}}">
+                              <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                                <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}">Reject</button>
+                              </div>
+                              <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                                <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal{{i.id}}">Approve</button>
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="modal fade" id="attachmentmodelall{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  {%endfor%}
+
+
+                  {% for i in expiredlist %}
+
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                        <div id="card" class="card text-start h-100">
+
+                          <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                            <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+
+                            <span class="d-flex">
+                              {% if i.attachment is not None %}
+                              <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodelall{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                            {% endif %}
+                              <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+      
+
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                                <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                                </svg>
+                              </a>
+                            </span>
+
+
+                          </div>
+                          <div class="card-header head d-flex justify-content-between align-items-center">
+                              <span>                                   
+                                  <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                  <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                              </span>
+                              <span class="d-flex justify-content-between">
+                                <span class="text-left">                                   
+                                  <span class="card-header-txt">Application Date </span><br>
+                                  <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                                </span>
+                                <span>
+
+                                </span>
+                              </span>
+                          </div>
+
+                          <div class="card-body">
+
+                              <div class="row">
+
+
+
+
+                                <div class="col-lg-12">
+                                  <div class="card-header head d-flex justify-content-between p-0">
+                                      <span>                                   
+                                          <span class="card-header-txt">From</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                      </span>
+                                      <span class="d-flex justify-content-between">
+                                          <span>                                   
+                                            <span class="card-header-txt">To</span><br>
+                                            <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                          </span>
+
+
+                                      </span>
+                                      <span>                                   
+                                        <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                        <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                      </span>
+                                  </div>
+
+                                </div>
+
+                                <div class="col-lg-12">
+                                  <div class="card-header p-0">
+
+                                  <span class="card-header-txt">Reason :</span><br>
+
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                  </div>
+                                </div>
+
+
+                              </div>
+
+                          </div>
+
+                          <div class="card-footer cardfooter mt-auto">
+                            <div class="row">
+
+
+                              <div class="col-lg-12 conclusion-box my-2">
+                                <div  class="py-2 row">
+                                  <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                    {%for manager in i.allleavedata %}
+                                    {%if manager.approvedBy  and not manager.rejectedBy %}
+                                      {%if manager.Photo != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                      {%endif%}
+                
+
+                                    {%endif%}
+                
+                                    {%endfor%}
+                                    <span class="ps-1">This application is pending.</span>
+                                  </span>  
+                                  
+                                  <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+
+
+
+                                    {%for manager in i.allleavedata %}
+                                    {%if not manager.approvedBy and not manager.rejectedBy %}
+                                    
+                                      {%if manager.Photo != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                      {%endif%}
+                
+                                    {%elif not manager.approvedBy and manager.rejectedBy%}
+                
+                                      {%if manager.Photo != None%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                      {%else%}
+                                        <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                      {%endif%}
+                                    {%endif%}
+                
+                                    {%endfor%}
+
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row mt-2" id="allapplicationsButttonStatus{{i.id}}">
+                              <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                                <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}">Reject</button>
+                              </div>
+                              <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                                <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal{{i.id}}">Approve</button>
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="modal fade" id="attachmentmodelall{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  {%endfor%}
+
+
+                  {% for i in Approved_list %}
+                
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+        
+        
+                      <div id="card" class="card text-start h-100">
+        
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                          <span class="d-flex">
+
+
+                            {%if i.allow_reject ==  True %}
+                              <span class="dropdown-item px-2"   title="Reject" data-bs-toggle="modal" data-bs-target="#approved_application_reject{{i.id}}"><i class="fa fa-solid fa-rotate-left text-danger" aria-hidden="true"></i></span>
+
+                              {%else%}
+                              <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The reject time has passed. You cannot reject this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                            {%endif%}
+                            {% if i.attachment is not None %}
+                              <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodelall{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                            {% endif %}
+
+                            <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+        
+        
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                              </span>
+                              <span>
+        
+                              </span>
+                            </span>
+                        </div>
+        
+                        <div class="card-body">
+        
+                            <div class="row">
+        
+        
+        
+        
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                        </span>
+        
+        
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                      <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                    </span>
+                                </div>
+        
+                              </div>
+        
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+        
+                                <span class="card-header-txt">Reason :</span><br>
+        
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                </div>
+                              </div>
+        
+        
+                            </div>
+        
+                        </div>
+        
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+        
+        
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  {%for manager in i.allleavedata %}
+                                  {%if manager.approvedBy  and not manager.rejectedBy %}
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                    {%endif%}
+              
+        
+                                  {%endif%}
+              
+                                  {%endfor%}
+                                  <span class="ps-1">You approved this application .</span>
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+        
+        
+        
+                                  {%for manager in i.allleavedata %}
+                                  {%if not manager.approvedBy and not manager.rejectedBy %}
+                                  
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                    {%endif%}
+              
+                                  {%elif not manager.approvedBy and manager.rejectedBy%}
+              
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                    {%endif%}
+                                  {%endif%}
+              
+                                  {%endfor%}
+        
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+        
+        
+                      </div>
+        
+        
+                    </div>
+                    <div class="modal fade" id="attachmentmodelall{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  {%endfor%}
+
+
+                  {% for i in Rejected_list %}
+                    
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                          <span class="d-flex">
+
+                            {%if i.allow_approve ==  True %}
+                            <span class="dropdown-item px-2"   title="approve" data-bs-toggle="modal" data-bs-target="#rejected_application_approve{{i.id}}"><i class="fa fa-solid fa-rotate-left text-success" aria-hidden="true"></i></span>
+    
+                            {%else%}
+                            <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The approve time has passed. You cannot approve this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+    
+                            {%endif%}
+                            {% if i.attachment is not None %}
+                              <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodelall{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                            {% endif %}
+                            <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                      <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                <span class="card-header-txt">Reason :</span><br>
+
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                </div>
+                              </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12  conclusion-box my-2">
+                              <div  class="row p-2 d-flex justify-content-between ">
+
+
+                                  
+                                  {% if i.universel_comment == "" %}
+                                  <span class="image-list col-lg-8 col-md-8 col-sm-12 card-header-txt d-flex">
+
+                                      {%for manager in i.allleavedata %}
+                                        {%if not manager.approvedBy and manager.rejectedBy%}
+                                        <span class="me-2">
+                                          {%if manager.Photo != None%}
+                                            <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture-rejected"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                          {%else%}
+                                            <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture-rejected"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                          {%endif%}
+                                          </span>
+
+
+                                          <span>
+                                            <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{manager.comment}}">{{manager.comment}}.</span>
+
+                                          </span>
+
+
+
+                                        
+                                        {%endif%}
+                
+                                      {%endfor%}
+                                  </span>
+
+                                  {% else %}
+                                  <span class="image-list col-lg-8 col-md-8 col-sm-12 card-header-txt d-flex rejected-application">
+
+
+                                      {%for manager in i.allleavedata %}
+                                            {%if not manager.approvedBy and manager.rejectedBy%}
+                                                {%if manager.Photo != None%}
+                                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                                {%else%}
+                                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                                {%endif%}
+                                            {%endif%}
+                                              
+                                      {%endfor%}
+
+                                      <span>
+                                        <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.universal_comment}}">{{i.universel_comment}}.</span>
+                                      </span>
+                                    </span>
+                                  {% endif %}
+                                
+                                
+                                <span class="col-lg-4 image-list d-flex justify-content-end col-md-4 col-sm-12 managers-imgs">
+
+
+
+                                  {%for manager in i.allleavedata %}
+                                  {%if manager.approvedBy  and not manager.rejectedBy %}
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                    {%endif%}
+              
+                                  {%elif not manager.approvedBy and not manager.rejectedBy %}
+                                  
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                    {%endif%}
+                                  
+
+                                  {%endif%}
+              
+                                  {%endfor%}
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+                    </div>
+
+                    <div class="modal fade" id="attachmentmodelall{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  {%endfor%}
+
+
+                  {% for i in withdraw_list %}
+                
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                          <span class="d-flex">
+                            {% if i.attachment is not None %}
+                              <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodelall{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                            {% endif %}
+                            <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                      <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                <span class="card-header-txt">Reason :</span><br>
+
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                </div>
+                              </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  {%for manager in i.allleavedata %}
+                                  {%if manager.approvedBy  and not manager.rejectedBy %}
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                    {%endif%}
+              
+
+                                  {%endif%}
+              
+                                  {%endfor%}
+                                  <span class="ps-1">This application is Withdrawn.</span>
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+
+
+
+                                  {%for manager in i.allleavedata %}
+                                  {%if not manager.approvedBy and not manager.rejectedBy %}
+                                  
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                    {%endif%}
+              
+                                  {%elif not manager.approvedBy and manager.rejectedBy%}
+              
+                                    {%if manager.Photo != None%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                    {%endif%}
+                                  {%endif%}
+              
+                                  {%endfor%}
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+
+                    </div>
+
+                    <div class="modal fade" id="attachmentmodelall{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  {%endfor%}
+
+                </div>
+                
+            </div>
+            <!-- 2nd Pane -->
+            <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab" tabindex="0">
+                
+                <div class="row" id="approvedleaves">
+                {% for i in Approved_list %}
+                  
+  
+  
+                  <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+  
+  
+                    <div id="card" class="card text-start h-100">
+  
+                      <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                        <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                        <span class="d-flex">
+  
+                          {%if i.allow_reject ==  True %}
+                          <span class="dropdown-item px-2"   title="Reject" data-bs-toggle="modal" data-bs-target="#approved_application_reject{{i.id}}"><i class="fa fa-solid fa-rotate-left text-danger" aria-hidden="true"></i></span>
+  
+                          {%else%}
+                          <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The reject time has passed. You cannot reject this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+  
+                          {%endif%}
+                          {% if i.attachment is not None %}
+                            <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodel{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                          {% endif %}
+                          <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                            <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                            </svg>
+                          </a>
+                        </span>
+  
+  
+                      </div>
+                      <div class="card-header head d-flex justify-content-between align-items-center">
+                          <span>                                   
+                              <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                              <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                          </span>
+                          <span class="d-flex justify-content-between">
+                            <span class="text-left">                                   
+                              <span class="card-header-txt">Application Date </span><br>
+                              <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                            </span>
+                            <span>
+  
+                            </span>
+                          </span>
+                      </div>
+  
+                      <div class="card-body">
+  
+                          <div class="row">
+  
+  
+  
+  
+                            <div class="col-lg-12">
+                              <div class="card-header head d-flex justify-content-between p-0">
+                                  <span>                                   
+                                      <span class="card-header-txt">From</span><br>
+                                      <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                  </span>
+                                  <span class="d-flex justify-content-between">
+                                      <span>                                   
+                                        <span class="card-header-txt">To</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                      </span>
+  
+  
+                                  </span>
+                                  <span>                                   
+                                    <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                    <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                  </span>
+                              </div>
+  
+                            </div>
+  
+                            <div class="col-lg-12">
+                              <div class="card-header p-0">
+  
+                              <span class="card-header-txt">Reason :</span><br>
+  
+                              <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                              </div>
+                            </div>
+  
+  
+                          </div>
+  
+                      </div>
+  
+                      <div class="card-footer cardfooter mt-auto">
+                        <div class="row">
+  
+  
+                          <div class="col-lg-12 conclusion-box my-2">
+                            <div  class="py-2 row">
+                              <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                {%for manager in i.allleavedata %}
+                                {%if manager.approvedBy  and not manager.rejectedBy %}
+                                  {%if manager.Photo != None%}
+                                    <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                  {%else%}
+                                    <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                  {%endif%}
+            
+  
+                                {%endif%}
+            
+                                {%endfor%}
+                                <span class="ps-1">This application is approved.</span>
+                              </span>  
+                              
+                              <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+  
+  
+  
+                                {%for manager in i.allleavedata %}
+                                {%if not manager.approvedBy and not manager.rejectedBy %}
+                                
+                                  {%if manager.Photo != None%}
+                                    <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                  {%else%}
+                                    <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                  {%endif%}
+            
+                                {%elif not manager.approvedBy and manager.rejectedBy%}
+            
+                                  {%if manager.Photo != None%}
+                                    <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                  {%else%}
+                                    <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                  {%endif%}
+                                {%endif%}
+            
+                                {%endfor%}
+  
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+  
+  
+                    </div>
+  
+  
+                  </div>
+  
+                      <div class="modal fade" id="attachmentmodel{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                        
+                          <div class="modal-content">           
+                            <div class="modal-header ps-4">
+                              <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                            </div>
+                            <div class="modal-header ps-4">
+                            </div>
+                            <div class="modal-body">
+                              <div class="row">
+                                {% if i.attachment is not None  %}
+                                  <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                                {%else%}
+                                <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+          
+                                  <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+          
+                                {% endif %}
+                              </div>
+                            
+                            </div>
+                            <div class="modal-footer">
+              
+                              <div class="w-50 text-center">
+                                <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                              </div>
+              
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+  
+                  {%empty%}
+                    <div class="noappdiv">
+                      <div class="text-center py-4 ">No Applications Recieved!</div>
+                    </div>
+                {%endfor%}
+  
+                </div>
+  
+            </div>
+
+            <!-- 3rd Pane -->
+            <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab" tabindex="0">
+                
+                <div class="row" id="rejectedleaves">
+                  
+                  {% for i in Rejected_list %}
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+                          <span class="d-flex">
+
+                            {%if i.allow_approve ==  True %}
+                                <span class="dropdown-item px-2"   title="approve" data-bs-toggle="modal" data-bs-target="#rejected_application_approve{{i.id}}"><i class="fa fa-solid fa-rotate-left text-success" aria-hidden="true"></i></span>
+    
+                            {%else%}
+                                <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The approve time has passed. You cannot approve this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+    
+                            {%endif%}
+                            {% if i.attachment is not None %}
+                              <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodel{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                            {% endif %}
+                            <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                                <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                      <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                <span class="card-header-txt">Reason :</span><br>
+
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                                </div>
+                              </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12  conclusion-box my-2">
+                              <div  class="row p-2 d-flex justify-content-between ">
+
+
+                                  
+                                  {% if i.universel_comment == "" %}
+                                  <span class="image-list col-lg-8 col-md-8 col-sm-12 card-header-txt d-flex">
+
+                                      {%for manager in i.allleavedata %}
+                                        {%if not manager.approvedBy and manager.rejectedBy%}
+                                        <span class="me-2">
+                                          {%if manager.Photo != None%}
+                                            <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture-rejected"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                          {%else%}
+                                            <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture-rejected"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                          {%endif%}
+                                          </span>
+
+
+                                          <span>
+                                            <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{manager.comment}}">{{manager.comment}}.</span>
+
+                                          </span>
+
+
+
+                                        
+                                        {%endif%}
+                
+                                      {%endfor%}
+                                  </span>
+
+                                  {% else %}
+                                  <span class="image-list col-lg-8 col-md-8 col-sm-12 card-header-txt d-flex rejected-application">
+
+
+                                      {%for manager in i.allleavedata %}
+                                            {%if not manager.approvedBy and manager.rejectedBy%}
+                                                {%if manager.Photo != None%}
+                                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                                {%else%}
+                                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-profile-picture"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                                {%endif%}
+                                            {%endif%}
+                                              
+                                      {%endfor%}
+
+                                      <span>
+                                        <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.universal_comment}}">{{i.universel_comment}}.</span>
+                                      </span>
+                                    </span>
+                                  {% endif %}
+                                
+                                
+                                <span class="col-lg-4 image-list d-flex justify-content-end col-md-4 col-sm-12 managers-imgs">
+
+
+
+                                  {%for manager in i.allleavedata %}
+                                  {%if manager.approvedBy  and not manager.rejectedBy %}
+                                    {%if manager.Photo != None %}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                    {%endif%}
+              
+                                  {%elif not manager.approvedBy and not manager.rejectedBy %}
+                                  
+                                    {%if manager.Photo != None %}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                    {%else%}
+                                      <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                    {%endif%}
+                                  
+
+                                  {%endif%}
+              
+                                  {%endfor%}
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+                    </div>
+
+                    <div class="modal fade" id="attachmentmodel{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {%empty%}
+                    <div class="noappdiv">
+                      <div class="text-center py-4 ">No Applications Recieved!</div>
+                    </div>
+                  {%endfor%}
+
+                    
+
+                </div>
+
+
+            </div>
+
+            <!-- 4th Pane-->
+
+
+
+            <div class="tab-pane fade" id="pills-expired" role="tabpanel" aria-labelledby="pills-expired-tab" tabindex="0">
+                
+              <div class="row" id="expiredleaves">
+                {% for i in expiredlist %}
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                  <div id="card" class="card text-start h-100">
+
+                    <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                      <span class="card-header-blue-txt text-black">{{i.applicant_name}}</span>
+
+                      <span class="d-flex">
+                        {% if i.attachment is not None %}
+                        <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#attachmentmodel{{i.id}}"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                      {% endif %}
+                        <a href="/leave/leavedetails/{{ i.leave_id|encrypt_parameter }}/{{ i.id|encrypt_parameter }}">
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                          <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                          </svg>
+                        </a>
+                      </span>
+
+
+                    </div>
+                    <div class="card-header head d-flex justify-content-between align-items-center">
+                        <span>                                   
+                            <span class="card-header-txt">{%if i.WorkFromHome == True %}Work From Home {%else%}Leave {%endif%}</span><br>
+                            <span class="card-header-txt">{{i.ApplicationId}}</span> 
+                        </span>
+                        <span class="d-flex justify-content-between">
+                          <span class="text-left">                                   
+                            <span class="card-header-txt">Application Date </span><br>
+                            <span class="card-header-txt" title="{{i.created_at }}">{{i.created_at}}</span> 
+                          </span>
+                          <span>
+
+                          </span>
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+
+
+
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                                <span>                                   
+                                    <span class="card-header-txt">From</span><br>
+                                    <span class="card-header-blue-txt">{{i.dd_month_sdate}}</span> 
+                                </span>
+                                <span class="d-flex justify-content-between">
+                                    <span>                                   
+                                      <span class="card-header-txt">To</span><br>
+                                      <span class="card-header-blue-txt">{{i.dd_month_edate}}</span> 
+                                    </span>
+
+
+                                </span>
+                                <span>                                   
+                                  <span class="card-header-txt">{% if i.leavetype == "Fullday"%} Full Day {%elif  i.leavetype == "SecondHalf" %} Second Half {%elif  i.leavetype == "FirstHalf" %} First Half{% endif %}</span><br>
+                                  <span class="card-header-blue-txt">{{i.total_days}} Days</span> 
+                                </span>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="card-header p-0">
+
+                            <span class="card-header-txt">Reason :</span><br>
+
+                            <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.reason}}.</span>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+
+
+                        <div class="col-lg-12 conclusion-box my-2">
+                          <div  class="py-2 row">
+                            <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                              {%for manager in i.allleavedata %}
+                              {%if manager.approvedBy  and not manager.rejectedBy %}
+                                {%if manager.Photo != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.name}} " />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}"  data-bs-toggle="tooltip" title="✅ {{manager.name}} "/>
+                                {%endif%}
+          
+
+                              {%endif%}
+          
+                              {%endfor%}
+                              <span class="ps-1">This application is pending.</span>
+                            </span>  
+                            
+                            <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+
+
+
+                              {%for manager in i.allleavedata %}
+                              {%if not manager.approvedBy and not manager.rejectedBy %}
+                              
+                                {%if manager.Photo != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} " />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.name}} "/>
+                                {%endif%}
+          
+                              {%elif not manager.approvedBy and manager.rejectedBy%}
+          
+                                {%if manager.Photo != None%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{{manager.Photo}}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}" />
+                                {%else%}
+                                  <img  class="manager-pic manager-pic-{{manager.status}} manager-image-picture{{manager.position}}"  src="{% static "admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png" %}" data-bs-toggle="tooltip" data-bs-placement="top" title=" ❌ {{manager.name}}"/>
+                                {%endif%}
+                              {%endif%}
+          
+                              {%endfor%}
+
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row mt-2" id="ExpiredDivButttonStatus{{i.id}}">
+                        <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                          <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}">Reject</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                          <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal{{i.id}}">Approve</button>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+
+              </div>
+
+
+                    <div class="modal fade" id="attachmentmodel{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                          <div class="modal-header ps-4">
+                            <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                          </div>
+                          <div class="modal-header ps-4">
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              {% if i.attachment is not None  %}
+                                <img class="w-100" src="{{ImageURL}}{{i.attachment}}" alt="">
+                              {%else%}
+                              <h5 class="modal-title text-center py-2" id="exampleModalLabel"> Attachment Not Found</h5>
+        
+                                <img class="w-100" src="{% static 'assets/images/nofilefound.jpg' %}" alt="">
+        
+                              {% endif %}
+                            </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+            
+                            <div class="w-50 text-center">
+                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            </div>
+            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                {%empty%}
+                  <div class="noappdiv">
+                    <div class="text-center py-4 ">No Applications Recieved!</div>
+                  </div>
+                {%endfor%}
+
+              </div>
+              
+            </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+    </main>
+
+
+  {% endblock %}
+{% block script %}
+{{block.super}}
+
+
+  {% comment %} <script>
+
+    $(document).ready(function () {
+      AddReadMore();
+      AddReadMore1();
+      getdepartmentlist()
+
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {return new bootstrap.Tooltip(tooltipTriggerEl)});
+      
+      var currentYear = new Date().getFullYear();
+
+      // Populate the select tag with options for the past 50 years
+      for (var year = currentYear+1; year >= currentYear - 49; year--) {
+        $('#search_year').append($('<option>', {
+          value: year,
+          text: year
+        }));
+      }
+
+      $('#search_year').val(currentYear)
+
+
+    });
+
+    function AddReadMore() {
+      //This limit you can set after how much characters you want to show Read More.
+      var carLmt = 95;
+      // Text to show when text is collapsed
+      var readMoreTxt = " ... Read More";
+      // Text to show when text is expanded
+      var readLessTxt = " Read Less";
+
+
+      //Traverse all selectors with this class and manupulate HTML part to show Read More
+      $(".addReadMore").each(function() {
+          if ($(this).find(".firstSec").length)
+              return;
+
+          var allstr = $(this).text();
+          if (allstr.length > carLmt) {
+              var firstSet = allstr.substring(0, carLmt);
+              var secdHalf = allstr.substring(carLmt, allstr.length);
+              var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+              $(this).html(strtoadd);
+          }
+
+      });
+      //Read More and Read Less Click Event binding
+      
+    }
+    function AddReadMore1() {
+      //This limit you can set after how much characters you want to show Read More.
+      var carLmt = 15;
+      // Text to show when text is collapsed
+      var readMoreTxt = " ... Read More";
+      // Text to show when text is expanded
+      var readLessTxt = " Read Less";
+
+
+      //Traverse all selectors with this class and manupulate HTML part to show Read More
+      $(".addReadMore1").each(function() {
+          if ($(this).find(".firstSec").length)
+              return;
+
+          var allstr = $(this).text();
+          if (allstr.length > carLmt) {
+              var firstSet = allstr.substring(0, carLmt);
+              var secdHalf = allstr.substring(carLmt, allstr.length);
+              var strtoadd = firstSet + "<span class='SecSec1'>" + secdHalf + "</span><span class='readMore1'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess1' title='Click to Show Less'>" + readLessTxt + "</span>";
+              $(this).html(strtoadd);
+          }
+
+      });
+      //Read More and Read Less Click Event binding
+      
+    }
+
+    $(document).on("click", ".readMore,.readLess", function() {
+        $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+    });
+    $(document).on("click", ".readMore1,.readLess1", function() {
+      $(this).closest(".addReadMore1").toggleClass("showlesscontent1 showmorecontent1");
+    });
+
+    function rejectleave(id){
+      var reason = $("#reason"+id).val();
+      if (IsValid(reason)){
+          $('#reasonerror'+id).html('');
+          $('#reasonerror'+id).show().delay(3000).slideUp();
+          $('#reasonerror'+id).html('This field is required');
+          $('#reason'+id).focus();
+          return false;
+      }else if (!/\S/.test(reason)){
+        $('#reasonerror'+id).html('');
+        $('#reasonerror'+id).show().delay(3000).slideUp();
+        $('#reasonerror'+id).html('This field is required');
+        $('#reason'+id).focus();
+          return false;
+      }else{
+        $("#editmodal"+id).modal("toggle");
+
+        $.ajax( {
+          url: frontendURL +"leave/leaveactionFront",
+          type: 'POST',
+          headers: {
+            'Authorization':'Token {{token}}'
+        },
+          data:{
+            csrfmiddlewaretoken:'{{ csrf_token }}',
+            'id':id,
+            'comment':reason,
+            },
+          dataType: 'json',
+          beforeSend: function() {
+
+
+          var PendingDivButttonStatus=""
+          PendingDivButttonStatus=`
+          <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+            <button class="btn w-100  btn-primary" >Loading...</button>
+          </div>
+          `
+          $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+          $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+          $("#ExpiredDivButttonStatus"+id).html(PendingDivButttonStatus)
+
+          },
+          success: function(response){
+            $("#rejectmodal").modal("toggle");
+
+            if (response['response']['n'] == 1){
+
+
+                var PendingDivButttonStatus=""
+                PendingDivButttonStatus=`
+                <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                  <button class="btn w-100  btn-danger" >Rejected</button>
+                </div>
+                `
+                $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+                $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+                $("#ExpiredDivButttonStatus"+id).html(PendingDivButttonStatus)
+
+
+                  }
+            else{
+              swal({
+                icon: "error",
+                title: "",
+                text: response['response']['msg'],  
+                button: "Close",
+                }).then(() => {
+                  // Code to execute after the user closes the SweetAlert dialog
+                  location.reload(); // Reload the page
+                });
+            }   
+            
+          }
+        });
+      }
+    }
+
+    function Rerejectleave(id){
+      var reason = $("#Rereason"+id).val();
+      if (IsValid(reason)){
+          $('#rereasonerror'+id).html('');
+          $('#rereasonerror'+id).show().delay(3000).slideUp();
+          $('#rereasonerror'+id).html('please enter rejection reason');
+          $('#Rereason'+id).focus();
+          return false;
+      }else if (!/\S/.test(reason)){
+        $('#rereasonerror'+id).html('');
+        $('#rereasonerror'+id).show().delay(3000).slideUp();
+        $('#rereasonerror'+id).html('please enter valid rejection reason');
+        $('#Rereason'+id).focus();
+          return false;
+      }else{
+
+        $.ajax( {
+          url: frontendURL +"leave/reject_approved_application",
+          type: 'POST',
+          headers: {
+            'Authorization':'Token {{token}}'
+        },
+          data:{
+            csrfmiddlewaretoken:'{{ csrf_token }}',
+            'id':id,
+            'comment':reason,
+            },
+          dataType: 'json',
+          beforeSend: function() {
+
+
+
+          },
+          success: function(response){
+           // $("#approved_application_reject"+id).modal("toggle");
+
+            if (response['response']['n'] == 1){
+
+
+              swal({
+                icon: "success",
+                title: "",
+                text: response['response']['msg'],  
+                button: "Close",
+                }).then(() => {
+                  location.reload(); // Reload the page
+                });
+
+                  }
+            else{
+              swal({
+                icon: "error",
+                title: "",
+                text: response['response']['msg'],  
+                button: "Close",
+                }).then(() => {
+                  location.reload(); // Reload the page
+                });
+            }   
+            
+          }
+        });
+      }
+    }
+    function Reapproveleave(id){
+ 
+
+        $.ajax( {
+          url: frontendURL +"leave/approve_rejected_application",
+          type: 'POST',
+          headers: {
+            'Authorization':'Token {{token}}'
+          },
+          data:{
+            csrfmiddlewaretoken:'{{ csrf_token }}',
+            'id':id,
+            },
+          dataType: 'json',
+          beforeSend: function() {
+
+
+
+          },
+          success: function(response){
+            //$("#rejected_application_approve"+id).modal("toggle");
+
+            if (response['response']['n'] == 1){
+
+
+              swal({
+                icon: "success",
+                title: "",
+                text: response['response']['msg'],  
+                button: "Close",
+                }).then(() => {
+                  location.reload(); // Reload the page
+                });
+
+                  }
+            else{
+              swal({
+                icon: "error",
+                title: "",
+                text: response['response']['msg'],  
+                button: "Close",
+                }).then(() => {
+                  location.reload(); // Reload the page
+                });
+            }   
+            
+          }
+        });
+      }
+    
+    function ApplicationApprove(id){
+
+
+        $.ajax( {
+          url: frontendURL +"leave/leaveactionFront",
+          type: 'POST',
+          headers: {
+            'Authorization':'Token {{token}}'
+        },
+          data:{
+            csrfmiddlewaretoken:'{{ csrf_token }}',
+            'id':id        
+            },
+          dataType: 'json',
+          beforeSend: function() {
+
+          var PendingDivButttonStatus=""
+          PendingDivButttonStatus=`
+          <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+            <button class="btn w-100   btn-primary" >Loading...</button>
+          </div>
+          `
+          $("#ExpiredDivButttonStatus"+id).html(PendingDivButttonStatus)
+          $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+          $("#ExpiredDivButttonStatus"+id).html(PendingDivButttonStatus)
+
+
+
+          },
+          success: function(response){
+            $("#acceptmodal").modal("toggle");
+            //swal.close()
+
+            if (response['response']['n'] == 1){
+
+
+                    var PendingDivButttonStatus=""
+                    PendingDivButttonStatus=`
+                    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                      <button class="btn w-100   btn-success" >Approved</button>
+                    </div>
+                    `
+                    $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+                    $("#allapplicationsButttonStatus"+id).html(PendingDivButttonStatus)
+                    $("#ExpiredDivButttonStatus"+id).html(PendingDivButttonStatus)
+
+
+            }
+            else{
+              swal({
+                    icon: "error",
+                    title: "",
+                    text: response['response']['msg'],
+                    button: "Close",
+                    }).then(() => {
+                      // Code to execute after the user closes the SweetAlert dialog
+                    location.reload(); // Reload the page
+                    });
+            }
+
+
+            
+            
+          }
+        });
+      
+    }
+
+
+
+    
+    function search_by_name(){
+      var html;
+      html="";
+      var pstatus;
+      pstatus="";
+      var Approvedhtml;
+      Approvedhtml="";
+      var Rejectedhtml;
+      Rejectedhtml="";
+      var expiredhtml;
+      expiredhtml="";
+      var Withdrawhtml;
+      Withdrawhtml="";
+      var allapplicationslisthtml ="";
+      allapplicationslisthtml =""
+      var name = $("#searchbar").val()
+      var ApplicationType = $("#ApplicationType").val()
+      var department_value = $("#searchdept").val()
+      var year = $("#search_year").val()
+      var month = $("#search_month").val()
+
+
+
+      $.ajax({
+        url: frontendURL + "leave/FilterleaveListAPIfront",
+        type: "POST",
+        headers: {"Authorization": "Token {{token}}"},
+
+        data: {
+            'name': name,
+            'ApplicationType':ApplicationType,
+            'department_value':department_value,
+            'year':year,
+            'month':month,
+
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function (response) {        
+          console.log("response",response)
+
+            if(response.pendinglist.length>0){
+              $(response.pendinglist).each(function(a, b) {
+                var encrypted_leave_id = btoa(b.leave_id.toString());
+                var encrypted_id = btoa(b.id.toString());
+                var url = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+
+
+                var attachment_html=''
+                if(b.attachment !='' && b.attachment != null && b.attachment !='None'){
+                  attachment_html=`                      
+                  <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#jsattachmentmodel`+b.id+`"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                `
+                }
+                html +=  
+                `
+                  <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                          <span class="d-flex">
+                        `+attachment_html+`
+
+                            <a href="`+url+`">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                                <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                      <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                  <span class="card-header-txt">Reason :</span><br>
+
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                                </div>
+                              </div>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span id="actedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  
+                                  
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="unactedmanagers`+b.id+`">
+
+
+
+
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          
+                          <div class="row mt-2" id="PendingDivButttonStatus`+b.id+`">
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                              <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal`+b.id+`">Reject</button>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                              <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal`+b.id+`">Approve</button>
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                      </div>
+
+
+                  </div>
+
+
+
+
+
+                  <div class="modal fade" id="jsattachmentmodel`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    
+                      <div class="modal-content">           
+                        <div class="modal-header ps-4">
+                          <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                        </div>
+  
+                        <div class="modal-body">
+                          <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+                        </div>
+          
+
+                        <div class="modal-footer">
+            
+                          <div class="w-50 text-center">
+                            <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          </div>
+          
+                        </div>
+                      </div>
+
+                    </div>
+  
+                  </div>
+
+
+
+
+
+
+                
+                `
+              
+              })
+
+            }else{
+              html +=  `<div class="text-center my-3">No Request Found</div>`
+            }
+
+
+            $('#pendingleaves').html(html);
+            $(response.pendinglist).each(function(a, b) {
+              actedmanagers="";
+              unactedmanagers="";
+              $(b.allleavedata).each(function(x, y) {
+
+                
+
+
+
+
+                if (y.status == "Approved"){
+                  actedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ `+y.name+` " />
+
+
+                  `
+                }else if(y.status=="Pending"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="⏳ `+y.name+` " />
+
+                  `
+
+                }
+              })
+
+              $('#actedmanagers'+b.id).append(actedmanagers);
+              $('#unactedmanagers'+b.id).append(unactedmanagers);
+              $('#actedmanagers'+b.id).append(`<span class="ps-1">This application is pending.</span>`);
+
+            
+            })
+
+
+
+
+
+
+
+            if(response.approvedlist.length>0){
+              $(response.approvedlist).each(function(a, b) {
+                var encrypted_leave_id = btoa(b.leave_id.toString());
+                var encrypted_id = btoa(b.id.toString());
+                var rej_html=''
+                if(b.allow_reject == true){
+                  rej_html=`
+                  <span class="dropdown-item px-2"   title="Reject" data-bs-toggle="modal" data-bs-target="#approved_application_reject`+b.id+`"><i class="fa fa-solid fa-rotate-left text-danger" aria-hidden="true"></i></span>
+                  `
+                }else{
+                  rej_html=`
+                  <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The reject time has passed. You cannot reject this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                  `
+
+                }
+
+                var attachment_html=''
+                if(b.attachment !='' && b.attachment != null && b.attachment !='None'){
+                  attachment_html=`                      
+                  <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#jsattachmentmodel`+b.id+`"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                `
+                }
+
+                var url = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+                Approvedhtml +=  
+                `
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                  <div id="card" class="card text-start h-100">
+
+                    <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                      <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                      <span class="d-flex">
+                        `+attachment_html+`
+
+                        `+rej_html+`
+                        <a href="`+url+`" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                          <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                          </svg>
+                        </a>
+                      </span>
+
+
+                    </div>
+                    <div class="card-header head d-flex justify-content-between align-items-center">
+                        <span>                                   
+                            <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                            <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                        </span>
+                        <span class="d-flex justify-content-between">
+                          <span class="text-left">                                   
+                            <span class="card-header-txt">Application Date </span><br>
+                            <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                          </span>
+                          <span>
+
+                          </span>
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+
+
+
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                                <span>                                   
+                                    <span class="card-header-txt">From</span><br>
+                                    <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                </span>
+                                <span class="d-flex justify-content-between">
+                                    <span>                                   
+                                      <span class="card-header-txt">To</span><br>
+                                      <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                    </span>
+
+
+                                </span>
+                                <span>                                   
+                                  <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                  <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                </span>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="card-header p-0">
+
+                              <span class="card-header-txt">Reason :</span><br>
+
+                              <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                            </div>
+                          </div>
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+
+
+                        <div class="col-lg-12 conclusion-box my-2">
+                          <div  class="py-2 row">
+                            <span id="approvedactedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                              
+                              
+                            </span>  
+                            
+                            <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="approvedunactedmanagers`+b.id+`">
+
+
+
+
+
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+
+                    </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+
+
+
+                <div class="modal fade" id="jsattachmentmodel`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                  
+                    <div class="modal-content">           
+                      <div class="modal-header ps-4">
+                        <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                      </div>
+
+                      <div class="modal-body">
+                        <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+                      </div>
+        
+
+                      <div class="modal-footer">
+          
+                        <div class="w-50 text-center">
+                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                        </div>
+        
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+
+                `
+              
+              })
+            }else{
+              Approvedhtml+=`<div class="text-center my-3">No Request Found</div>`
+            }
+            $('#approvedleaves').html(Approvedhtml)
+            $(response.approvedlist).each(function(a, b) {
+              actedmanagers="";
+              unactedmanagers="";
+              $(b.allleavedata).each(function(x, y) {
+
+                
+
+
+
+
+                if (y.status == "Approved"){
+                  actedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ `+y.name+` " />
+
+
+                  `
+                }else if(y.status=="Pending"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="⏳ `+y.name+` " />
+
+                  `
+
+                }
+              })
+
+              $('#approvedactedmanagers'+b.id).append(actedmanagers);
+              $('#approvedunactedmanagers'+b.id).append(unactedmanagers);
+              $('#approvedactedmanagers'+b.id).append(`<span class="ps-1">This application is approved.</span>`);
+
+            
+            })
+
+            if (response.rejectedlist.length>0){
+              $(response.rejectedlist).each(function(a, b) {
+                var encrypted_leave_id = btoa(b.leave_id.toString());
+                var encrypted_id = btoa(b.id.toString());
+                var url = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+                var approve_html=''
+                if(b.allow_approve == true){
+                  approve_html=`
+                  <span class="dropdown-item px-2"   title="approve" data-bs-toggle="modal" data-bs-target="#approved_application_approve`+b.id+`"><i class="fa fa-solid fa-rotate-left text-success" aria-hidden="true"></i></span>
+                  `
+                }else{
+                  approve_html=`
+                  <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The approve time has passed. You cannot approve this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                  `
+
+                }
+                var attachment_html=''
+                if(b.attachment !='' && b.attachment != null && b.attachment !='None'){
+                  attachment_html=`                      
+                  <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#jsattachmentmodel`+b.id+`"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                `
+                }
+                Rejectedhtml +=  
+                `
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                  <div id="card" class="card text-start h-100">
+
+                    <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                      <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                      <span class="d-flex">
+                        `+approve_html+`
+                        `+attachment_html+`
+
+                        <a href="`+url+`" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                          <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                          </svg>
+                        </a>
+                      </span>
+
+
+                    </div>
+                    <div class="card-header head d-flex justify-content-between align-items-center">
+                        <span>                                   
+                            <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                            <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                        </span>
+                        <span class="d-flex justify-content-between">
+                          <span class="text-left">                                   
+                            <span class="card-header-txt">Application Date </span><br>
+                            <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                          </span>
+                          <span>
+
+                          </span>
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+
+
+
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                                <span>                                   
+                                    <span class="card-header-txt">From</span><br>
+                                    <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                </span>
+                                <span class="d-flex justify-content-between">
+                                    <span>                                   
+                                      <span class="card-header-txt">To</span><br>
+                                      <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                    </span>
+
+
+                                </span>
+                                <span>                                   
+                                  <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                  <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                </span>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="card-header p-0">
+
+                              <span class="card-header-txt">Reason :</span><br>
+
+                              <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                            </div>
+                          </div>
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+
+
+                        <div class="col-lg-12 conclusion-box my-2">
+                          <div  class="py-2 row">
+                            <span id="actedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                              
+                              
+                            </span>  
+                            
+                            <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="unactedmanagers`+b.id+`">
+
+
+
+
+
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+
+                    </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+
+                <div class="modal fade" id="jsattachmentmodel`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                  
+                    <div class="modal-content">           
+                      <div class="modal-header ps-4">
+                        <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                      </div>
+
+                      <div class="modal-body">
+                        <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+                      </div>
+        
+
+                      <div class="modal-footer">
+          
+                        <div class="w-50 text-center">
+                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                        </div>
+        
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+                `
+              
+              })
+            }else{
+              Rejectedhtml+=`<div class="text-center my-3">No Request found</div>`
+            }
+            $('#rejectedleaves').html(Rejectedhtml)
+            $(response.rejectedlist).each(function(a, b) {
+              actedmanagers="";
+              unactedmanagers="";
+              manager_comment="";
+              $(b.allleavedata).each(function(x, y) {
+
+                
+
+
+
+
+                if (y.status == "Approved"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ `+y.name+` " />
+
+
+                  `
+                }else if(y.status=="Pending"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="⏳ `+y.name+` " />
+
+                  `
+
+                }else if(y.status=="Rejected"){
+                  actedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="❌ `+y.name+` " />
+
+                  `
+                  manager_comment = y.comment
+
+                }
+              })
+              if(manager_comment =="" || manager_comment == null){
+                manager_comment="No response  application"
+              }
+              $('#actedmanagers'+b.id).append(actedmanagers);
+              $('#unactedmanagers'+b.id).append(unactedmanagers);
+              $('#actedmanagers'+b.id).append(`<span class="ps-1">
+                <span  class="card-body-comment-text addReadMore1 showlesscontent1" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+manager_comment+`">`+manager_comment+`.</span>
+
+              </span>`);
+
+            
+            })
+
+            if(response.withdrawlist.length>0){
+              $(response.withdrawlist).each(function(a, b) {
+                var encrypted_leave_id = btoa(b.leave_id.toString());
+                var encrypted_id = btoa(b.id.toString());
+                var url = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+                var attachment_html=''
+                if(b.attachment !='' && b.attachment != null && b.attachment !='None'){
+                  attachment_html=`                      
+                  <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#jsattachmentmodel`+b.id+`"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                `
+                }
+                Withdrawhtml +=  
+                `
+                <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                  <div id="card" class="card text-start h-100">
+
+                    <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                      <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                      <span class="d-flex">
+                        `+attachment_html+`
+
+                        <a href="`+url+`" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                          <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                          </svg>
+                        </a>
+                      </span>
+
+
+                    </div>
+                    <div class="card-header head d-flex justify-content-between align-items-center">
+                        <span>                                   
+                            <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                            <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                        </span>
+                        <span class="d-flex justify-content-between">
+                          <span class="text-left">                                   
+                            <span class="card-header-txt">Application Date </span><br>
+                            <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                          </span>
+                          <span>
+
+                          </span>
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+
+
+
+                          <div class="col-lg-12">
+                            <div class="card-header head d-flex justify-content-between p-0">
+                                <span>                                   
+                                    <span class="card-header-txt">From</span><br>
+                                    <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                </span>
+                                <span class="d-flex justify-content-between">
+                                    <span>                                   
+                                      <span class="card-header-txt">To</span><br>
+                                      <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                    </span>
+
+
+                                </span>
+                                <span>                                   
+                                  <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                  <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                </span>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12">
+                            <div class="card-header p-0">
+
+                              <span class="card-header-txt">Reason :</span><br>
+
+                              <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                            </div>
+                          </div>
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer cardfooter mt-auto">
+                      <div class="row">
+
+
+                        <div class="col-lg-12 conclusion-box my-2">
+                          <div  class="py-2 row">
+                            <span id="actedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                              
+                              
+                            </span>  
+                            
+                            <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="unactedmanagers`+b.id+`">
+
+
+
+
+
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+
+                    </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+
+
+
+                <div class="modal fade" id="jsattachmentmodel`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                  
+                    <div class="modal-content">           
+                      <div class="modal-header ps-4">
+                        <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                      </div>
+
+                      <div class="modal-body">
+                        <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+                      </div>
+        
+
+                      <div class="modal-footer">
+          
+                        <div class="w-50 text-center">
+                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                        </div>
+        
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+                `
+              
+              })
+            }else{
+              Withdrawhtml+=`<div class="text-center my-3">No Request Found</div>`
+            }
+            $('#withdrawleaves').html(Withdrawhtml)
+            $(response.withdrawlist).each(function(a, b) {
+              actedmanagers="";
+              unactedmanagers="";
+              $(b.allleavedata).each(function(x, y) {
+
+                
+
+
+
+
+                if (y.status == "Approved"){
+                  actedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ `+y.name+` " />
+
+
+                  `
+                }else if(y.status=="Pending"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="⏳ `+y.name+` " />
+
+                  `
+
+                }
+              })
+
+              $('#actedmanagers'+b.id).append(actedmanagers);
+              $('#unactedmanagers'+b.id).append(unactedmanagers);
+              $('#actedmanagers'+b.id).append(`<span class="ps-1">This application is withdrawn.</span>`);
+
+            
+            })
+
+
+
+
+            if(response.allapplicationslist.length>0){
+              $(response.allapplicationslist).each(function(a, b) {
+                var encrypted_leave_id = btoa(b.leave_id.toString());
+                var encrypted_id = btoa(b.id.toString());
+                var url = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+                var rej_html=''
+                if(b.allow_reject == true){
+                  rej_html=`
+                  <a class="dropdown-item px-2"   title="Reject" data-bs-toggle="modal" data-bs-target="#approved_application_reject`+b.id+`"><i class="fa fa-solid fa-rotate-left text-danger" aria-hidden="true"></i></a>
+                  `
+                }else{
+                  rej_html=`
+                  <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The reject time has passed. You cannot reject this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                  `
+                }
+                var attachment_html=''
+                if(b.attachment !='' && b.attachment != null && b.attachment !='None'){
+                  attachment_html=`                      
+                  <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#jsattachmentmodelall`+b.id+`"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                `
+                }
+                var approve_html=''
+                if(b.allow_approve == true){
+                  approve_html=`
+                  <span class="dropdown-item px-2"   title="approve" data-bs-toggle="modal" data-bs-target="#approved_application_approve`+b.id+`"><i class="fa fa-solid fa-rotate-left text-success" aria-hidden="true"></i></span>
+                  `
+                }else{
+                  approve_html=`
+                  <span class="dropdown-item px-2"   data-bs-toggle="tooltip" title="The approve time has passed. You cannot approve this application."><i class="fa fa-solid fa-rotate-left text-warning disabled-icon" aria-hidden="true"></i></span>
+
+                  `
+
+                }
+
+
+                if(b.action_taken == false){
+
+                
+
+                  allapplicationslisthtml +=  
+                    `
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                          <span class="d-flex">
+                        `+attachment_html+`
+                          
+                            <a href="`+url+`" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                                <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                      <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                  <span class="card-header-txt">Reason :</span><br>
+
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                                </div>
+                              </div>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span id="allapplications_actedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  
+                                  
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="allapplications_unactedmanagers`+b.id+`">
+
+
+
+
+
+                                </span>
+                              </div>
+                            </div>
+
+
+
+
+
+                          </div>
+
+
+
+                          <div class="row mt-2" id="allapplicationsButttonStatus`+b.id+`" >
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                              <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal`+b.id+`">Reject</button>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                              <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal`+b.id+`">Approve</button>
+                            </div>
+                          </div>
+
+
+
+
+                        </div>
+
+
+
+                      </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="modal fade" id="jsattachmentmodelall`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                            <div class="modal-header ps-4">
+                              <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                            </div>
+          
+                            <div class="modal-body">
+                              <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+      
+                            </div>
+                            <div class="modal-footer">
+            
+                              <div class="w-50 text-center">
+                                <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                              </div>
+              
+                            </div>
+                        </div>
+            
+                      </div>
+                    </div>
+                    `
+                
+                  }else{
+                    allapplicationslisthtml +=  
+                    `
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                          <span class="d-flex">
+                            `+rej_html+`
+                        `+attachment_html+`
+
+                            <a href="`+url+`" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                                <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                      <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                  <span class="card-header-txt">Reason :</span><br>
+
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                                </div>
+                              </div>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span id="allapplications_actedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  
+                                  
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="allapplications_unactedmanagers`+b.id+`">
+
+
+
+
+
+                                </span>
+                              </div>
+                            </div>
+
+
+
+
+
+                          </div>
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+                      </div>
+
+
+                    </div>
+
+                    <div class="modal fade" id="jsattachmentmodelall`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg">
+                      
+                        <div class="modal-content">           
+                            <div class="modal-header ps-4">
+                              <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                            </div>
+          
+                            <div class="modal-body">
+                              <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+      
+                            </div>
+                            <div class="modal-footer">
+            
+                              <div class="w-50 text-center">
+                                <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                              </div>
+              
+                            </div>
+                        </div>
+            
+                      </div>
+                    </div>
+                    `
+                  }
+
+
+              })
+            }else{
+              allapplicationslisthtml+=`<div class="text-center my-3">No Request Found</div>`
+            }
+
+            $('#allapplicationslist').html(allapplicationslisthtml)
+            $(response.allapplicationslist).each(function(a, b) {
+              actedmanagers="";
+              unactedmanagers="";
+              $(b.allleavedata).each(function(x, y) {
+
+                
+
+
+
+
+                if (y.status == "Approved"){
+                  actedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ `+y.name+` " />
+
+
+                  `
+                }else if(y.status=="Pending"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="⏳ `+y.name+` " />
+
+                  `
+
+                }
+              })
+
+              $('#allapplications_actedmanagers'+b.id).append(actedmanagers);
+              $('#allapplications_unactedmanagers'+b.id).append(unactedmanagers);
+              $('#allapplications_actedmanagers'+b.id).append(`<span class="ps-1">This application is `+b.leave_status+`.</span>`);
+
+            
+            })
+
+
+            //expired leaves
+
+            if(response.expiredlist.length>0){
+
+              $(response.expiredlist).each(function(a, b) {
+                var encrypted_leave_id = btoa(b.leave_id.toString());
+                var encrypted_id = btoa(b.id.toString());
+                var url = "/leave/leavedetails/" + encrypted_leave_id + "/" + encrypted_id ;
+                var attachment_html=''
+                if(b.attachment !='' && b.attachment != null && b.attachment !='None'){
+                  attachment_html=`                      
+                  <span class="px-2"   title="attachment" data-bs-toggle="modal" data-bs-target="#jsattachmentmodel`+b.id+`"><i class="fa fa-solid fa-folder-open text-primary" aria-hidden="true"></i></span>
+                `
+                }
+                expiredhtml +=  
+                `
+
+
+                  <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+
+
+                      <div id="card" class="card text-start h-100">
+
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-blue-txt text-black">`+b.applicant_name+`</span>
+                          <span class="d-flex">
+                        `+attachment_html+`
+
+                            <a href="`+url+`">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 36 36" fill="none">
+                              <path d="M27.8438 2.25H8.15625C4.89994 2.25 2.25 5.14084 2.25 8.69318V27.3068C2.25 30.8592 4.89994 33.75 8.15625 33.75H27.8438C31.1001 33.75 33.75 30.8592 33.75 27.3068V8.69318C33.75 5.14084 31.1001 2.25 27.8438 2.25ZM32.4375 27.3068C32.4375 30.0702 30.3769 32.3182 27.8438 32.3182H8.15625C5.62313 32.3182 3.5625 30.0702 3.5625 27.3068V8.69318C3.5625 5.92977 5.62313 3.68182 8.15625 3.68182H27.8438C30.3769 3.68182 32.4375 5.92977 32.4375 8.69318V27.3068ZM28.5 10.125C28.5 10.5202 28.206 10.8409 27.8438 10.8409H14.7188C14.3565 10.8409 14.0625 10.5202 14.0625 10.125C14.0625 9.72982 14.3565 9.40909 14.7188 9.40909H27.8438C28.206 9.40909 28.5 9.72982 28.5 10.125ZM10.125 10.125C10.125 10.9154 9.537 11.5568 8.8125 11.5568C8.088 11.5568 7.5 10.9154 7.5 10.125C7.5 9.33464 8.088 8.69318 8.8125 8.69318C9.537 8.69318 10.125 9.33464 10.125 10.125ZM28.5 18C28.5 18.3952 28.206 18.7159 27.8438 18.7159H14.7188C14.3565 18.7159 14.0625 18.3952 14.0625 18C14.0625 17.6048 14.3565 17.2841 14.7188 17.2841H27.8438C28.206 17.2841 28.5 17.6048 28.5 18ZM10.125 18C10.125 18.7904 9.537 19.4318 8.8125 19.4318C8.088 19.4318 7.5 18.7904 7.5 18C7.5 17.2096 8.088 16.5682 8.8125 16.5682C9.537 16.5682 10.125 17.2096 10.125 18ZM28.5 25.875C28.5 26.2702 28.206 26.5909 27.8438 26.5909H14.7188C14.3565 26.5909 14.0625 26.2702 14.0625 25.875C14.0625 25.4798 14.3565 25.1591 14.7188 25.1591H27.8438C28.206 25.1591 28.5 25.4798 28.5 25.875ZM10.125 25.875C10.125 26.6654 9.537 27.3068 8.8125 27.3068C8.088 27.3068 7.5 26.6654 7.5 25.875C7.5 25.0846 8.088 24.4432 8.8125 24.4432C9.537 24.4432 10.125 25.0846 10.125 25.875Z" fill="black"/>
+                              </svg>
+                            </a>
+                          </span>
+
+
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                                <span class="card-header-txt">`+b.ApplicationType+`</span><br>
+                                <span class="card-header-txt">`+b.ApplicationId+`</span> 
+                            </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-left">                                   
+                                <span class="card-header-txt">Application Date </span><br>
+                                <span class="card-header-txt" title="`+b.created_at+`">`+b.created_at+`</span> 
+                              </span>
+                              <span>
+
+                              </span>
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+
+
+
+                              <div class="col-lg-12">
+                                <div class="card-header head d-flex justify-content-between p-0">
+                                    <span>                                   
+                                        <span class="card-header-txt">From</span><br>
+                                        <span class="card-header-blue-txt">`+b.dd_month_sdate+`</span> 
+                                    </span>
+                                    <span class="d-flex justify-content-between">
+                                        <span>                                   
+                                          <span class="card-header-txt">To</span><br>
+                                          <span class="card-header-blue-txt">`+b.dd_month_edate+`</span> 
+                                        </span>
+
+
+                                    </span>
+                                    <span>                                   
+                                      <span class="card-header-txt">`+b.leavetype+`</span><br>
+                                      <span class="card-header-blue-txt">`+b.total_days+` Days</span> 
+                                    </span>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+
+                                  <span class="card-header-txt">Reason :</span><br>
+
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent " data-bs-toggle="tooltip" data-bs-placement="bottom"  title="`+b.reason+`">`+b.reason+`.</span>
+                                </div>
+                              </div>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+
+
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span id="expired_actedmanagers`+b.id+`" class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                  
+                                  
+                                </span>  
+                                
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12" id="expired_unactedmanagers`+b.id+`">
+
+
+
+
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          
+                          <div class="row mt-2" id="ExpiredDivButttonStatus`+b.id+`">
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                              <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal`+b.id+`">Reject</button>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                              <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal`+b.id+`">Approve</button>
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                      </div>
+
+
+                  </div>
+
+
+                  <div class="modal fade" id="jsattachmentmodel`+b.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    
+                      <div class="modal-content">           
+                        <div class="modal-header ps-4">
+                          <h5 class="modal-title py-2" id="exampleModalLabel">Attachment</h5>
+                        </div>
+  
+                        <div class="modal-body">
+                          <img class="w-100" src="{{ImageURL}}`+b.attachment+`" alt="">
+                        </div>
+          
+
+                        <div class="modal-footer">
+            
+                          <div class="w-50 text-center">
+                            <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          </div>
+          
+                        </div>
+                      </div>
+
+                    </div>
+  
+                  </div>
+                
+                `
+              
+              })
+
+            }else{
+              expiredhtml +=  `<div class="text-center my-3">No Request Found</div>`
+            }
+            $('#expiredleaves').html(expiredhtml);
+            $(response.expiredlist).each(function(a, b) {
+
+              actedmanagers="";
+              unactedmanagers="";
+
+
+              $(b.allleavedata).each(function(x, y) {
+
+                
+
+
+
+
+                if (y.status == "Approved"){
+                  actedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ `+y.name+` " />
+
+
+                  `
+                }else if(y.status=="Pending"){
+                  unactedmanagers+=
+                  `
+                  <img  class="manager-pic manager-pic-`+y.status+` manager-image-picture`+y.position+`"  src="`+y.Photo+`" data-bs-placement="top" data-bs-toggle="tooltip" title="⏳ `+y.name+` " />
+
+                  `
+
+                }
+              })
+
+              $('#expired_actedmanagers'+b.id).append(actedmanagers);
+              $('#expired_unactedmanagers'+b.id).append(unactedmanagers);
+              $('#expired_actedmanagers'+b.id).append(`<span class="ps-1">This application is pending.</span>`);
+            })
+
+
+
+
+
+        
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            AddReadMore();
+            AddReadMore1();
+
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {return new bootstrap.Tooltip(tooltipTriggerEl)})
+        
+        }
+      });
+    }
+
+    function getdepartmentlist(){
+      var html=''
+      var fd = new FormData();    
+      fd.append("csrfmiddlewaretoken","{{csrf_token}}");
+      $.ajax({
+        type: "POST",
+        url: frontendURL+"getdepartmentlist",
+        data: fd,
+        processData: false,
+        contentType: false,
+        
+        success: function(response) {
+          var numberToCheck ='';
+
+
+
+          html += `<option value="" >Select Department</option>`
+
+          $(response.data).each(function(a, b) {
+              html += `<option value="` + b.id + `">` + b.DepartmentName + `</option>`
+          })
+          $("#searchdept").html(html);
+
+        },
+      });
+    }
+
+  </script> {% endcomment %}
+
+
+  
+  
+{% endblock %}

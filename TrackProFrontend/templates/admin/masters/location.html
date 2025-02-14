@@ -1,0 +1,396 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Location 
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<style>
+  .fa-minus-circle{
+    font-size:22px
+  }
+  .savebtn {
+    background: #00a1ff !important;
+    padding: 5px 25px !important;
+    margin: 0px !important;
+    border-radius: 24px !important;
+    font-size: 15px !important;
+    color: white !important;
+    text-align: center;
+    border: none;
+}
+.form-floating .form-control {
+  border: none;
+  border-bottom: 1px solid #c2c2c2;
+  box-shadow:None;
+  border-radius: 0px;
+  outline:none;
+}
+.form-floating>label {
+  
+  padding: 10px 0;
+}
+
+#addEmployeeForm input {
+  width: 100%;
+  font-size: 14px;
+  color: black; 
+
+}
+.modal-body input {
+font-size: 14px;
+margin-bottom: 10px;
+}
+.error{
+  font-size:12px;
+}
+</style>
+<main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+   
+
+        <div class="table-div">
+            <table id="myTable" class="row-border w-100" >
+              <thead>
+                <tr class="">
+                  <th style="width:10%;text-align: center;" class="">Sr. No</th>
+                  <th style="width:15%;" class="">Location Name</th>
+                  <th style="width:15%;" class="">Longitude</th>
+                  <th style="width:15%;" class="">Lattitude</th>
+                  <th style="width:15%;" class="">Radius</th>
+                  <th style="width:20%;" class="">Address</th>
+                  <th style="width:10%;text-align: center;" class="">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {%for i in locationlist %}
+                    <tr>
+                        <td style="text-align:center;">{{forloop.counter}}</td>
+                        <td>{{i.LocationName|default_if_none:'NA'}}</td>
+                        <td>{{i.lattitude|default_if_none:'NA'}}</td>
+                        <td>{{i.longitude|default_if_none:'NA'}}</td>
+                        <td>{{i.meter|default_if_none:'NA'}}</td>
+                        <td>{{i.address|default_if_none:'NA'}}</td>
+                        <td class="actionflex">
+                            <a class="viewEmpDeetsBtn me-2" data-bs-toggle="modal" data-bs-target="#modal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>   
+                            {%if i.Used == True %}
+                            <a class="px-1" onclick="return false;"><i class="fa text-danger fa-minus-circle" aria-hidden="true" data-bs-toggle="tooltip" title="used"></i>
+                            {%else%}
+                            
+                            <a class="px-1 cursor-pointer" data-bs-toggle="modal"  data-bs-target="#deletelocation{{i.id}}" ><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" data-bs-toggle="tooltip" title="unused"></a>
+                            <div class="modal fade" id="deletelocation{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered w-25">
+                              
+                                <div class="modal-content">           
+                                  <div class="modal-header ps-3 text-center">
+                                    <h5 class="modal-title py-2" id="exampleModalLabel">Delete location</h5>
+                                  </div>
+                                  <div class="modal-body">
+                                    
+                                    <div class="row">
+                                      <div> Are you sure you want to delete this?
+                      
+                                      </div>
+                                   
+                                  
+                                 
+                                 
+                                    </div>
+                                  
+                                  </div>
+                                  <div class="modal-footer ">
+                                      <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          
+                                      <a href="{% url 'users:delete_location' i.id %}"  class="Role-btn text-center" id="addEmployeeBtn">Delete</a>
+                      
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            
+                            {%endif%}
+                        </td>
+                    </tr>
+                  {%endfor%}
+              </tbody>                 
+            </table>
+        </div>
+  
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+              <form class="formstyle" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+              <div class="modal-header ps-4">
+                <h5 class="modal-title py-2" id="exampleModalLabel">Location Details</h5>
+              </div>
+              <div class="modal-body">
+                <div class="row px-4">
+                  <div class="col-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="LocationName" value=""  name="LocationName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');" placeholder="Enter location name">
+                        <label for="LocationName">Location Name<span style="color:red;">*</span></label>
+                        <span id="LocationNameerror" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="lattitude" value=""  name="lattitude"  placeholder="Enter lattitude">
+                        <label for="lattitude">Lattitude<span style="color:red;">*</span></label>
+                        <span id="lattitudeerror" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="longitude" value=""  name="longitude"  placeholder="Enter longitude">
+                        <label for="longitude">Longitude<span style="color:red;">*</span></label>
+                        <span id="longitudeerror" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="meter" value=""  name="meter"  placeholder="Enter meter">
+                        <label for="meter">Radius<span style="color:red;">*</span></label>
+                        <span id="metererror" class="error"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="address" value=""  name="address"  placeholder="Enter address">
+                        <label for="address">Address<span style="color:red;">*</span></label>
+                        <span id="addresserror" class="error"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="trackproBtn" id="addEmployeeBtn"  onclick="return formValidation();">Submit</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+
+
+    {% for i in locationlist %}
+    <div class="modal fade" id="modal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+          <div class="modal-header ps-4">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Location Details</h5>
+          </div>
+          <div class="modal-body">
+            
+
+
+
+
+
+
+
+
+            <div class="row px-4">
+              <div class="col-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="LocationName{{i.id}}" value="{{i.LocationName|default_if_none:''}}"  name="LocationName{{i.id}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');" placeholder="Enter location name">
+                    <label for="LocationName{{i.id}}">Location Name<span style="color:red;">*</span></label>
+                    <span id="LocationNameerror{{i.id}}" class="error"></span>
+
+                    
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="lattitude{{i.id}}" value="{{i.lattitude|default_if_none:''}}"  name="lattitude{{i.id}}"  placeholder="Enter lattitude{{i.id}}">
+                    <label for="lattitude{{i.id}}">Lattitude<span style="color:red;">*</span></label>
+                    <span id="lattitudeerror{{i.id}}" class="error"></span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="longitude{{i.id}}" value="{{i.longitude|default_if_none:''}}"  name="longitude{{i.id}}"  placeholder="Enter longitude{{i.id}}">
+                    <label for="longitude{{i.id}}">Longitude<span style="color:red;">*</span></label>
+                    <span id="longitudeerror{{i.id}}" class="error"></span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="meter{{i.id}}" value="{{i.meter|default_if_none:''}}"  name="meter{{i.id}}"  placeholder="Enter meter{{i.id}}">
+                    <label for="meter{{i.id}}">Radius<span style="color:red;">*</span></label>
+                    <span id="metererror{{i.id}}" class="error"></span>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="address{{i.id}}" value="{{i.address|default_if_none:''}}"  name="address{{i.id}}"  placeholder="Enter address{{i.id}}">
+                    <label for="address{{i.id}}">Address<span style="color:red;">*</span></label>
+                    <span id="addresserror{{i.id}}" class="error"></span>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button class="trackproBtn" id="addEmployeeBtn" onclick="updateLocation({{i.id}})">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#modal">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Location"
+  src="{% static 'assets/svg/locationicon.svg' %}">
+</a></li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+          responsive:true
+        });
+    });
+    
+
+    function formValidation(){
+
+       
+        var LocationName = $('#LocationName').val().trim();   
+        var lattitude = $('#lattitude').val().trim();   
+        var longitude = $('#longitude').val().trim();   
+        var meter = $('#meter').val().trim();   
+        var address = $('#address').val().trim();   
+      
+        if (IsValid(LocationName)) {
+          $('#LocationName').html('');
+          $('#LocationNameerror').show().delay(3000).slideUp();
+          $('#LocationNameerror').html('Please enter valid location name ');
+          $('#LocationName').focus();
+          return false;
+        }
+        if (IsValid(lattitude)) {
+          $('#lattitude').html('');
+          $('#lattitudeerror').show().delay(3000).slideUp();
+          $('#lattitudeerror').html('Please enter valid lattitude ');
+          $('#lattitude').focus();
+          return false;
+        }
+        if (IsValid(longitude)) {
+          $('#longitude').html('');
+          $('#longitudeerror').show().delay(3000).slideUp();
+          $('#longitudeerror').html('Please enter valid longitude ');
+          $('#longitude').focus();
+          return false;
+        }
+        if (IsValid(meter)) {
+          $('#meter').html('');
+          $('#metererror').show().delay(3000).slideUp();
+          $('#metererror').html('Please enter valid meter ');
+          $('#meter').focus();
+          return false;
+        }
+        if (IsValid(address)) {
+          $('#address').html('');
+          $('#addresserror').show().delay(3000).slideUp();
+          $('#addresserror').html('Please enter valid address ');
+          $('#address').focus();
+          return false;
+        }
+    }
+
+    function updateLocation(id) {
+        var LocationName = $('#LocationName'+id).val().trim();   
+        var lattitude = $('#lattitude'+id).val().trim();   
+        var longitude = $('#longitude'+id).val().trim();   
+        var meter = $('#meter'+id).val().trim();   
+        var address = $('#address'+id).val().trim();   
+        
+        if (IsValid(LocationName)) {
+            $('#LocationNameerror'+id).html('');
+            $('#LocationNameerror'+id).show().delay(3000).slideUp();
+            $('#LocationNameerror'+id).html('Location Name is required');
+            $('#LocationName'+id).focus();
+            return false;
+        }if (IsValid(lattitude)) {
+          $('#lattitude'+id).html('');
+          $('#lattitudeerror'+id).show().delay(3000).slideUp();
+          $('#lattitudeerror'+id).html('Please enter valid lattitude ');
+          $('#lattitude'+id).focus();
+          return false;
+        }
+        if (IsValid(longitude)) {
+          $('#longitude'+id).html('');
+          $('#longitudeerror'+id).show().delay(3000).slideUp();
+          $('#longitudeerror'+id).html('Please enter valid longitude ');
+          $('#longitude'+id).focus();
+          return false;
+        }
+        if (IsValid(meter)) {
+          $('#meter'+id).html('');
+          $('#metererror'+id).show().delay(3000).slideUp();
+          $('#metererror'+id).html('Please enter valid meter ');
+          $('#meter'+id).focus();
+          return false;
+        }if (IsValid(address)) {
+          $('#address'+id).html('');
+          $('#addresserror'+id).show().delay(3000).slideUp();
+          $('#addresserror'+id).html('Please enter valid address ');
+          $('#address'+id).focus();
+          return false;
+        }else{
+
+          $.ajax({
+              type: "POST",
+              url: frontendURL + "updatelocation",
+              data: {
+                  'locationId':id,
+                  'LocationName':LocationName,
+                  'lattitude':lattitude,
+                  'longitude':longitude,
+                  'meter':meter,
+                  'address':address,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+              },
+              success: function (response) {         
+                  console.log("reps",response.data.n)
+                  if(response.data.n == 1){
+                      window.location = frontendURL + "location";
+                  }else{
+                      window.location = frontendURL + "location";
+                  }
+                  
+              }
+          });
+        }
+    }
+</script>
+{% endblock %}

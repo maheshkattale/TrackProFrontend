@@ -1,0 +1,1915 @@
+
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Shift Calendar
+</div>
+
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<!-- Bootstrap CSS -->
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+  .attendance_type{
+    font-size: 12px;
+  }
+  .emp-dropdown{
+    width:170px;
+  }
+  .cursor-pointer{
+    cursor:pointer;
+  }
+  .error{
+    font-size:12px;
+  }
+  .holidaydiv{
+    display: flex;
+    align-items: center;
+    margin: 0px 4px 8px 4px;
+  }
+    /* Custom tab styling */
+    .custom-tabs .nav-link {
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #333;
+      background-color: transparent;
+      transition: border-color 0.3s;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .custom-tabs .nav-link.active {
+      border-color: #174fa3;
+
+    }
+    .nav-fill .nav-item, .nav-fill>.nav-link {
+
+      padding: 10px;
+      font-weight: 500;
+   }
+    .currentmnth td{
+      color:green;
+      font-weight:500;
+    }
+
+    .custom-tabs .nav-link:hover {
+      border-color: #007bff;
+    }
+      .tab-content>.active {
+        padding: 23px 0 0 0;
+    }
+    .first-container{
+      display:flex;
+    }
+    .inner-date-font-size-wf {
+      font-size: 14px;
+    }
+
+
+      .popup>.card1>.table >tbody>tr>td {
+        height: 100px !important;
+        width: 150px !important;
+    }
+    .date-count-text{
+      font-size:15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .inner-date-font-size{
+      font-size:12px;
+    }
+      .daySlider {
+        padding: 20px;
+      }
+      .clndr-controls {
+        font-family: "Arial", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+          Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin: 0 auto;
+        max-width: 500px;
+        text-align: center;
+      }
+      .clndr-control-button:before{
+        content: "\f137";
+        font-family: FontAwesome;
+      }
+      
+      .clndr-controls {
+        align-items: initial;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        align-items: center;
+      }
+      
+
+      .clndr-control-button.rightalign {
+        transform: rotate(180deg);
+      }
+      .clndr-control-button .clndr-next-button,
+      .clndr-control-button .clndr-previous-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+      
+
+      
+      .clndr-table,
+      .clndr-table thead,
+      .clndr-table tbody,
+      .clndr-table tr,
+      .clndr-table td {
+        display: inline-block;
+        background: transparent;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        vertical-align: baseline;
+      }
+      
+      .clndr-table {
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        padding:10px 0px;
+        margin-bottom: 50px;
+
+      }
+      
+
+      
+      .clndr-table tr {
+        padding-bottom: 58px;
+        position: relative;
+      }
+      .clndr-table tr td {
+        display: inline-block;
+        text-align: center;
+      }
+      .clndr-table tr td + td {
+        margin-left: 25px;
+      }
+      .clndr-table tr + tr {
+        margin-left: 25px;
+      }
+      
+      .clndr-table:after {
+        bottom: 0;
+        content: "";
+        display: block;
+        height: 58px;
+        left: 50%;
+        margin-left: -570px;
+        opacity: 0.7;
+        position: absolute;
+        width: 1140px;
+      }
+      
+      .clndr-table .day {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1em;
+        display: inline-block;
+        color: #b1b1b1;
+
+        padding: 15px 0;
+      }
+
+      .clndr-table tr{
+        padding: 0px 22px 0 0px;
+        border-right:1px solid grey;
+
+      }
+        .clndr-table .day.today {
+          color: #ffffff;
+          padding: 14px 11px;
+          background: #8ccaff;
+          border-radius: 10px;
+        }
+      .clndr-table .day.event {
+        color: #54659c;
+        cursor: pointer;
+      }
+      .clndr-table .day.selected {
+        padding: 10px 5px;
+      }
+      .clndr-table .day.selected.event {
+        background:#174fa3;
+        color:white;
+        border-radius:5px;
+      }
+      .clndr-table .day.past {
+        color: #bebebe;
+      }
+      .leave-btn {
+      padding: 8px 10px 8px 10px !important;
+      margin-top: 8px !important;
+      margin-right:5px;
+      background: #174fa3 !important;
+      /* margin: 0px !important; */
+      border-radius: 24px !important;
+      font-size: 13px !important;
+      color: white !important;
+      min-width: 130px !important;
+      text-align: center;
+      border: none;
+      }
+    
+    .holiday-btn{
+      padding: 8px 10px 8px 10px !important;
+      margin-top: 8px !important;
+      background: green !important;
+      /* margin: 0px !important; */
+      border-radius: 24px !important;
+      font-size: 13px !important;
+      color: white !important;
+      min-width: 130px !important;
+      text-align: center;
+      border: none;
+    }
+    .request-btn{
+      padding: 8px 10px 8px 10px !important;
+      margin-top: 8px !important;
+      background: #174fa3 !important;
+      /* margin: 0px !important; */
+      border-radius: 24px !important;
+      font-size: 13px !important;
+      color: white !important;
+      min-width: 130px !important;
+      text-align: center;
+      border: none;
+    }
+      .col-2 {
+        flex: 0 0 auto;
+        width: 16.66666667%;
+        height: 340px;
+      }
+
+
+        
+      .header-day {
+        background: transparent;
+        width: 150px;
+        height: 34px;
+        border-radius: 5px;
+        padding: 6px !important;
+        margin: 20px !important;
+        color: #a0a0a0;
+        border: 1px solid #a0a0a0!important;
+      }
+      .modal-dialog {
+        max-width: 60%;
+    
+    }
+    .clndr-control-button {
+      background: url("http://lorempixel.com/26/26/abstract/") no-repeat 0 0;
+      cursor: pointer;
+      height: 24px;
+      width: 24px;
+      position: relative;
+    }
+    .calendarIcon-img {
+      top: -36px;
+      left: 90%;
+      cursor:pointer;
+
+    }
+    .clndr-table .empty {
+      display: none;
+    } 
+    .header-days{
+      position: absolute !important;
+      top: 35%;
+      left:7%;
+      border: none !important;
+
+    }
+    .selected-weekday{
+      background-color: #8ccaff !important;
+      border:1px solid #8ccaff !important;
+      outline:1px solid #8ccaff !important;
+      color: whitesmoke !important;
+    }
+
+
+
+    .week_off_colorbox{
+      height:20px;
+      background:red;
+      width:20px;
+      margin:0 10px;
+    }
+    .Half_Day_colorbox{
+      height:20px;
+      background:grey;
+      width:20px;
+      margin:0 10px;
+    }
+    .Leave_colorbox{
+      height:20px;
+      background:rgb(158 219 255);
+      width:20px;
+      margin:0 10px;
+    }
+    .Wfh_day_colorbox {
+      height:20px;
+      background:yellow;
+      width:20px;
+      margin:0 10px;
+    }
+    .Holiday_colorbox{
+      height:20px;
+      background:green;
+      width:20px;
+      margin:0 10px;
+    }
+    .height_100px{
+      height:100px
+    }
+    .bg-acblue{
+      background: aliceblue;
+      border-radius: 12px;
+    }
+    .attandance_heading_bar {
+      border-radius: 12px;
+      margin: 10px;
+      height: 100px;
+      box-shadow: 0 4px 8px #0000001f;
+    }
+
+  .holidayimg{
+    width:100%;
+    height:28px;
+  }
+
+
+
+    .month1 {
+      display: inline-block;
+      vertical-align: top;
+      margin: 10px 8px;
+      padding: 10px 6px;
+      opacity:0.5;
+      cursor: pointer;
+      height: 260px;
+      box-shadow: 0px 0px 10px #0000001F;
+
+    }
+    .popup>.card1>.table >tbody>tr>th{
+        padding: 10px;
+    }
+    .popup>.card1>.table >tbody>tr>td{
+        padding: 10px 5px;
+    }
+
+    .month1.selected {
+      border: 2px solid #174fa3;
+      opacity:1;
+    }
+    .table-bordered1{
+        border-collapse: collapse; /* Remove cell spacing */
+        margin: auto;
+
+    }
+    .popup {
+        background-color: #fff;
+        padding: 5px;
+        z-index: 9999;
+    }
+
+    table tr.week-row th {
+      color: #fff;
+      background-color: #174fa3;
+      font-weight: 500;
+      padding: 5px;
+
+
+    }
+
+    /* table td.sunday {
+      color: #fff;
+      background-color: red;
+    } */
+
+    .month1 table td.second-saturday,
+    .month1 table td.fourth-saturday {
+      color: #fff;
+      background-color: red;
+    }
+    .card-header1{
+        text-align: center;
+        margin: 10px 0;
+        font-size: 16px;
+
+    }
+    .table-bordered1>tbody>tr>td{
+        text-align: center;
+        padding: 2px 5px;
+    }
+
+    .currentYear{
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) { 
+
+      .attandance_heading_bar {
+          height: 200px;
+      }
+    }
+    @media only screen and (max-device-width : 1380px) { 
+      
+
+
+      .header-day {
+          width: 115px !important;
+      }
+      .leave-status {
+        width: 100%;
+      }
+      .manager-box {
+        margin: 14px;
+
+      }
+      .viewEmpDeetsBtn {
+
+        font-size: 12px;
+      }
+      .leave-days {
+        font-size: 12px;
+      }
+      .radio-div >label {
+        font-size: 12px;
+        cursor:pointer;
+
+      }
+      .leave-reason {
+        font-size: 12px;
+      }
+      .clndr-table .day {
+        font-size: 12px;
+      }
+    }
+    @media only screen and (max-device-width: 1100px){
+      .first-container{
+        display:block;
+      }
+      .header-day {
+          width: 80px !important;
+          font-size: 12px;
+      }
+      .leave-Employee-name {
+        font-size: 12px;
+      }
+      .leave-days {
+        font-size: 12px;
+      }
+      .radio-div >label {
+        font-size: 12px;
+
+      }
+      .leave-reason {
+        font-size: 12px;
+      }
+      .leave-status {
+
+        font-size: 10px;
+      }
+      .leave-date{
+
+        font-size: 10px;
+      }
+      .clndr-table .day {
+        font-size: 12px;
+      }
+
+    }
+
+    @media only screen and (max-device-width: 768px){
+      .first-container{
+        display:block;
+      }
+      .table-bordered1>tbody>tr>td {
+        padding: 2px 4px;
+      }
+      .leave-date{
+
+        font-size: 10px;
+      }
+      .leave-status {
+
+        font-size: 10px;
+      }
+      .header-day {
+        width: 58px !important;
+        font-size: 10px;
+      }
+
+      .leave-Employee-name {
+        font-size: 10px;
+      }
+      .leave-days {
+        font-size: 10px;
+      }
+      .leave-reason {
+        font-size: 10px;
+      }
+      .radio-div >label {
+        font-size: 10px;
+
+      }
+      .header-days {
+
+        top: 25%;
+        left: 5%;
+
+      }
+      .clndr-table .day {
+        font-size: 12px;
+      }
+
+    }
+
+
+
+    tr td {
+      border-bottom: none !important;
+    }
+    .border_box{
+      border:1px solid grey !important;
+      border-bottom: 1px solid grey !important;
+      border-top: 1px solid grey !important;
+    }
+    #prev-year:before {
+      content: "\f0a8";
+      font-family: FontAwesome;
+      font-style: normal;
+      font-size: 18px;
+      cursor:pointer;
+    }
+    #next-year:before {
+      content: "\f0a9";
+      font-family: FontAwesome;
+      font-style: normal;
+      font-size: 18px;
+      cursor:pointer;
+
+    }
+    .selectdrop{
+      width:200px;
+    }
+
+    .progress-section {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    .progress-section .progress-range {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      border: none;
+      border-radius: 10px;
+      height: 10px;
+    }
+    .progress-section .progress-range::-webkit-progress-bar {
+      background-color: #f0f0f0;
+    }
+    .progress-section .progress-range::-webkit-progress-bar,
+    .progress-section .progress-range::-webkit-progress-value {
+      border-radius: 10px;
+    }
+
+    .progress-section .progress1::-webkit-progress-value {
+      background: #56b6ff;
+    }
+      
+
+    @media screen and (min-width: 1000px) and (max-width: 1400px) {
+      /* Your styles for screens with width 1280px and height 720px or smaller */
+      /* Add your CSS rules here */
+      .month1>.card1>.table-bordered1>tbody>tr>td{
+        font-size: 8px !important;
+        font-weight: 400 !important;
+      }
+      .month1>.card1>.table-bordered1>tbody>.week-row>th{
+        font-size:8px;
+      }
+      .month1 {
+            height: 200px;
+      }
+      .inner-text-font-size{
+        font-size:10px;
+      }
+      .inner-date-font-size{
+        font-size:10px;
+      }
+      .inner-date-font-size-wf {
+        font-size: 14px;
+      }
+      #prev-year{
+        cursor:pointer;
+      }
+      #next-year{
+        cursor:pointer;
+      }
+
+      .week_off_colorbox {
+        height: 15px;
+        width: 15px;
+    }
+    .Half_Day_colorbox {
+      height: 15px;
+      width: 15px;
+    }
+    .Wfh_day_colorbox {
+      height: 15px;
+      width: 15px;
+    }
+    .Leave_colorbox {
+      height: 15px;
+    
+      width: 15px;
+    }
+    .Holiday_colorbox {
+      height: 15px;
+      width: 15px;
+    }
+  }
+
+
+  .image-container {
+    align-items: center;
+  }
+
+
+
+  .image-selected {
+    border-color: #174fa3 !important;
+    transform: scale(1.3); /* Scale up on hover */
+    margin-top: -7.5px;
+
+
+  }
+
+
+  .modal-footer {
+    border-top: none;
+    justify-content: center;
+  }
+  .form-control {
+    width: 175px;
+
+  }
+
+  .user_name_atcal {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .infobtn{
+    font-size:18px;
+    color:#174fa3;
+    cursor:pointer;
+  }
+  .modal-lg {
+    max-width:95%;
+    height:auto;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .borderdiv{
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    height: 150px;
+    overflow-y: scroll;
+  }
+  .reastext{
+    color:grey;
+    font-size:14px;
+    padding:4px;
+    word-wrap: break-word;
+
+  }
+  .lheadlabel{
+    font-size:14px;
+    font-weight:500;
+  }
+  .parent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  padding: 2px 0 2px 16px;
+  grid-row-gap: 15px;
+  }
+  .colcontainer{
+    display:table;
+    width:100%;
+  }
+  .coldiv{
+    display: table-cell;
+  }
+
+  .div1 { grid-area: 1 / 1 / 2 / 2;padding: 15px 0 0 0; }
+  .div2 { grid-area: 1 / 2 / 2 / 3;padding: 15px 0 0 0; }
+  .div3 { grid-area: 2 / 1 / 3 / 2;padding: 15px 0 0 0; }
+  .div4 { grid-area: 2 / 2 / 3 / 3;padding: 15px 0 0 0; }
+
+
+  .activeleavedetails{
+    font-size: 12px;
+    color:grey;
+    font-weight: 500;
+
+  }
+  .activeleavedetailscolored{
+    color: var(--fc-main);
+    font-weight: 500;
+    font-size: 12px;
+
+  }
+  .imagediv{
+    width:45px;
+    height:45px;
+    border-radius: 50%;
+    margin:0px 6px;
+  }
+  .pasthistorycard{
+    background:white;
+    border:1px solid transparent;
+    box-shadow: 0px 4px 8px #00000029;
+    height:600px;
+    border-radius:15px;
+  }
+  .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-top: 2px;
+    }
+  .select2-container--default .select2-selection--single {
+    height: 40px;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 2px;
+    }
+    .cardheadding {
+        font-size: 18px;
+        font-weight: 500;
+        padding: 8px;
+        padding-bottom: 16px;
+
+
+    }
+    .innercardheading {
+        font-size: 16px;
+        color: grey;
+    }
+    .application_titles{
+        font-size: 12px;
+        color: grey;
+    }
+    .application_values{
+        font-size: 14px;
+        font-weight: 500;
+
+    }
+    .Application_div {
+        border: 1px solid #dadada;
+        margin: 12px;
+        border-radius: 6px;
+        background: #f9f9f9;
+
+    }
+    .Application_reason_div {
+        border: 1px solid #dadada;
+        height: 80px;
+        margin: 12px;
+        border-radius: 6px;
+        color: grey;
+        font-size: 14px;
+        word-wrap: break-word;
+
+    }
+    .pastleaves{
+        overflow-y: auto;
+        height: 500px;
+
+    }
+    .myTrackProScore{
+        cursor: pointer;
+        margin: 0 10px;
+        font-size: 16px;
+
+    }
+    .manager_heading{
+        margin: 0 0 10px 0;
+        font-size:14px;
+    }
+    .manager_reason {
+      padding: 0px 0 0 35px;
+      color: grey;
+      font-size: 12px;
+  }
+    .modaltogglebtn {
+        height: 24px;
+        width: 24px;
+    }
+    .ApplicationWithdraw{
+      color: #ff8000;
+    }
+    .ApplicationApproved{
+      color: green;
+    }
+    .ApplicationRejected{
+      color: red;
+    }
+    .ApplicationPending{
+      color: orange;
+    }
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) { 
+      .Activeleavecard{
+        height: 450px;
+        padding: 15px;
+    
+    }
+    .scalable-div{
+      margin: 10px 0px;
+    }
+        
+
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: #d1e2fc;
+    border: 1px solid #c9c9c9;
+  }
+
+  .accordion-button {
+    color: var(--fc-dark);
+    background-color: #f1f8ff;
+  }
+  .extradays{
+    color: red;
+    font-size: 12px;
+    position: relative;
+    top: -10px;
+  }
+  table.dataTable thead th, table.dataTable tfoot th {
+     font-weight: 400; 
+}
+</style>
+
+
+<main class="main-wrapper">
+    {% if messages %}
+        <div class="row" style="justify-content: center;">
+            <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+      
+    <div id="snackbar"></div>
+        
+   <div class="title-div pt-1">
+    <span class="first-container">
+      <div class="company-title pe-2">ICICI Bank L1 L2 Support</div>
+
+
+    </span>
+   </div>
+
+    <div class="leads-div">
+
+
+        <div class="bar-div py-2 mt-2">
+          <div class="row attandance_heading_bar">
+            <div class="col-lg-12">
+              <div class="row attandance_score_bar">
+
+
+                <div class="col-lg-3 bg-acblue  col-md-12 col-sm-12  px-0 height_100px">
+                  <span class="profile_section">
+
+
+
+                    <div class="row height_100px">
+                      <div class="col-3 height_100px">
+                        <img src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png' %}" alt="img" class="attandance_calender_profile_img"> 
+                      </div>
+                      <div class="col-9 height_100px">
+    
+                        <div class="m-2 mx-3">
+                        <div>
+                          <span  class="user_name_atcal">Employee Name</span>
+                        </div>
+                        <div>
+                          <span class="" style="font-size:12px">Designation</span>
+                        </div>
+                        <div>
+                          <span class="" style="font-size:12px">Employee ID - 0000</span>
+                        </div>
+                        </div>
+    
+    
+                      </div>
+                    </div>
+
+
+
+                  </span>
+                </div>
+
+
+
+                <div class="col-lg-9  col-md-12 col-sm-12  px-0 height_100px">
+                  <div class="row m-1">
+    
+    
+    
+    
+                    <div class="emp-dropdown col-lg-3">
+                      <span class="mx-3 selectdrop">
+                        <select class="input-feild select2dropdown" onchange="calcal();" id="EmployeeId" name="EmployeeId" >
+                          <option value="{{UserId}}" selected>{{username}}</option>
+                        </select>
+                      </span>
+                    </div>
+
+
+
+
+                    <div class="years col-lg-3">
+                        <span class="mx-3 selectdrop">
+                          <select class="input-feild select2dropdown" onchange="calcal();"  id="years" name="years" >
+                            
+                          </select>
+                        </span>
+                      </div>
+                      <div class="months col-lg-3">
+                        <span class="mx-3 selectdrop">
+                          <select class="input-feild select2dropdown"  onchange="calcal();" id="months" name="months" >
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+
+                          </select>
+                        </span>
+                      </div>
+
+
+                      <div class="col-lg-3 m-auto text-right">
+                        <span>
+                          <button onclick="shiftexcelreport()" type="button" class="btn-round-blue usermapping-form-button">Generate Report</button>      
+                        </span>
+                      
+                      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+                  </div>
+                </div>
+
+
+
+
+              </div>
+            </div>
+
+
+
+
+
+
+          </div>
+
+        </div>
+
+        <div class="p-2">
+          <div class="row m-1">
+            <div class="row mb-3">
+
+                <div class="col d-flex justify-content-center">
+                  <div class="week_off_colorbox"></div> <div class="inner-text-font-size">Week Off</div>
+                  <div class="Half_Day_colorbox"></div> <div class="inner-text-font-size">Half Day</div>
+                  <div class="Wfh_day_colorbox  "></div> <div class="inner-text-font-size">WFH</div>
+                  <div class="Leave_colorbox"></div> <div class="inner-text-font-size">Leave</div>
+                  <div class="Holiday_colorbox"></div> <div class="inner-text-font-size">Holidays</div>
+                </div>
+              </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 px-0">
+              <div class="preview-month">
+                <div class="p-2"  style="overflow-x:auto;" >
+                  <div id="popupContainer"></div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div>
+            <div class="modal fade" id="daytarget" tabindex="-1" aria-labelledby="daytarget" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title py-2" >Check Attendance</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="dailytarget_modal" class="modal-body"></div>
+    
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <div id="modelsdiv">
+
+        </div>
+    </div>
+            
+        
+    
+
+</main>
+{% endblock %}
+
+{% block indexaddbuttons %}
+
+
+
+<li>
+  
+  <a href="{% url 'users:Employeerequest' %}">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Attendance Request"
+  src="{% static 'assets/svg/Empatt_request.svg' %}">
+
+
+</a></li>
+
+
+
+
+ {% endblock %}
+
+{%block script%}{{block.super}}
+  <!-- ==================================================================================================================================================== -->
+  
+  
+<script>
+  var allmappedemp=[]
+
+  function closeAllTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        var tooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+        if (tooltip) {
+            tooltip.hide();
+        }
+    });
+  }
+
+
+
+  function shiftexcelreport(){
+   //  
+      var search_employees=$("#EmployeeId").val();
+      if (search_employees == null){
+        search_employees='{{UserId}}'
+      }
+      if (search_employees =='All'){
+        emplistsech=allmappedemp
+      }else{
+        emplistsech=[search_employees]
+      }    
+      var years=$("#years").val();
+      var months=$("#months").val();
+      var fd = new FormData();
+      fd.append('search_employees',JSON.stringify(emplistsech))
+      fd.append('year',years)
+      fd.append('month',months)
+      fd.append("csrfmiddlewaretoken", '{{csrf_token}}')
+
+
+        $.ajax({
+          url:frontendURL+"shiftexcelreport",
+          type: 'POST',
+          data: fd,
+          processData: false,
+          contentType: false,
+          beforeSend: function() {
+            swal({
+              icon: "info",
+              title: "",
+              text: "Loading...",
+              buttons: false,
+          });
+          },
+            success:function(response){
+                swal({
+                    icon: response.response.status,
+                    title: "",
+                    text: response.response.msg,
+                    button: "Close",
+                });
+                console.log(response)
+                urlpath = response.response.url
+                window.location.href = urlpath;
+            }
+        })
+    
+  }
+
+
+
+
+
+  function disablePage() {
+    // Create a transparent overlay div to cover the entire page
+    var overlay = $('<div id="page-overlay"></div>');
+    overlay.css({
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'rgba(0, 0, 0, 0.6)', // Semi-transparent black overlay
+        zIndex: 99999, // Ensure it's on top of everything
+        cursor: 'wait', // Show a wait cursor
+    });
+
+    // Append the overlay to the body
+    $('body').append(overlay);
+  }
+  function enablePage() {
+    $('#page-overlay').remove();
+  }
+
+  $(document).ready(function() {
+    populateYearSelector();
+    var currentDateinstance = new Date();
+    var currentMonthinstance = currentDateinstance.getMonth() + 1;
+    var currentYearinstance = currentDateinstance.getFullYear();
+    getyearlydata(currentMonthinstance,currentYearinstance)
+    get_alloted_shift_employees('{{UserId}}');
+//    calcal();
+  });
+
+  function populateYearSelector() {
+    var selectTag = document.getElementById("years");
+    var currentYear = new Date().getFullYear();
+    var currentMonth = new Date().getMonth();
+
+    // Add past 50 years
+    for (var i = currentYear - 50; i <= currentYear; i++) {
+      var option = document.createElement("option");
+      option.value = i;
+      option.text = i;
+      selectTag.add(option);
+    }
+    // Add upcoming one year
+    var upcomingYear = currentYear + 1;
+    var optionUpcoming = document.createElement("option");
+    optionUpcoming.value = upcomingYear;
+    optionUpcoming.text = upcomingYear;
+    selectTag.add(optionUpcoming);
+    $('#years').val(currentYear);
+    $('#months').val(currentMonth+1).trigger("change");
+
+  }
+
+  // Call the function to populate the select tag
+
+  function calcal(year,month){
+        
+        var monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+        ];
+
+        var year =$('#years').val();
+        var months =$('#months').val();
+        showShopPreview(months);
+
+
+
+
+        function showShopPreview(month) {
+        var daysInMonth = new Date(year, month, 0).getDate();
+        getyearlydata(month,year)
+        attendancecount(month,year)
+        var tableHTML = '<div class="card1">' +
+                        '<h5 class="card-header1">' + monthNames[month - 1] + ' ' + year + '</h5>' +
+                        '<table class="table table-bordered1">' +
+                        '<tr class="week-row">' +
+                        '<th scope="col">Sun</th>' +
+                        '<th scope="col">Mon</th>' +
+                        '<th scope="col">Tue</th>' +
+                        '<th scope="col">Wed</th>' +
+                        '<th scope="col">Thu</th>' +
+                        '<th scope="col">Fri</th>' +
+                        '<th scope="col">Sat</th>' +
+                        '</tr>';
+
+        var dayOfWeek = new Date(year, month - 1, 1).getDay();
+        var dayCounter = 1;
+        if(month<10){
+            month="0"+month
+        }
+
+
+        for (var j = 0; j < 6; j++) {
+            tableHTML += '<tr>';
+
+            for (var k = 0; k < 7; k++) {
+            if(dayCounter<10){
+                dayCounter_obj="0"+dayCounter
+            }else{
+                dayCounter_obj=dayCounter
+            }
+            var dateclass="date-"+year+"-"+month+"-"+dayCounter_obj
+
+            
+            if ((j === 0 && k < dayOfWeek) || dayCounter > daysInMonth) {
+                tableHTML += '<td></td>';
+            } else {
+                if (k === 0) {
+                tableHTML += '<td class="sunday border_box '+dateclass+'">' + dayCounter + '</td>';
+                } else if (k === 6) {
+                if (dayCounter % 7 === 14 || dayCounter % 7 === 28) {
+                    tableHTML += '<td class="fourth-saturday border_box '+dateclass+'">' + dayCounter + '</td>';
+                } else if (dayCounter % 7 === 7 || dayCounter % 7 === 21) {
+                    tableHTML += '<td class="second-saturday border_box '+dateclass+'">' + dayCounter + '</td>';
+                } else {
+                    tableHTML += '<td class="border_box '+dateclass+'">' + dayCounter + '</td>';
+                }
+                } else {
+                tableHTML += '<td class=" border_box '+dateclass+'">' + dayCounter + '</td>';
+                }
+                dayCounter++;
+            }
+            }
+
+            tableHTML += '</tr>';
+        }
+
+        tableHTML += '</table>' +
+                    '</div>';
+
+        var $popupContainer = $('<div class="popup">' + tableHTML + '</div>');
+
+        $('#popupContainer').html($popupContainer);
+
+        }
+
+
+
+        closeAllTooltips();
+
+  }
+  //intime and out time
+  function attendancecount(selectedMonth,selectedYear){
+    empid = $("#EmployeeId").val();
+    disablePage();
+
+    $.ajax({
+      url: frontendURL +"shift_history_by_month",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'month':selectedMonth,
+        'year':selectedYear,
+        'empid':empid
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+        });
+      },
+      success: function(response){
+        
+        if (empid == "All"){
+          $(response.data).each(function(a, b) {
+            var textContent = $('#popupContainer').find('.date-'+b.fulldate).text();
+            date_html=''
+
+            
+
+
+
+
+
+
+
+            $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-toggle','tooltip');
+            if(b.att_status == 'P'){
+
+                date_html=`<p onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');" class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Total : `+b.total+
+                  `<br>Leave : `+b.leaves+
+
+                 // `<br>Present : `+b.present  +
+                  //`<br>Not Found : `+b.noattendenceid+
+
+                  `</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Total : '+ b.total + '<br>Present : '+b.present  +'<br>Leave : '+ b.leaves +'<br>Not Found : '+ b.noattendenceid);
+            }else if(b.att_status == 'H'){
+                date_html=`<p onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');" class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">`+b.reason+`</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "green");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title',b.reason);
+            }else if(b.att_status == 'NF'){
+                date_html=`<p onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');" class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Not Found</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("opacity", "0.5");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found');
+            }else{
+                date_html=`<p onclick="get_sift_emp_attendance_by_date('`+b.fulldate+`');" class="date-count-text">`+textContent+`</p><p class="inner-date-font-size">Not Found</p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found');
+            }
+          })
+
+        
+        }
+
+        else{
+          var modelsdiv=''
+          $(response.data).each(function(a, b) {
+
+
+            var textContent = $('#popupContainer').find('.date-'+b.fulldate).text();
+            date_html=''
+            $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-toggle','tooltip');
+
+
+
+            if(b.att_status == 'P'){
+              
+                if(b.extra_days !=''){
+                  inTime_toolip=b.inTime + ' ('+b.inTime_date+')'
+                  outTime_tooltip=b.outTime + ' ('+b.outTime_date+')'
+                }else{
+                  inTime_toolip=b.inTime
+                  outTime_tooltip=b.outTime 
+                }
+                date_html=`<p class="date-count-text"  data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`' >`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p><p class="inner-date-font-size">In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p>   <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','In Time '+ inTime_toolip + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs  <br>' + b.shift.swap);
+            }else if(b.att_status == 'WFH'){
+                if(b.extra_days !=''){
+                  inTime_toolip=b.inTime + ' ('+b.inTime_date+')'
+                  outTime_tooltip=b.outTime + ' ('+b.outTime_date+')'
+                }else{
+                  inTime_toolip=b.inTime
+                  outTime_tooltip=b.outTime 
+                }
+
+
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`' >`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p></p><p class="inner-date-font-size">Work From Home <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p><p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size"-`+b.shift.outtime+`) Hrs</span></div> </p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(255, 212, 0)");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Work From Home'+'<br>In Time '+ inTime_toolip  + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs<br>' + b.shift.swap);
+    
+            }else if(b.att_status == 'HF'){
+
+                if(b.extra_days !=''){
+                  inTime_toolip=b.inTime + ' ('+b.inTime_date+')'
+                  outTime_tooltip=b.outTime + ' ('+b.outTime_date+')'
+                }else{
+                  inTime_toolip=b.inTime
+                  outTime_tooltip=b.outTime 
+                }
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`<span class='extradays'> `+b.extra_days+`</span></p><p class="inner-date-font-size">Halfday <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p> <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">-`+b.shift.outtime+`) Hrs</span></div> </p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "grey");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Halfday <br>In Time '+ inTime_toolip  + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs<br>' + b.shift.swap);
+            
+            
+            }else if(b.att_status == 'L'){
+               
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Leave</p>   <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
+                $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+                $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
+                $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(158 219 255)");
+                $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+                $('#popupContainer').find('.date-'+b.fulldate).attr('title','Leave  '+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs<br>' + b.shift.swap);
+            
+            
+            }else{
+
+              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Not Found</p> <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
+              $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
+              $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
+              $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found  '+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs<br>' + b.shift.swap);
+            
+            }
+
+            modelsdiv+=`
+            
+              <div class="modal fade" id="empattendancelog`+b.fulldate+`" tabindex="-1" aria-labelledby="daytarget" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title py-2" >Attendance log</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="" class="modal-body">
+
+                      <table class="table" style="width:100%;">
+                        <thead>
+                          <tr class="tableHeadings">
+                            <th>Shift Name</th>
+                            <th>CheckIn / CheckOut</th>
+                          </tr>
+                        </thead>
+                        <tbody class="">
+                          ${b.shifts_list.map(l => `
+                            <tr class="border">
+                              <td class='py-0'><span class='py-1'>`+l.shiftname+`</span></td>
+                              <td class="border-left p-0">
+                                ${l.attendance_history.map((entry, index) => `
+                                  <div class='d-flex '>
+                                    <div class='p-1 w-25 border'>
+                                      ${entry['Status'] === 'Check-In' ?
+                                      `<span class='text-success'>${entry['Status']}</span>` 
+                                      : `<span class='text-danger'>${entry['Status']}</span>`}
+
+                                    </div>
+                                    <div class='p-1 w-25 border'>
+                                      `+entry['datetime'].split(" ")[1]+ `  ` + ddmonthyyyy(entry['datetime'].split(" ")[0])+`
+                                    </div>
+                                    <div class='w-25 p-1 border' data-bs-toggle='tooltip' title='`+entry['attendance_type_resaon']+`'>
+                                      `+entry['attendance_type']+ `
+                                    </div>
+                                    <div class='w-25 p-1 border' data-bs-toggle='tooltip' title='`+entry['remote_map_name']+`'>
+                                      <a style="" target='blank' href="`+entry['remote_map_location']+ `">`+entry['remote_map_name']+`</a>
+                                    </div>
+                                  </div>
+                                `).join("\n")}
+                              </td>
+
+                            </tr>
+
+                          `).join("\n")}
+                          
+                        </tbody>
+                      </table>   
+
+
+                    </div>
+
+
+
+ 
+
+                    
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            
+            `
+
+
+
+
+          })
+          $('#modelsdiv').html(modelsdiv)
+        }
+        
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {return new bootstrap.Tooltip(tooltipTriggerEl)}) 
+
+        swal.close()
+        enablePage();
+
+      }
+    });
+  }
+
+
+
+
+  function get_sift_emp_attendance_by_date(my_date){
+    $.ajax({
+      url: frontendURL +"get_sift_emp_attendance_by_date",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'my_date':my_date,
+
+      },
+      dataType: 'json',
+
+      success: function(response){
+        
+        modalhtml = `
+        <div class="">
+          <ul class="nav custom-tabs nav-fill" id="myTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Present (`+response.context.Present+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">On leave (`+response.context.Onleave+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab3-tab" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Work From Home (`+response.context.WFH+`)</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab4-tab" data-bs-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Not Found (`+response.context.yettojoin+`)</a>
+            </li>
+          </ul>
+      
+          <div class="tab-content" id="myTabsContent">
+      
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+      
+      
+              <table class=" model-table" style="width:100%;">
+                  <thead>
+                    <tr class="tableHeadings">
+                      <th>Sr No.</th>
+                      <th>Employee Name</th>
+                      <th>Check-In <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                      <th>Check-Out <i class="fa fa-arrow-up" aria-hidden="true"></i></th>
+                      <th>Total Hrs</th>
+                      <th>Shift</th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+                    ${response.context.Presentlist.map((l, index) => `
+                      <tr>
+                        <td>${index + 1}</td>
+                        <td>${l.empname}</td>
+                        <td ><div data-bs-toggle="tooltip" title=' ${l.check_in_attendance_type_resaon}'>${l.checkintime}</div><div ><a class='attendance_type text-success' data-bs-toggle="tooltip" title=' ${l.check_in_remote_map_name}' href="${l.check_in_remote_map_location}">${l.check_in_attendance_type}</a></div> </td>
+                        <td ><div data-bs-toggle="tooltip" title=' ${l.check_out_attendance_type_resaon}'>${l.checkouttime}</div><div ><a class='attendance_type text-danger' data-bs-toggle="tooltip" title=' ${l.checkout_remote_map_name}' href="${l.checkout_remote_map_location}">${l.check_out_attendance_type}</a></div></td>
+                        <td>${l.total_time}</td>
+                        <td>${l.shift.shiftname} (${l.shift.intime}-${l.shift.outtime})</td>
+                      </tr>
+                    `).join("\n")}
+                    
+                  </tbody>
+                </table>
+      
+      
+            </div>
+      
+            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+              <table class=" model-table" style="width:100%;">
+                  <thead>
+                    <tr class="tableHeadings">
+                      <th>Sr No.</th>
+                      <th>Employee Name</th>
+                      <th>Check-In <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                      <th>Check-Out <i class="fa fa-arrow-up" aria-hidden="true"></i></th>
+                      <th>Total Hrs</th>
+                      <th>Shift</th>
+                    </tr>
+                  </thead>
+                  <tbody class="">
+      
+                       ${response.context.leavelist.map((l, index) => `
+                            <tr>
+                            <td>${index + 1}</td>
+                            <td>${l.empname}</td>
+                            <td data-bs-toggle="tooltip" title='${l.check_in_attendance_type}  ${l.check_in_attendance_type_resaon}'><div>${l.checkintime}</div><div class='attendance_type text-success'>${l.check_in_attendance_type}</div> </td>
+                            <td data-bs-toggle="tooltip" title='${l.check_out_attendance_type}  ${l.check_out_attendance_type_resaon}'><div>${l.checkouttime}</div><div class='attendance_type text-danger'>${l.check_out_attendance_type}</div></td>
+                            <td>${l.total_time}</td>
+                            <td>${l.shift.shiftname} (${l.shift.intime}-${l.shift.outtime})</td>
+                          </tr>
+                          `).join("\n")}
+
+                          
+                  </tbody>
+              </table> 
+            </div>
+      
+            <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+              <table class=" model-table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Employee Name</th>
+                    <th>Check-In <i class="fa fa-arrow-down" aria-hidden="true"></i></th>
+                    <th>Check-Out <i class="fa fa-arrow-up" aria-hidden="true"></i></th>
+                    <th>Total Hrs</th>
+                    <th>Shift</th>           
+                         </tr>
+                </thead>
+                <tbody class="">
+
+
+                  ${response.context.wfhlist.map((l, index) => `
+                    <tr>
+                    <td>${index + 1}</td>
+                    <td>${l.empname}</td>
+                    <td data-bs-toggle="tooltip" title='${l.check_in_attendance_type}  ${l.check_in_attendance_type_resaon}'><div>${l.checkintime}</div><div class='attendance_type text-success'>${l.check_in_attendance_type}</div> </td>
+                    <td data-bs-toggle="tooltip" title='${l.check_out_attendance_type}  ${l.check_out_attendance_type_resaon}'><div>${l.checkouttime}</div><div class='attendance_type text-danger'>${l.check_out_attendance_type}</div></td>
+                    <td>${l.total_time}</td>
+                    <td>${l.shift.shiftname} (${l.shift.intime}-${l.shift.outtime})</td>
+                  </tr>
+                  `).join("\n")}
+
+
+                </tbody>
+              </table>    
+            </div>
+      
+      
+            <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+              <table class=" model-table" style="width:100%;">
+                <thead>
+                  <tr class="tableHeadings">
+                    <th>Sr No.</th>
+                    <th>Employee Name</th>
+                    <th>Reason</th>
+                  </tr>
+                </thead>
+                <tbody class="">
+
+
+                  ${response.context.yettojoinlist.map((l, index) => `
+                    <tr>
+                    <td>${index + 1}</td>
+                    <td>${l.username}</td>
+                    <td>${l.reason}</td>
+                  </tr>
+                  `).join("\n")}
+                  
+                </tbody>
+              </table>
+            
+            </div>
+          </div>
+        </div>
+
+         `
+      $('#dailytarget_modal').html(modalhtml)
+
+      $('.model-table').DataTable({
+         searching: false, // Disable search box
+         paging: true // Enable pagination
+        })
+
+
+      }
+    });
+    $("#daytarget").modal("show");
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  function get_alloted_shift_employees(empid){
+    var options ="";
+    var imageslist="";
+    $.ajax({
+      url: frontendURL +"get_all_shifts_employees",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+      },
+      dataType: 'json',
+
+      success: function(response){
+        options += `<option value="All">All</option>`
+
+
+        $.each(response.caluserslist,function(i,o){
+          options += `<option value="`+o.employeeId+`">`+o.employee_name+`</option>`
+          allmappedemp.push(o.employeeId)
+        })
+      
+        $("#EmployeeId").html(options);
+        $("#EmployeeId").val(empid);
+
+      }
+    });
+
+  }
+  //header pannel
+  function getyearlydata(selectedMonth,selectedYear){
+
+    empid = $("#EmployeeId").val();
+    $.ajax({
+      url: frontendURL +"get_alloted_shift_header_details",
+      type: 'POST',
+      data:{
+        csrfmiddlewaretoken:'{{ csrf_token }}',
+        'month':selectedMonth,
+        'year':selectedYear,
+        'empid':empid,
+
+      },
+      dataType: 'json',
+      beforeSend: function() {
+        swal({
+          icon: "info",
+          title: "",
+          text: "Loading...",
+          buttons: false,
+
+      });
+      },
+      success: function(response){
+        var profile_section_html = "";
+
+        if (empid != "All"){
+
+
+
+
+          
+          profile_section_html=`
+            <div class="row height_100px">
+                <div class="col-3 height_100px">
+                <img src='`+response.Photo+`' alt="img" class="attandance_calender_profile_img"> 
+                </div>
+                <div class="col-9 height_100px">
+
+                <div class="m-2 mx-3">
+                <div>
+                    <span class="user_name_atcal">`+response.Name+`</span>
+                </div>
+                <div>
+                    <span class="" style="font-size:12px">`+response.Designation+`</span>
+                </div>
+                <div>
+                    <span class="" style="font-size:12px">Employee ID -`+response.EmployeeId+`</span>
+                </div>
+                </div>
+
+
+                </div>
+            </div>
+            `
+          $('.profile_section').html(profile_section_html)
+
+
+
+
+
+
+                  
+
+        }
+        else{
+
+
+
+          profile_section_html=`
+            <div class="row height_100px">
+                        
+                <div class="col-12 height_100px d-flex justify-content-center">
+
+                <div class="m-2 mx-3">
+                    <div>
+                    <span class="user_name_atcal">`+response.Name+`</span>
+                    </div>
+                    <div>
+                    <span class="score-points" style="font-size:16px;" id="year_total_days_title">Count : `+response.context.Total_count+`</span>
+                    </div>
+                </div>
+
+
+                </div>
+            </div>
+          `
+          $('.profile_section').html(profile_section_html)
+
+
+
+
+
+
+
+
+        }
+        get_alloted_shift_employees(empid);
+
+
+            
+        swal.close()
+      }
+
+    });
+
+  }
+  function ddmonthyyyy(inputDate) {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = new Date(inputDate).toLocaleDateString(undefined, options);
+    return formattedDate;
+  }
+</script>
+    
+{%endblock%}

@@ -1,0 +1,382 @@
+.trackproBtn{
+    cursor:pointer;
+  }
+        .trash-btn{
+          color: #ff0000;
+          font-size:16px;
+        }
+        .noappdiv{
+          background-color: #fff;
+          color: #174fa3;
+          border:1px solid #fff;
+          border-radius:15px;
+          padding:30px 0px;
+          /* width:400px; */
+          /* margin-top:1rem ; */
+        }
+        .cross{
+          color:red;
+        }
+        .checkicon{
+          color:green;
+        }
+        #snackbar {
+          visibility: hidden;
+          min-width: 250px;
+          margin-left: -125px;
+          background-color: lightgreen;
+          color: black;
+          text-align: center;
+          border-radius: 2px;
+          padding: 16px;
+          position: fixed;
+          z-index: 1;
+          left: 60%;
+          top: 90px;
+          font-size: 17px;
+        }
+  
+        #snackbar.show {
+          visibility: visible;
+          -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        .nav-pills .nav-link {
+          background-color:transparent !important;
+          padding-right: 12px;
+          padding-left: 12px;
+          color:rgba(0, 0, 0, 0.626) !important;
+        }
+  
+        .noapp{
+          display:flex;
+          justify-content: center;
+        }
+        @-webkit-keyframes fadein {
+          from {
+            top: 0;
+            opacity: 0;
+          }
+          to {
+            top: 90px;
+            opacity: 1;
+          }
+        }
+  
+        @keyframes fadein {
+          from {
+            top: 0;
+            opacity: 0;
+          }
+          to {
+            top: 90px;
+            opacity: 1;
+          }
+        }
+  
+        @-webkit-keyframes fadeout {
+          from {
+            top: 90px;
+            opacity: 1;
+          }
+          to {
+            top: 0;
+            opacity: 0;
+          }
+        }
+  
+        @keyframes fadeout {
+          from {
+            top: 90px;
+            opacity: 1;
+          }
+          to {
+            top: 0;
+            opacity: 0;
+          }
+        }
+        .nav-item{
+          display:flex;
+          justify-content: center;
+        }
+  
+        .card-header {
+          padding: 0.5rem 1rem;
+          margin-bottom: 0;
+          background-color:white; 
+          border-bottom: none;
+          color: #403f3f;
+        }
+        .card{
+          border-radius: 6px;
+          background: #FFF;
+          box-shadow: 0px 4px 8px #00000029;
+        }
+  
+        .btn-outline-success {
+          --bs-btn-color: #019d00;
+          --bs-btn-border-color: #019d00;
+          --bs-btn-hover-color: #fff;
+          --bs-btn-hover-bg: #019d00;
+          --bs-btn-hover-border-color: #019d00;
+          --bs-btn-focus-shadow-rgb: 25,135,84;
+          --bs-btn-active-color: #fff;
+          --bs-btn-active-bg: #019d00;
+          --bs-btn-active-border-color: #019d00;
+          --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+          --bs-btn-disabled-color: #019d00;
+          --bs-btn-disabled-bg: transparent;
+          --bs-btn-disabled-border-color: #019d00;
+          --bs-gradient: none;
+      }
+      .btn-success {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #019d00;
+        --bs-btn-border-color: #019d00;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #157347;
+        --bs-btn-hover-border-color: #146c43;
+        --bs-btn-focus-shadow-rgb: 60,153,110;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #146c43;
+        --bs-btn-active-border-color: #13653f;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #019d00;
+        --bs-btn-disabled-border-color: #019d00;
+      }
+      .searchbar-input-feild{
+  
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #bdbdbd;
+        margin: 0px 10px 0 10px;
+        outline: none;
+        padding:13px 0px;
+        font-size: 14px;
+        width:100%;
+      }
+        .fa{
+        font-size:18px;
+        }
+        .cross {
+          color:red;
+        }
+        .fa-check {
+          color:#56c600;
+        }
+        .fa-info-circle{
+          color:#0062ff;
+        }
+        .btn-font{
+          font-size:14px;
+        }
+        .btn-width{
+          width:100%;
+        }
+  
+        
+      /*--------read more /less css -----*/
+      .addReadMore.showlesscontent .SecSec,
+          .addReadMore.showlesscontent .readLess {
+              display: none;
+          }
+  
+          .addReadMore.showmorecontent .readMore {
+              display: none;
+          }
+  
+          .addReadMore .readMore,
+          .addReadMore .readLess {
+              margin-left: 2px;
+              color: #174fa3;
+              cursor: pointer;
+          }
+  
+          .addReadMoreWrapTxt.showmorecontent .SecSec,
+          .addReadMoreWrapTxt.showmorecontent .readLess {
+              display: block;
+          }
+          .tab-icon-button {
+            padding-top: 15px;
+          }
+  
+      /*    ------------------------------------------*/
+          .card-body-reason-text {
+            font-size: 12px;
+            color: #000000;
+            padding-bottom: 10px 0px;
+          }
+          .card-header-txt {
+          font-size: 12px;
+          }
+          .card-header-title {
+            font-size: 12px;
+            font-weight: 500;
+          }
+          .card-header-blue-txt{
+            color: #00AEEF;
+            font-size: 16px;
+            font-weight: 500;
+          }
+          .conclusion-box{
+            border-radius: 12px;
+          
+            background-color: #ECF1F2;
+            color: #403f3f;
+          }
+          .manager-profile-picture1,.manager-profile-picture2,.manager-profile-picture3 {
+            height: 25px;
+            width: 25px;
+          
+          }
+          .manager-profile-picture-rejected {
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            position: relative;
+            z-index: 10 !important;
+          }
+          .card-header-name-txt {
+            color: #403f3f;
+            font-size: 18px;
+            padding-bottom: 16px;
+          }
+          .card-body-comment-text {
+            font-size: 12px;
+            height: 18px;
+            padding-bottom: 10px 0px;
+          }
+          
+          .dropdown-toggle{
+            cursor: pointer;
+          }
+          .dropdwn {
+              cursor: pointer;
+              min-width: 10px !important;
+              right: 0 !important;
+              left: initial !important;
+          }
+          .dropdwn.show {
+              display:flex;
+              transform: translate(0px, 23px) !important;
+          }
+          .disabled-icon {
+            color: gray !important; /* Change icon color to indicate it's disabled */
+            opacity: 0.5; /* Reduce opacity for a faded look */
+          }
+          .manager-pic-Pending{
+            border: 1px solid orange;
+          }
+          .manager-pic-Approved{
+            border: 1px solid green;
+          }
+          .manager-pic-Rejected{
+            border: 1px solid red;
+          }
+          .cardfooter{
+            background: white;
+            border: none;
+          }
+          .managers-imgs{
+            text-align: right;
+            padding: 4px 30px 4px 0;
+          }
+          
+          
+          
+          
+          /*--------read more /less css -----*/
+          .addReadMore1.showlesscontent1 .SecSec1,
+            .addReadMore1.showlesscontent1 .readLess1 {
+                display: none;
+            }
+          
+            .addReadMore1.showmorecontent1 .readMore1 {
+                display: none;
+            }
+          
+            .addReadMore1 .readMore1,
+            .addReadMore1 .readLess1 {
+                margin-left: 2px;
+                color: #174fa3;
+                cursor: pointer;
+            }
+          
+            .addReadMore1WrapTxt.showmorecontent1 .SecSec1,
+            .addReadMore1WrapTxt.showmorecontent1 .readLess1 {
+                display: block;
+            }
+            .manager-image-picture1{
+              height: 25px;
+              width: 25px;
+              border-radius: 50%;
+          }
+          .manager-image-picture2{
+              height: 25px;
+              width: 25px;
+              border-radius: 50%;
+  
+          
+          }
+  
+          .manager-image-picture3{
+              height: 25px;
+              width: 25px;
+              border-radius: 50%;
+  
+          
+          }
+          .image-list img:not(:first-child) {
+            margin-left: -21.5px;
+          }
+          .image-list img:hover {
+            transform: scale(1.5); /* Scale up on hover */
+            
+        
+          }
+          .image-list {
+            display: flex;
+            gap: 15px;
+            margin:auto;
+  
+        }
+        .card-body{
+          padding-top:0px ;
+          padding-bottom:0px ;
+        }
+        .rejected-application {
+          gap: 13px;
+  
+        }
+        .manager-pic {
+          cursor: pointer;
+          height: 25px;
+          width: 25px;
+          border-radius: 50%;
+      }
+      .btn-primary {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #174fa3 ;
+        --bs-btn-border-color: #174fa3 ;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #0b5ed7;
+        --bs-btn-hover-border-color: #174fa3;
+        --bs-btn-focus-shadow-rgb: 49,132,253;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #174fa3;
+        --bs-btn-active-border-color: #0a53be;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #174fa3 ;
+        --bs-btn-disabled-border-color: #174fa3 ;
+    }
+    .application-filter-box {
+      width: 100%;
+      margin-top: auto;
+      margin-left: 5px;
+  }
+  .fa-plus {
+    font-size: 24px;
+  
+  }

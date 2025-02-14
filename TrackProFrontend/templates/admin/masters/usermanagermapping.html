@@ -1,0 +1,433 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+User Mapping
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    .select2-container .select2-search--inline .select2-search__field {
+
+        height: 30px;
+
+    }
+    #myTable_filter {
+        position: absolute !important;
+        top: 0px!important;
+
+        right: 0px !important;
+        z-index: 100;
+    }
+    .dataTables_wrapper #myTable_filter label {
+
+        top: 0px!important;
+    }
+    .dataTables_filter {
+        position: relative !important;
+        top: 47px !important;
+        right: 6px !important;
+        z-index: 100;
+    }
+    #myTable_length {
+        display: block !important;
+    }
+    .input-feild {
+
+        height: 48px;
+    }
+    .table-div {
+
+        padding: 16px 15px 15px 15px !important;
+    }
+    #myTable>tbody>tr>td {
+
+        padding: 15px !important;
+    }
+    #Update_Team_Members option{
+        margin:5px 0px ;
+        padding:5px;
+    }
+    .icon-caret{
+        display:none;
+    }
+    .ms-select-all{
+        display:none !important;
+    }
+    .ms-choice>span {
+        top: 10px !important;
+
+    }
+    .placeholder-text{
+        position: relative;
+        top: -7px;
+        z-index: 10;
+    }
+    .ms-choice>span.placeholder {
+         color: black !important; 
+    }
+</style>
+
+<main class="main-wrapper">
+    {% if messages %}
+        <div class="row" style="justify-content: center;">
+            <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+            <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                <p style="margin-bottom: 0px;">{{ message }}</p>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    <div id="snackbar"></div>
+
+
+    <div class="user_mapping_filter_div">
+        <form class="formstyle" method="POST" enctype="multipart/form-data">
+            <div class="usermaping-title-div">
+    
+               
+                <!-- Button trigger modal -->
+
+            </div>
+        
+            {% csrf_token %}
+                <div class="row">
+                <div class="col-4">
+                    <select id="ManagerID" name="ManagerID"   class="input-feild select2dropdown text-black">
+                        <option value=''>Select Team Leader</option> 
+                        {% for i in employeelist %}
+                            <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
+                        {% endfor %}
+                    </select>
+                    <p id="ManagerID_err" class="error"></p>    
+
+                </div>
+                <div class="col-6">
+
+
+                    <select id='lstBox1' name="UserID" class="input-feild select2dropdown" data-placeholder="Select employee" multiple >
+                        <option value="selectAll">Select All</option>
+
+                        {% for i in employeelist %}
+                            <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
+                        {% endfor %}
+                      </select>
+
+                    <p id="lstBox2_err" class="error"></p>
+                </div>
+                <div class="col-2 d-flex align-items-center">
+                   
+                        <button class="btn-round-blue usermapping-form-button" onclick="return formValidation();" type="submit">+ Add Mapping</button>
+                   
+                  
+                </div>
+
+            </div> 
+        
+            {% comment %} <div class="border-top mt-1 ">
+                <h6 class="my-3 d-flex flex-wrap"><span class="align-middle py-1">Selected Employee :</span><span class="selected-employees d-flex"></span></h6>
+            </div> {% endcomment %}
+        </form>
+    </div>
+
+
+    <div class="table-div">
+        <table class="w-100 row-border" id="myTable">
+            <thead class="border-bottom">
+                <th>Sr. No</th>
+                <th>Team Leader</th>
+                <th>Team Members</th>
+                <th>Action</th>
+            </thead>
+
+            <tbody>
+                {%for i in mappinglist %}
+                <tr class="border-bottom" id="usermapping_row">
+                    <td style="width:5%">{{forloop.counter}}.</td>
+                    <td  style="width:15%">{{i.ManagerIDStr}}</td>
+                    <td  style="width:70%">
+                        
+                    {% for u in i.Users %}
+                        {{ u.UserIDStr }}{% if not forloop.last %}, {% endif %}
+                    {%endfor%}
+                    </td>
+                    <td  style="width:10%">
+                        <a class="px-1" id="{{i.ManagerID}}"  onclick="getusermappings(this.id);" ><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>
+                        <a class="px-1"  data-bs-toggle="modal" data-bs-target="#deletemodal{{i.ManagerID}}"  ><img class="delete-icon" src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon"></a>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="modal fade" id="deletemodal{{i.ManagerID}}"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                Are you sure you want to delete?
+                                </div>
+                                <div class="modal-footer">
+                                  <a href="javascript:void(0)" onclick="deleteusermappings({{i.ManagerID}});" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    </td>
+                </tr>
+                {%endfor%}
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+<script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+
+<script>
+
+    function removeselection(){
+         
+        $('select#lstBox1').find('option').each(function() {
+            var value=$(this).val();
+            $('#lstBox1 option[value='+value+']').prop("selected", false);
+        });    
+
+    } 
+
+    $(document).ready(function() {
+        //$('.placeholder').html('<span class="placeholder-text"> Select Employee </span>')
+        // Handler for .ready() called.
+
+        var dataTable = $('#myTable').DataTable({
+            "searching": true, // Enable global search
+            "columnDefs": [
+              {
+                "targets": [1], // Apply the following options only to the first column (index 0)
+                "searchable": true // Enable search for the "name" column
+              },
+              {
+                "targets": [0,2,3,], // Apply the following options to the second and third columns (index 1 and 2)
+                "searchable": false // Disable search for the "age" and "country" columns
+              }
+            ],
+            "language": {
+                "searchPlaceholder": "by Team Leader" // Set the placeholder text for the search input
+              }
+        });
+
+    });
+
+    function IsValid(value) {
+        if (value == "" || value == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function removedublicates() {
+         
+        var manager = $("#ManagerID").val();
+
+        var emp = $("#lstBox1").val();
+
+    
+        var isNumberInList = $.inArray(manager, emp) !== -1;
+    
+        if (isNumberInList) {
+
+            $('#lstBox1 option[value="'+manager+'"]').prop('selected', false);
+
+            console.log(manager + " is present in the list.");
+        } else {
+            console.log(manager + " is not present in the list.");
+        }
+
+
+    }
+
+    
+    function unselect(opt){
+        $('.multiple-select input[value='+opt+']').prop("checked", false);
+        $('#lstBox1 option[value='+opt+']').prop("selected", false);
+        $(".emp"+opt).hide();
+    }
+
+    $('#lstBox1').change('on',function() {
+        var managerID =$("#ManagerID").val();
+        removedublicates();
+
+        var selectedValues = $(this).val();
+        if (selectedValues) {
+          if (selectedValues.includes('selectAll')) {
+            // Select All was chosen, select all options except "Select All"
+            $('#lstBox1 option:not([value="selectAll"])').prop('selected', true);
+            // Unselect the "Select All" option
+            $(this).find('option[value="selectAll"]').prop('selected', false);
+            $(this).find('option[value="'+managerID+'"]').prop('selected', false);
+
+          } else if (selectedValues.length === 0) {
+            // No option was chosen, remove all selections
+            $('#lstBox1 option').prop('selected', false);
+          }
+        }  
+                
+    });
+
+    $("#ManagerID").on('change',function() {
+        removedublicates();
+        $(".usermapping-form-button").text("+ Add Mapping");
+        var emp=$(this).val();
+
+
+    }); 
+
+    function getusermappings(managerID) {
+       removedublicates();
+        //$("#ManagerID option[value=" +managerID+ "]").prop('selected',true);
+        //$('#ManagerID').find('option[value='+managerID+']').prop('selected', true);
+        //$('#ManagerID option[value="'+managerID+'"]').prop('selected', true);
+        $("#ManagerID").val(managerID).trigger("change");
+
+        //$("#lstBox1 option").prop('selected',false);
+        //$(".multiple-select input").prop('checked',false);
+        //$(".usermapping-form-button").text("+ Update Mapping");
+
+        //$("#lstBox1 option[value="+managerID+"]").closest("label").hide();
+        //$(".multiple-select input[value="+managerID+"]").closest("label").hide();
+        //$("#lstBox1 option[value="+managerID+"]").prop('selected',false);
+        //$(".multiple-select input[value="+managerID+"]").prop('checked',false);
+
+        var employee ="";
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'MappingSelectOnchangeAjax',
+            data: {
+                'id': managerID
+            },
+
+            dataType: 'json',
+            success: function(response) {
+                console.log("response",response)
+
+                if (response.n == 1) {
+
+                    if(response.data.length != 0){
+                        emplist=[]
+                        $(response.data).each(function(i, o) {
+                            emplist.push(o.UserID)
+
+                        })
+                        $("#lstBox1").val(emplist).trigger("change");
+
+
+                    }
+
+
+                } else if (response.n == 0) {
+                    swal({
+                        icon: "error",
+                        title: "",
+                        text: response.Msg,
+                        button: "Close",
+                        });
+                        $('#ManagerID').val("").trigger("change");
+                        $('#lstBox1').val("").trigger("change");
+
+                }
+            },
+            error: function(error) {
+                console.log('error; ' + JSON.stringify(error));
+            }
+        });
+    }
+
+    function formValidation(){
+         
+      
+        var teamleader = $('#ManagerID').val();     
+        var selectedemployees = $('#lstBox1').val();    
+      
+        if (IsValid(teamleader)) {
+          $('#ManagerID_err').show().delay(3000).slideUp();
+          $('#ManagerID_err').html('Please select Team Leader');
+          $('#ManagerID').focus();
+          return false;
+        }if (IsValid(selectedemployees)) {
+          $('#lstBox2_err').show().delay(3000).slideUp();
+          $('#lstBox2_err').html('Please select employees under Team Leader');
+          $('#lstBox2').focus();
+          return false;
+        }
+    }
+
+    function deleteusermappings(ManagerID) {
+        
+          $.ajax({
+              type: "POST",
+              url: frontendURL + "deleteusermappings",
+              data: {
+                  'ManagerID':ManagerID,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+              },
+              success: function (response) {         
+                  console.log("response",response)
+                  if(response.n == 1){
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.Msg,
+                        button: "Close",
+                        }).then(() => {
+                          // Code to execute after the user closes the SweetAlert dialog
+                          location.reload(); // Reload the page
+                        });
+                  }else{
+                    swal({
+                        icon: "error",
+                        title: "",
+                        text: response.Msg,
+                        button: "Close",
+                        }).then(() => {
+                          // Code to execute after the user closes the SweetAlert dialog
+                          location.reload(); // Reload the page
+                        });
+                    
+                }
+                  
+              }
+          });
+        
+    }
+
+    
+
+</script>
+
+{% endblock %}

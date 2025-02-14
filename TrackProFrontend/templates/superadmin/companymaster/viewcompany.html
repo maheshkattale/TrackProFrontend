@@ -1,0 +1,486 @@
+
+{% extends "index.html" %}
+{% load static %} 
+{% block content %}
+
+
+
+<style>
+    .body {
+        margin-top: 20px;
+        padding: 40px;
+        box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+        border-radius: 40px;
+        background: #fff;
+    }
+    
+    .head {
+        background-color: #f1f1f1;
+    }
+    
+    th {
+        /* background: #007cb9 !important; */
+        color: black;
+        padding: 15px;
+        /* text-align: center; */
+        max-width: 500px;
+        /* width: 300px; */
+        background-color: gray;
+    }
+    /* .dataTables_info{
+  background-color: #f4f4f4;
+}
+.dataTables_paginate {
+  background-color: #f4f4f4;
+
+} */
+    
+    select {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    .dataTables_info {
+        padding: 0 !important;
+    }
+    
+    .table.dataTable {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+    
+    div#dataTable_filter {
+        float: right;
+        margin-right: 15px;
+        margin-top: 0px;
+    }
+    /* .thfs{
+   
+    color: white;
+    text-align: center;
+    padding: 15px;
+    width:300px;
+    border-radius: 5px 0px 0px 0px;
+}
+.thls{
+   
+    color: white;
+    text-align: center;
+    
+    padding: 15px;
+    width:300px;
+    border-radius: 0px 5px 0px 0px;
+} */
+    
+    .highlight {
+        background-color: skyblue;
+    }
+    
+    #example {}
+    
+    #example_filter input[type="search"] {
+        border: none;
+        border-radius: 0px;
+        border-bottom: 2.2px solid #1d87ad;
+        color: white;
+        padding: 5px;
+        outline: none;
+        background-color: transparent;
+    }
+    
+    .row1 {
+        background: rgb(34, 34, 34);
+        background: linear-gradient(180deg, rgba(34, 34, 34, 1) 0%, rgba(78, 78, 78, 1) 100%, rgba(255, 255, 255, 1) 100%);
+        padding: 10px;
+        color: white;
+        border-radius: 13px 13px 0px 0px;
+        align-items: center;
+    }
+    
+    .dataTables_wrapper {}
+    
+    select::-ms-expand {
+        display: none !important;
+    }
+    
+    select::-ms-expand {
+        display: none;
+    }
+    
+    #example_filter input[type="search"]:focus {
+        border-color: inherit;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-bottom: 2px solid #174fa3;
+    }
+    
+    #example_length select {
+        border: none;
+        color: #174fa3;
+        background-color: transparent;
+        border-bottom: 2px solid #174fa3;
+        border-radius: 0px;
+        border-color: inherit;
+        box-shadow: none;
+        text-align: center;
+        height: 30px;
+    }
+    
+    #example_datatable {
+        background-color: black;
+    }
+    
+    .table.dataTable thead th {
+        padding: 10px;
+        font-weight: 500;
+        font-size: 16px;
+    }
+    
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        padding: 0.5rem 0.5rem;
+    }
+    
+    table td {
+        font-size: 14px !important;
+        font-weight: 400 !important;
+        text-align: center;
+    }
+    
+    .table.dataTable thead>tr>th.sorting {
+        padding-right: 0 !important;
+        text-align: center;
+    }
+    
+    .rowl {
+        background: #f1f1f1;
+        align-items: center;
+        padding: 5px;
+    }
+    
+    .btn-close {
+        font-size: 14px;
+    }
+    
+    .error-message {
+        color: red;
+    }
+    .maincontainer{
+        background-color: white;
+        margin: 0px 20px;
+        padding: 50px 30px;
+        box-shadow: 0 0 10px #0000001f;
+        border-radius: 1rem;
+
+    }
+    .excelgstbtn{
+        background-color: white;
+        color:#7f8fa6;;
+        border:1px solid #7f8fa6;
+        padding: 0.6rem;
+        /* margin:100%; */
+        width:100%;
+        font-weight: 500;
+    }
+    .imagediv{
+        text-align:center;
+    }
+    .spnfilename{
+       text-align: center;
+    }
+    .excelgstbtn:hover{
+        border:1px solid #174fa3 !important;
+        outline:none !important;
+        box-shadow:none !important;
+    }
+    .excelgstbtn:focus{
+        border:1px solid #174fa3 !important;
+        outline:none !important;
+        box-shadow:none !important;
+    }
+   
+</style>
+
+
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css' %}">
+
+<main class="main-wrapper">
+   
+        
+        <div class="d-flex ms-4 my-3">
+            <h5>View Company</h5>
+        </div>
+      
+       <div class="maincontainer ">
+       <form action="">
+        <div class="row ">
+            <div class="col-md-4"><div class="did-floating-label-content did-error-input">
+                <input type="text"   id="Name" name="companyname" value="{{companyInfo.companyName}}" placeholder=" " style="height:45px" readonly class="did-floating-input"/>
+                <label class="did-floating-label">Company Name</label>
+            </div></div>
+            <div class="col-md-4"><div class="did-floating-label-content did-error-input">
+                <input type="text" id="Number" required="required" name="gstNumber" id="Number" value="{{companyInfo.gstNumber}}" readonly placeholder=" " style="height:45px" class="did-floating-input"/>
+                <label class="did-floating-label">GSTIN Number</label>
+            </div></div>
+            <div class="col-md-4"><div class="did-floating-label-content did-error-input">
+                <input type="Email"   id="Email" required="required" name="memberadmin" value="{{companyInfo.memberadmin}}" readonly placeholder=" " style="height:45px" class="did-floating-input"/>
+                <label class="did-floating-label">Company Admin</label>
+            </div></div>
+        </div>
+        <div class="row row2">
+            <div class="col-md-4"><div class="did-floating-label-content did-error-input">
+                <input type="text"   id="Email" required="required" name="adhaarNumber" value="{{companyInfo.adhaarNumber}}" readonly placeholder=" " style="height:45px" class="did-floating-input"/>
+                <label class="did-floating-label">Adhaar Number</label>
+            </div></div>
+        <div class="col-md-4"><div class="did-floating-label-content did-error-input">
+                <input type="text"   id="Email" required="required" name="caddress" value="{{companyInfo.companyAddress}}" readonly placeholder=" " style="height:45px" class="did-floating-input"/>
+                <label class="did-floating-label">Comapny Address</label>
+            </div></div>
+        <div class="col-md-4"><div class="did-floating-label-content did-error-input">
+                    <input type="text"   id="Email" required="required" name="panNumber"  value="{{companyInfo.panNumber}}" readonly placeholder=" " style="height:45px" class="did-floating-input"/>
+                    <label class="did-floating-label">Pan Card Number</label>
+                </div></div>
+        </div>
+        <div class="row row3">
+            <div class="col-md-4">
+                <div class="did-floating-label-content did-error-input">
+                    <input type="text"   id="companyType" required="required" name="companyType"  value="{{companyInfo.companyType}}" readonly placeholder=" " style="height:45px" class="did-floating-input"/>
+                    <label class="did-floating-label">Company Type</label>
+                  </div>       
+           
+        </div>
+         <!-- GST certificate -->
+ 
+            <div class="col-md-4">
+             {% if companyInfo.gstcertificate == None %}
+             <button type="button" id="fileName" class="btn excelgstbtn">GST Certificate</button>
+             <div class="imagediv mt-1">
+                 <img id="gstcertificatePreview" src="{%static 'assets/img/dummy-image.png'%}" class="preview-img" width="40%" alt = "No Image">
+             </div>
+             {%else%}
+             <button type="button" id="fileName" class="btn excelgstbtn">GST Certificate</button>
+             <div class="imagediv mt-1">
+                 <img id="gstcertificatePreview" src="{{companyInfo.gstcertificate}}" class="preview-img" width="40%">
+             </div>
+             {%endif%}
+             <!-- <input type="file" class="form-control" id="customFile" name="gstcertificate"/>
+             <img src="{{companyInfo.gstcertificate}}" width="150px" class="mt-4"/> -->
+         </div>
+        
+         <!-- Company logo -->
+ 
+         <div class="col-md-4">
+             {% if companyInfo.companylogos == None %}
+            
+             <button type="button" id="logofileName" class="btn excelgstbtn">Company Logo</button>
+             <div class="imagediv mt-1">
+                 <img id="companylogosPreview" src="{%static 'assets/img/dummy-image.png'%}" class="preview-img" width="40%" alt = "No Image">
+             </div>
+             <p id="inputGroupFile_e" class="error"></p> 
+             {%else%}
+           
+             <button type="button" id="logofileName" class="btn excelgstbtn">Company Logo</button>
+             <div class="imagediv mt-1">
+                 <img id="companylogosPreview" src="{{companyInfo.companylogos}}" class="preview-img" width="40%" >
+             </div>
+             <p id="inputGroupFile_e" class="error"></p> 
+             {%endif%}
+             <!-- <input type="file" class="form-control" id="inputGroupFile" name="companylogos"/>
+             <img src="{{companyInfo.companylogos}}" width="150px" class="mt-4"/> -->
+         </div>
+ 
+        </div>
+        <div>
+            <h5>Payment History </h5>
+        </div>
+       <div class="mt-5">
+           <table id="example1" class="table mt-5"  class="display" style="width:100% color:white;!important">
+           <thead class="head">
+               <tr>
+                   <th class="text-center">Plan period</th>
+                   <th class="text-center">Start Date</th>
+                   <th class="text-center">Expiry Date</th>
+                   <th class="text-center">Payment</th>
+                   
+               </tr>
+           </thead>
+           <tbody>
+               
+               {%for c in paymenthistory%}
+                                   <tr>
+                                       <td class="text-capitalize">{{c.planperiod}}</td>
+                                       <td>{{c.startdate}}</td>
+                                       <td>{{c.expirydate}}</td>
+                                       <td>{{c.payment}}</td>
+                                   </tr>
+               {%endfor%}
+               
+               
+           </tfoot>
+       </table>
+       </div>
+       <div>
+           <div class="text-start mt-4">
+               <a href="/company/leads"  class="reset">Cancel</a>
+               
+           </div>
+       </div>
+   </form>
+       </div>
+ 
+</main>
+{% endblock %}{%block script%}{{block.super}}
+  <!-- ==================================================================================================================================================== -->
+<script src="{% static 'assets/js/validation/validations.js'%}"></script>
+<script>
+    $(document).ready(function() {
+   var table = $('#example1').DataTable();
+});
+    
+    // Name--------------------------------------------------------------------
+    const Name = document.getElementById("companyname");
+    Name.addEventListener("focus", function () {
+        Name.setAttribute("placeholder", "Enter Company Name");
+    });
+    Name.addEventListener("blur", function () {
+        Name.removeAttribute("placeholder");
+    });
+
+    //gst number-------------------------------------------------------------------
+    const gst = document.getElementById("gstNumber");
+    gst.addEventListener("focus", function () {
+        gst.setAttribute("placeholder", "Enter GST Number");
+    });
+    gst.addEventListener("blur", function () {
+        gst.removeAttribute("placeholder");
+    });
+
+    // Email--------------------------------------------------------------------------------
+    const Email = document.getElementById("memberadmin");
+    Email.addEventListener("focus", function () {
+        Email.setAttribute("placeholder", "Enter Your Email");
+    });
+    Email.addEventListener("blur", function () {
+        Email.removeAttribute("placeholder");
+    });
+
+    //Aadhaar number-------------------------------------------------------------------
+    const aadhaar = document.getElementById("aadhaar");
+    aadhaar.addEventListener("focus", function () {
+        aadhaar.setAttribute("placeholder", "Enter Your Aadhaar Number");
+    });
+    aadhaar.addEventListener("blur", function () {
+        aadhaar.removeAttribute("placeholder");
+    });
+
+    //Company Address-------------------------------------------------------------------
+    const address = document.getElementById("caddress");
+    address.addEventListener("focus", function () {
+        address.setAttribute("placeholder", "Enter Address");
+    });
+    address.addEventListener("blur", function () {
+        address.removeAttribute("placeholder");
+    });
+
+    //Aadhaar number-------------------------------------------------------------------
+    const pancard = document.getElementById("panNumber");
+    pancard.addEventListener("focus", function () {
+        pancard.setAttribute("placeholder", "Enter Pan Number");
+    });
+    pancard.addEventListener("blur", function () {
+        pancard.removeAttribute("placeholder");
+    });
+
+    //Dropdown------------------------------------------------------------------------------
+     const Role = document.getElementById("role");
+     Role.addEventListener("focus", function() {
+       Role.setAttribute("placeholder", "Enter Your Role");
+     });
+     Role.addEventListener("blur", function() {
+       Role.removeAttribute("placeholder");
+     });
+
+     //Payment-------------------------------------------------------------------
+    const payment = document.getElementById("payment");
+    payment.addEventListener("focus", function () {
+        payment.setAttribute("placeholder", "Enter Value");
+    });
+    payment.addEventListener("blur", function () {
+        payment.removeAttribute("placeholder");
+    });
+    //=========================================================================================
+
+    function formValidation(){
+         
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var companyname = $('#companyname').val().trim();   
+        var memberadmin = $('#memberadmin').val().trim();   
+        var caddress = $('#caddress').val().trim();   
+        var companyType = $('#companyType').val();   
+        var gstNumber = $('#gstNumber').val();  
+        var panNumber = $('#panNumber').val().trim();  
+      
+        if (IsValid(companyname)) {
+          $('#snackbar').html('');
+          $('#snackbar').html('Name field is required');
+          $('#companyname').focus();
+          return false;
+        }else if (IsValid(memberadmin)) {
+            $('#snackbar').html('');
+            $('#snackbar').html('Admin Email is required');
+            $('#memberadmin').focus();
+            return false;
+        }else if (!validateEmail(memberadmin)) {
+            $('#snackbar').html('');
+            $('#snackbar').html('Invalid Email');
+            $('#memberadmin').focus();
+            return false;
+        }else if (IsValid(caddress)) {
+            $('#snackbar').html('');
+            $('#snackbar').html('Address field is required');
+            $('#caddress').focus();
+            return false;
+        }else if (IsValid(companyType)) {
+            $('#snackbar').html('');
+            $('#snackbar').html('Please select company type');
+            $('#companyType').focus();
+            return false;
+        }else if (IsValid(panNumber)) {
+            $('#snackbar').html('');
+            $('#snackbar').html('Please provide Pan card number');
+            $('#panNumber').focus();
+            return false;
+        }
+        else if (gstNumber != ""){
+            if (IsValid(gstNumber)){
+            $('#snackbar').html('');
+            $('#snackbar').html('Gst Number field is required');
+            $('#gstNumber').focus();
+            return false;
+          }else if(gstNumber.length != 15){
+            $('#snackbar').html('');
+            $('#snackbar').html('GST Number should be of 15 digits');
+            $('#gstNumber').focus();
+            return false;
+          }else if (!validateGstNumber(gstNumber)) {
+            $('#snackbar').html('');
+            $('#snackbar').html('Invalid gstNumber');
+            $('#gstNumber').focus();
+            return false;
+          }
+          else{
+            $('#snackbar').addClass('validationBox')
+          }
+        }
+      
+      else{
+        $('#snackbar').addClass('validationBox')
+      }
+    } 
+    </script>
+    
+{%endblock%}

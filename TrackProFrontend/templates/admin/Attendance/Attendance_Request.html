@@ -1,0 +1,801 @@
+{% extends "index.html" %}
+{% load static %} 
+{% load encryption_filters %}
+
+{% block headercontent %}
+<div class="nav-item newheading">
+Attendance Request
+</div>
+
+{% endblock %}
+{% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+  <style>
+    #pills-tab{
+      border:none;
+    }
+    .focused{
+      border: solid 2px red;
+    }
+
+      .image-list img:not(:first-child) {
+          margin-left: -21.5px;
+        }
+        .image-list img:hover {
+          transform: scale(1.5); /* Scale up on hover */
+        }
+        .image-list {
+          display: flex;
+          gap: 15px;
+          margin:auto;
+      }
+    .buttons-excel  {
+        background: transparent !important;
+        border: none !important;
+    }
+
+
+    .input-feild {
+
+        height: 48px;
+    }
+    .table-div {
+
+        padding: 16px 15px 15px 15px !important;
+    }
+    #latemarktable>tbody>tr>td {
+        padding: 15px !important;
+    }
+    table.dataTable thead th, table.dataTable tfoot th {
+        font-weight: 500;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        border: none;
+        border-bottom: 1px solid #aaa;
+        border-radius: 1px;
+
+        outline: none;
+    }
+    .card-body-reason-text {
+          font-size: 12px;
+          color: #000000;
+          padding-bottom: 10px 0px;
+        }
+        .card-header-txt {
+        font-size: 12px;
+        }
+        .card-header-title {
+          font-size: 12px;
+          font-weight: 500;
+        }
+        .card-header-blue-txt{
+          color: #00AEEF;
+          font-size: 12px;
+          font-weight: 500;
+        }
+        .card-header-black-txt{
+          color: #000000;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        .conclusion-box{
+          border-radius: 12px;
+        
+          background-color: #ECF1F2;
+          color: #403f3f;
+        }
+       
+        .manager-profile-picture-rejected {
+          height: 25px;
+          width: 25px;
+          border-radius: 50%;
+          position: relative;
+          z-index: 10 !important;
+        }
+        .card-header-name-txt {
+          color: #403f3f;
+          font-size: 18px;
+          padding-bottom: 16px;
+        }
+        .card-body-comment-text {
+          font-size: 12px;
+          height: 18px;
+          padding-bottom: 10px 0px;
+        }
+        .card-header {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0;
+        background-color:white; 
+        border-bottom: none;
+        color: #403f3f;
+      }
+      .card-body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+      .card{
+        border-radius: 6px;
+        background: #FFF;
+        box-shadow: 0px 4px 8px #00000029;
+      }
+      .manager-pic {
+        cursor: pointer;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+    }
+    .manager-pic-Pending{
+          border: 1px solid orange;
+        }
+        .manager-pic-Approved{
+          border: 1px solid green;
+        }
+        .manager-pic-Rejected{
+          border: 1px solid red;
+        }
+        .cardfooter{
+          background: white;
+          border: none;
+        }
+        .managers-imgs{
+          text-align: right;
+          padding: 4px 30px 4px 0;
+        }
+        span>input{
+          border: 1px solid #c9c9c9;
+          border-radius: 5px;
+          padding: 2px;
+        }
+</style>
+  <!-- Include jQuery UI Datepicker library -->
+
+  <main class="main-wrapper">
+    {% if messages %}
+    <div class="row" style="justify-content: center;">
+      <div class="col-sm-6 col-sm-offset-3">
+        {% for message in messages %}
+        <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert-meaasge alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p style="margin-bottom: 0px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+
+ 
+
+  
+    <div class="leads-div">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+       
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link active" id="pills-pending-tab" data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab" aria-controls="pills-pending" aria-selected="true">Pending Requests</button>
+            </li>
+    
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link" id="pills-approved-tab" data-bs-toggle="pill" data-bs-target="#pills-approved" type="button" role="tab" aria-controls="pills-approved" aria-selected="false">Approved Requests</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link" id="pills-rejected-tab" data-bs-toggle="pill" data-bs-target="#pills-rejected" type="button" role="tab" aria-controls="pills-rejected" aria-selected="false">Rejected Requests</button>
+            </li>
+            <li class="nav-item p-0 m-0" role="presentation">
+              <button class="nav-link" id="pills-cancelled-tab" data-bs-toggle="pill" data-bs-target="#pills-cancel" type="button" role="tab" aria-controls="pills-cancel" aria-selected="false">Cancelled Requests</button>
+            </li>
+        </ul>
+      
+        <div class="tab-content" id="pills-tabContent">
+            <!-- 1st-Pane -->
+            <div class="tab-pane fade show active" id="pills-pending" role="tabpanel" aria-labelledby="pills-pending-tab" tabindex="0">
+                
+              <div class="row" id="pendingleaves">
+                {% for i in Pendingrequests %}
+                  <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                      <div id="card" class="card text-start h-100">
+                        <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                          <span class="card-header-black-txt">{{i.Username}}</span>
+                        </div>
+                        <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>         
+                              <span class="d-none" id="reqdate{{i.id}}">{{i.Date }}</span>                          
+                                <span class="card-header-txt">Request Date </span><br>
+                                <span class="card-header-blue-txt">{{i.newdate }}</span> 
+                            </span>
+                            <span> 
+                                                             
+                              <span class="card-header-txt">checkIn Time </span><br>
+                              {%if i.UserCheckInTime != '' %} 
+                              <input type="time" name="checkintime" id="usercheckintime{{i.id}}" min="00:00" max="23:59"  value="{{i.UserCheckInTime}}" required>
+                             {%else%}
+                             <input type="time" name="checkintime" id="usercheckintime{{i.id}}" min="00:00" max="23:59"  value="" required>
+                             {%endif%}
+
+                          </span>
+                            <span class="d-flex justify-content-between">
+                              <span class="text-center">
+                                                                   
+                                <span class="card-header-txt">checkout Time </span><br>
+                                {%if i.UserCheckOutTime != '' %} 
+                                <input type="time"  name="checkouttime" id="usercheckouttime{{i.id}}"  value="{{i.UserCheckOutTime}}" required>
+                                {%else%}
+                                <input type="time"  name="checkouttime" id="usercheckouttime{{i.id}}"  value="" required>
+                                {%endif%}
+                                </span>
+                                <span>
+  
+                              </span>
+                            </span>
+                        </div>
+  
+                        <div class="card-body">
+                            <div class="row">
+                              <div class="col-lg-12">
+                                <div class="card-header p-0">
+                                <span class="card-header-txt">Reason :</span><br>
+                                <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.Reason}}</span>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+  
+                        <div class="card-footer cardfooter mt-auto">
+                          <div class="row">
+                            <div class="col-lg-12 conclusion-box my-2">
+                              <div  class="py-2 row">
+                                <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                 
+                                  <span class="ps-1">This application is pending.</span>
+                                </span>  
+                                <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+                                
+                                  {%for manager in i.managerlist %}
+                                 
+                                      <img  class="manager-pic manager-pic-Pending"  src="{{manager.managerpic}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.managername}} " />
+                                  {%endfor%}
+  
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+  
+  
+                          <div class="row mt-2" id="PendingDivButttonStatus{{i.id}}">
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 pe-2">
+                              <button class="btn w-100  btn-danger" data-bs-toggle="modal" data-bs-target="#editmodal{{i.id}}">Reject</button>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 px-0 ps-2">
+                              <button class="btn w-100   btn-success" data-bs-toggle="modal" data-bs-target="#acceptmodal{{i.id}}">Approve</button>
+                            </div>
+                          </div>
+                        </div>
+  
+  
+                      </div>
+  
+  
+                  </div>
+  
+  
+                {%empty%}
+                  <div class="noappdiv">
+                    <div class="text-center py-4 ">No Applications Recieved!</div>
+                  </div>
+                {%endfor%}
+  
+              </div>
+                
+            </div>
+
+              <!-- 2nd-Pane -->
+              <div class="tab-pane fade" id="pills-approved" role="tabpanel" aria-labelledby="pills-approved-tab" tabindex="0">
+                
+                <div class="row" id="approvedleaves">
+                  {% for i in Approverequests%}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                        <div id="card" class="card text-start h-100">
+                          <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                            <span class="card-header-black-txt text-black">{{i.Username}}</span>
+                          </div>
+                          <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                              <span class="card-header-txt">Request Date </span><br>
+                              <span class="card-header-blue-txt">{{i.newdate }}</span> 
+                          </span>
+                          <span>                                   
+                              <span class="card-header-txt">CheckIn Time </span><br>
+                                  <span class="card-header-blue-txt" title="{{i.UserCheckInTime }}">{{i.UserCheckInTime }}</span> 
+                          </span>
+                              <span class="d-flex justify-content-between">
+                                <span class="text-center">                                   
+                                  <span class="card-header-txt">CheckOut Time </span><br>
+                                  <span class="card-header-blue-txt" title="{{i.UserCheckOutTime }}">{{i.UserCheckOutTime }}</span> 
+                                </span>
+                                <span>
+    
+                                </span>
+                              </span>
+                          </div>
+    
+                          <div class="card-body">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="card-header p-0">
+                                  <span class="card-header-txt">Reason :</span><br>
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.Reason}}</span>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+    
+                          <div class="card-footer cardfooter mt-auto">
+                            <div class="row">
+                              <div class="col-lg-12 conclusion-box my-2">
+                                <div  class="py-2 row">
+                                  <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                    {%for manager in i.managerlist %}
+                                    {%if manager.actiontaken == True%} 
+                                    
+                                    
+                                        <img  class="manager-pic manager-pic-Approved" src="{{manager.managerpic}}" data-bs-placement="top" data-bs-toggle="tooltip" title="✅ {{manager.managername}} " />
+                                     
+                
+          
+                                    {%endif%}
+                
+                                    {%endfor%}
+                                    <span class="ps-1">This application is approved.</span>
+                                  </span>   
+                                  <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+                                    {%for manager in i.managerlist %}
+                                    {%if manager.actiontaken == False%}
+                                     
+                                        <img  class="manager-pic manager-pic-Pending"  src="{{manager.managerpic}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.managername}} " />
+                                      
+                                      {%endif%}
+                                    {%endfor%}
+    
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+    
+    
+                          </div>
+    
+    
+                        </div>
+    
+    
+                    </div>
+    
+    
+                  {%empty%}
+                    <div class="noappdiv">
+                      <div class="text-center py-4 ">No Applications Recieved!</div>
+                    </div>
+                  {%endfor%}
+    
+                </div>
+                  
+              </div>
+
+              <!---3rd pane-->
+              <div class="tab-pane fade" id="pills-rejected" role="tabpanel" aria-labelledby="pills-rejected-tab" tabindex="0">
+                
+                <div class="row" id="approvedleaves">
+                  {% for i in Rejectedrequests%}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                        <div id="card" class="card text-start h-100">
+                          <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                            <span class="card-header-black-txt text-black">{{i.Username}}</span>
+                          </div>
+                          <div class="card-header head d-flex justify-content-between align-items-center">
+                            <span>                                   
+                              <span class="card-header-txt">Request Date </span><br>
+                              <span class="card-header-blue-txt">{{i.newdate }}</span> 
+                          </span>
+                          <span>                                   
+                            <span class="card-header-txt">CheckIn Time </span><br>
+                                <span class="card-header-blue-txt" title="{{i.UserCheckInTime }}">{{i.UserCheckInTime }}</span> 
+                          </span>
+                              <span class="d-flex justify-content-between">
+                                <span class="text-center">                                   
+                                  <span class="card-header-txt">CheckOut Time </span><br>
+                                  <span class="card-header-blue-txt" title="{{i.UserCheckOutTime }}">{{i.UserCheckOutTime }}</span> 
+                                </span>
+                                <span>
+    
+                                </span>
+                              </span>
+                          </div>
+    
+                          <div class="card-body">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="card-header p-0">
+                                  <span class="card-header-txt">Reason :</span><br>
+                                  <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.Reason}}</span>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+    
+                          <div class="card-footer cardfooter mt-auto">
+                            <div class="row">
+                              <div class="col-lg-12 conclusion-box my-2">
+                                <div  class="py-2 row">
+                                  <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                    {%for manager in i.managerlist %}
+                                    {%if manager.actiontaken == True%}
+                                     
+                                        <img  class="manager-pic manager-pic-Rejected" src="{{manager.managerpic}}" data-bs-placement="top" data-bs-toggle="tooltip" title="❌  {{manager.managername}} " />
+                                     
+                                    
+                
+          
+                                    {%endif%}
+                
+                                    {%endfor%}
+                                    <span class="ps-1">This application is Rejected.</span>
+                                  </span>   
+                                  <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+                                    {%for manager in i.managerlist %}
+                                    {%if manager.actiontaken == False%}
+                                     
+                                        <img  class="manager-pic manager-pic-Pending"  src="{{manager.managerpic}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.managername}} " />
+                                     
+                                      {%endif%}
+                                    {%endfor%}
+    
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+    
+    
+                          </div>
+    
+    
+                        </div>
+    
+    
+                    </div>
+    
+    
+                  {%empty%}
+                    <div class="noappdiv">
+                      <div class="text-center py-4 ">No Applications Recieved!</div>
+                    </div>
+                  {%endfor%}
+    
+                </div>
+                  
+              </div>
+
+
+                <!---4th pane-->
+                <div class="tab-pane fade" id="pills-cancel" role="tabpanel" aria-labelledby="pills-cancelled-tab" tabindex="0">
+                
+                  <div class="row" id="approvedleaves">
+                    {% for i in Cancelledrequests%}
+                      <div class="col-lg-4 col-md-6 col-sm-12 mt-4">
+                          <div id="card" class="card text-start h-100">
+                            <div class="card-header d-flex justify-content-between pb-0 col-lg-12 card-header-name-txt">
+                              <span class="card-header-black-txt text-black">{{i.Username}}</span>
+                            </div>
+                            <div class="card-header head d-flex justify-content-between align-items-center">
+                              <span>                                   
+                                <span class="card-header-txt">Request Date </span><br>
+                                <span class="card-header-blue-txt">{{i.newdate }}</span> 
+                            </span>
+                            <span>                                   
+                              <span class="card-header-txt">CheckIn Time </span><br>
+                                  <span class="card-header-blue-txt" title="{{i.UserCheckInTime }}">{{i.UserCheckInTime }}</span> 
+                              </span>
+                                <span class="d-flex justify-content-between">
+                                  <span class="text-center">                                   
+                                    <span class="card-header-txt">CheckOut Time </span><br>
+                                    <span class="card-header-blue-txt" title="{{i.UserCheckOutTime }}">{{i.UserCheckOutTime }}</span> 
+                                  </span>
+                                  <span>
+      
+                                  </span>
+                                </span>
+                            </div>
+      
+                            <div class="card-body">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="card-header p-0">
+                                    <span class="card-header-txt">Reason :</span><br>
+                                    <span  class="my-3 card-body-reason-text addReadMore showlesscontent" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="{{i.reason}}">{{i.Reason}}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+      
+                            <div class="card-footer cardfooter mt-auto">
+                              <div class="row">
+                                <div class="col-lg-12 conclusion-box my-2">
+                                  <div  class="py-2 row">
+                                    <span class="image-list card-header-txt py-1 pe-0 col-lg-8 col-md-6 col-sm-12" style="display: flex; align-items: center;">
+                                      {%for manager in i.managerlist %}
+                                      {%if manager.actiontaken == True%}
+                                       
+                                          <img  class="manager-pic manager-pic-Rejected" src="{{manager.managerpic}}" data-bs-placement="top" data-bs-toggle="tooltip" title="❌  {{manager.managername}} " />
+                                       
+                                      {%endif%}
+                  
+                                      {%endfor%}
+                                      <span class="ps-1">This application is Cancelled.</span>
+                                    </span>   
+                                    <span class="image-list d-flex justify-content-end managers-imgs col-lg-4 col-md-6 col-sm-12">
+                                      {%for manager in i.managerlist %}
+                                      {%if manager.actiontaken == False%}
+                                       
+                                          <img  class="manager-pic manager-pic-Pending"  src="{{manager.managerpic}}" data-bs-toggle="tooltip" data-bs-placement="top" title="⏳ {{manager.managername}} " />
+                                       
+                                        {%endif%}
+                                      {%endfor%}
+      
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+      
+      
+                            </div>
+      
+      
+                          </div>
+      
+      
+                      </div>
+      
+      
+                    {%empty%}
+                      <div class="noappdiv">
+                        <div class="text-center py-4 ">No Applications Recieved!</div>
+                      </div>
+                    {%endfor%}
+      
+                  </div>
+                    
+                </div>
+
+    </div>
+    </div>
+
+    {% for i in Pendingrequests %}
+    <div class="modal fade" id="acceptmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+      
+        <div class="modal-content">           
+          <div class="modal-header">
+            <h5 class="modal-title py-2" id="exampleModalLabel">Approve Request</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row py-1">
+              <div> Are you sure you want to Approve Attendance Request?
+              </div>
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <span   data-bs-dismiss="modal" onclick="ApplicationApprove({{i.id}})" class="trackproBtn" id="editEmployeeDetails">Approve</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%endfor%}
+
+
+  {% for i in Pendingrequests %}
+  <div class="modal fade" id="editmodal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg px-5">
+    
+      <div class="modal-content">           
+        <div class="modal-header ps-4">
+          <h5 class="modal-title py-2" id="exampleModalLabel">Reject Application</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row py-1">
+            <div> Are you sure you want to Reject Attendance Request?
+            </div>
+          </div>            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+          <span type="submit" class="trackproBtn" id="editEmployeeDetails" onclick="rejectrequest({{i.id}})">Submit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endfor%}
+
+</main>
+{%endblock%} {% block script %} {{block.super}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.js"></script>
+
+
+
+<script type="text/javascript">
+ 
+function ApplicationApprove(id){
+$("#acceptmodal"+id).modal("toggle");
+  var request_date = $('#reqdate'+id).text()
+  console.log("request_date",request_date)
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  get_date = yyyy + '-' + mm + '-' + dd;
+  
+  var usercheckintime = $('#usercheckintime'+id).val()
+  var usercheckouttime = $('#usercheckouttime'+id).val()
+  var action = "Approve"
+
+  if (request_date != get_date){
+    if (usercheckintime == "00:00:00" || $('#usercheckintime'+id).val().length == 0) {
+      console.log("ifddd")
+      swal({
+            icon: "warning",
+            title: "",
+            text: "Plase enter valid check in time",
+            timer: 2000
+        });
+        $("#usercheckintime"+id).focus()
+        return false;
+    } 
+    if (usercheckouttime == "00:00:00" || $('#usercheckouttime'+id).val().length == 0) {
+      swal({
+            icon: "warning",
+            title: "",
+            text: "Plase enter valid check out time",
+            timer: 2000
+        });
+        $("#usercheckouttime"+id).focus()
+        return false;
+    } 
+  }
+  
+
+  
+  $.ajax( {
+    url: frontendURL +"Attendancerequest_action",
+    type: 'POST',
+    data:{
+      csrfmiddlewaretoken:'{{ csrf_token }}',
+      'id':id ,
+      'action':action ,
+      'usercheckintime': usercheckintime,
+      'usercheckouttime':usercheckouttime  
+      },
+    dataType: 'json',
+    beforeSend: function() {
+
+    var PendingDivButttonStatus=""
+    PendingDivButttonStatus=`""
+    <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+      <button class="btn w-100   btn-primary" >Loading...</button>
+    </div>
+    `
+    $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+
+    },
+    success: function(response){
+      console.log("respo app",response)
+     
+      //swal.close()
+
+      if (response['response']['n'] == 1){
+       /* swal({
+              icon: "success",
+              title: "",
+              text: "Application Accepted Successfully",
+              button: "Close",
+              })*/
+
+              var PendingDivButttonStatus=""
+              PendingDivButttonStatus=`
+              <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                <button class="btn w-100   btn-success" >Approved</button>
+              </div>
+              `
+              $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+
+      }
+      else{
+        swal({
+              icon: "error",
+              title: "",
+              text: response['response']['msg'],
+              button: "Close",
+              }).then(() => {
+                // Code to execute after the user closes the SweetAlert dialog
+               location.reload(); // Reload the page
+              });
+      }
+
+
+      
+      
+    }
+  });
+
+}
+
+
+function rejectrequest(id){
+    var action ="Reject"
+  
+      $.ajax( {
+        url: frontendURL +"Attendancerequest_action",
+        type: 'POST',
+     
+        data:{
+          csrfmiddlewaretoken:'{{ csrf_token }}',
+          'id':id,
+          'action':action,
+          },
+        dataType: 'json',
+        beforeSend: function() {
+/*          swal({
+            icon: "info",
+            title: "",
+            text: "Loading...",
+            buttons: false,
+  
+        });*/
+
+        var PendingDivButttonStatus=""
+        PendingDivButttonStatus=`
+        <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+          <button class="btn w-100  btn-primary" >Loading...</button>
+        </div>
+        `
+        $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+        },
+        success: function(response){
+          $("#editmodal"+id).modal("toggle");
+         //swal.close()
+
+          console.log("respo",response)
+          if (response['response']['n'] == 1){
+          
+              var PendingDivButttonStatus=""
+              PendingDivButttonStatus=`
+              <div class="col-lg-12 col-md-12 col-sm-12 px-0 ps-2">
+                <button class="btn w-100  btn-danger" >Rejected</button>
+              </div>
+              `
+              $("#PendingDivButttonStatus"+id).html(PendingDivButttonStatus)
+                }
+          else{
+            swal({
+              icon: "error",
+              title: "",
+              text: response['response']['msg'],  
+              button: "Close",
+              }).then(() => {
+                // Code to execute after the user closes the SweetAlert dialog
+                location.reload(); // Reload the page
+              });
+          }   
+          
+        }
+      });
+    }
+  
+ 
+  </script>
+{% endblock %}
+
+
+

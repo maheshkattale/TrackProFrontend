@@ -1,0 +1,559 @@
+{% extends "index.html" %} {% load static %}{% block headercontent %}
+<div class="nav-item newheading">
+  Shift Master
+</div>
+{% endblock %}{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+
+  td {
+    text-align: left;
+  }
+  .tooltip-inner {
+    max-width: 100% !important;
+  }
+  .uppercard {
+    background-color: white;
+    border: 1px solid #f8f1f1;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #acacac !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .hoverdiv {
+    width: 600px;
+    justify-content: space-between;
+  }
+  .tasktitlehover {
+    width: 250px;
+  }
+  .tooltip-inner {
+    background-color: white;
+    color: black;
+    box-shadow: 2px 4px #888888;
+    z-index: 111;
+  }
+
+  .heading {
+    color: var(--unnamed-color-888888);
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0px;
+    color: #888888;
+  }
+  .table-div {
+    background-color: white !important;
+    border-radius: 16px !important;
+    margin: 11px 9px !important;
+    padding: 5px 15px 15px 15px !important;
+  }
+  #myTable2 > tbody > tr > td {
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 12px !important;
+    font-size: 13px;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  #pagination-demo2 {
+    display: flex;
+    justify-content: end;
+  }
+  #myTable2 > thead > tr > th {
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size: 15px;
+    padding: 10px;
+   
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .dataTables_filter input[type="search"] {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0px !important;
+    margin: 0 2px 0 2px !important;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button .active:hover {
+    background-color: #b9f7ff !important;
+    outline-color: #b9f7ff !important;
+    border-color: #b9f7ff !important;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height: 30px !important;
+    padding: 2px 7px 7px 5px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+  }
+
+  .submitBtn {
+    width: 150px !important;
+    height: 38px;
+    }
+</style>
+
+<!-- Main page -> Manage Task -->
+<main class="main-wrapper">
+  <!-- ==================Row1======================= -->
+  <div class="">
+    <div id="addEmployeeForm">
+    <div class="row">
+      
+        
+      <div class="col-md-3 my-2">
+        <div class="py-2">
+            <label for="shiftname">Shift Name<span style="color:red">*</span></label>
+            <input type="text" class="tabview" id="shiftname" placeholder="Enter Shift Name" name="shiftname" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+            <span id="shiftname_err" class="error"></span>
+        </div>
+
+      </div>
+
+      <div class="col-md-3 my-2">
+        <div class="py-2">
+
+            <label for="intime">Select in time<span style="color:red">*</span>:</label>
+            <input type="time" class="tabview" id="intime" name="intime">
+            <span id="intime_err" class="error"></span>
+        </div>
+      </div>
+
+      <div class="col-md-3 my-2">
+        <div class="py-2">
+        <label for="outtime">Select out time<span style="color:red">*</span>:</label>
+        <input type="time" class="tabview" id="outtime" name="outtime">
+        <span id="outtime_err" class="error"></span>
+        </div>
+      </div>
+      <div class="col-md-3 my-auto text-center">
+        <button onclick="return add_shift();" class="trackproBtn submitBtn mobilerespon">Submit</button>
+      </div>
+    </div>
+</div>
+
+  </div>
+
+  <div class="tablecard">
+    <div class="table-div">
+      <table class="row-border w-100 projecttaskdetails" id="myTable2">
+        <thead>
+          <th>Shift Name</th>
+          <th>Intime</th>
+          <th>Outtime</th>
+
+          <th>Actions</th>
+        </thead>
+
+        <tbody class="" id="table_body">
+            {%for i in shifts %}
+                <tr class="table_row{{i.id}}">
+                    <td>{{i.shiftname}}</td>
+                    <td>{{i.intime}}</td>
+                    <td>{{i.outtime}}</td>
+                    <td>
+                        <a class="viewEmpDeetsBtn me-2" onclick="get_shift_details({{i.id}});"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon">
+
+                        </a>  
+                        <a class="px-1" data-bs-toggle="modal"  data-bs-target="#deleteshift{{i.id}}" ><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" data-bs-toggle="tooltip" title="delete"></a>
+                        <div class="modal fade" id="deleteshift{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered w-25">
+                          
+                            <div class="modal-content">           
+                              <div class="modal-header ps-3 text-center">
+                                <h5 class="modal-title py-2" id="exampleModalLabel">Delete Shift</h5>
+                              </div>
+                              <div class="modal-body">
+                                
+                                <div class="row">
+                                  <div> Are you sure you want to delete this?
+                  
+                                  </div>
+                               
+                              
+                             
+                             
+                                </div>
+                              
+                              </div>
+                              <div class="modal-footer ">
+                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="Role-btn text-center" onclick="delete_shift({{i.id}})" id="addEmployeeBtn">Delete</button>
+                  
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                    </td>
+                </tr>
+            {%endfor%}
+        </tbody>
+      </table>
+
+
+    </div>
+  </div>
+</main>
+{%endblock%}
+{% block indexaddbuttons %}
+
+<li>
+  <a href="/empshiftmaster">
+    <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Shift Employee"
+    src="{% static 'assets/svg/assigntaskicon.svg' %}">
+  </a>
+</li>
+
+
+ {% endblock %}
+{%block script%}{{block.super}}
+
+<script src="https://rawgit.com/unconditional/jquery-table2excel/master/src/jquery.table2excel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#myTable2').DataTable();
+    $(".input-feild").on("focus", function () {
+      var label = $("label[for=" + this.id + "]");
+      label
+        .delay("slow")
+        .animate(
+          { "font-size": "14px", "font-weight": "400", padding: "1px" },
+          "slow"
+        );
+    });
+  });
+
+  var upadting_shift_id=''
+
+
+  function add_shift() {
+
+    var shiftname=$('#shiftname').val();
+    var intime=$('#intime').val();
+    var outtime=$('#outtime').val();
+    var trhtml=''
+
+    if (IsValid(shiftname)) {
+      
+        $('#shiftname_err').show().delay(3000).slideUp();
+        $('#shiftname_err').html('Shift Name is required');
+        $('#shiftname').focus();
+        return false;
+    } 
+
+
+    if (IsValid(intime)) {
+      
+        $('#intime_err').show().delay(3000).slideUp();
+        $('#intime_err').html('Intime is required');
+        $('#intime').focus();
+        return false;
+    } 
+    if (IsValid(outtime)) {
+      
+        $('#outtime_err').show().delay(3000).slideUp();
+        $('#outtime_err').html('Outtime is required');
+        $('#outtime').focus();
+        return false;
+    } 
+    if (upadting_shift_id==''){
+        $.ajax({ 
+            type: "POST",
+            url: frontendURL + "add_shift",
+            headers:{
+              'Authorization': 'Token '+ '{{token}}'
+            },
+            data: {
+                'shiftname':shiftname,
+                'outtime':outtime,
+                'intime':intime,
+                'csrfmiddlewaretoken':'{{csrf_token}}'
+            },
+            
+            success: function(response) {
+                console.log("response",response)
+                if(response.n != 1){
+                    swal({
+                        icon: "warning",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                    });
+                }else{
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                    });
+                    trhtml=`<tr class="table_row`+response.data.id+`">
+                                    <td>`+response.data.shiftname+`</td>
+                                    <td>`+response.data.intime+`</td>
+                                    <td>`+response.data.outtime+`</td>
+                                    <td>
+                                        <a class="viewEmpDeetsBtn me-2" onclick="get_shift_details(`+response.data.id+`);"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon">
+    
+    
+                                        <a class="px-1" data-bs-toggle="modal"  data-bs-target="#deleteshift`+response.data.id+`" ><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" data-bs-toggle="tooltip" title="delete"></a>
+                                        <div class="modal fade" id="deleteshift`+response.data.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog modal-dialog-centered w-25">
+                                          
+                                            <div class="modal-content">           
+                                              <div class="modal-header ps-3 text-center">
+                                                <h5 class="modal-title py-2" id="exampleModalLabel">Delete Shift</h5>
+                                              </div>
+                                              <div class="modal-body">
+                                                
+                                                <div class="row">
+                                                  <div> Are you sure you want to delete this?
+                                  
+                                                  </div>
+                                               
+                                              
+                                             
+                                             
+                                                </div>
+                                              
+                                              </div>
+                                              <div class="modal-footer ">
+                                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                                  <button type="button" class="Role-btn text-center" onclick="delete_shift(`+response.data.id+`)" id="addEmployeeBtn">Delete</button>
+                                  
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+    
+    
+    
+                                    </td>
+                                </tr>`
+                    $("#table_body").append(trhtml);
+    
+                } 
+                $('#shiftname').val('');
+                $('#intime').val('');
+                $('#outtime').val('');
+             
+            }
+        });
+    
+    }else{
+        $.ajax({ 
+            type: "POST",
+            url: frontendURL + "update_shift",
+            headers:{
+              'Authorization': 'Token '+ '{{token}}'
+            },
+            data: {
+                'id':upadting_shift_id,
+                'shiftname':shiftname,
+                'outtime':outtime,
+                'intime':intime,
+                'csrfmiddlewaretoken':'{{csrf_token}}'
+            },
+            
+            success: function(response) {
+                console.log("response",response)
+                if(response.n != 1){
+                    swal({
+                        icon: "warning",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                    });
+                }else{
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                    });
+                    trhtml=`
+                                    <td>`+response.data.shiftname+`</td>
+                                    <td>`+response.data.intime+`</td>
+                                    <td>`+response.data.outtime+`</td>
+                                    <td>
+                                        <a class="viewEmpDeetsBtn me-2" onclick="get_shift_details(`+response.data.id+`);"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon">
+    
+    
+                                        <a class="px-1" data-bs-toggle="modal"  data-bs-target="#deleteshift`+response.data.id+`" ><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" data-bs-toggle="tooltip" title="delete"></a>
+                                        <div class="modal fade" id="deleteshift`+response.data.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog modal-dialog-centered w-25">
+                                          
+                                            <div class="modal-content">           
+                                              <div class="modal-header ps-3 text-center">
+                                                <h5 class="modal-title py-2" id="exampleModalLabel">Delete Shift</h5>
+                                              </div>
+                                              <div class="modal-body">
+                                                
+                                                <div class="row">
+                                                  <div> Are you sure you want to delete this?
+                                  
+                                                  </div>
+                                               
+                                              
+                                             
+                                             
+                                                </div>
+                                              
+                                              </div>
+                                              <div class="modal-footer ">
+                                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                                  <button type="button" class="Role-btn text-center" onclick="delete_shift(`+response.data.id+`)" id="addEmployeeBtn">Delete</button>
+                                  
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+    
+    
+    
+                                    </td>
+                                `
+                    $(".table_row"+response.data.id).html(trhtml);
+    
+                } 
+                $('#shiftname').val('');
+                $('#intime').val('');
+                $('#outtime').val('');
+                upadting_shift_id=''
+    
+            }
+        });
+    }
+    $('#myTable2').DataTable();
+
+
+  }
+
+
+
+  function delete_shift(id) {
+
+
+    $.ajax({ 
+        type: "POST",
+        url: frontendURL + "delete_shift",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'id':id,
+
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+            console.log("response",response)
+            if(response.n != 1){
+                swal({
+                    icon: "warning",
+                    title: "",
+                    text: response.msg,
+                    button: "Close",
+                });
+            }else{
+                swal({
+                    icon: "success",
+                    title: "",
+                    text: response.msg,
+                    buttons: false,
+                    timmer:2000,
+                });
+                $(".modal").modal('hide');
+
+                $(".table_row"+id).remove();
+
+
+
+            } 
+
+         
+        }
+      });
+
+
+  }
+
+
+  function get_shift_details(id) {
+
+
+    $.ajax({ 
+        type: "POST",
+        url: frontendURL + "get_shift_details",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'id':id,
+
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+            console.log("response",response)
+            if(response.n != 1){
+                swal({
+                    icon: "warning",
+                    title: "",
+                    text: response.msg,
+                    button: "Close",
+                });
+            }else{
+
+                upadting_shift_id=response.data.id
+                $('#shiftname').val(response.data.shiftname);
+                $('#intime').val(response.data.intime);
+                $('#outtime').val(response.data.outtime);
+                $('#shiftname').focus();
+
+            } 
+
+         
+        }
+      });
+
+
+  }
+
+
+
+
+  
+
+</script>
+{%endblock%}

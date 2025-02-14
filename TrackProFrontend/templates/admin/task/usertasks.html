@@ -1,0 +1,2283 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Tasks
+</div>
+{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+  .fa-comments{
+    font-size: 20px;
+    color: #174fa3;
+  }
+  .fa-ellipsis-h{
+    color:#00000078;
+   }
+  #calendarIcon {
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    background-image: url(./Media/Employee_Master/calendarLogo.svg);
+    background-size: cover;
+    bottom: 50%;
+    left: 50%;
+}
+    .nav-pills .nav-link.active{
+        background-color: #174fa3 !important; 
+        color: #fff !important;
+    }
+    .nav-link{
+        color: #888888 !important;
+    }
+    .select2-dropdown {
+      z-index: 111111 !important;
+  }
+  .trash-btn{
+    color: #ff0000;
+  }
+  .activeicons{
+    height:24px !important;
+    width:100%;
+  }
+  .swal-text {
+    font-size: 20px;
+    position: relative;
+    float: none;
+    line-height: normal;
+    vertical-align: top;
+    text-align: left;
+    display: inline-block;
+    margin: 0;
+    padding: 0 10px;
+    font-weight: 400;
+    color: rgb(0 0 0);
+    max-width: calc(100% - 20px);
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    font-weight: 500;
+}
+.fa-spin{
+  font-size:12px;
+}
+.taskcontent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom:3rem;
+}
+.fa-spinner{
+  font-size: 90px;
+  color: #174fa3;
+}
+.swal-modal {
+  width: 400px;
+}
+.swal-button{
+  display: flex;
+  width: 75px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+}
+.editid{
+  display:none;
+}
+
+
+.ellipsisColorStyle {
+  color: #174fa3;
+}
+
+
+.eddropdwn{
+ margin-right:10px !important;
+
+}
+
+.dropdown-toggle{
+  cursor: pointer;
+}
+.dropdwn {
+    cursor: pointer;
+    min-width: 10px !important;
+    right: 0 !important;
+    left: initial !important;
+}
+.dropdwn.show {
+    display:flex;
+    transform: translate(0px, 23px) !important;
+}
+/* .select2-container--default .select2-selection--single {
+    border: none;
+    border-radius: 20 px !important;
+    height: 50px;
+    border-bottom: 1px solid rgb(214, 214, 214);
+} */
+.thours{
+  font-size:14px;
+}
+.hrszone{
+  display:flex;
+  justify-content: space-between;
+}
+.greenzone{
+  color:rgb(1, 95, 1);
+  margin-right:5px;
+}
+.yellowzone{
+  color:rgb(255, 196, 0);
+  margin-right:5px;
+}
+.redzone{
+  color:rgb(170, 2, 2);
+  margin-right:5px;
+}
+.notdonezone{
+  color:grey;
+  margin-right:5px;
+}
+.bonusdiv img{
+  width:100%;
+  height:22px;
+}
+.cardheader{
+  border-bottom:1px solid #0000001F;
+  padding:14px 10px 8px 10px;
+}
+.cardfoot{
+  border-top:1px solid #0000001F;
+  padding:5px;
+  padding-bottom:7px
+}
+.mainbox {
+    padding: 6px 0px 10px 12px;
+}
+.cardmainheading{
+  font-size: 13px;
+  color:#acacac;
+}
+.bottomicons img{
+  width:100%;
+  height:22px;
+}
+.description{
+  color: #282828;
+  text-align: left;
+  font-size: 13px;
+  /* display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis; */
+}
+
+.taskinfo2{
+font-size:16px;
+text-align: left;
+font-weight:500;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+}
+.taskinfo1{
+font-size:14px;
+text-align: left;
+}
+.actionimage{
+width:70%;
+}
+.completeimage{
+  width:70%;
+}
+/*--------new css -----*/
+.uppercard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  padding :5px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+
+}
+.select2-container--default .select2-selection--single{
+  border-bottom:1px solid #acacac !important;
+  box-shadow:none !important;
+  border-radius: 0 !important;
+
+}
+.trackpropercent{
+  font-size: 12px;
+  color:#acacac;
+}
+.trackpropercent img{
+  width:18px;
+  height:18px;
+}
+.pointscard{
+  background-color:white;
+  border: 1px solid #f8f1f1;
+  border-radius: 10px;
+  box-shadow: 2px 3px 4px #00000029;
+ padding:5px;
+ display:flex;
+ align-items:center;
+}
+.textpadding{
+  padding:5px;
+}
+.cardtext{
+  font-size:12px;
+}
+.pointscard img{
+  height :35px;
+}
+.head1{
+  letter-spacing: 0px;
+  color: #282828;
+  opacity: 1;
+  font-size: 14px;
+    font-weight: 500;
+}
+.creditpoints{
+  color:green;
+  font-weight:500;
+}
+
+.bor_end{
+  border-right:1px solid #acacac;
+}
+.togglebtn{
+  border:none;
+  cursor: pointer;
+  background: white;
+}
+
+.points{
+ color:#174fa3;
+ font-size:15px;
+ font-weight:500;
+ margin-left:4px;
+ }
+ .greenpoints{
+  color:green;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .yellowpoints{
+  color:#F2B700;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .redpoints{
+  color:#F24B59;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .notdonepoints{
+  color:#ABABAB;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .helppoints{
+ color:#174fa3;
+ font-weight:500;
+  font-size: 18px;
+ }
+ .bonuspoints{
+  color:#EC9922;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .cancelledpoints{
+  color:black;
+  font-weight:500;
+  font-size: 18px;
+ }
+ .rejectedpoints{
+color:#F24B59;
+font-weight:500;
+  font-size: 18px;
+ }
+ .card{
+  border:none !important;
+ }
+ .statustext{
+  font-size:10px;
+  color:#acacac;
+  margin-bottom:2px !important;
+ }
+ .taskcontainer {
+	 width: 16%;
+	 display: flex;
+	 justify-content: left;
+	 align-items: center;
+	 position: fixed;
+   bottom:10%;
+   right:0%;
+}
+ #toggle {
+	 -webkit-appearance: none;
+}
+ .button {
+	 position: absolute;
+	 z-index: 999;
+	 width: 200px;
+	 height: 50px;
+	 background: #174fa3;
+	 border-radius: 30px;
+	 cursor: pointer;
+	 display: flex;
+	 justify-content: left;
+	 align-items: center;
+	 padding: 0 15px;
+	 overflow: hidden;
+	 transition: width 300ms linear;
+}
+ .button:before {
+	 position: absolute;
+	 content: "";
+	 width: 20px;
+	 height: 2px;
+	 background: #fff;
+	 transform: rotate(225deg);
+	 transition: all 0.4s ease;
+}
+ .button:after {
+	 position: absolute;
+	 content: "";
+	 width: 20px;
+	 height: 2px;
+	 background: #fff;
+	 transform: rotate(135deg);
+	 transition: all 0.4s ease;
+}
+ .nav {
+	 opacity: 1;
+	 transition: all 0.5s ease-in-out;
+	 background: #174fa3;;
+	 width: 100%;
+	 border-radius: 5px;
+	 transform: translateX(10%);
+   display: flex;
+    justify-content: center;
+}
+.savebutton{
+  font-size:15px;
+}
+ .nav ul {
+	 margin: 0;
+	 padding: 0;
+	 display: flex;
+	 flex-direction: row;
+}
+ .nav li {
+	 opacity: 0;
+	 list-style: none;
+}
+ .nav li:nth-child(1) {
+	 animation: itop 300ms 300ms linear forwards;
+}
+
+ .nav a {
+	 transition: all 0.5s linear;
+	 text-decoration: none;
+	 color: #fff;
+	 font-size: 15px;
+	 width: 100%;
+	 height: 52px;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 margin: 0 10px 0 0;
+	 border-radius: 15px;
+}
+ .nav a:hover {
+	 color: #fff;
+	 background: #174fa3;
+	 border-radius: 15px;
+}
+ #toggle:checked ~ label .nav {
+	 display: none;
+	 opacity: 0;
+  
+	 transform: translateX(150px);
+}
+ #toggle:checked ~ .button:before {
+	 transform: rotate(90deg);
+}
+ #toggle:checked ~ .button:after {
+	 transform: rotate(0deg);
+}
+ #toggle:checked ~ .button {
+	 width: 50px;
+	 transition: all 0.1s linear;   
+   position: absolute ;
+   left: 132px;
+}
+ @media (max-width: 640px) {
+	 
+}
+ @keyframes itop {
+	 0% {
+		 opacity: 0;
+		 transform: translateY(60px);
+	}
+	 100% {
+		 opacity: 1;
+		 transform: translateY(0);
+	}
+}
+
+ /*--------read more /less css -----*/
+ .addReadMore.showlesscontent .SecSec,
+    .addReadMore.showlesscontent .readLess {
+        display: none;
+    }
+
+    .addReadMore.showmorecontent .readMore {
+        display: none;
+    }
+
+    .addReadMore .readMore,
+    .addReadMore .readLess {
+        margin-left: 2px;
+        color: #174fa3;
+        cursor: pointer;
+    }
+
+    .addReadMoreWrapTxt.showmorecontent .SecSec,
+    .addReadMoreWrapTxt.showmorecontent .readLess {
+        display: block;
+    }
+
+    .send_icon{
+      height: 40px;
+    }
+    .chat-log_item {
+      background: #eaeaea;
+      padding: 10px;
+      margin: 0 auto 10px;
+      max-width: 95%;
+      min-width: 25%;
+      float: left;
+      font-size: 13px;
+      border-radius: 0 20px 20px 20px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+      clear: both;
+    }
+    
+    .chat-log_item.chat-log_item-own {
+      float: right;
+      background: #D5F4E7;
+      text-align: right;
+      margin-right: 0.7rem;
+      border-radius: 20px 0 20px 20px;
+    }
+    
+    .chat-form {
+      background: #DDDDDD;
+      padding: 40px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    
+    .chat-log_author {
+      margin: 0 auto 0em;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .chat-log_time {
+      margin: 0 auto .5em;
+      direction: rtl;
+      font-size: 12px;
+      opacity: 0.5;
+    }
+</style>
+
+<main class="main-wrapper">
+  {% if messages %}
+  <div class="row" style="justify-content: center;">
+    <div class="col-sm-6 col-sm-offset-3">
+      {% for message in messages %}
+      <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p style="margin-bottom: 0px;">{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+<div id="snackbar"></div>
+
+<div class="uppercard">
+
+  <div class="row">
+    <div class="col-md-11">
+      <div class="row justify-content-around mb-3 collapse" id="filtersRow">
+          <div class="col-md-2">
+            <!-- <label for="Year">Year:</label><br> -->
+          <select id='Year' name="Year" class="select2dropdown yearselect" onchange="getOnChangeWeek();">
+            {% for y in year %}
+              {%if currYear == y.Year%}
+                <option value="{{y.Year}}" selected>{{y.Year}}</option>
+              {%else%}
+                <option value="{{y.Year}}">{{y.Year}}</option>
+              {%endif%}
+            {% endfor %}
+          </select>
+        </div>
+  
+          <div class="col-md-2">
+            <!-- <label for="Week">Week:</label><br> -->
+            <select class="form-control select2dropdown" type="text" id="Week" name="Week" onchange="usercurrentweekdata();">
+           
+            </select>
+          </div>
+  
+          <div class="col-md-3">
+          <!-- <label for="Employee">Employee:</label><br> -->
+          <select id='Employee' name="Employee" class="select2dropdown" onchange="usercurrentweekdata();">
+          
+            <option value="">Me(Myself)</option>
+          
+          </select>
+        </div>
+  
+        <div class="col-md-2">
+          <!-- <label for="Task">Task Status:</label><br> -->
+        <select id='TaskStatus' name="TaskStatus" class="select2dropdown" onchange="usercurrentweekdata();">
+          <option value="All" selected>All Statuses</option>
+          <option value="InProcess">InProcess</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+  
+      <div class="col-md-2">
+        <!-- <label for="Review">Review:</label><br> -->
+      <select id='Review' name="Review" class="select2dropdown" onchange="usercurrentweekdata();">
+        <option value="All" selected>All Review</option>
+        <option value="Checked" >Checked</option>
+        <option value="Unchecked" >Unchecked</option>
+      </select>
+    </div>
+    </div>
+    <div class="row justify-content-around p-2 trackpropercent">
+      <div class="col-md-2">
+        <div class="head1">Total Trackpro & Percentage</div>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+      <div class="col-md-3 bor_end">
+        <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1"> Average Trackpro Percent :</span><span id="trackpropercent" class="points">0</span><span style="color:#174fa3;">%</span></div>
+      </div>
+      <div class="col-md-3 bor_end">
+        <div><img src="/static/Media/taskicons/weektask.svg"  alt="Paris" onclick=""><span class="ms-1">Total Tasks of week :</span><span id="weektask" class="points">0</span></div>
+      </div>
+      <div class="col-md-2 bor_end">
+        <div><img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick=""><span class="ms-1">Total Tasks :</span><span id="totaltask" class="points">0</span></div>
+      </div>
+      <div class="col-md-4">
+        <div><img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick=""><span class="ms-1">Weekly Percentage :</span><span id="weeklyperc" class="points">0</span><span style="color:#174fa3;">%</span></div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>   
+    <div class="col-md-1 mt-1">
+      <button class="togglebtn" id="filterBtn" type="button" data-bs-toggle="collapse" data-bs-target="#filtersRow" aria-expanded="false" aria-controls="filtersRow"><img src="/static/Media/taskicons/toggle.svg"  alt="Paris" onclick=""></button>
+    </div>
+    </div>
+    
+   
+  <div class="row my-3">
+    <div class="d-flex justify-content-around">
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-360" src="/static/Media/taskicons/activegreen.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Green</div>
+          <div class="greenpoints">0</div>
+        </div>
+      </div>
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-540" src="/static/Media/taskicons/activeyellow.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Yellow</div>
+          <div class="yellowpoints">0</div>
+        </div>
+      </div>
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-360" src="/static/Media/taskicons/activered.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Red</div>
+          <div class="redpoints">0</div>
+        </div>
+      </div>  
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="move-top-down" src="/static/Media/taskicons/activenotdone.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Not Done</div>
+          <div class="notdonepoints">0</div>
+        </div>
+      </div>
+      <div class="row d-none pointscard">
+        <div class="col-md-4">
+          <img class="move-top-down" src="/static/Media/taskicons/activehelp.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Help</div>
+          <div class="helppoints">0</div>
+        </div>
+      </div>
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-30" src="/static/Media/taskicons/activebonus.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Bonus</div>
+          <div class="bonuspoints">0</div>
+        </div>
+      </div>
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-70" src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Credits</div>
+          <div class="creditpoints">0</div>
+        </div>
+      </div>
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-90" src="/static/Media/taskicons/activerejected.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Rejected</div>
+          <div class="rejectedpoints">0</div>
+        </div>
+      </div>
+      <div class="row pointscard">
+        <div class="col-md-4">
+          <img class="rotate-image-70" src="/static/Media/taskicons/activecancelled.svg"  alt="Paris" onclick="">
+        </div>
+        <div class="col-md-8 text-center textpadding">
+          <div class="cardtext">Cancel</div>
+          <div class="cancelledpoints">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+    <!-- Row 2 -->
+    <div class="container-fluid mt-4">
+       <span class="d-none" id="newstarttime"></span>
+   <div class="row d-flex justify-content-between align-items-center h-100">
+      <div class="col-md-12 taskcontent textpadding">
+        <div class="row g-3 col-md-12" id="multipletask">
+          
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true"  aria-labelledby="exampleModalToggleLabel2" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="mt-3 text-center">
+        <span id="imgsection">
+          <img src="/static/Media/TaskManager/task_alt_FILL0_wght400_GRAD0_opsz48 (1).svg" alt="Paris" width="50" height="50">
+          <h5 class="modal-title" id="exampleModalToggleLabel2">Task Added Successfully</h5>
+        </span>
+      </div>
+      <div class="modal-body p-0">
+        <div class="container-fluid">
+          <div class="row" id="addmodalsection">
+            <div class="col-md-6">
+                <div class="my-3">
+                  <label for="task">Project Name</label>
+                 <span id="projectname"></span>
+                </div>   
+            </div>
+            <div class="col-md-6">
+              <div class="my-3">
+              <label for="task">Assign By</label>
+              <span id="projectassignby"></span>
+            </div>
+            </div>
+            <div class="col-md-12">
+              <label for="task">Task details</label>
+              <span id="projecttaskdetail"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="modal-add-btn" data-bs-dismiss="modal" onclick="removebackdrop();"><span id="modalclosesection">Done</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!----edit modal-->
+
+<div class="modal" id="edittaskModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" >
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Edit Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">                      
+                <div class="mb-3">
+                  <div class="editid" id="edittaskid"></div>
+                  <label for="Project">Project Name</label>
+                  <select class="form-control select2dropdown" id="editProject" name="Project" >
+                    <option value="">Select Project</option>
+
+                    {% for p in project reversed %}
+                      {% if p.Active == True %}
+                        <option value="{{p.id}}">{{p.ProjectName}}</option>
+                      {% endif %}
+                    {% endfor %}
+
+                  </select>
+                  <span id="editprojectrequired"></span>
+                </div>
+      
+         
+                          
+            </div>
+            <div class="col-md-6">
+              <label for="task">Assign By</label>
+              <select class="form-control select2dropdown" id="editAssignBy" name="AssignBy">
+                <option value="">Select Manager</option>
+                {% for m in basemanagerlist %}
+                  <option value="{{m.ManagerID}}">{{m.ManagerIDStr}}</option>
+                {% endfor %}
+
+   
+              </select>
+              <span id="editassignByrequired"></span>
+            </div>
+            <div class="col-md-6">
+              <label for="AssignDate">Date</label>
+              <input type="text" id="editAssignDate" placeholder="Select Date" name="DateofJoining" autocomplete="off" disabled>
+              <span id="editdaterequired"></span>
+              <div id="calendarIcon"></div>
+            </div>
+            <div class="col-md-12">
+              <label for="TaskTitle">Task details</label>
+              <textarea name="TaskTitle" id="editTaskTitle" cols="10" rows="3" style="width: 100%;"></textarea>
+              <span id="edittasknamerequired"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <span class="modal-add-btn" id="updatebutton" onclick="updateTask();">Update</span>
+        <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<div class="modal" id="remarkmodal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Remarks</h5>
+        <input type="hidden" id="remark_user_id">
+        <input type="hidden" id="remark_task_id">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-2">
+        <div class="container-fluid" id="remark_details">
+         
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <div class="row col-12">
+          <span class="col-11 pe-0">
+            <input type="text" class="form-control form-control-custom ps-4" id="remark_comment" placeholder="Add Remark"
+            name="target_title">
+            <span id="remark_comment_required"></span>
+          </span>
+          <span class="col-1 p-0">
+            <img src="{% static 'assets/svg/send-icon.svg'%}" class="send_icon" onclick="addremark(document.getElementById('remark_user_id').value,document.getElementById('remark_task_id').value);">
+          </span>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block script %}
+{{block.super}}
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+<script>
+  $(document).ready(function() {
+    get_project_list()
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+
+      $('[rel="tooltip"]').tooltip({trigger: "hover"});
+    })
+
+    $("#AssignDate").datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        minDate: -5,
+        maxDate: 0
+    });
+
+    
+      // usercurrentweekdata();
+    getOnChangeWeek();
+    getTodaydate();
+    $(".select2dropdown").select2({
+    });
+  })
+
+  
+  
+   
+   
+function getTodaydate(){
+  var todayDate = new Date();    
+  date = todayDate.getDate();
+  if(todayDate.getMonth == 12){
+    currentMonth = todayDate.getMonth() ;
+  }else{
+    currentMonth = todayDate.getMonth() + 1 ;
+  }
+  month = currentMonth.toString().padStart(2, '0');
+  year = todayDate.getFullYear();
+  currentDate = date + "-" +month+ "-" + year
+  $( "#AssignDate" ).val(currentDate);
+  // $("#Year").val(year).trigger('change');
+}
+
+function getOnChangeWeek() {
+     
+    var year = $('#Year').val()
+    $.ajax({
+        type: 'post',
+        url: frontendURL + 'checktrackpro/getUserWeek',
+        data: {
+            'year': year,
+            'csrfmiddlewaretoken': '{{csrf_token}}',
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log("response week",response)
+            $('#Week').empty()
+            $.each(response.weeklist, function(i, o) {
+                $('#Week').append(`<option value="${o.Week}" >${o.Week} </option>`)
+            });
+            $('#Week').append(`<option value="All">All Weeks</option>`)
+            //populateTable();
+            usercurrentweekdata();
+        },
+        error: function(error) {
+            console.log('error; ' + JSON.stringify(error));
+        }
+    });
+}
+
+function removebackdrop(){
+  $('.modal-backdrop').remove();
+}
+
+
+
+function saveTask() {
+   
+  var task = $("#TaskTitle").val().trim();
+  var AssignDate = $("#AssignDate").val();
+  var projectname = $("#Project").val();
+  var AssignBy = $("#AssignBy").val();
+  if (IsValid(projectname)) {
+    $('#projectrequired').html('');
+    $("#projectrequired").show().delay(3000).slideUp();
+    $('#projectrequired').html('Please Select Project').css('color', 'red');
+    $('#Project').focus();
+    return false;
+  }else if (IsValid(AssignBy)) {
+    $('#assignByrequired').html('');
+    $("#assignByrequired").show().delay(3000).slideUp();
+    $('#assignByrequired').html('Please select Manager').css('color', 'red');
+    $('#AssignBy').focus();
+    return false;
+  }
+ else if (IsValid(AssignDate)) {
+      $('#daterequired').html('');
+      $("#daterequired").show().delay(3000).slideUp();
+      $('#daterequired').html('Please enter date.').css('color', 'red');
+      $('#AssignDate').focus();
+      return false;
+  } else if (IsValid(task)) {
+      $('#tasknamerequired').html('');
+      $("#tasknamerequired").show().delay(3000).slideUp();
+      $('#tasknamerequired').html('Please enter your Task before submitting.').css('color', 'red');
+      $('#TaskTitle').focus();
+      return false;
+  }  else {
+    
+      var Project = $('#Project').val();
+      var TaskTitle = $('#TaskTitle').val();
+      var date = $('#AssignDate').val();
+      var AssignBy = $('#AssignBy').val();
+      var dt = $("#AssignDate").datepicker("getDate");
+      var dateDay = dt.getDate();
+      var dateMonth = dt.getMonth() + 1;
+      var dateYear = dt.getFullYear()
+      var date = dateDay + "/" + dateMonth + "/" + dateYear;
+      var dateStr = dateDay + "/" + dateMonth + "/" + dateYear;
+      getWeekday = s => {
+          const [dd, mm, yyyy] = s.split('/'),
+              date = new Date(yyyy, mm - 1, dd)
+          return date.toLocaleDateString('en-US', {
+              weekday: 'long'
+          })
+      }
+
+      var Day = getWeekday(dateStr)
+   
+
+      var postdata = new FormData();
+      postdata.append('Project', Project);
+      postdata.append('TaskTitle', TaskTitle);
+      postdata.append('AssignBy', AssignBy);
+      postdata.append('Day', Day);
+      postdata.append('AssignDate', dateStr);
+   
+      postdata.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+      var errorhtml;
+      var imghtml;
+      $.ajax({
+          type: 'post',
+          url: frontendURL + 'task/addTaskAjax',
+          data: postdata,
+          processData: false,
+          contentType: false,
+          beforeSend: function() {
+              $('#savebutton').html('<i class="fa fa-spin fa-spinner savebutton"></i> Submitting...');
+              $("#savebutton").css({"pointer-events": "none","opacity":"0.5"});
+            },
+
+          success: function(response) {
+            $("#toggle").prop('checked',true)
+            $('#savebutton').html('Add');
+            $("#savebutton").css({"pointer-events": "auto","opacity":"1"});
+            if(response.n == 1){
+              $('#exampleModalToggle').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#Project").val("").trigger("change");
+              $("#AssignBy").val("").trigger("change");
+              $("#TaskTitle").val("");
+              var projectname = response.data.ProjectName;
+              var projectassignby = response.data.AssignByStr;
+              var projecttaskdetail = response.data.TaskTitle;
+
+              var contenthtml = `
+                        <div class="row" id="addmodalsection">
+                          <div class="popdiv d-flex">
+                          <div class="col-md-6 d-flex" style="text-align: left;">
+                              <div class="my-3">
+                              <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Project Name</b></span> <br>
+                               <span id="projectname" style="font-size: 14px;">`+projectname+`</span>
+                              </div>   
+                          </div>
+                          <div class="col-md-6 d-flex justify-content-end">
+                            <div class="my-3">
+                            <span style="font-size: 14px;"><b style="font-weight: 500 !important;">Assign By</b></span> <br>
+                            <span id="projectassignby" style="font-size: 14px;">`+projectassignby+`</span>
+                          </div>
+                          </div>
+                        </div>
+                        </div>
+                          <div class="row" id="addmodalsection">
+                          
+                          <div class="col-md-12">
+                            <div class="row" style="font-size: 14px;"><b style="padding: 0px;display: flex;justify-content: flex-start;font-weight: 500 !important;" class="ms-3">Task details</b></div>
+                            <div id="projecttaskdetail" style="word-break: break-word;font-size: 14px;text-align: left;" class="row ms-1">`+projecttaskdetail+`</div>
+                          </div>
+                        </div>
+                        `
+                        var span = document.createElement("span");
+                        span.innerHTML = contenthtml;
+                        usercurrentweekdata();
+                        swal({
+                          icon: "success",
+                          title: "",
+                          text: "Task Added Successfully",
+                          button: "Close",
+                          content : span,
+                      });
+               
+            }else{
+              $('#exampleModalToggle').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#Project").val("").trigger("change");
+              $("#AssignBy").val("").trigger("change");
+              // $("#AssignDate").val("");
+              $("#TaskTitle").val("");
+
+              swal({
+                icon: "warning",
+                title: "",
+                text: response.Msg,
+                button: "Close",
+            });
+            }
+           
+          },
+          error: function(error) {
+            $('#exampleModalToggle').modal('hide');
+              $('.modal-backdrop').remove();
+              $("#Project").val("").trigger("change");
+              $("#AssignBy").val("").trigger("change");
+              $("#AssignDate").val("");
+              $("#TaskTitle").val("");
+            swal({
+              icon: "warning",
+              title: "",
+              text: "Some Tasks are still running, hold them if you want to start antoher task, close them if everthing is completed.",
+              button: "Close",
+          });
+           
+          }
+
+      });
+  }
+}
+
+function resumetask(id) {
+  
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'project/resumeProjectTask/' + id,
+      data: {
+          'EndDate': "",
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      success: function(response) {
+          if (response.n != 0) {
+            var holdhtml = `
+            <img src="/static/Media/TaskManager/pause_circle.svg" title="Pause" alt="Paris" class= onclick="holdtask(`+id+`)">
+            `
+              swal({
+                  title: "",
+                  text: 'Task Resume',
+                  icon: "success",
+                  button: "Close",
+              })
+             
+              $('#hold' + id).html(holdhtml);
+             
+              usercurrentweekdata();
+              //GGDate();
+          } else {
+              swal({
+                  icon: "warning",
+                  title: "",
+                  text: "Cannot resume more than One task",
+                  button: "Close",
+              });
+          }
+
+      },
+      error: function(error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+//hold tasks
+function holdtask(id) {
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'project/holdProjectTask/' + id,
+      data: {
+          'EndDate': "",
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      success: function(response) {
+        if (response['n'] == 1 ){
+          swal({
+              title: "",
+              icon: "success",
+              text: 'Task onhold',
+              button: "Close",
+          })
+          var resumehtml = `<img src="/static/Media/TaskManager/play_circle.svg" title="Play" alt="Paris" class="actionimage" onclick="resumetask(`+id+`)">`
+          $('#hold' + id).html(resumehtml);
+        }
+        else{
+          swal({
+              title: "",
+              icon: "error",
+              text: response['Msg'],
+              button: "Close",
+          })
+        }
+        
+
+        
+          usercurrentweekdata();
+         
+      },
+      error: function(error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+// close tasks 
+function stoptask(id) {
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'project/updateProjectTask/' + id,
+      data: {
+          'EndDate': "",
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      success: function(response) {
+          swal({
+            icon: "success",
+              title: "",
+              text: 'Task has been closed',
+              button: "Close",
+          })
+
+          if (response.status == 1) {
+              $(".pause-img"+id).html('<button type="button" class="complete-btn">Completed</button>')
+              
+          }
+          stoptimer();
+      },
+      error: function(error) {
+          console.log('error; ' + JSON.stringify(error));
+      }
+  });
+}
+
+function usercurrentweekdata(){
+  var year = $("#Year").val();
+  var week = $("#Week").val();
+  var TaskStatus = $("#TaskStatus").val();
+  var Review = $("#Review").val();
+  weeklist=[]
+
+  if (week == "All"){
+    $("#Week").children().each(function(){
+      weeklist.push($(this).attr('value'))
+    })
+    var filteredArrayweek = weeklist.filter(function(e) { return e !== 'All' })
+    week = filteredArrayweek
+  }else{
+    var userweek = weeklist.push($("#Week").val());
+    week = weeklist
+  }
+
+  $.ajax({
+    type: 'post',
+    url: frontendURL + 'task/usercurrentweektask',
+    data: {
+        'year':year,
+        'week':JSON.stringify(week),
+        'Task':TaskStatus,
+        'Review':Review,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+    },
+    dataType: 'json',
+    beforeSend: function() {
+      $('.taskcontent').html(
+          '<i class="fa fa-spin fa-spinner"></i> Please Wait...'
+      );
+    },
+    success: function(response) {
+      var taskdetail ="" ; 
+
+      $('#trackpropercent').text(response.trackpropercentavg)
+      $('#weeklyperc').text(response.Weeklyperc)
+      $('#weektask').text(response.weeektaskcount)
+      $('#totaltask').text(response.totaltaskscount)
+      $('.greenpoints').text(response.GreenZoneTask)
+      $('.yellowpoints').text(response.YellowZoneTask)
+      $('.redpoints').text(response.RedZoneTask)
+      $('.notdonepoints').text(response.NotdoneZoneTask)
+      $('.bonuspoints').text(response.bonus)
+      $('.cancelledpoints').text(response.cancelledZoneTask)
+      $('.rejectedpoints').text(response.rejectedZoneTask)
+      $('.creditpoints').text(response.extracredits)
+
+      $.each(response.serdata,function(i,o){
+        if( o.Status == 1){  
+          editmanagerId = o.AssignBy
+          taskdetail += `
+          <div class="col-md-4">
+            <div class="card  h-100 d-flex flex-column ">
+            <div class="cardheader">
+            <div class="d-flex justify-content-between">
+              <p class="m-0 text-muted">Task added on: `+o.AssignDate+`</p>
+              <div class="d-flex">
+                ${ o.task_remark_count > 0 ? `
+                <div class="bonusdiv me-2" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)"><i class="fa fa-comments" aria-hidden="true"></i></div>
+                `
+                :``
+              }
+             
+              <div class="bonusdiv me-3"> `+o.Bonus+`</div>
+              <div class="dropdown eddropdwn">
+              <a class="dropdown-toggle" id="dropdownMenuButton`+o.id+`" data-bs-toggle="dropdown" aria-expanded="false" >
+                <i class="fa fa-ellipsis-h fa-rotate-90" aria-hidden="true"></i></a>
+                   
+              <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton`+o.id+`">
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Continue" data-bs-target="#continuetaskmodal`+o.id+`"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                </li>
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Duplicate" data-bs-target="#duplicatetaskmodal`+o.id+`"><i class="fa fa-clone" aria-hidden="true"></i></a>
+                </li>
+                <li><a class="dropdown-item" href ="" data-bs-toggle="modal"  data-bs-target="#edittaskModal" title="Edit" onclick="gettaskinfo(`+o.id+`)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a>
+                </li>
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Delete" data-bs-target="#deletetaskModal`+o.id+`"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </li>
+                </ul>
+
+                
+                <div class="modal fade" id="deletetaskModal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body text-center">
+                      Are you sure you want to delete?
+                      </div>
+                      <div class="modal-footer">
+                        <a href="javascript:void(0)" onclick="deletetaskf(`+o.id+`);" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal fade" id="duplicatetaskmodal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body text-center">
+                      Are you sure you want to duplicate the task?
+                      </div>
+                      <div class="modal-footer">
+                        <a href="javascript:void(0)" onclick="duplicatetaskf(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal fade" id="continuetaskmodal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                     Are you sure you want to continue the task?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="continuetask(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+         
+          </div>
+          </div>
+            </div>
+            </div>
+
+
+
+            <div class="mainbox">
+              <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class=" cardmainheading">Assigned To:</div>
+                    <div  class="taskinfo1">`+o.empstr+`</div>
+                </div>
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Assigned By:</div>
+                    <div  class="taskinfo1">`+o.AssignByStr+`</div>
+                </div>
+                </div>
+                <div class="row mt-2">
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Project</div>
+                    <div class="taskinfo2">`+o.ProjectName+`</div>
+                </div>
+                <div class="col-md-6">
+                    <div  class=" cardmainheading"> Total Hours:</div>
+                    <div class="taskinfo2" id="taskhours`+o.id+`">`+o.taskhours+`</div>
+                </div>
+                </div>
+                <div class=" mt-2 d-flex justify-content-between align-items-center">
+                <div style="width:80%;">
+                    <div  class="cardmainheading">Description</div>
+                    <div class="description me-2 addReadMore showlesscontent" >`+o.TaskTitle+`</div>
+                </div>
+                <div class="d-flex justify-content-end" style="width:20%;">
+                  <span class="pause-img`+o.id+` d-flex">
+                   <span class="task_icons" id="hold`+o.id+`"><img src="/static/Media/taskicons/pause_circle.svg" title="Pause" alt="Paris" class="actionimage" onclick="holdtask(`+o.id+`)"></span>
+                  <span class="task_icons" id="complete`+o.id+`">
+                   <img src="/static/Media/taskicons/stop_circle.svg" alt="Paris" title="complete" class="completeimage"  onclick="stoptask(`+o.id+`);">
+                  </span>
+                  </span>
+                </div>
+                </div>
+              </div>
+
+            <div class="cardfoot mt-auto">
+              <div class="d-flex justify-content-around bottomicons">
+
+                <div>
+                  <div class="text-center">`+o.greenstatusstr+`</div>
+                  <p class="statustext">Green</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.yellowstatusstr+`</div>
+                  <p class="statustext">Yellow</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.redstatusstr+`</div>
+                  <p class="statustext">Red</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.notdonestr+`</div>
+                  <p class="statustext">Not Done</p>
+                </div>
+                <div class="d-none">
+                  <div><img src="/static/Media/taskicons/help.svg"  alt="Paris" onclick=""></div>
+                  <p class="statustext">Help</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.rejectedstr+`</div>
+                  <p class="statustext">Reject</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.cancelledstr+`</div>
+                  <p class="statustext">Cancel</p>
+                </div>
+                </div>
+              </div>
+
+
+          </div>
+          </div>
+
+          `
+        }else if(o.Status == 2){
+
+          taskdetail += `
+          <div class="col-md-4">
+            <div class="card  h-100 d-flex flex-column ">
+            <div class="cardheader">
+            <div class="d-flex justify-content-between">
+              <p class="m-0 text-muted">Task added on: `+o.AssignDate+`</p>
+              <div class="d-flex">
+                ${ o.task_remark_count > 0 ? `
+                  <div class="bonusdiv me-2" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)"><i class="fa fa-comments" aria-hidden="true"></i></div>
+                  `
+                  :``
+                }
+              <div class="bonusdiv me-3"> `+o.Bonus+`</div>
+              <div class="dropdown eddropdwn">
+              <a class="dropdown-toggle" id="dropdownMenuButton`+o.id+`" data-bs-toggle="dropdown" aria-expanded="false" >
+                <i class="fa fa-ellipsis-h fa-rotate-90" aria-hidden="true"></i></a>
+                   
+              <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton`+o.id+`">
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Continue" data-bs-target="#continuetaskmodal`+o.id+`"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                </li>
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Duplicate" data-bs-target="#duplicatetaskmodal`+o.id+`"><i class="fa fa-clone" aria-hidden="true"></i></a>
+                </li>
+                <li><a class="dropdown-item" href ="" title="Edit" data-bs-toggle="modal"  data-bs-target="#edittaskModal" onclick="gettaskinfo(`+o.id+`)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a>
+                </li>
+                <li><a class="dropdown-item" href="" title="Delete" data-bs-toggle="modal" data-bs-target="#deletetaskModal`+o.id+`"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </li>
+                </ul>
+
+                
+                <div class="modal fade" id="deletetaskModal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                     Are you sure you want to delete?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="deletetaskf(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="modal fade" id="duplicatetaskmodal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                      Are you sure you want to duplicate the task?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="duplicatetaskf(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="modal fade" id="continuetaskmodal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                     Are you sure you want to continue the task?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="continuetask(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+         
+         
+          </div>
+          </div>
+            </div>
+            </div>
+
+
+
+            <div class="mainbox">
+              <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class=" cardmainheading">Assigned To:</div>
+                    <div  class="taskinfo1">`+o.empstr+`</div>
+                </div>
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Assigned By:</div>
+                    <div  class="taskinfo1">`+o.AssignByStr+`</div>
+                </div>
+                </div>
+                <div class="row mt-2">
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Project</div>
+                    <div class="taskinfo2">`+o.ProjectName+`</div>
+                </div>
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Total Hours:</div>
+                    <div class="taskinfo2">`+o.taskhours+`</div>
+                </div>
+                </div>
+                <div class="mt-2 d-flex justify-content-between align-items-center">
+                <div  style="width:80%;">
+                    <div  class="cardmainheading">Description</div>
+                    <div class="description me-2 addReadMore showlesscontent">`+o.TaskTitle+`</div>
+                </div>
+                <div class="d-flex justify-content-end" style="width:20%;">
+                  <span class="pause-img`+o.id+` d-flex">
+                  <span class="task_icons" id="hold`+o.id+`"><img src="/static/Media/taskicons/play_circle.svg" title="Play" alt="Paris" class="actionimage"  onclick="resumetask(`+o.id+`)">
+                  </span>
+                  <span class="task_icons" id="complete`+o.id+`">
+                  <img src="/static/Media/taskicons/stop_circle.svg" alt="Paris" class="completeimage" title="Complete" onclick="stoptask(`+o.id+`);">
+                  </span>
+                  </span>
+                </div>
+                </div>
+              </div>
+
+            <div class="cardfoot mt-auto">
+              <div class="d-flex justify-content-around bottomicons">
+
+                <div>
+                  <div class="text-center">`+o.greenstatusstr+`</div>
+                  <p class="statustext">Green</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.yellowstatusstr+`</div>
+                  <p class="statustext">Yellow</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.redstatusstr+`</div>
+                  <p class="statustext">Red</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.notdonestr+`</div>
+                  <p class="statustext">Not Done</p>
+                </div>
+                <div class="d-none">
+                  <div><img src="/static/Media/taskicons/help.svg"  alt="Paris" onclick=""></div>
+                  <p class="statustext">Help</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.rejectedstr+`</div>
+                  <p class="statustext">Reject</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.cancelledstr+`</div>
+                  <p class="statustext">Cancel</p>
+                </div>
+
+                </div>
+              </div>
+
+
+          </div>
+          </div>
+
+          `
+        }else{
+          taskdetail += `
+          <div class="col-md-4">
+            <div class="card  h-100 d-flex flex-column ">
+            <div class="cardheader">
+            <div class="d-flex justify-content-between">
+              <p class="m-0 text-muted">Task added on: `+o.AssignDate+`</p>
+              <div class="d-flex">
+                ${ o.task_remark_count > 0 ? `
+                  <div class="bonusdiv me-2" data-bs-toggle="modal" data-bs-target="#remarkmodal" onclick="remarklist(`+o.AssignTo+`,`+o.id+`)"><i class="fa fa-comments" aria-hidden="true"></i></div>
+                  `
+                  :``
+                }
+              <div class="bonusdiv me-3">`+o.Bonus+` </div>
+
+              <div class="dropdown eddropdwn">
+              <a class="dropdown-toggle" id="dropdownMenuButton`+o.id+`" data-bs-toggle="dropdown" aria-expanded="false" >
+                <i class="fa fa-ellipsis-h fa-rotate-90" aria-hidden="true"></i></a>
+                   
+              <ul class="dropdown-menu dropdwn" aria-labelledby="dropdownMenuButton`+o.id+`">
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Continue" data-bs-target="#continuetaskmodal`+o.id+`"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                </li>
+                <li><a class="dropdown-item" href="" data-bs-toggle="modal" title="Duplicate" data-bs-target="#duplicatetaskmodal`+o.id+`"><i class="fa fa-clone" aria-hidden="true"></i></a>
+                </li>
+                <li><a class="dropdown-item" href ="" title="Edit"  data-bs-toggle="modal" data-bs-target="#edittaskModal" onclick="gettaskinfo(`+o.id+`)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a>
+                </li>
+                <li><a class="dropdown-item" href="" title="Delete" data-bs-toggle="modal" data-bs-target="#deletetaskModal`+o.id+`"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </li>
+                </ul>
+
+                
+                <div class="modal fade" id="deletetaskModal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                      Are you sure you want to delete ?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="deletetaskf(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="modal fade" id="duplicatetaskmodal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                     Are you sure you want to duplicate the task?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="duplicatetaskf(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="modal fade" id="continuetaskmodal`+o.id+`"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                     Are you sure you want to continue the task?
+                    </div>
+                    <div class="modal-footer">
+                      <a href="javascript:void(0)" onclick="continuetask(`+o.id+`);" data-bs-dismiss="modal" class="btn btn-danger">Yes</a>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+         
+         
+          </div>
+          </div>
+            </div>
+            </div>
+
+
+
+            <div class="mainbox">
+              <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class=" cardmainheading">Assigned To:</div>
+                    <div  class="taskinfo1">`+o.empstr+`</div>
+                </div>
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Assigned By:</div>
+                    <div  class="taskinfo1">`+o.AssignByStr+`</div>
+                </div>
+                </div>
+                <div class="row mt-2">
+                  
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Project</div>
+                    <div class="taskinfo2">`+o.ProjectName+`</div>
+                </div>
+                <div class="col-md-6">
+                    <div  class=" cardmainheading">Total Hours:</div>
+                    <div class="taskinfo2">`+o.taskhours+`</div>
+                </div
+                </div>
+                <div class="mt-2 d-flex justify-content-between align-items-center">
+                <div style="width:80%;">
+                    <div  class="cardmainheading">Description</div>
+                    <div class="description me-2 addReadMore showlesscontent">`+o.TaskTitle+`</div>
+                </div>
+                <div class="d-flex justify-content-end" style="width:20%;">
+                  <span class="pause-img`+o.id+`">
+                  <span  class="complete-btn">Completed</span>
+                </span>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="cardfoot mt-auto">
+              <div class="d-flex justify-content-around bottomicons">
+
+                <div>
+                  <div class="text-center">`+o.greenstatusstr+`</div>
+                  <p class="statustext">Green</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.yellowstatusstr+`</div>
+                  <p class="statustext">Yellow</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.redstatusstr+`</div>
+                  <p class="statustext">Red</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.notdonestr+`</div>
+                  <p class="statustext">Not Done</p>
+                </div>
+                <div class="d-none">
+                  <div><img src="/static/Media/taskicons/help.svg"  alt="Paris" onclick=""></div>
+                  <p class="statustext">Help</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.rejectedstr+`</div>
+                  <p class="statustext">Reject</p>
+                </div>
+                <div>
+                  <div class="text-center">`+o.cancelledstr+`</div>
+                  <p class="statustext">Cancel</p>
+                </div>
+
+               </div>
+              </div>
+
+            </div>
+          </div>
+          `
+        }
+      })
+
+      var taskcontenthtml = `<div class="row g-3 col-md-12" id="multipletask">`+taskdetail+`</div>`
+
+      $('.taskcontent').html(taskcontenthtml);
+
+
+
+      
+      AddReadMore();
+      stoptimer();
+      $.each(response.serdata,function(i,o){
+
+        if( o.Status == 1){ 
+          getstarttime(o.id)
+         }
+        
+         else{
+          stoptimer();
+         }
+        })
+
+
+    },
+    error: function(error){
+        console.log('error; ' + JSON.stringify(error));
+    }
+});
+}
+
+function AddReadMore() {
+      //This limit you can set after how much characters you want to show Read More.
+      var carLmt = 75;
+      // Text to show when text is collapsed
+      var readMoreTxt = " ... Read More";
+      // Text to show when text is expanded
+      var readLessTxt = " Read Less";
+  
+  
+      //Traverse all selectors with this class and manupulate HTML part to show Read More
+      $(".addReadMore").each(function() {
+          if ($(this).find(".firstSec").length)
+              return;
+  
+          var allstr = $(this).text();
+          if (allstr.length > carLmt) {
+              var firstSet = allstr.substring(0, carLmt);
+              var secdHalf = allstr.substring(carLmt, allstr.length);
+              var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+              $(this).html(strtoadd);
+          }
+  
+      });
+      //Read More and Read Less Click Event binding
+      
+}
+
+$(document).on("click", ".readMore,.readLess", function() {
+        $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+});
+
+function gettaskinfo(taskid){
+  var id = taskid;
+  $.ajax({
+      type: "GET",
+      url: frontendURL + "task/getTaskInfo/"+ id,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        $("#editProject").val(response.data.Project).trigger('change');
+        $("#editAssignBy").val(response.data.AssignBy).trigger('change');
+        $("#editTaskTitle").val(response.data.TaskTitle);
+        $("#editAssignDate").val(response.data.AssignDate);
+        $("#edittaskid").text(response.data.id);
+      }
+      })
+}
+function updateTask(){
+      var edittaskid = $("#edittaskid").text();
+
+      var editTaskTitle = $("#editTaskTitle").val();
+      var editAssignBy = $("#editAssignBy").val();
+      var editProject = $("#editProject").val();
+      var editProjectName = $("#editProject :selected").text();
+
+      if (IsValid(editProject)) {
+          $("#editProject").html();
+          $("#editprojectrequired").show().delay(3000).slideUp();
+          $("#editprojectrequired").html("Project Name Is Required");
+          $("#editProject").focus();
+          return false;
+      }
+      else if (IsValid(editAssignBy)) {
+          $("#editAssignBy").html();
+          $("#editassignByrequired").show().delay(3000).slideUp();
+          $("#editassignByrequired").html("Assign By is required");
+          $("#editAssignBy").focus();
+          return false;
+      }
+      
+      else if (IsValid(editTaskTitle)) {
+          $("#editTaskTitle").html();
+          $("#edittasknamerequired").show().delay(3000).slideUp();
+          $("#edittasknamerequired").html("task details are required");
+          $("#editTaskTitle").focus();
+          return false;
+      }
+      else{
+      var fd = new FormData();
+      fd.append("editTaskTitle", editTaskTitle);
+      fd.append("editAssignBy", editAssignBy);
+      fd.append("editProject", editProject);
+      fd.append("editProjectName", editProjectName);
+      fd.append('csrfmiddlewaretoken', '{{csrf_token}}');
+      
+      $.ajax({
+          type: "POST",
+          url: frontendURL + "task/updateTaskAjax/"+edittaskid,
+          data: fd,
+          processData: false,
+          contentType: false,
+          beforeSend: function() {
+              $('#updatebutton').html('<i class="fa fa-spin fa-spinner savebutton"></i> Submitting...');
+              $("#updatebutton").css({"pointer-events": "none","opacity":"0.5"});
+            },
+          success: function (response) {
+            $('#updatebutton').html('Add');
+            $("#updatebutton").css({"pointer-events": "auto","opacity":"1"});
+            if (response.n == 1){
+              $(".cancel-btn").click();
+              usercurrentweekdata();
+              swal({
+                icon: "success",
+                title: "",
+                text: "Task Edited Successfully.",
+                button: "Close",
+                });  
+            }
+            else{
+              swal({
+                icon: "Failed",
+                title: "",
+                text: "Could Not Edit Task!",
+                button: "Close",
+                }); 
+            }
+              
+          }
+      })
+  }
+  }
+
+  function deletetaskf(id) {
+  $.ajax({
+      type: 'post',
+      url: frontendURL + 'task/deleteTask/' + id,
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      success: function(response) {
+          if (response.n != 0) {
+            usercurrentweekdata();
+              swal({
+                  title: "",
+                  text: 'Task Deleted Successfully',
+                  icon: "success",
+                  button: "Close",
+              })
+           } else {
+              swal({
+                  icon: "warning",
+                  title: "",
+                  text:response.Msg,
+                  button: "Close",
+              });
+          }
+
+      },
+  });
+}
+
+function continuetask(id){
+   
+  var taskid = id
+   $.ajax({
+      type: 'POST',
+      url: frontendURL + 'task/Add_Continuetask',
+      data: {
+        'Taskid':taskid,
+        csrfmiddlewaretoken: '{{csrf_token}}',
+      },
+      success: function(response) {
+        if (response.n == 1){
+              swal({
+                icon: "success",
+                title: "",
+                text: "Task Continued Successfully.",
+                button: "Close",
+                timer: 1000
+                }); 
+                location.reload(); 
+            }
+            else{
+              swal({
+                icon: "warning",
+                title: "",
+                text: response.Msg,
+                button: "Close",
+                }); 
+            }
+      }
+    });
+}
+
+
+function get_project_list(){
+ //  
+ 
+   $.ajax({
+      type: 'post',
+      url: frontendURL + 'task/get_project_list',
+      data: {
+        csrfmiddlewaretoken: '{{csrf_token}}',
+      },
+      success: function(response) {
+        console.log("get_project_list",response)
+        if (response.n == 1){
+          $('#editProject').empty()
+          $.each(response.data, function(i, o) {
+              $('#editProject').append(`<option value="${o.id}" >${o.ProjectName} </option>`)
+          });
+        }
+        else{
+          swal({
+            icon: "warning",
+            title: "",
+            text: 'projectlist cannot be loaded',
+            button: "Close",
+            }); 
+        }
+      }
+    });
+}
+
+
+
+function duplicatetaskf(id){
+   
+  var taskid = id
+   $.ajax({
+      type: 'post',
+      url: frontendURL + 'task/Add_duplicateTask',
+      data: {
+        'Taskid':taskid,
+         csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.n == 1){
+              
+              swal({
+                icon: "success",
+                title: "",
+                text: "Task Duplicated Successfully.",
+                button: "Close",
+                timer: 1000
+                }); 
+                location.reload(); 
+            }
+            else{
+              swal({
+                icon: "Failed",
+                title: "",
+                text: "Could Not duplicate Task!",
+                button: "Close",
+                }); 
+            }
+      }
+    });
+}
+
+function getstarttime(id){
+   
+  var startnow = new Date().getTime();
+   $("#newstarttime").html(startnow);
+   $.ajax({
+      type: 'post',
+      url: frontendURL + 'task/previoustasktime',
+      data: {
+        'Taskid':id,
+         csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      dataType: 'json',
+      success: function(response) {
+        prevtime = response['data']
+        countdownTimeStart(id,prevtime)
+      }
+    });
+
+}
+
+var x;
+function countdownTimeStart(id,prevtime){
+   
+
+  var countDownDate =   $("#newstarttime").html();
+  // Update the count down every 1 second
+  x = setInterval(function() {
+      // Get todays date and time
+      var now = new Date().getTime();
+      var por = new Date()
+      // $("#show").html(now);
+      // $("#hide").html(ds);
+      // $("#hide2").html(por);
+      
+      
+      // Find the distance between now an the count down date
+      var distance = now - countDownDate;
+
+
+
+
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      //var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+
+      caltime = hours + ":" + minutes
+
+      var totalTime = addTime(prevtime, caltime);
+
+      // Output the result in an element with id="demo"
+      document.getElementById("taskhours"+id).innerHTML = totalTime + " Hrs";
+      
+  }, 1000);
+}
+
+function addTime(){
+    if (arguments.length < 2)
+    {
+        if (arguments.length == 1 && isFormattedDate(arguments[0])) return arguments[0];
+        else return false;
+    }
+    
+    var time1Split, time2Split, totalHours, totalMinutes;
+    if (isFormattedDate(arguments[0])) var totalTime = arguments[0];
+    else return false;
+    
+    for (var i = 1; i < arguments.length; i++)
+    {
+        // Add them up
+        time1Split = totalTime.split(':');
+        time2Split = arguments[i].split(':');
+
+        totalHours = parseInt(time1Split[0]) + parseInt(time2Split[0]);
+        totalMinutes = parseInt(time1Split[1]) + parseInt(time2Split[1]);
+
+        // If total minutes is more than 59, then convert to hours and minutes
+        if (totalMinutes > 59)
+        {
+            totalHours += Math.floor(totalMinutes / 60);
+            totalMinutes = totalMinutes % 60;
+        }
+
+        totalTime = padWithZeros(totalHours) + ':' + padWithZeros(totalMinutes);
+    }
+    
+    return totalTime;
+}
+
+function isFormattedDate(date){
+    var splitDate = date.split(':');
+    if (splitDate.length == 2 && (parseInt(splitDate[0]) + '').length <= 2 && (parseInt(splitDate[1]) + '').length <= 2) return true;
+    else return false;
+}
+
+function padWithZeros(number){
+    var lengthOfNumber = (parseInt(number) + '').length;
+    if (lengthOfNumber == 2) return number;
+    else if (lengthOfNumber == 1) return '0' + number;
+    else if (lengthOfNumber == 0) return '00';
+    else return false;
+}
+
+function stoptimer(){
+  clearInterval(x);
+}
+
+
+function addremark(user_id,task_id){
+  var remark_comment = $("#remark_comment").val().trim();
+  if(remark_comment == "" || remark_comment == undefined){
+
+    $('#remark_comment').html('');
+    $("#remark_comment_required").show().delay(3000).slideUp();
+    $('#remark_comment_required').html('Please add remark!').css('color', 'red');
+    $('#remark_comment').focus();
+    return false;
+
+  }else{
+    var trhtml = ""
+    var fd = new FormData();    
+    fd.append("task_id",task_id);
+    fd.append("remark_comment",remark_comment);
+    fd.append("user_id",user_id);
+    fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "task/addemployertaskremark",
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        if (response.n == 1){
+          swal({
+            icon: "success",
+            title: "",
+            text: "Remark Added Successfully.",
+            button: false,
+            timer: 500
+            });  
+            $('#remark_comment').val('');
+            remarklist(user_id,task_id)
+        
+        }
+        else{
+          swal({
+            icon: "error",                
+            text: response.Msg,
+            button: false,
+            timer: 1000
+            }); 
+       
+        }
+       
+          
+      }
+  })
+  }
+ 
+
+}
+
+function remarklist(userid,taskid){
+  $("#remark_user_id").val(userid);
+  $("#remark_task_id").val(taskid);
+  var trhtml = ""
+  var fd = new FormData();    
+  fd.append("task_id",taskid);
+  fd.append('csrfmiddlewaretoken', '{{csrf_token}}')
+
+  $.ajax({
+    type: "POST",
+    url: frontendURL + "task/taskremarklist",
+    data: fd,
+    processData: false,
+    contentType: false,
+    success: function (response) {
+      if (response.n == 1){
+        $(response.data).each(function(i,o){
+
+          if (o.ismanager == true){
+            trhtml +=`
+          <div class="chat-log_item chat-log_item z-depth-0">
+            <div class="row justify-content-end mx-1 d-flex">
+              <div class="col-auto px-0">
+                <span class="chat-log_author">
+                  @`+o.created_by_str+`
+                </span>
+              </div>
+              <div class="col-auto px-0">
+              </div>
+            </div>
+            <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+            <div class="chat-log_message">
+              <p class="m-0">`+o.remark_comment+`
+              </p>
+            </div>
+            <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+            <div class="row chat-log_time m-0 p-0 justify-content-end">
+              `+o.created_date+`
+            </div>
+          </div>
+          `
+
+          }else{
+            trhtml += `
+            <div class="chat-log_item chat-log_item-own z-depth-0">
+              <div class="row justify-content-end mx-1 d-flex">
+                <div class="col-auto px-0">
+                  <span class="chat-log_author">
+                    @`+o.created_by_str+`
+                  </span>
+                </div>
+                <div class="col-auto px-0">
+                </div>
+              </div>
+              <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+              <div class="chat-log_message">
+                <p class="m-0">`+o.remark_comment+`
+                </p>
+              </div>
+              <hr class="my-1 py-0 col-12" style="opacity: 0.5">
+              <div class="row chat-log_time m-0 p-0 justify-content-end">
+                `+o.created_date+`
+              </div>
+            </div>
+            `
+          }
+
+          
+
+        })
+
+       $("#remark_details").html(trhtml)
+      }
+      else{
+     
+      }
+     
+        
+    }
+  })
+
+}
+</script>
+
+
+
+{% endblock %}

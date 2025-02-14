@@ -1,0 +1,324 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+Onboarding Form
+</div>
+{% endblock %}
+{% block content %}
+
+    
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+
+<style>
+.select2-container--default .select2-selection--single{
+border-bottom:1px solid rgb(214, 214, 214) !important;
+border:none;
+height:50px;
+box-shadow:none;
+border-radius:0px;
+}
+.trackproBtn {
+    width: 150px !important;
+    height: 38px !important;
+    margin :0px !important;
+}
+
+</style>
+
+
+
+
+
+
+ 
+
+
+
+
+            
+
+
+               
+
+
+
+    
+
+
+<main class="main-wrapper">
+    <div class="row my-4 px-4">
+        <div class="col p-0">
+            <h2 class="company-title">Add Employee</h2>
+        </div>
+    </div>
+    <div id="snackbar"></div>
+    <form method="POST" id="addEmployeeForm">
+        {% csrf_token %}
+        <div class="row g-4 mb-5">
+            <div class="col-md-12">
+                <div class="row mb-3">
+
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpFirstname">First Name<span style="color:red">*</span></label>
+                        <input type="text" id="addEmpFirstname" placeholder="Enter First Name" name="firstname" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');"  value="{{employeedetails.Firstname}}">
+                        <span id="addEmpFirstname_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpLastname">Last Name<span style="color:red">*</span></label>
+                        <input type="text" id="addEmpLastname" placeholder="Enter Last Name" name="lastname" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');"  value="{{employeedetails.Lastname}}">
+                        <span id="addEmpLastname_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpMobileNumber">Mobile Number</label>                        
+                        <input type="text" id="addEmpMobileNumber" placeholder="Enter 10 Digit Mobile Number" name="MobileNumber" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" value="{{employeedetails.Phone}}"> 
+                        <span id="addEmpMobileNumber_err" class="error"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpEmailId">Official  Email Id</label>
+                        <input type="text" id="addEmpEmailId" placeholder="Enter Email Id" name="email" value="{{employeedetails.email|default_if_none:''}}">
+                        <span id="addEmpEmailId_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="personal_email">Personal/Unofficial Email Id<span style="color:red">*</span></label>
+                        <input type="text" id="personal_email" placeholder="Enter Email Id" name="personal_email" value="{{employeedetails.personal_email|default_if_none:''}}">
+                        <span id="personal_email_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpRole">Role<span style="color:red">*</span></label>
+                            <select id='addEmpRole' name="role">
+                                <option value=''>Select Role</option> 
+                                {% for r in rolelist %}
+                                    {% if r.RoleName == employeedetails.RoleID %}
+                                    <option value="{{r.id}}" selected>{{r.RoleName}}</option>
+                                    {%else%}
+                                    <option value="{{r.id}}">{{r.RoleName}}</option>
+                                    {%endif%}
+                                {% endfor %}
+                            </select>
+                        <span id="addEmpRole_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpDesignation">Designation<span style="color:red">*</span></label>
+                        <select id='addEmpDesignation' name="designation">
+                            <option value=''>Select Designation</option> 
+                            {% for i in designationlist %}
+                                {%if employeedetails.DesignationId == i.DesignationName %}
+                                <option value="{{i.id}}" selected>{{i.DesignationName}}</option>
+                                {%else%}
+                                <option value="{{i.id}}">{{i.DesignationName}}</option>
+                                {%endif%}
+                            {% endfor %}
+                        </select>
+                        <span id="addEmpDesignation_err" class="error"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpDepartment">Department<span style="color:red">*</span></label>
+                        <select id='addEmpDepartment' name="DepartmentID">
+                            <option value=''>Select Department</option> 
+                            {% for d in deptlist %}
+                                {% if d.id in employeedetails.DepartmentID  %}
+                                <option value="{{d.id}}" selected>{{d.DepartmentName}}</option>
+                                {%else%}
+                                <option value="{{d.id}}" >{{d.DepartmentName}}</option>
+                                {%endif%}   
+                            {% endfor %}
+                        </select>
+                        <span id="addEmpDepartment_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpEmploymentStatus">Employeement Status<span style="color:red">*</span></label>
+                        <select id='addEmpEmploymentStatus' name="employeeStatus">
+                            <option value=''>Select Employment Status</option>                               
+                            {% for s in statuslist %}
+                            {%if s.statusvalue == employeedetails.employeementStatus %}
+                            <option value="{{s.statusvalue}}" selected>{{s.statusName}}</option>
+                            {%else%}
+                            <option value="{{s.statusvalue}}">{{s.statusName}}</option>
+                            {%endif%}
+                            
+                              {% endfor %}
+                        </select>
+                        <span id="addEmpEmploymentStatus_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3  position-relative">
+                        <label for="addEmpJoinDate">Date of Joining<span style="color:red">*</span></label>
+                        <input type="text" id="addEmpJoinDate" placeholder="Select Date of Joining" name="DateofJoining" autocomplete="off" value="{{employeedetails.DateofJoining}}" readonly>
+                        <div id="calendarIcon"></div>
+                        <span id="addEmpJoinDate_err" class="error"></span>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpLocation">Work Location<span style="color:red">*</span></label>
+                        <select id='addEmpLocation' name="location">
+                            <option value=''>Select Work Location</option> 
+                            {% for l in locationlist %}
+                            {%if employeedetails.locationId == l.id %}
+                              <option value="{{l.id}}" selected>{{l.LocationName}}</option>
+                              {%else%}
+                              <option value="{{l.id}}">{{l.LocationName}}</option>
+                              {%endif%}
+                              {% endfor %}
+                        </select>
+                        <span id="addEmpLocation_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpAttendanceId">Attendance Id</label>
+                        <input type="text" id="addEmpAttendanceId" placeholder="Enter Attendance Id" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" name="employeeId" value="{{employeedetails.employeeId}}">
+                        <span id="addEmpAttendanceId_err" class="error"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="addEmpTOW">Type of Work<span style="color:red">*</span></label>
+                        <select id='addEmpTOW' name="typeofwork">
+                            <option value=''>Select Type of Work</option> 
+                            {% for t in typelist %}
+                            {% if employeedetails.typeofwork == t.id %}
+                              <option value="{{t.id}}" selected>{{t.type}}</option>
+                              {%else%}
+                              <option value="{{t.id}}">{{t.type}}</option>
+                              {%endif%}
+                              {% endfor %}
+                        </select>
+                      <span id="addEmpTOW_err" class="error"></span>
+                    </div>
+
+            
+
+                    <div class="col-lg-4  position-relative mb-3">
+                        <label for="addEmpPassword">Password</label>
+                        <input class="tabview" type="password" id="addEmpPassword" placeholder="Enter Password" autocomplete="new-password" name="password">
+                        <div id="passwordToggle" class="mb-3"></div>
+                        <span id="addEmpPassword_err" class="error"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row justify-content-end">
+          <div class="col-auto">
+            <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>             
+          </div>
+          <div class="col-auto">
+            <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+          </div>
+        </div>
+    </form>
+    
+</main>
+
+{% endblock %}
+{% block script %}
+{{block.super}}
+    <script src="{% static 'admin/master/add_employee.js'%}"></script>
+    <script>
+        $( document ).ready(function() {
+            $('#addEmpJoinDate').val(dateformater($('#addEmpJoinDate').val()));
+            $('#addEmpJoinDate2').val(dateformater($('#addEmpJoinDate2').val()));
+        });
+        function dateformater(datestr) {
+            var date_obj = new Date(datestr);
+            var day = String(date_obj.getDate()).padStart(2, '0'); 
+            var month = String(date_obj.getMonth() + 1).padStart(2, '0');
+            var year = date_obj.getFullYear();
+            var formattedDate = `${day}-${month}-${year}`;
+            return formattedDate
+        }
+
+        function formValidation() {
+             var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+             var addEmpFirstname = $('#addEmpFirstname').val().trim();
+             var addEmpAttendanceId = $('#addEmpAttendanceId').val().trim();
+             var addEmpLastname = $('#addEmpLastname').val().trim();
+             var addEmpEmailId = $('#addEmpEmailId').val().trim();
+             var personal_email = $('#personal_email').val().trim();
+
+             var addEmpDesignation = $('#addEmpDesignation').val();
+             var addEmpEmploymentStatus = $('#addEmpEmploymentStatus').val();
+             var addEmpLocation = $('#addEmpLocation').val();
+             var addEmpMobileNumber = $('#addEmpMobileNumber').val();
+             var addEmpRole = $('#addEmpRole').val();
+             var addEmpDepartment = $('#addEmpDepartment').val();
+             var addEmpJoinDate = $('#addEmpJoinDate').val();
+             var addEmpJoinDate2 = $('#addEmpJoinDate2').val();
+             var addEmpTOW = $('#addEmpTOW').val();
+                console.log("addEmpLocation",addEmpLocation)
+             if (IsValid(addEmpFirstname)) {
+              
+                 $('#addEmpFirstname_err').show().delay(3000).slideUp();
+                 $('#addEmpFirstname_err').html('First Name is required');
+                 $('#addEmpFirstname').focus();
+                 return false;
+             } 
+             if (IsValid(addEmpLastname)) {
+               
+                 $('#addEmpLastname_err').show().delay(3000).slideUp();
+                 $('#addEmpLastname_err').html('Last Name is required');
+                 $('#addEmpLastname').focus();
+                 return false;
+             }
+             
+             
+
+            if (!validateEmail(personal_email)) {
+                
+                 $('#personal_email_err').show().delay(3000).slideUp();
+                 $('#personal_email_err').html('Please provide a valid  Email');
+                 $('#personal_email').focus();
+                 return false;
+             }
+              
+             if (IsValid(addEmpRole)) {
+                $('#addEmpRole_err').show().delay(3000).slideUp();
+                $('#addEmpRole_err').html('Please select Role');
+                $('#addEmpRole').focus();
+                return false;
+            } 
+             if (IsValid(addEmpDesignation)) {
+                 $('#addEmpDesignation_err').show().delay(3000).slideUp();
+                 $('#addEmpDesignation_err').html('Designation field is required');
+                 $('#addEmpDesignation').focus();
+                 return false;
+             } 
+             
+             if (IsValid(addEmpDepartment)) {
+                $('#addEmpDepartment_err').show().delay(3000).slideUp();
+                $('#addEmpDepartment_err').html('Please select Department');
+                $('#addEmpDepartment').focus();
+                return false;
+            }  
+             if (IsValid(addEmpEmploymentStatus)) {
+                 $('#addEmpEmploymentStatus_err').show().delay(3000).slideUp();
+                 $('#addEmpEmploymentStatus_err').html('Please select Employee Status');
+                 $('#addEmpEmploymentStatus').focus();
+                 return false;
+             }
+             if (IsValid(addEmpJoinDate)) {
+                $('#addEmpJoinDate_err').show().delay(3000).slideUp();
+                $('#addEmpJoinDate_err').html('Please provide joining date');
+                $('#addEmpJoinDate').focus();
+                return false;
+            } 
+              if (addEmpLocation == '') {
+                 $('#addEmpLocation_err').show().delay(3000).slideUp();
+                 $('#addEmpLocation_err').html('Please select location');
+                 $('#addEmpLocation').focus();
+                 return false;
+             } 
+
+
+
+
+             if (IsValid(addEmpTOW)) {
+                 $('#addEmpTOW_err').show().delay(3000).slideUp();
+                 $('#addEmpTOW_err').html('Please select type of work');
+                 $('#addEmpTOW').focus();
+                 return false;
+             } 
+ 
+         }
+    </script>
+{% endblock %}

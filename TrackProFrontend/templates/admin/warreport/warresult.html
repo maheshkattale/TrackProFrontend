@@ -1,0 +1,680 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+ Trackpro Result
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+  .firstdiv{
+    justify-content: space-between;
+    padding:10px;
+  }
+  .pageheading{
+    font-size:20px;
+    font-weight:500;
+  }
+  .select2-container--default .select2-selection--single{
+  border-bottom:1px solid #acacac !important;
+  box-shadow:none !important;
+  border-radius: 0 !important;
+  background: transparent;
+  border: none;
+}
+/* datatable */
+.table-div {
+    background-color: white !important;
+    border-radius: 5px !important;
+    margin: 20px 5px !important;
+    padding: 8px 15px 15px 15px !important;
+    box-shadow: 0px 4px 8px #0000001F;
+
+}
+.rankdatatable>tbody>tr>td{
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 12px !important;
+    font-size:13px;    
+
+}
+.rankdatatable>thead>tr>th{
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size:12px;  
+    border-top:1px solid darkgrey;  
+    margin-top:10px;
+    text-align:center ;
+}
+/* .rankdatatable_filter{
+    position: absolute !important;
+    top: -24px !important;
+    right: 180px !important;
+    z-index: 100; 
+    margin-bottom:10px;
+} */
+.rankdatatable_length{
+    display: none !important;
+}
+/* .dataTables_wrapper .dataTables_filter label {
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    margin-left: 3px !important;
+    border-bottom: 1px solid rgb(190, 190, 190) !important;
+    outline: none !important;
+    color: rgb(151, 151, 151) !important;
+ 
+    position: relative !important;
+    top: -50px !important; 
+
+} */
+
+/* .dataTables_wrapper .dataTables_filter input {
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    margin-left: 3px !important;
+    border-bottom: 1px solid transparent !important;
+    outline: none !important;
+    width: 250px !important;
+
+} */
+
+/* .dataTables_wrapper .dataTables_filter label::after {
+    content: '\f002' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #000 !important;
+    font-size: 18px !important;
+    padding-right: 0.5em !important;
+
+} */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0px !important;
+    margin:0 2px 0 2px !important;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button .active:hover{
+    background-color: #b9f7ff !important;
+    outline-color: #b9f7ff !important;
+    border-color: #b9f7ff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+/* background: white !important;
+border-radius: 6px !important; */
+
+box-sizing: border-box !important;
+display: inline-block !important;
+min-width: 30px !important;
+max-height:30px !important;
+padding: 2px 7px 7px 5px !important;
+margin: 0 0 0 2px !important;
+text-align: center !important;
+text-decoration: none !important;
+cursor: pointer !important;
+color: black !important;
+border: 1px solid rgb(236, 236, 236) !important;
+border-radius: 6px !important;
+background: white !important;
+
+}
+
+.page-link{
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height:30px !important;
+    padding: 5px 7px 7px 4px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+}
+.page-link:hover{
+    color: black !important;
+    background: white !important;
+}
+.page-item.active .page-link {
+
+    color: #9b9b9b !important;
+}
+.previous{
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+}
+.next{
+    visibility: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    content: " " !important;
+}
+.previous:after {
+    visibility: visible !important;
+    content: '\f053' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-right: 15px;
+
+}
+.next::before {
+    visibility: visible !important;
+    content: '\f054' !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    color: #174fa3 !important;
+    font-size: 14px !important;
+    padding-right: 0px !important;
+    margin-left: 15px;
+
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+.dataTables_filter input[type="search"] {
+    border-bottom: 2px solid #9b9b9b;
+    margin-bottom: 5px;
+}
+/*datatable css end*/
+.gradepoints{
+    display:flex;
+    justify-content: space-between;
+   vertical-align: middle;
+}
+.gradepoints img{
+    width:17px;
+    height:17px;
+}
+.rankdatatable p{
+    margin:0;
+    font-size:10px;
+    color:#ABABAB;
+}
+.absentinint{
+    opacity:0.5;
+}
+</style>
+<main class="main-wrapper ">
+  <!-- ==================Row1======================= -->
+  <div class="d-flex firstdiv">
+      <div class="pageheading d-none">TrackPro Rank</div>
+      <div class="d-flex justify-content-end me-2">
+        <button class="excel-file" onclick="publishranks();" id="publishrank">Publish Ranks</button>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mx-3">
+        <select class="form-select select2dropdown" onchange="getWeek()" aria-label="Default select example" id="Year">
+          <option value="" selected>Select Year</option>   
+          {% for y in yearlist %}
+          {% if y.Year == currYear %}
+          <option value="{{y.Year}}" selected>{{y.Year}}</option>
+          {% else %}
+        <option value="{{y.Year}}">{{y.Year}}</option>
+        {% endif %}
+        {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mx-3">
+        <select class="form-select select2dropdown" aria-label="Default select example" id="Week" name="Week" onchange="publishemployeeinfo();">
+            <option value="">Select Week</option>
+         
+         </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mx-3">
+      <select class="form-select select2dropdown" aria-label="Default select example" id="Employee" onchange="publishemployeeinfo();">
+        <option value="" selected>Select Employee</option>
+        {% for u in employeelist %}
+       <option value="{{u.id}}" >{{u.Firstname}} {{u.Lastname}}</option>
+       {% endfor %}
+       </select>
+       </div>
+    </div>
+  </div>
+
+  <div class="tablecard">
+    <div class="table-div">
+      <table class="row-border w-100 rankdatatable">
+          <thead class="">
+              <th>
+               S.No
+              </th>
+              <th>
+                Employee Name
+              </th>
+              <th  style="width:28%;">
+                Grade
+              </th>
+              <th>
+                Trackpro Score
+                <p class="selectedweek"></p>
+              </th>
+              <th>
+                Total Score
+                <p class="selectedweek"></p>
+              </th>
+              <th>
+                Yearly
+                <p>(Year % avg)</p>
+              </th>
+              <th>
+                  Previous week
+                  <p>(trackpro %)</p>
+                  <p class="prevweek"></p>
+              </th>    
+
+              <th>
+                 Week
+                 <p>(trackpro %)</p>
+                 <p class="selectedweek"></p>
+              </th>
+              <th>
+                Previous Rank
+                <p class="prevweek"></p>
+            </th> 
+            <th style="width:10%;">
+                 Rank
+                 <p class="selectedweek"></p>
+            </th> 
+          </thead>
+
+          <tbody class="rankdatatabletbody">
+            
+                  
+         
+
+          </tbody>
+      </table>
+  </div>
+
+   </div> 
+
+ 
+
+</main>
+{% endblock %}
+{% block script %}
+{{block.super}}
+
+<script>
+
+  
+$(document).ready(function() {
+    getWeek();
+    
+  $('.rankdatatable').DataTable({
+    // sDom: 'lrtip',
+//  autoWidth: false
+});
+
+});          
+
+      
+        var d = new Date();
+        Date.prototype.getWeek = function() {
+            var onejan = new Date(this.getFullYear(), 0, 1);
+            return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+        }
+        var currWeek = (new Date()).getWeek() - 1;
+        var currYear = d.getFullYear()
+
+
+  
+
+
+        //default year and week end----------
+        // $('#Employee').on('change', function() {
+        //     table.column(6).search(this.value).draw()
+        // });
+        // $('#Year').on('change', function() {
+        //     table.column(2).search("^" + this.value + "$", true, false, true).draw()
+        // });
+        // $('#Week').on('change', function() {
+        //     table.column(3).search("^" + this.value + "$", true, false, true).draw()
+
+        // });
+    
+
+function getWeek() {
+      
+        year = $('#Year').val()
+        // userID = $('#Employee').val()
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/TrackProResultWeek',
+            data: {
+                'year': year
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#Week').empty()
+                console.log("week",response)
+                $.each(response, function(i, o) {
+                    $('#Week').append(`<option value="${o.Week}">
+                                       ${o.Week}
+                                  </option>`)
+                });
+                $("#Week").val($("#Week option:eq(1)").val());
+                var w = $('#Week').find(":selected").val();
+                publishemployeeinfo();
+                // table.column(3).search("^" + w + "$", true, false, true).draw()
+            },
+            error: function(error) {
+                console.log('error; ' + JSON.stringify(error));
+            }
+        });
+    }
+
+    function publishranks() {
+        var Year = $('#Year').val();
+        var Week = $('#Week').val();
+        console.log("Year",Year)
+        console.log("Week",Week)
+        var trHTML = "";
+        counter=1
+        var data = {
+            'Year': Year,
+            'Week': Week
+        };
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/publishrank',
+            data: data,
+            dataType: "json",
+
+            success: function(response) {
+                console.log("resp",response)
+                if (response.n == 0) {
+                    swal({
+                        title: "",
+                        text: response.Msg,
+                        button: "ok",
+                    });
+                } else if (response.n == 1) {
+                    $('.selectedweek').html(response.context.selectedweek);
+                    $('.prevweek').html(response.context.prevweek);
+
+                    $.each(response.data, function(i,o){
+
+              
+              trHTML+=`<tr>
+                            <td>`+counter+`</td>
+                            <td>`+o.userstr+`</td>
+                            <td>
+                                <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">`+o.TrackProScore+`</td>
+                            <td class="text-center">`+o.TotalScore+`</td>
+                            <td class="text-center">`+o.yearlywarpercnt+`</td>
+                            <td class="text-center">`+o.prevweekpercent+`</td>
+                            <td class="text-center">`+o.TrackProPercent+`</td>
+                            <td class="text-center">`+o.prevweekrank+`</td>
+                            <td class="d-flex justify-content-around"><div class="">`+o.Rank+` </div>
+                                <span>`+o.Rank_diffstr+`</span></td>
+                         
+                        </tr>`   
+                        counter += 1 
+              }) 
+              
+              initialiseDataTable(trHTML);
+
+                    
+                    swal({
+                        title: "",
+                        type: "success",
+                        text: 'Ranks published',
+                        timer: 2000,
+                        buttons: true,
+                        showConfirmButton: false,
+                        dangerMode: true,
+                      });
+                   
+                        // window.location.reload(true);
+
+                }
+
+            },
+        });
+    }
+
+    function publishemployeeinfo() {
+        var Year = $('#Year').val();
+        var Week = $('#Week').val();
+        var employee = $('#Employee').val();
+        var trHTML = "";
+        counter=1
+        var data = {
+            'Year': Year,
+            'Week': Week,
+            'employee':employee
+        };
+        $('#publishrank').prop('disabled', false).css({'opacity':'1','cursor':'pointer'});
+        $.ajax({
+            type: 'post',
+            url: frontendURL + 'checktrackpro/Getemployeerankinformation',
+            data: data,
+            dataType: "json",
+
+            success: function(response) {
+                console.log("resp",response)
+                if (response.n == 0) {
+                    swal({
+                        title: "",
+                        text: response.Msg,
+                        button: "ok",
+                    });
+                } else if (response.n == 1) {
+                    $('.selectedweek').html(response.context.selectedweek);
+                    $('.prevweek').html(response.context.prevweek);
+
+                    $.each(response.data, function(i,o){
+                        if (o.in_Intermediate == "Present"){
+                        trHTML+=`<tr>
+                            <td>`+counter+`</td>
+                            <td>`+o.userstr+`</td>
+                            <td>
+                                <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">`+o.TrackProScore+`</td>
+                            <td class="text-center">`+o.TotalScore+`</td>
+                            <td class="text-center">`+o.yearlywarpercnt+`</td>
+                            <td class="text-center">`+o.prevweekpercent+`</td>
+                            <td class="text-center">`+o.TrackProPercent+`</td>
+                            <td class="text-center">`+o.prevweekrank+`</td>
+                            <td class="d-flex justify-content-around"><div class="">`+o.Rank+` </div>
+                                <span>`+o.Rank_diffstr+`</span></td>
+                         
+                        </tr>`   
+                    }
+                    else if(o.in_Intermediate == "Absent"){
+                        
+                        $('#publishrank').prop('disabled', true).css({'opacity':'0.6','cursor':'not-allowed'});
+                        trHTML+=`<tr class="absentinint">
+                            <td>`+counter+`</td>
+                            <td>`+o.userstr+`</td>
+                            <td>
+                                <div class="gradepoints">
+                                    <div>
+                                        <img src="/static/Media/taskicons/activegreenpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.greencount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeyellowpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.yellowcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activeredpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.redcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activenotdonepoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.notdonecount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activecancelledpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.cancelcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activerejectpoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.rejectcount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/activebonuspoints.svg"  alt="Paris" onclick="">
+                                        <span>`+o.Bonuscount+`</span>
+                                    </div>
+                                    <div>
+                                        <img src="/static/Media/taskicons/extracredit.svg"  alt="Paris" onclick="">
+                                        <span>`+o.creditcount+`</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">`+o.TrackProScore+`</td>
+                            <td class="text-center">`+o.TotalScore+`</td>
+                            <td class="text-center">`+o.yearlywarpercnt+`</td>
+                            <td class="text-center">`+o.prevweekpercent+`</td>
+                            <td class="text-center">`+o.TrackProPercent+`</td>
+                            <td class="text-center">`+o.prevweekrank+`</td>
+                            <td class="d-flex justify-content-around"><div class="">`+o.Rank+` </div>
+                                <span>`+o.Rank_diffstr+`</span></td>
+                         
+                        </tr>`   
+                    }
+                    else{
+
+                    }
+
+                        counter += 1 
+              }) 
+              
+              initialiseDataTable(trHTML);
+
+                    
+                    
+                   
+                        // window.location.reload(true);
+
+                }
+
+            },
+        });
+    }
+
+    function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('.rankdatatable')) {
+        $('.rankdatatable').DataTable().destroy();
+    }
+    $('.rankdatatable tbody').empty();
+    $(".rankdatatabletbody").html(trHTML);
+    $('.rankdatatable').DataTable({
+      // sDom: 'lrtip',
+        //  autoWidth: false
+        "ordering": false,
+        // "bLengthChange": false 
+        })
+        }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,1757 @@
+{% extends "index.html" %} {% load static %} {% block headercontent %}
+<div class="nav-item newheading">
+  Dashboard
+</div>
+{% endblock %} {% block content %}
+
+<style>
+  /* dashboard calendar */
+  .reqtime{
+    justify-content: center;
+    align-items: center;
+  }
+  .teamwrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 5px;
+    }
+    .attrequesticon{
+      width:15px;
+      height:15px;
+    }
+    #calendarIcon {
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    background-size: cover;
+    right: 5%;
+    top: 18%;
+}
+
+    .teamwrapper .option {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 0 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0 10px;
+    border: 2px solid lightgrey;
+    transition: all 0.3s ease;
+    }
+    .innercard{
+      padding:10px !important;
+    }
+
+    .teamwrapper .option .dot {
+    height: 10px;
+    width: 10px;
+    background: #d9d9d9;
+    border-radius: 50%;
+    position: relative;
+    margin-right:3px;
+    }
+
+    
+
+    input[type="radio"] {
+    display: none;
+    }
+
+    #option-1:checked:checked ~ .option-1,
+    #option-2:checked:checked ~ .option-2,
+    #option-3:checked:checked ~ .option-3,
+    #option-4:checked:checked ~ .option-4 {
+    border-color: #174fa3;
+
+    }
+
+    #option-1:checked:checked ~ .option-1 .dot,
+    #option-2:checked:checked ~ .option-2 .dot,
+    #option-3:checked:checked ~ .option-3 .dot,
+    #option-4:checked:checked ~ .option-4 .dot{
+    /* background: #174fa3; */
+    display:none;
+    }
+
+    #option-1:checked:checked ~ .option-1 .dot::before,
+    #option-2:checked:checked ~ .option-2 .dot::before,
+    #option-3:checked:checked ~ .option-3 .dot::before,
+    #option-4:checked:checked ~ .option-4 .dot::before {
+    opacity: 1;
+    transform: scale(1);
+    }
+
+    .teamwrapper .option span {
+    font-size: 12px;
+    color: #676767;
+    }
+
+    #option-1:checked:checked ~ .option-1 span,
+    #option-2:checked:checked ~ .option-2 span,
+    #option-3:checked:checked ~ .option-3 span,
+    #option-4:checked:checked ~ .option-4 span {
+    color: #174fa3 ;
+    }
+    .nobday{
+      font-size:13px;
+      margin-left:13px;
+    }
+  
+  .owl-carousel .owl-stage-outer{
+    border-radius: 10px;
+  }
+  .monthstr{
+    color:grey;
+    font-size:13px;
+  }
+  
+table.dataTable thead th{
+  background-color: #d3d3d375;
+  font-weight:500;
+  font-size:16px
+}
+.cardadjust{
+  height:330px!important;
+}
+.squarebtns{
+  width:50px;
+  height:50px;
+  border:none;
+  color:white;
+}
+{% comment %} .trackproscorestyle{
+  margin-top: 50px!important;
+} {% endcomment %}
+.card-body{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: center;
+ 
+}
+.leavetextstyle{
+  margin-top: 1px!important;
+  margin-left: 13px!important;
+  margin-bottom: 0px;
+}
+.leavetextstyles{
+  margin-top: 1px!important;
+  margin-right: 33px!important;
+}
+.leavetextstyling{
+  margin-left: 11px!important;
+}
+
+/* .btn{
+  height: 44px!important;
+} */
+.newstyle {
+  height: 150px!important;
+  border: 2px solid #dfdfdf!important;
+  border-radius: 12px!important;
+  text-align: center!important;
+  padding-top: 15px!important;
+  margin-top:0px!important;
+}
+.newtrackprostyle{
+  margin-bottom:14px!important;
+}
+
+@media screen and (min-width: 1700px) and (max-width : 1920px){
+  .teamwrapper .option{
+            padding:5px 20px;
+        }
+        .teamwrapper .option span {
+            font-size: 18px;
+        }
+        table.dataTable thead th{
+          font: size 20px;
+        }
+}
+  /* Custom CSS to hide the scrollbar */
+  .custom-scroll-bar {
+    /* Hide the default scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  /* Custom scrollbar for webkit-based browsers (e.g., Chrome) */
+  .custom-scroll-bar::-webkit-scrollbar {
+    display:none;
+    width: 1px;
+  }
+
+  .custom-scroll-bar::-webkit-scrollbar-thumb {
+    background-color: white;
+  }
+
+  /*mobile tab by sushma*/
+  @media only screen and (max-width: 768px) {
+  .scrollable{
+    overflow-y: scroll;
+  }
+
+}
+  .cardadjust{
+    flex: 0 0 auto;
+    width: 52.333333%;
+  }
+  .rightcardadjust{
+    flex: 0 0 auto;
+    width: 46.666667%;
+  }
+  .monthstyle{
+    font-size: var(--f-sm) !important;
+    color: var(--fc-md-dark) !important;
+  }
+  .cardss{
+    width: 400px;
+    height: 100px;
+    margin: 30px auto;
+  }
+  .scrollable{
+    overflow-y: scroll;
+    max-height: 86px;
+  }
+  .imagtab{
+    width:62px;
+  }
+  {% comment %} LandScape {% endcomment %}
+  @media only screen and (max-width: 1180px) {
+    
+    .respontab{
+      display: block !important;
+      width: 330px !important;
+      height:312px !important;
+    }
+
+    .attgraphCont{
+      height: 116% !important;
+    }
+    .responsetab{
+      display: block!important;
+      width: 370px!important;
+      height: 324px!important;
+    }
+    .rowleavecard{
+      margin-top: 3rem!important;
+    }
+    .trackproscorestyle{
+      margin-top: 16px!important;
+    }
+    .cardtab{
+      margin-right:-19px!important
+    }
+    .calendar {
+      margin: 0px!important;
+      padding: 9px!important;
+      box-sizing: border-box!important;
+      background: #ffffff!important;
+      border-radius: 12px!important;
+      box-shadow: 0px 0px 3px #dadada!important;
+    }
+    #teamdatatable_filter{
+      margin-right: -60px!important;
+    }
+  }
+  {% comment %} portrait {% endcomment %}
+  @media only screen and (max-width: 820px) {
+    .respontab{
+      display: block !important;
+      width: 230px !important;
+      height: 292px !important;
+    }
+    .perbargraphcard{
+      width:237px!important;
+      height:384px!important;
+    }
+    .responsetab{
+      display: block !important;
+      width: 237px !important;
+      height: 280px !important;
+    }
+    .attgraphCont {
+      height: 116% !important;
+    }
+    .imgtab{
+      margin-left: -1px!important;
+    }
+    #teamdatatable_filter{
+      margin-right:-304px!important;
+    }
+    .calendar-title-text{
+      margin-left: -6px!important;
+    }
+    .calendar{
+      width:261px!important;
+    }
+    .card-body{
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cardtab{
+      margin-right: -18px!important;
+    }
+    .leavetextstyle{
+      font-size: 15px!important;
+      margin-top: 1px!important;
+      margin-right: 5px;
+    }
+    .porttab{
+      font-size: 15px!important;
+      margin-top: 1px!important;
+      margin-right: 37px;
+    }
+    /* .btn{
+      height: 39px!important;
+      width: 49px !important;
+    } */
+    /* .card {
+      width: 222%!important;
+      height: 95%!important;
+      margin-top: -2px;
+    } */
+    .rowleavecard{
+      display:block;
+      margin-top: 8px!important;
+    }
+    .portrejecttab{
+      font-size: 15px!important;
+      margin-top: 1px!important;
+      margin-right: 19px;
+    }
+    .leavetextstyling{
+      margin-right: 16px;
+    }
+    .totalcard{
+      margin-top: 11px;
+    }
+    .pendingcard{
+      margin-top: 11px!important;
+    }
+    .imgtab{
+      width: 60px!important;
+      margin-left:-2pximportant;
+    }
+  }
+  
+
+  .select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #aaa;
+    border-radius: 0px;
+    height: 50px;
+    box-shadow: none;
+}
+.calendar .calendar-dates-day {
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  border: 1px solid #efefef;
+  padding: 10px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 4px;
+}
+.calendar .calendar-dates-day-empty {
+  font-size: 14px;
+
+}
+.calendar .calendar-day-name {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 5px;
+}
+.calendar .calendar-day-name div {
+  text-align: center;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #174fa3;
+  border: 1px solid #f3f3f3;
+  padding: 7px;
+  color: white;
+  border-radius: 8px;
+}
+.calendar .calendar-dates-day.today-date {
+  background: transparent;
+  border: 1px solid black;
+  color: black;
+}
+.calendar #prevMonth, .calendar #nextMonth, .calendar #today {
+  padding: 2px 6px;
+  box-sizing: border-box;
+  font-family: "Manrope", sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  background: transparent;
+}
+#nextMonth:before {
+  content: "\f0a9";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-size: 18px;
+  cursor: pointer;
+}
+#prevMonth:before {
+  content: "\f0a8";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-size: 18px;
+  cursor: pointer;
+}
+.weeklyoff {
+  color:red !important;
+}
+.Holiday{
+    color: green !important;
+    font-weight: 700;
+}
+.workingformhomefirsthalf,.workingformhomesecondhalf,.workingformhomefullday{
+  color: orange !important;
+
+}
+
+.leavefullday,.leavefirsthalf,.leavesecondhalf{
+  color:#174fa3 !important;
+  font-weight: 700;
+
+
+}
+</style>
+<main class="main-wrapper">
+  <div id="snackbar"></div>
+  <!-- ==================Row1======================= -->
+
+  <div class="row g-3 mb-3 mt-3">
+    <div class="col-md-4">
+      <div class="card-height-md card-defaults h-100">
+        <div class="checkIO">
+          <p class="todayDate" id="todayDate"></p>
+          <div class="IOtimes">
+            <div class="Itime">
+              <p>Check In</p>
+              <div class="d-flex reqtime">
+                {% if requestbtn == True %}
+                  <img class=" me-2 attrequesticon" id="att_request_btn" src="{% static 'assets/svg/attendancerequest.svg' %}" data-bs-toggle="modal" data-bs-target="#att_requestmodal" class="cursor-pointer"> 
+                {%else%}
+                  <img class=" me-2 attrequesticon" id="att_request_btn" src="{% static 'assets/svg/attendancerequest.svg' %}" style="display: none;" data-bs-toggle="modal" data-bs-target="#att_requestmodal" class="cursor-pointer"> 
+                {%endif%}
+                <b id="checkintime">-- : --</b> 
+              </div>
+              
+            </div>
+            <div class="Otime">
+              <p>Check Out</p>
+              <b id="checkouttime">-- : --</b>
+            </div>
+          </div>
+          <p class="totalHours">
+            Total Working Hours: <span id="totalHours">--</span>
+          </p>
+ 
+          <div class="IOButtons">
+            {% if checkinstatus == True %}
+            <button
+              type="button"
+              id="punch_btn"
+              class="manageAttendance"
+              onclick="punch_in();"
+              >
+              <a>Check In</a>
+            </button>
+            {% else %}
+            <button
+            type="button"
+            id="punch_btn"
+            class="manageAttendance"
+            onclick="punch_in();" disabled>
+            <a>Check In</a>
+          </button>
+          {% endif %}
+
+
+
+          {% if checkinstatus == True %}
+            <button
+              type="button"
+              class="IOBtn"
+              id="punch_out"
+              onclick="punch_out();" 
+              >
+              Check Out
+            </button>
+            {% else %}
+            <button
+            type="button"
+            class="IOBtn"
+            id="punch_out"
+            onclick="punch_out();"
+            disabled>
+            Check Out
+          </button>
+          {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card-height-md-2 card-defaults blue-bg">
+            <div class="gradient">
+              <div class="totalTasksIcon"></div>
+              <div class="totalTasksText">
+                <p class="totTask">Total Tasks</p>
+                <p id="TotalTasks">{{totaltasks}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-height-md-2 card-defaults purple-bg">
+            <div class="gradient">
+              <div class="completedTasksIcon"></div>
+              <div class="competedTasksText">
+                <p class="compTask">Tasks this Week</p>
+                <p id="CompletedTasks">{{taskthisweek}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="row ">
+            <div class="col-md-12">
+             
+                <div class="owl-carousel owl-theme" id="testimonialCarousel">
+                    {% for i in allbdaylist %}
+                    <div class="carouselItem birthdaybg" style="height:100px;">
+                        <span class="ps-2 mt-1" style="font-size:12px;">Birthday Today</span>
+                      <div class="d-flex py-2">
+                        <div class="testProfImage ms-1">
+                            <img src="{{i.userimage}}">
+                        </div>
+                        <div class="testUserDeets">
+                          <p class="testUserName mb-0">{{i.Firstname}} {{i.Lastname}}</p>
+                          <p class="testUserDept mb-0"> 
+                            {% for u in i.DepartmentID %}
+                            {{ u}}{% if not forloop.last %}, {% endif %}
+                            {%endfor%}</p>
+                        </div>
+                      </div>
+                    </div>
+                    {% empty %}
+                    <div class="carouselItem birthdaybg" style="height:100px;">
+                      <span class="ps-2 mt-1" style="font-size:12px;">Birthday Today</span>
+                    <div class="d-flex py-2">
+                      <span class="nobday">No Birthdays Today</span>
+                    </div>
+                  </div>
+                    {% endfor %}
+                    {% for a in announcements %}
+                    <div class="carouselItem anndiv">
+                          <div class="testUserDeets" style="height:100px;">
+                            <div class="d-flex ps-2 annhead">
+                                <div>Announcement </div>
+                                <div class="ms-2 mt-1"><img class="hornimage" width="5%" src="/static/Media/taskicons/megaphone.png"/></div>
+                            </div>
+                            <div class="anntext">{{a.announcementText}}</div>
+                          </div>
+                      </div>
+                      {% empty %}
+                      <div class="carouselItem noanndiv">
+                        <div class="testUserDeets" style="height:100px;">
+                          <div class="d-flex ps-2 noannhead">
+                              <div>Announcements </div>
+                              <div class="ms-2 mt-1"><img class="hornimage" width="5%" src="/static/Media/taskicons/megaphone.png"/></div>
+                          </div>
+                          <!-- <div class="anntext">No Announcements</div> -->
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-12 mt-2">
+              {% if last_task.Status == 'On hold' %}
+              <div class="card-height-md card-defaults">
+                <div class="resumeTask">
+                  <p class="taskstatus">Resume Last Task</p>
+                </div>
+                <p id="taskProject">Project : <span style="color:black;">{{last_task.ProjectName}}</span></p>
+                <p id="taskDetails" style="word-break: break-word">
+                  {{last_task.TaskTitle}}
+                </p>
+                <div class="taskBottomRow">
+                  <div class="taskAssign">
+                    <p class="assignedBy">Assigned by</p>
+                    <p class="assignedByPerson">{{last_task.AssignByStr}}</p>
+                  </div>
+                  <div class="taskButtons">
+                    <span
+                      class="task_icons"
+                      id="hold{{last_task.id}}"
+                      ><img
+                        src="/static/Media/taskicons/play_circle.svg"
+                        alt="Paris" class="taskiconimage"
+                        onclick="resumetask({{last_task.id}})"
+                      />
+                    </span>
+                    <span class="task_icons" id="complete{{last_task.id}}">
+                      <img
+                        src="/static/Media/taskicons/stop_circle.svg"
+                        alt="Paris" class="taskiconimage"
+                        onclick="stoptask({{last_task.id}});"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {%elif last_task.Status == 'Completed' %}
+              <div class="card-height-md card-defaults">
+                <div class="resumeTask">
+                  <p class="taskstatus">Completed Last Task</p>
+                  <!-- <div id="taskDots"></div> -->
+                </div>
+                <p id="taskProject">Project : <span style="color:black;">{{last_task.ProjectName}}</span></p>
+                <p id="taskDetails" style="word-break: break-word">
+                  {{last_task.TaskTitle}}
+                </p>
+                <div class="taskBottomRow">
+                  <div class="taskAssign">
+                    <p class="assignedBy">Assigned by</p>
+                    <p class="assignedByPerson">{{last_task.AssignByStr}}</p>
+                  </div>
+                  <div class="taskButtons">
+                    <button type="button" class="complete-btn">Completed</button>
+                        </div>
+                </div>
+              </div>
+              {%elif last_task.Status == 'In progress'%}
+              <div class="card-height-md card-defaults">
+                <div class="resumeTask">
+                  <p class="taskstatus">In Progress Task</p>
+                  <!-- <div id="taskDots"></div> -->
+                </div>
+                <p id="taskProject">Project :<span style="color:black;">{{last_task.ProjectName}}</span> </p>
+                <p id="taskDetails" style="word-break: break-word">
+                  {{last_task.TaskTitle}}
+                </p>
+                <div class="taskBottomRow">
+                  <div class="taskAssign">
+                    <p class="assignedBy">Assigned by</p>
+                    <p class="assignedByPerson">{{last_task.AssignByStr}}</p>
+                  </div>
+                  <div class="taskButtons">
+                    <!-- <div id="taskResume" class="resumed"></div>
+                            <div id="taskStop"></div> -->
+                    <span class="task_icons" id="hold{{last_task.id}}"
+                      ><img
+                        src="/static/Media/taskicons/pause_circle.svg"
+                        alt="Paris"
+                        class='taskiconimage'
+                        onclick="holdtask({{last_task.id}})"
+                    /></span>
+                    <span class="task_icons" id="complete{{last_task.id}}">
+                      <img
+                        src="/static/Media/taskicons/stop_circle.svg"
+                        alt="Paris"
+                        class="taskiconimage"
+                        onclick="stoptask({{last_task.id}});"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {%else%}
+              <div class="card-height-md card-defaults">
+                <div class="resumeTask">
+                  <p>No Task Available Yet</p>
+                  <!-- <div id="taskDots"></div> -->
+                </div>
+              </div>
+              {%endif%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="att_requestmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header py-1 ps-4">
+                    <h5 class="modal-title py-2" id="exampleModalLabel"> Attendance Request
+                    </h5>
+                </div>
+                <div class="modal-body">
+                  <div class="row mb-3">
+                    <div class="col-12 px-3">
+                      <label for="request_date">Select Date</label>
+                      <input type="text" id="request_date" placeholder="Select Date" name="" autocomplete="off">
+                      <span class="error" id="request_dateerror"></span>
+                      <div id="calendarIcon"></div> 
+                    </div>
+                    <div class="col-md-12 px-3">
+                      <label for="attReason_req">Reason for Request:</label></p>
+                      <textarea id="attReason_req" style="width: 100%;" name="attReason_req" rows="4"></textarea>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="att_request();" id="">Submit</button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================Row2 ======================= -->
+ 
+<div class="">
+  <div class="row g-3 mb-5">
+    <div class="col-md-12">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class=" custom-scroll-bar card-height-md h-100 overflow-auto card-defaults perbargraphcard">
+            <p style="font-weight: 500">My Trackpro Percentage</p>
+            <div class="barcontainer"> 
+              <canvas id="myChart"></canvas>
+              {{ weeklypercentdata|json_script:"weeklypercentdata" }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-height-md h-100 card-defaults attgraphCont">
+            <div class="attendanceStats">
+              <p class="mb-2">Attendance Statistics</p>
+            </div>
+            <div class="attendanceGraphWrapper">
+              <canvas id="newattchart" height="240"></canvas>
+
+                  {{ attendancegraphdata|json_script:"attendancegraphdata" }}
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-4">
+          <div class="card-height-lg card-defaults toptrackproscorecard h-100">
+            <p class="topScorersText">
+              Top Trackpro Scorers
+              <span class="md-dark-text">(Previous Week)</span>
+            </p>
+           
+            <div class="trackproTop3">
+              <div>
+                <div class="rankerImage" id="rank2Image">
+                  <img
+                    src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png'%}"
+                    width="40px"
+                  />
+                </div>
+                <p class="rankerName" id="rank2Name">
+                  {{r.secondrankname}}
+                </p>
+                <div class="pos2">
+                  <p>Rank Earned<br />2nd</p>
+                </div>
+              </div>
+              <div>
+                <div class="rankerImage" id="rank1Image">
+                  <img
+                  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png'%}"
+                    width="40px"
+                  />
+                </div>
+                <p class="rankerName" id="rank1Name">
+                  {{r.firstrankname}}
+                </p>
+                <div class="pos1">
+                  <p>Rank Earned<br />1st</p>
+                </div>
+              </div>
+              <div>
+                <div class="rankerImage" id="rank3Image">
+                  <img
+                  src="{% static 'admin/dashboard/Media/TrackProRankingCard/profile_picture_1.png'%}"
+                    width="40px"
+                  />
+                </div>
+                <p class="rankerName" id="rank3Name">
+                  {{r.thirdrankname}}
+                </p>
+                <div class="pos3">
+                  <p>Rank Earned<br />3rd</p>
+                </div>
+              </div>
+            </div>
+          
+
+           
+          </div>
+        </div>
+       
+      </div>
+    </div>
+    
+    
+    
+    <div class="col-md-12">
+      <div class="row g-3">
+        <div class="col-md-8">
+          <div class="card-height-xl card-defaults datatableCard h-100">
+            <div class="headingAndFilters">
+              <p class="d-none d-lg-block">Team Tracker</p>
+
+              <div class="teamwrapper">
+                <input type="radio" name="selectteamfilter" value="All" id="option-1" checked>
+                <input type="radio" name="selectteamfilter" value="Present" id="option-2">
+                <input type="radio" name="selectteamfilter" value="On Leave" id="option-3">
+                <input type="radio" name="selectteamfilter" value="WFH" id="option-4">
+
+                <label for="option-1" class="option option-1">
+                <div class="dot"></div> <span>All</span> </label>
+
+                <label for="option-2" class="option option-2">
+                <div class="dot"></div> <span>Present</span> </label>
+
+                <label for="option-3" class="option option-3">
+                <div class="dot"></div> <span>On Leave</span> </label>
+
+                <label for="option-4" class="option option-4">
+                <div class="dot"></div> <span>WFH</span> </label>
+
+                </div>
+
+            </div>
+
+            <div class="tableSearch">
+             
+            </div>
+
+            <table class="" id="teamdatatable">
+              <thead>
+              <tr class="tableHeadings" style="height: 50px;font-weight:500;">
+                <th>Employee Details</th>
+                <th>Department</th>
+                <th>Check In</th>
+                <th>Check out</th>
+                <th>TrackPro Score (prev week)
+
+                </th>
+              </tr>
+            </thead>
+            <tbody class="teamtable">
+
+
+            </tbody>
+             
+            </table>
+            <div
+              class="col-md-12 pull-right mt-2 mb-2"
+              style="text-align: center"
+            >
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-4">
+      
+        <div class="col-md-12 trackproscorestyle card-defaults newtrackprostyle">
+          <div class="myTrackProPerformance trackproscorestyle newstyle">
+            <p class="topScorersText">
+              My Trackpro Score
+              <span class="md-dark-text">(Previous Week)</span>
+            </p>
+            {%for i in rankcard_data%}
+            <p class="myTrackProScore">{{i.prevweekperc}}</p>
+          
+            <p class="myTrackProRank">
+              Rank Earned : <span id="myRank">{{i.prevweekrank}}</span>
+            </p>
+            {%endfor%}
+          </div>
+      </div>
+        <div class="col-12">
+          <!---calendar-->
+          <div id="calendar" class="calendar">
+            <div class="calendar-title">
+              <div class="calendar-title-text"></div>
+              <div class="calendar-button-group">
+                <button id="prevMonth"></button>
+                <button id="today">Today</button>
+                <button id="nextMonth"></button>
+              </div>
+            </div>
+            <div class="calendar-day-name"></div>
+            <div class="calendar-dates"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</main>
+{%endblock%} {% block script %} {{block.super}}
+<!-- <script src="{% static 'admin/dashboard/dashboard.js'%}"></script> -->
+<script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{% static 'assets/scripts/Chart.min.js' %}"></script> -->
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.0-beta/Chart.js"></script> -->
+
+<script>
+
+
+
+
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, "0");
+  }
+
+  function convertMsToHM(milliseconds) {
+    let seconds = Math.floor(milliseconds / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds = seconds % 60;
+    // 👇️ if seconds are greater than 30, round minutes up (optional)
+    minutes = seconds >= 30 ? minutes + 1 : minutes;
+
+    minutes = minutes % 60;
+
+    // 👇️ If you don't want to roll hours over, e.g. 24 to 00
+    // 👇️ comment (or remove) the line below
+    // commenting next line gets you `24:00:00` instead of `00:00:00`
+    // or `36:15:31` instead of `12:15:31`, etc.
+    hours = hours % 24;
+
+    return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}`;
+  }
+
+  $(document).ready(function () {
+    weekpercentage();
+    weeklyattpercentage();
+    makecalendar();
+
+    $("#request_date").datepicker({ 
+          dateFormat: 'dd-mm-yy',
+          minDate: -7,
+          maxDate: 0
+        });
+
+    var teamfilt = $("input:radio[name='selectteamfilter']").val();
+    teamdata(teamfilt);
+
+
+
+
+
+    var birthDayDict = $("#birthDayDict").text();
+    var employeeId = $("#employeeId").text();
+    $(function () {
+      $.ajax({
+        url: frontendURL + "get-data",
+        data: {
+          employeeId: employeeId,
+          csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+          if (response.data == 1) {
+            
+            $("#checkintime").text(response.intime).css("color", "#00800096;");
+            $("#checkouttime").text(response.outtime).css("color", "#f24b59");
+            $("#punch_btn").prop("disabled", true).css("opacity", 0.5);
+
+            if (response.punchout == 1) {
+              $("#punch_out").prop("disabled", true).css("opacity", 0.5);
+            }
+
+            var valuestart = $("#checkintime").text();
+            var valuestop = $("#checkouttime").text();
+            if (valuestop != "") {
+              var time_start = new Date();
+              var time_end = new Date();
+              var value_start = valuestart.split(":");
+              var value_end = valuestop.split(":");
+
+              time_start.setHours(
+                value_start[0],
+                value_start[1],
+                value_start[2],
+                0
+              );
+              time_end.setHours(value_end[0], value_end[1], value_end[2], 0);
+
+              tttt = time_end - time_start; // millisecond
+              m = convertMsToHM(tttt);
+              hours = m.split(":");
+              mainstr = hours[0] + " hours " + hours[1] + " minutes";
+              $("#totalHours").text(mainstr).css("color", "#00aeef");
+            }
+          }
+          else{
+            $("#punch_out").prop("disabled", true).css("opacity", 0.5);
+          }
+        },
+      });
+    });
+  });
+
+  $("input:radio[name='selectteamfilter']").change(function(){
+    var _val = $(this).val();
+    teamdata(_val)
+  });
+
+  function teamdata(teamfiltervalue){
+    var _val = teamfiltervalue;
+    $.ajax({
+        url: frontendURL + "Teamfiltertracker",
+        data: {
+          teamfilter: _val,
+          csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+          var tablehtml =""
+
+          $.each(response.data, function(i,o){
+            tablehtml += `
+              <tr class="tablerow" style="height: 75px">
+                <td>
+                  <div class="employeeDetails">
+                  
+                    <div class="tableProfileImage">
+                      <img src=`+o.userimage+` />
+                    </div>
+                    <div class="employeeNameAndDesignation">
+                      <p class="empName">`+o.username+`</p>
+                      <p class="empDesig d-none d-lg-block">
+                        `+o.empdesignation+`
+                      </p>
+                    </div>
+                  </div>
+                </td>
+
+                <td>`+o.empdeparment+`</td>
+
+                <td>`+o.checkin+`</td>
+                <td>`+o.checkout+`</td>
+                <td>`+o.prevtrackproscore+`</td>
+              </tr>`
+            })
+            initialiseDataTable(tablehtml);
+        }
+      })
+
+
+  }
+
+
+
+  function initialiseDataTable(trHTML) {
+    if ($.fn.DataTable.isDataTable('#teamdatatable')) {
+        $('#teamdatatable').DataTable().destroy();
+    }
+    $('#teamdatatable tbody').empty();
+    $(".teamtable").html(trHTML);
+    $('#teamdatatable').DataTable({
+        "ordering": false,
+        "bLengthChange": false ,
+        scrollY: '350px',
+        scrollCollapse: true,
+        })
+  }
+
+
+
+  function att_request(){
+    var requestreason = $('#attReason_req').val()
+    var  requestdate = $('#request_date').val()
+  
+    if (IsValid(requestdate)) {
+        $('#request_dateerror').show().delay(3000).slideUp();
+        $('#request_dateerror').html('Date for request is required');
+        $('#request_date').focus();
+        return false;
+    } 
+    if (IsValid(requestreason)) {
+        $('#reason_err').show().delay(3000).slideUp();
+        $('#reason_err').html('reason for request is required');
+        $('#reason').focus();
+        return false;
+    } 
+      else{
+        $.ajax({
+        url: frontendURL + "Attendancerequest",
+        data: {
+          'reason': requestreason,
+          'requestdate':requestdate,
+          csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+          if (response['response']['n'] == 1){
+             swal({
+              icon: "success",
+              title: "",
+              text: response['response']['msg'],
+              button: "Close",
+              })
+            }
+          else{
+            swal({
+              icon: "error",
+              title: "",
+              text: response['response']['msg'],
+              button: "Close",
+              })
+          }
+        }
+      })
+      }
+  }
+
+
+  function makecalendar() {
+
+    let currentDate = dayjs();
+    let daysInMonth = dayjs().daysInMonth();
+    let firstDayPosition = dayjs().startOf("month").day();
+    let monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let weekNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    let dateElement = document.querySelector("#calendar .calendar-dates");
+    let calendarTitle = document.querySelector(".calendar-title-text");
+    let nextMonthButton = document.querySelector("#nextMonth");
+    let prevMonthButton = document.querySelector("#prevMonth");
+    let dayNamesElement = document.querySelector(".calendar-day-name");
+    let todayButton = document.querySelector("#today");
+    let dateItems = null;
+    let newMonth = null;
+
+    weekNames.forEach(function (item) {
+      dayNamesElement.innerHTML += `<div>${item}</div>`;
+    });
+
+    function plotDays() {
+      let count = 1;
+      dateElement.innerHTML = "";
+      console.log('dashboardcalender',currentDate.$y ,currentDate.$M+1)
+      let prevMonthLastDate = currentDate
+        .subtract(1, "month")
+        .endOf("month").$D;
+      let prevMonthDateArray = [];
+
+      //plot prev month array
+      for (let p = 1; p < firstDayPosition; p++) {
+        prevMonthDateArray.push(prevMonthLastDate--);
+      }
+      prevMonthDateArray.reverse().forEach(function (day) {
+        dateElement.innerHTML += `<button class="calendar-dates-day-empty">${day}</button>`;
+      });
+
+      //plot current month dates
+      for (let i = 0; i < daysInMonth; i++) {
+        //console.log("i",i)
+        dateElement.innerHTML += `<button class="calendar-dates-day day${i+1}">${count++}</button>`;
+      }
+
+      //next month dates
+      let diff =
+        42 - Number(document.querySelector(".calendar-dates").children.length);
+      let nextMonthDates = 1;
+      for (let d = 0; d < diff; d++) {
+        document.querySelector(
+          ".calendar-dates"
+        ).innerHTML += `<button class="calendar-dates-day-empty">${nextMonthDates++}</button>`;
+      }
+
+      //month name and year
+      calendarTitle.innerHTML = `${
+        monthNames[currentDate.month()]
+      } - ${currentDate.year()}`;
+
+      getcalendershedule(currentDate.$y,currentDate.$M+1)
+
+    }
+
+    //highlight current date
+    function highlightCurrentDate() {
+      dateItems = document.querySelectorAll(".calendar-dates-day");
+      if (dateElement && dateItems[currentDate.$D - 1]) {
+        dateItems[currentDate.$D - 1].classList.add("today-date");
+      }
+    }
+
+    //next month button event
+    nextMonthButton.addEventListener("click", function () {
+      newMonth = currentDate.add(1, "month").startOf("month");
+      setSelectedMonth();
+    });
+
+    //prev month button event
+    prevMonthButton.addEventListener("click", function () {
+      newMonth = currentDate.subtract(1, "month").startOf("month");
+      setSelectedMonth();
+    });
+
+    //today button event
+    todayButton.addEventListener("click", function () {
+      newMonth = dayjs();
+      setSelectedMonth();
+      setTimeout(function () {
+        highlightCurrentDate();
+      }, 50);
+    });
+
+    //set next and prev month
+    function setSelectedMonth() {
+      daysInMonth = newMonth.daysInMonth();
+      firstDayPosition = newMonth.startOf("month").day();
+      currentDate = newMonth;
+      plotDays();
+    }
+
+    //init
+    plotDays();
+    setTimeout(function () {
+      highlightCurrentDate();
+    }, 50);
+  }
+
+
+
+
+  
+  function weekpercentage() {
+    var weeklypercentdata = JSON.parse(
+      document.getElementById("weeklypercentdata").textContent
+    );
+    labelsarray = weeklypercentdata["labellist"];
+    percentagedata = weeklypercentdata["percentlist"];
+    if(labelsarray.length > 0 ){
+      barchart(percentagedata, labelsarray);
+    }
+    
+  }
+
+  function weeklyattpercentage() {
+    var weeklyattpercentagedata = JSON.parse(
+      document.getElementById("attendancegraphdata").textContent
+    );
+    attlabelsarray = weeklyattpercentagedata["weekList"];
+    attpercentarray = weeklyattpercentagedata["weekpercentlist"];
+    attpointschart(attpercentarray, attlabelsarray);
+  }
+
+  function attpointschart(attpercentarray, attlabelsarray) {
+    var ctx = document.getElementById("newattchart").getContext("2d");
+    var grd = ctx.createLinearGradient(0, 0, 0, 170);
+    grd.addColorStop(0, "#2196f3");
+    grd.addColorStop(1, "white");
+
+    var myChart = new Chart(ctx, {
+      
+      type: "line",
+      data: {
+        labels: attlabelsarray,
+        datasets: [
+          {
+            label: "Series 1", // Name the series
+            data:attpercentarray, // Specify the data values array
+            fill: true,
+            borderColor: "#2196f3", // Add custom color border (Line)
+            backgroundColor: grd, // Add custom color background (Points and Fill)
+            borderWidth: 1, // Specify bar border width
+          },
+        ],
+      },
+      options: {
+        legend: {
+          display: false,
+        },
+        responsive: true, // Instruct chart js to respond nicely.
+        maintainAspectRatio: false, // Add to prevent default behaviour of full-width/height
+        
+
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                drawOnChartArea: false,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              ticks: {
+                suggestedMax: 100,
+                beginAtZero: true,
+              },
+              gridLines: {
+                drawOnChartArea: false,
+              },
+            },
+          ],
+        },
+      },
+    });
+  }
+
+  function argMax(array) {
+    return array
+      .map((x, i) => [x, i])
+      .reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+  }
+
+  function barchart(percentagedata, labelsarray) {
+    // dummy data
+    var data = percentagedata;
+    var labels = labelsarray;
+
+    // other data color
+    var color = data.map((x) => "#D3D3D3");
+
+    // change max color
+    color[argMax(data)] = "#00aeef";
+
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            backgroundColor: color,
+            barThickness: 30,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,  
+        legend: {
+          display: false,
+        },
+        scales: {
+          xAxes: [
+            {
+              categoryPercentage: 1.0,
+              barPercentage: 1.0,
+              gridLines: {
+                drawOnChartArea: false,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                beginAtZero: true,
+                callback: function (value) {
+                  return value + "%";
+                },
+              },
+              scaleLabel: {
+                display: true,
+                labelString: "Percentage",
+              },
+              gridLines: {
+                drawOnChartArea: false,
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    // var ctx2 = document.getElementById("myChart_resp");
+    // var myChart2 = new Chart(ctx2, {
+    //   type: "bar",
+    //   data: {
+    //     labels: labels,
+    //     datasets: [
+    //       {
+    //         data: data,
+    //         backgroundColor: color,
+    //         barThickness: 30,
+    //       },
+    //     ],
+    //   },
+    //   options: {
+    //     maintainAspectRatio: false,
+    //     responsive: true,  
+    //     legend: {
+    //       display: false,
+    //     },
+    //     scales: {
+    //       xAxes: [
+    //         {
+    //           categoryPercentage: 1.0,
+    //           barPercentage: 1.0,
+    //           gridLines: {
+    //             drawOnChartArea: false,
+    //           },
+    //         },
+    //       ],
+    //       yAxes: [
+    //         {
+    //           ticks: {
+    //             min: 0,
+    //             beginAtZero: true,
+    //             callback: function (value) {
+    //               return value + "%";
+    //             },
+    //           },
+    //           scaleLabel: {
+    //             display: true,
+    //             labelString: "Percentage",
+    //           },
+    //           gridLines: {
+    //             drawOnChartArea: false,
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   },
+    // });
+
+
+
+
+  }
+
+  function resumetask(id) {
+    $.ajax({
+      type: "post",
+      url: frontendURL + "project/resumeProjectTask/" + id,
+      data: {
+        EndDate: "",
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (response) {
+        if (response.n != 0) {
+          var holdhtml =
+            `
+            <img src="/static/Media/taskicons/pause_circle.svg" alt="Paris" class="taskiconimage" onclick="holdtask(` +
+            id +
+            `)">
+            `;
+          swal({
+            title: "",
+            text: "Task Resume",
+            icon: "success",
+            button: "Close",
+          });
+          $("#hold" + id).html(holdhtml);
+          //GGDate();
+        } else {
+          swal({
+            icon: "warning",
+            title: "",
+            text: "Cannot resume more than One task",
+            button: "Close",
+          });
+        }
+      },
+      error: function (error) {
+        console.log("error; " + JSON.stringify(error));
+      },
+    });
+  }
+
+  function getcalendershedule(year,month) {
+    console.log(year,month)
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "getcalendershedule",
+      data: {
+        'year':year,
+        'month':month,
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+
+      dataType: "json",
+      success: function (response) {
+
+        $.each(response.data, function(i,o){
+          var dayKey = Object.keys(o)[0]; // Get the key (e.g., 'day1', 'day2', etc.)
+          var dayInfo = o[dayKey]; // Access the nested day object
+          var date = dayInfo['date'];
+          var reason = dayInfo['reason'];
+          var dayClass = dayInfo['class'];
+          var element_obj=$('.'+dayKey);
+          element_obj.removeClass()
+
+          element_obj.addClass(dayClass)
+          element_obj.addClass(date)
+          element_obj.addClass(dayKey)
+          element_obj.addClass('calendar-dates-day')
+          element_obj.removeAttr('title');
+          element_obj.attr('title',reason)
+
+          var givenDate = date;
+
+          // Convert the given date string to a Date object
+          var parsedGivenDate = new Date(givenDate);
+
+          // Get today's date
+          var today = new Date();
+          if (
+            parsedGivenDate.getFullYear() === today.getFullYear() &&
+            parsedGivenDate.getMonth() === today.getMonth() &&
+            parsedGivenDate.getDate() === today.getDate()
+          ) {
+            element_obj.addClass('today-date')
+          }
+          // Log or perform operations with the day's information
+          console.log('Day:', dayKey, 'Date:', date, 'Reason:', reason, 'Class:', dayClass);
+        
+        })
+ 
+      },
+      error: function (error) {
+        console.log("error; " + JSON.stringify(error));
+      },
+    });
+  }
+  function holdtask(id) {
+    $.ajax({
+      type: "post",
+      url: frontendURL + "project/holdProjectTask/" + id,
+      data: {
+        EndDate: "",
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (response) {
+        swal({
+          title: "",
+          icon: "success",
+          text: "Task onhold",
+          button: "Close",
+        });
+        var resumehtml =
+          `<img src="/static/Media/taskicons/play_circle.svg" alt="Paris" class="taskiconimage" onclick="resumetask(` +
+          id +
+          `)">`;
+        $("#hold" + id).html(resumehtml);
+      },
+      error: function (error) {
+        console.log("error; " + JSON.stringify(error));
+      },
+    });
+  }
+
+  function stoptask(id) {
+    $.ajax({
+      type: "post",
+      url: frontendURL + "project/updateProjectTask/" + id,
+      data: {
+        EndDate: "",
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (response) {
+        swal({
+          icon: "success",
+          title: "",
+          text: "Task has been closed",
+          button: "Close",
+        });
+
+        if (response.status == 1) {
+          $(".taskButtons").html(
+            '<button type="button" class="complete-btn">Completed</button>'
+          );
+          $(".taskstatus").text("Completed Last Task");
+        }
+      },
+      error: function (error) {
+        console.log("error; " + JSON.stringify(error));
+      },
+    });
+  }
+
+  function punch_out(employeeId) {
+    swal({title: "Are you sure?",
+            text: "you want to checkout for the day!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }) 
+            .then((willDelete) => {if (willDelete) 
+              {
+
+    $.ajax({
+      url: frontendURL + "punch-outdata",
+      data: {
+        employeeId: employeeId,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+      },
+      beforeSend: function() {
+      $("#punch_out").prop("disabled", true).css("opacity", 0.5);
+      },
+      type: "POST",
+      dataType: "json",
+      success: function (response) {
+        if (response.response.n == 1) {
+          var dt = new Date();
+          // var time =
+          //   dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+          var time = response.data.time
+          $("#checkouttime").text(time).css("color", "#f24b59");
+          starttime = $("#checkintime").text();
+          var valuestart = $("#checkintime").text();
+          var valuestop = $("#checkouttime").text();
+          var time_start = new Date();
+          var time_end = new Date();
+          var value_start = valuestart.split(":");
+          var value_end = valuestop.split(":");
+
+          time_start.setHours(
+            value_start[0],
+            value_start[1],
+            value_start[2],
+            0
+          );
+          time_end.setHours(value_end[0], value_end[1], value_end[2], 0);
+
+          tttt = time_end - time_start; // millisecond
+          m = convertMsToHM(tttt);
+          hours = m.split(":");
+          mainstr = hours[0] + " hours " + hours[1] + " minutes";
+          $("#totalHours").text(mainstr).css("color", "#00aeef");
+          // if negative result, add 24 hours
+
+          $("#punch_out").prop("disabled", true).css("opacity", 0.5);
+          swal({
+          title: "",
+          icon: "success",
+          text: "Punch-Out Successfull",
+          button: "Close",
+          timer: 3000
+        });
+        } else {
+         
+        }
+      },
+    });
+    
+  }else { swal("checkout incomplete!", { icon: "error", }); } });
+  }
+
+  function punch_in() {
+    var fd = new FormData();
+    fd.append("csrfmiddlewaretoken", "{{csrf_token}}");
+  
+   
+    $.ajax({
+      url: frontendURL + "punch-indata",
+      headers: {
+        Authorization: "Token {{token}}",
+      },
+      data: {
+        csrfmiddlewaretoken: "{{csrf_token}}",
+      },
+      type: "POST",
+      dataType: "json",
+      beforeSend: function() {
+      $("#punch_btn").prop("disabled", true).css("opacity", 0.5);
+      },
+      success: function (response) {
+        if (response.response.n == 1) {
+          
+          var dt = new Date();
+          var time =
+            dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+          $("#checkintime").text(time).css("color", "#00800096");
+          $("#att_request_btn").show();
+          $("#punch_btn").prop("disabled", true).css("opacity", 0.5);
+          $("#punch_out").prop("disabled", false).css("opacity", 1);
+          $("#msgsuccess_in")
+            .text(response.response.msg)
+            .css("color", "#50e678");
+
+          setTimeout(function () {
+            $("#msgsuccess_in").fadeOut();
+          }, 500);
+
+        } else {
+         swal({
+              title: "",
+              text: response.response.msg,
+              icon: "warning",
+              button: "Close",
+          });
+        }
+      },
+    });
+  }
+
+
+  let testArr = $('.carouselItem');
+  let noOfTest = testArr.length;
+  let noOfDots = Math.ceil(noOfTest / 5);
+
+  $('#testimonialCarousel').owlCarousel({
+    loop:true,
+    margin:10,
+    nav:false,
+    items: 1,
+    dots: false,
+    dotsEach: noOfDots,
+    autoplay: true,
+    autoplayTimeout: 2000,
+    autoplayHoverPause: true
+  });
+
+
+</script>
+{% endblock %}

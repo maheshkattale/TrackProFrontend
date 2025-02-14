@@ -1,0 +1,287 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Add Plan
+</div>
+{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<main class="main-wrapper">
+ <!-- NavBar -->
+ {% if messages %}
+ <div class="row" style="justify-content: center;">
+     <div class="col-sm-6 col-sm-offset-3">
+     {% for message in messages %}
+     <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-meaasge alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+         <span aria-hidden="true">&times;</span>
+         </button>
+         <p style="margin-bottom: 0px;">{{ message }}</p>
+     </div>
+     {% endfor %}
+     </div>
+ </div>
+ {% endif %}
+        
+ <div class="title-div">
+    
+    <!-- <span class="company-title">Plan List</span>
+    <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModaladd">+ Add Plan</span> -->
+    
+    <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content py-2">
+          <div class="modal-header py-3">
+            <h5 class="modal-title" id="exampleModalLabel"> Add Plan Period</h5>
+          </div>
+          <form class="mt-2" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                        <label for="period">Plan Period Name</label>
+                        <input type="text"  id="period" name="period" placeholder="Enter period" class="input-feild"/>
+                        <span class="error" id="period_e"></span>
+                    </div>
+                    <div class="col-lg-6 mt-3">
+                        <label for="duration">Duration in days</label>
+                        <input type="text" name="duration" id="duration" placeholder="Enter duration" class="input-feild" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                        <span class="error" id="duration_e"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                        <label for="amount">Enter Amount</label>
+                        <input type="text"  name="amount" id="amount" placeholder="Enter amount" class="input-feild" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                        <span class="error" id="amount_e"></span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Cancel</button>
+              <button class="trackproBtn w-25"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+          
+<div class="table-div">
+    <table class="row-border w-100" id="myTable">
+        <thead>
+            <th>Sr. no</th>
+            <th>Plan</th>
+            <th>Duration</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </thead>
+
+        <tbody>
+            {%for i in periodlist%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.period}} </td>
+                <td>{{i.duration}}</td>
+                <td>{{i.amount}}</td>
+                <td>
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal{{i.id}}"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon" aria-hidden="true">
+                </td>
+            </tr>
+            {%endfor%}
+
+
+        </tbody>
+    </table>
+</div>  
+
+
+{%for i in periodlist%}
+
+
+    <div class="modal fade" id="myModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Update Plan Peroid</h5>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="row">
+                        <div class="col-lg-6 mt-3">
+                            <label for="period{{i.id}}">Plan Period Name</label>
+                            <input type="text"  id="period{{i.id}}" name="period" value="{{i.period}}" placeholder="Enter period" class="input-feild"/>
+                            <span class="error" id="period_e{{i.id}}"></span>
+                        </div>
+                        <div class="col-lg-6 mt-3">
+                            <label for="duration{{i.id}}">Duration in days</label>
+                            <input type="text" name="duration" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"  id="duration{{i.id}}" value="{{i.duration}}" placeholder="Enter duration" class="input-feild"/>
+                            <span class="error" id="duration_e{{i.id}}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 mt-3">
+                            <label for="amount{{i.id}}">Enter Amount</label>
+                            <input type="text"  name="amount" id="amount{{i.id}}" value="{{i.amount}}" placeholder="Enter amount" class="input-feild" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                            <span class="error" id="amount_e{{i.id}}"></span>
+                        </div>
+    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Close</button>
+                <button class="trackproBtn w-25" id="editEmployeeDetails" onclick="return updateplan({{i.id}});">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+{%endfor%}
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#myModaladd">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Plan"
+  src="{% static 'assets/svg/departmentmastericon.svg' %}">
+</a></li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+    $( document ).ready(function() {
+        $(".usermapping-form-button").hide()
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+    });
+
+
+    // Name--------------------------------------------------------------------
+    const planName = document.getElementById("planName");
+    planName.addEventListener("focus", function () {
+        planName.setAttribute("placeholder", "Enter Plan Period Name");
+    });
+    planName.addEventListener("blur", function () {
+        planName.removeAttribute("placeholder");
+    });
+
+    // Duration--------------------------------------------------------------------
+    const duration = document.getElementById("duration");
+    duration.addEventListener("focus", function () {
+        duration.setAttribute("placeholder", "Enter Duration");
+    });
+    duration.addEventListener("blur", function () {
+        duration.removeAttribute("placeholder");
+    });
+
+    // Duration--------------------------------------------------------------------
+    const amount = document.getElementById("amount");
+    amount.addEventListener("focus", function () {
+        amount.setAttribute("placeholder", "Enter Amount");
+    });
+    amount.addEventListener("blur", function () {
+        amount.removeAttribute("placeholder");
+    });
+
+    function updateplan(id){
+
+        var planperiod = $('#period'+id).val().trim();   
+        var duration = $('#duration'+id).val().trim();   
+        var amount = $('#amount'+id).val().trim();   
+        
+    
+        if (IsValid(planperiod)) {
+        $('#period'+id).html('');
+        $('#period_e'+id).show().delay(3000).slideUp();
+        $('#period_e'+id).html('Plan period name is required');
+        $('#period'+id).focus();
+        return false;
+        }else if (IsValid(duration)) {
+            $('#duration'+id).html('');
+            $('#duration_e'+id).show().delay(3000).slideUp();
+            $('#duration_e'+id).html('Duration is required');
+            $('#duration'+id).focus();
+            return false;
+        }else if (IsValid(amount)) {
+            $('#amount'+id).html('');
+            $('#amount_e'+id).show().delay(3000).slideUp();
+            $('#amount_e'+id).html('Amount is required');
+            $('#amount'+id).focus();
+            return false;
+        }
+        else{
+        $.ajax({
+            type: "POST",
+            url: frontendURL+"company/updateplan/"+id,
+            headers: {
+                "Authorization": "Token {{token}}"
+            },
+            data: {
+                'period': planperiod,
+                'amount': amount,
+                'duration': duration,
+                'id':id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {         
+                console.log("reps",response)
+                $('#myModal'+id).modal('hide');
+                location.reload();
+            
+            }
+        });
+        }
+
+    }
+
+    function formValidation(){
+        //  
+    
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var planperiod = $('#period').val().trim();   
+        var duration = $('#duration').val().trim();   
+        var amount = $('#amount').val().trim();   
+        
+    
+        if (IsValid(planperiod)) {
+        $('#period').html('');
+        $('#period_e').show().delay(3000).slideUp();
+        $('#period_e').html('Plan Period Name is required');
+        $('#period').focus();
+        return false;
+        }else if (IsValid(duration)) {
+            $('#duration').html('');
+            $('#duration_e').show().delay(3000).slideUp();
+            $('#duration_e').html('Duration is required');
+            $('#duration').focus();
+            return false;
+        }else if (IsValid(amount)) {
+            $('#amount').html('');
+            $('#amount_e').show().delay(3000).slideUp();
+            $('#amount_e').html('Amount is required');
+            $('#amount').focus();
+            return false;
+        }
+        
+        }
+    
+    
+
+</script>
+{% endblock %}

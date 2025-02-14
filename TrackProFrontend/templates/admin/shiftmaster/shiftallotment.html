@@ -1,0 +1,1302 @@
+{% extends "index.html" %} {% load static %}{% block headercontent %}
+<div class="nav-item newheading">
+   Shift Allotment Master
+</div>
+{% endblock %}{% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+
+<style>
+
+  td {
+    text-align: left;
+  }
+  .tooltip-inner {
+    max-width: 100% !important;
+  }
+  .uppercard {
+    background-color: white;
+    border: 1px solid #f8f1f1;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px #00000029;
+  }
+  .select2-container--default .select2-selection--single {
+    border-bottom: 1px solid #acacac !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .hoverdiv {
+    width: 600px;
+    justify-content: space-between;
+  }
+  .tasktitlehover {
+    width: 250px;
+  }
+  .tooltip-inner {
+    background-color: white;
+    color: black;
+    box-shadow: 2px 4px #888888;
+    z-index: 111;
+  }
+
+  .heading {
+    color: var(--unnamed-color-888888);
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0px;
+    color: #888888;
+  }
+  .table-div {
+    background-color: white !important;
+    border-radius: 16px !important;
+    margin: 11px 9px !important;
+    padding: 5px 15px 15px 15px !important;
+  }
+
+
+  .dataTables_filter input[type="search"] {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0px !important;
+    margin: 0 2px 0 2px !important;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button .active:hover {
+    background-color: #b9f7ff !important;
+    outline-color: #b9f7ff !important;
+    border-color: #b9f7ff !important;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+
+
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 30px !important;
+    max-height: 30px !important;
+    padding: 2px 7px 7px 5px !important;
+    margin: 0 0 0 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: black !important;
+    border: 1px solid rgb(236, 236, 236) !important;
+    border-radius: 6px !important;
+    background: white !important;
+  }
+
+  .submitBtn {
+    width: 150px !important;
+    height: 38px;
+    }
+
+
+
+    #myTable > tbody > tr > td {
+    text-transform: capitalize;
+    font-weight: 400;
+    padding: 12px !important;
+    font-size: 13px;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  /* #pagination-demo2 {
+    display: flex;
+    justify-content: end;
+  } */
+  #myTable > thead > tr > th {
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: white !important;
+    font-size: 15px;
+    padding: 10px;
+   
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  .buttons-bule {
+    border: none;
+    background-color: var(--fc-main);
+    color: #fff;
+    height: 38px;
+    border-radius: 24px;
+    padding: 0 25px;
+    margin: 0 2px;
+}
+.infobtn{
+  font-size:18px;
+  color:#174fa3;
+  cursor:pointer;
+}
+
+
+#swapshift .modal-dialog {
+  position: fixed;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%)!important;
+  width: 95%;
+}
+#swapshift label {
+text-align: left;
+}
+#swapshift input {
+  text-align: left;
+  }
+
+  #swapshift select {
+    text-align: left;
+    }
+</style>
+
+<!-- Main page -> Manage Task -->
+<main class="main-wrapper">
+  <!-- ==================Row1======================= -->
+  <div class="">
+    <div id="addEmployeeForm">
+    <div class="row">
+      
+        
+      <div class="col-md-3 my-2">
+        <div class="py-2">
+            <label for="employee_name">Employee <span style="color:red">*</span></label>
+            
+            <select class="input-feild select2dropdown" id='employee_name' name="employee_name" >
+                <option value=''>Select Employee</option> 
+                {% for r in empshiftsdetails %}
+      
+                            <option value="{{r.employeeId}}" >{{r.employee_name}}</option>
+  
+                {% endfor %}
+          </select>
+            
+            <span id="employee_name_err" class="error"></span>
+        </div>
+
+      </div>
+
+      <div class="col-md-3 my-2">
+        <div class="py-2">
+            <label for="shift">Shift <span style="color:red">*</span></label>
+            
+            <select class="input-feild select2dropdown" id='shift' name="shift">
+                <option value=''>Select shift</option> 
+                {% for r in shifts %}
+      
+                            <option value="{{r.id}}" >{{r.shiftname}}</option>
+  
+                {% endfor %}
+          </select>
+            
+            <span id="shift_err" class="error"></span>
+        </div>
+
+      </div>
+
+      <div class="col-md-3 mt-4">
+        <div class="py-2">
+            <span style="display:flex;">
+                <span id="daterange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                <span id="spandatechange"></span> <i class="fa fa-caret-down"></i>
+                </span>
+            </span>
+            
+            <span id="date_err" class="error"></span>
+        </div>
+
+      </div>
+
+      <div class="col-md-3 my-auto text-center d-flex">
+        <button onclick="return add_shift();" class="buttons-bule">+ Add</button>
+        <button data-bs-toggle="modal" data-bs-target="#uploadshift" class="buttons-bule">Upload Excel</button>
+
+
+
+
+        <div class="modal fade" id="uploadshift" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog  modal-dialog-scrollable modal-lg" >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upload Shift Allotment Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+
+                  
+      
+                  <span class="attendance-box">
+                      <div class="d-flex justify-content-center">
+                          <div class="file-upload-box d-block">
+                              <div class="file-upload-btn">
+                                <div class="text-center">
+                                  <p id="filename" class="text-secondary p-0 m-0"></p>
+      
+                                  <label class="buttons-bule text-white  my-4 mx-auto" style="padding: 6px 0; width: 150px;" id="">Select File
+                                      <input id="datafile"  name="datafile"  type="file"  accept=".dat, .txt" hidden>
+                                  </label>
+      
+                                  <p class="p-0 m-0">Click here to  <a class="text-primary cursor-pointer" href="{% static 'Media/SampleExcels/shiftallotment.xlsx'%}" download>download Excel</a>   
+                                    <i  class="fa fa-solid fa-info-circle infobtn"  data-bs-toggle="tooltip" data-bs-html="true" title="
+                                    1)  Date must be in dd/mm/yyyy   format,<br>                                   
+                                    2) Shift  name must be present in  shift  master,<br>
+                                    3) All entries in excel must be  valid for alloting shift<br>
+                                    4)Employee name must be present in employee shift  master,<br>
+                                   " ></i>
+                                  </p>
+                                  <p id="spnFilePath"></p>
+                                  </div>
+                              </div>
+                          </div>
+
+                      </div>
+                      <div>
+
+                      </div>
+          
+                      <div id="msgsuccess"></div>
+                      
+                      <div class="text-center mblviewbutton py-5 mb-5">
+                          <p id="file_e" class="error"></p>
+
+                          <button type="submit" onclick="return bulkuploadexcel();" class="buttons-bule">Submit</button>
+                      </div>
+                  </span>
+                  
+
+
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+                        
+        <div class="modal fade" id="swapshift" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl  modal-dialog-centered">
+          
+            <div class="modal-content">           
+              <div class="modal-header ps-3 text-center">
+                <h5 class="modal-title py-2" id="exampleModalLabel">Swap Shift</h5>
+              </div>
+              <div class="modal-body">
+                
+                <div class="row">
+
+
+                  <div class="row"> 
+                    
+                    <div class="col-md-4 my-2">
+                      <div class="py-2">
+                          <label for="employee_name1">Employee 1<span style="color:red">*</span></label>
+                          
+                          <select class="input-feild select2dropdown" id='employee_name1' name="employee_name1" onchange="getemployee1allotedshift()" >
+                              <option value=''>Select Employee</option> 
+                              {% for r in empshiftsdetails %}
+                    
+                                          <option value="{{r.employeeId}}" >{{r.employee_name}}</option>
+                
+                              {% endfor %}
+                        </select>
+                          
+                          <span id="employee_name1_error" class="error"></span>
+                      </div>
+              
+                    </div>
+
+
+                    <div class="col-md-4 my-2">
+                      <div class="py-2">
+                          <label for="shiftdate1">Shift Date <span style="color:red">*</span></label>
+                          <input type="text" id ="shiftdate1" name="shiftdate1" class ="input-feild" placeholder="select date" onchange="getemployee1allotedshift()">
+                          <span id="shiftdate1_error" class="error"></span>
+                      </div>
+              
+                    </div>
+
+
+                    <div class="col-md-4 my-2">
+                      <div class="py-2">
+                          <label for="shift1">Shift <span style="color:red">*</span></label>
+                          
+                          <select class="input-feild select2dropdown" id='shift1' name="shift1">
+                              <option value=''>Select shift</option> 
+
+                              {% for r in shifts %}
+                    
+                                <option value="{{r.id}}" >{{r.shiftname}}</option>
+                
+                              {% endfor %}
+                          </select>
+                          
+                          <span id="shift1_error" class="error"></span>
+                      </div>
+              
+                    </div>
+              
+
+
+
+
+
+
+
+
+                    
+                    <div class="col-md-4 my-2">
+                      <div class="py-2">
+                          <label for="employee_name2">Employee 2<span style="color:red">*</span></label>
+                          
+                          <select class="input-feild select2dropdown" id='employee_name2' name="employee_name2" onchange="getemployee2allotedshift()">
+                              <option value=''>Select Employee</option> 
+                              {% for r in empshiftsdetails %}
+                    
+                                <option value="{{r.employeeId}}" >{{r.employee_name}}</option>
+                
+                              {% endfor %}
+                        </select>
+                          
+                          <span id="employee_name2_error" class="error"></span>
+                      </div>
+              
+                    </div>
+
+
+                    <div class="col-md-4 my-2">
+                      <div class="py-2">
+                          <label for="shiftdate2">Shift Date <span style="color:red">*</span></label>
+                          <input type="text" id ="shiftdate2" name="shiftdate2" class ="input-feild"  placeholder="select date" onchange="getemployee2allotedshift()">
+                          <span id="shiftdate2_error" class="error"></span>
+                      </div>
+              
+                    </div>
+
+
+                    <div class="col-md-4 my-2">
+                      <div class="py-2">
+                          <label for="shift2">Shift <span style="color:red">*</span></label>
+                          
+                          <select class="input-feild select2dropdown" id='shift2' name="shift2">
+                              <option value=''>Select shift</option> 
+
+                              {% for r in shifts %}
+                    
+                                <option value="{{r.id}}" >{{r.shiftname}}</option>
+                
+                              {% endfor %}
+                          </select>
+                          
+                          <span id="shift2_error" class="error"></span>
+                      </div>
+              
+                    </div>
+              
+
+                  </div>
+               
+              
+             
+             
+                </div>
+              
+              </div>
+              <div class="modal-footer ">
+                <div class="w-50">
+                  <button type="button" class="Role-btn  w-50 modalClose" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="Role-btn  w-50 text-center" onclick="swap_shift()" id="addEmployeeBtn">Swap</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+</div>
+
+  </div>
+
+  <div class="tablecard">
+    <div class="table-div">
+      <div class="d-flex justify-content-end">
+        
+        <div class="px-1">
+          <label for="employeename">Employee Name </label>
+          <input type="text" id="employeename" name="employeename" class ="input-feild" oninput="shiftallotmentDetailPagination()">
+        </div>
+
+        <div class="px-1">
+        
+          <label for="shiftname">Shift </label>
+          <input type="text" id ="shiftname" name="shiftname" class ="input-feild" oninput="shiftallotmentDetailPagination()">
+        </div>
+        <div class="px-1">
+        
+          <label for="searchdate">Date </label>
+          <input type="text" id ="searchdate" name="searchdate" class ="input-feild" onchange="shiftallotmentDetailPagination()">
+        </div>
+      </div>
+
+
+      <table class="row-border w-100 shiftallotmenttaskdetails" id="myTable">
+        <thead>
+          <th>Sr No</th>
+          <th>Employee Name</th>
+
+
+          <th>Shift</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </thead>
+
+        <tbody class="" id="shiftallotmentbody">
+
+        </tbody>
+
+
+
+      </table>
+
+      <div class=" d-flex justify-content-end m-3" id="secondpagination-demo2">
+        <ul id="pagination-demo2" class="pagination-sm"></ul>
+      </div>
+
+
+    </div>
+  </div>
+</main>
+{%endblock%}
+
+{% block indexaddbuttons %}
+
+
+<li><a data-bs-toggle="modal"  data-bs-target="#swapshift">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" width="20px" title="Swap Shift"
+  src="{% static 'assets/images/swap.svg' %}">
+</a></li>
+
+
+
+
+
+ {% endblock %}
+
+{%block script%}{{block.super}}
+
+<script src="https://rawgit.com/unconditional/jquery-table2excel/master/src/jquery.table2excel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script>
+    let datename
+
+
+  $(document).ready(function () {
+
+    $('.select2-search__field').on('keydown', function() {
+         
+        console.log("hit");
+        shiftallotmentDetailPagination()
+
+    });
+
+    $( "#searchdate" ).datepicker({ 
+      dateFormat: 'dd-mm-yy',
+      //minDate: 0,
+      changeYear:true,
+      //maxDate: +90,
+      changeMonth: true,
+      });
+
+      $( "#shiftdate1" ).datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        //minDate: 0,
+        changeYear:true,
+        //maxDate: +90,
+        changeMonth: true,
+        });
+        $( "#shiftdate2" ).datepicker({ 
+          dateFormat: 'dd-mm-yy',
+          //minDate: 0,
+          changeYear:true,
+          //maxDate: +90,
+          changeMonth: true,
+          });
+    shiftallotmentDetailPagination()
+
+    
+    $(".input-feild").on("focus", function () {
+      var label = $("label[for=" + this.id + "]");
+      label
+        .delay("slow")
+        .animate(
+          { "font-size": "14px", "font-weight": "400", padding: "1px" },
+          "slow"
+        );
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    jQuery(function ($) {
+
+        var start = moment().subtract(0, 'days')
+        var end = moment()
+    
+        function cb(start, end) {
+        $('#daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        }
+    
+        $('#daterange').daterangepicker(
+        {
+            startDate: start,
+            endDate: end,
+            ranges: {
+            Today: [moment(), moment()],
+            Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        },
+        cb
+        )
+    
+        cb(start, end)
+
+        // Use jQuery UI Datepicker for DOB input
+        $('#spandatechange').on('DOMSubtreeModified', function () {
+            console.log('DOMSubtreeModified')
+        })
+    })
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var months = [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+        
+        var currentDate = new Date();
+        var day = currentDate.getDate();
+        var monthIndex = currentDate.getMonth();
+        var year = currentDate.getFullYear();
+        
+        var datename = (day < 10 ? '0' : '') + day + ' ' + months[monthIndex] + ' ' + year;
+        
+        console.log(datename); // Output
+
+
+        var table = $('#latemarktable').DataTable({
+            "ordering": true,
+              "bLengthChange": true ,
+        }) 
+
+        var buttons = new $.fn.dataTable.Buttons(table, {
+        buttons: [{
+            extend : 'excel',
+            title: 'Late Attendance report ' + datename ,
+            text : '<span class="btn-shadow  btn add-btn exportButton" >Export<i class="fa fa-download"></i></span> '        
+        }]
+        }).container().appendTo($('#exportButton'));
+
+        console.log("datename--",datename)
+
+    });
+
+  });
+
+  function GetMonthName(monthname) {
+      var months = {
+      January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      December: 12
+      }
+      var monthNumber = months[monthname]
+  
+      return monthNumber
+  }
+
+
+
+
+    
+  function add_shift() {
+    var datevalue = $('#spandatechange').html()
+    datename=datevalue
+
+    
+
+
+    var employeeId=$('#employee_name').val();
+    var employee_name = $('#employee_name option:selected').text();
+    var shift=$('#shift').val();
+    var shift_name = $('#shift option:selected').text();
+
+
+    if (IsValid(employeeId)) {
+
+        $('#employee_name_err').show().delay(3000).slideUp();
+        $('#employee_name_err').html('Employeee  is required');
+        $('#employee_name').focus();
+        return false;
+    } 
+
+    if (IsValid(shift)) {
+
+        $('#shift_err').show().delay(3000).slideUp();
+        $('#shift_err').html('Shift  is required');
+        $('#shift').focus();
+        return false;
+    } 
+  
+    if (datevalue == '' && datevalue == null) {
+
+        $('#date_err').show().delay(3000).slideUp();
+        $('#date_err').html('Please select date');
+        $('#date_err').focus();
+        return false;
+
+    }
+
+
+    
+    var start_datestr = datevalue.split(' - ')[0]
+    var end_datestr = datevalue.split(' - ')[1]
+
+    var smonthstr = start_datestr.split(' ')[0]
+    var smonth = GetMonthName(smonthstr)
+
+    var emonthstr = end_datestr.split(' ')[0]
+    var emonth = GetMonthName(emonthstr)
+
+    var sdate = start_datestr.split(' ')[1].split(',')[0]
+    var edate = end_datestr.split(' ')[1].split(',')[0]
+
+    var syear = start_datestr.split(',')[1].split(' ')[1]
+    var eyear = end_datestr.split(',')[1].split(' ')[1]
+
+    var start_date = syear + '-' + smonth + '-' + sdate
+    var end_date = eyear + '-' + emonth + '-' + edate
+    console.log("start_date",$.type(start_date),start_date)
+
+
+        $.ajax({ 
+            type: "POST",
+            url: frontendURL + "add_empshiftallotment",
+            headers:{
+              'Authorization': 'Token '+ '{{token}}'
+            },
+            dataType:'json',
+            data: {
+                'employeeId':employeeId,
+                'employee_name':employee_name,
+                "shiftId":shift,
+                "start_date":start_date,
+                "shift_name":shift_name,
+                "end_date":end_date,
+                'csrfmiddlewaretoken':'{{csrf_token}}'
+            },
+            
+            success: function(response) {
+                console.log("response",response)
+                if(response.n != 1){
+                    swal({
+                        icon: "warning",
+                        title: "",
+                        text: response.msg,
+                        button: "Close",
+                    });
+                }else{
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.msg,
+                        buttons: false,
+                    });
+                    window.location.reload();
+
+                    /*$.each(response.data.allotedshift,function(i,o){
+                        var trhtml=''
+
+                        trhtml=`<tr class="table_row`+o.id+`">
+                                    <td>`+o.employee_name+`</td>
+                                    <td>`+o.shift_name+`</td>
+                                    <td>`+o.date+`</td>
+                                    <td>
+
+
+                                        <a class="px-1" data-bs-toggle="modal"  data-bs-target="#deleteshift`+o.id+`" ><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" data-bs-toggle="tooltip" title="delete"></a>
+                                        <div class="modal fade" id="deleteshift`+o.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered w-25">
+                                        
+                                            <div class="modal-content">           
+                                            <div class="modal-header ps-3 text-center">
+                                                <h5 class="modal-title py-2" id="exampleModalLabel">Delete Shift</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                
+                                                <div class="row">
+                                                <div> Are you sure you want to delete this?
+                                
+                                                </div>
+                                            
+                                            
+                                            
+                                            
+                                                </div>
+                                            
+                                            </div>
+                                            <div class="modal-footer ">
+                                                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="Role-btn text-center" onclick="delete_shift(`+o.id+`)" id="addEmployeeBtn">Delete</button>
+                                
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+
+
+                                    </td>
+                                </tr>`
+                        $("#table_body").append(trhtml);
+
+
+
+
+                    })*/
+
+
+
+
+          
+                    $("#employee_name").val('').trigger('change');
+                    $("#shift").val('').trigger('change');
+
+
+
+                } 
+
+             
+            }
+        });
+    
+
+
+  }
+
+
+
+  function delete_shift(id) {
+
+
+    $.ajax({ 
+        type: "POST",
+        url: frontendURL + "delete_empshiftallotment",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'id':id,
+
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+            console.log("response",response)
+            if(response.n != 1){
+                swal({
+                    icon: "warning",
+                    title: "",
+                    text: response.msg,
+                    button: "Close",
+                });
+            }else{
+                swal({
+                    icon: "success",
+                    title: "",
+                    text: response.msg,
+                    buttons: false,
+                    timmer:2000,
+                });
+                $(".modal").modal('hide');
+                shiftallotmentDetailPagination()
+
+
+                //$(".table_row"+id).remove();
+
+
+
+            } 
+
+         
+        }
+      });
+
+
+  }
+
+
+
+
+  function shiftallotmentlist(p){
+
+
+    var trhtml = ""
+    var shiftallotmentName = $('#shiftname').val();
+    var employee_name = $('#employeename').val();
+    var searchdate = $('#searchdate').val();
+
+
+    $.ajax({
+      type: "POST",
+      url: frontendURL + "paginationshiftallotmentlist",
+      data: {
+        'p':p,
+        'employee_name' : employee_name,
+        'shiftallotmentname' : shiftallotmentName,
+        'searchdate' : searchdate,
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      success: function (response) {         
+        console.log("bloggggg",response)
+        /*
+                        ${o.shiftlist.map(l => `
+                  `+l.shift_name+`
+                `).join(",")}
+        */
+         counter = 1
+          $.each(response.shiftallotmentData.data,function(i,o){
+            trhtml += `
+            <tr>
+
+              <td>`+counter+`</td>
+              <td>`+o.employee_name+`</td>
+              <td>`+o.shift_name+`</td>
+              <td>`+o.date+`</td>
+              <td>
+
+
+
+
+
+         
+                        <a class="px-1" data-bs-toggle="modal"  data-bs-target="#deleteshift`+o.id+`" ><img src="{% static 'assets/images/Group 16729.svg' %}" height="20px" alt="delete icon" data-bs-toggle="tooltip" title="delete"></a>
+                        <div class="modal fade" id="deleteshift`+o.id+`" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered w-25">
+                          
+                            <div class="modal-content">           
+                              <div class="modal-header ps-3 text-center">
+                                <h5 class="modal-title py-2" id="exampleModalLabel">Delete Shift</h5>
+                              </div>
+                              <div class="modal-body">
+                                
+                                <div class="row">
+                                  <div> Are you sure you want to delete this?
+                  
+                                  </div>
+                               
+                              
+                             
+                             
+                                </div>
+                              
+                              </div>
+                              <div class="modal-footer ">
+                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="Role-btn text-center" onclick="delete_shift(`+o.id+`)" id="addEmployeeBtn">Delete</button>
+                  
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+              </td>
+          </tr>
+
+
+
+
+
+
+
+
+            `
+            counter += 1;
+
+
+
+
+
+
+
+          })
+
+          $("#shiftallotmentbody").html(trhtml);
+          
+          var totalfilter = Math.ceil(parseInt(response.shiftallotmentData.count)/10);
+                      $('#pagination-demo2').twbsPagination({
+          
+                        totalPages: totalfilter,
+                        visiblePages: 3,
+                        next: 'Next',
+                        prev: 'Prev',
+                        onPageClick: function (event, page) {
+                          var testflag=true;
+                            //fetch content and render here
+                            filternamepageno = page
+                            if (testflag==true){
+                              testflag=false;
+                              shiftallotmentlist(page)
+                            }
+                            $('#page-content').text('Page ' + page) + ' content here';
+          }
+          })
+
+          
+       
+      }
+    });
+  }
+
+  function shiftallotmentDetailPagination(){
+    var testflag =true;
+    $('#secondpagination-demo2').html('<ul id="pagination-demo2" class="pagination-sm"></ul>');
+    shiftallotmentlist(1);
+    
+  }
+  
+
+
+
+
+
+
+
+
+    
+  function bulkuploadexcel(){
+           
+          var fd = new FormData();
+          fd.append('file', $('#datafile')[0].files[0]);
+          fd.append('csrfmiddlewaretoken','{{csrf_token}}');
+          console.log(fd)
+          
+          var filereq = $("#datafile").val();
+
+          if (filereq=="") {
+              $('#file_e').show().delay(3000).slideUp();
+              $('#file_e').html('please select file').css("color","red");
+              return false;
+          }
+
+              var fileInput = document.getElementById('datafile');
+              var filePath = fileInput.value;
+              var allowedExtensions = /(\.xls|\.xlsx)$/i;
+
+              if (!allowedExtensions.exec(filePath)) {
+                $('#file_e').show().delay(3000).slideUp();
+                $('#file_e').html('Please upload a valid Excel file (xls or xlsx).').css("color","red");
+                  fileInput.value = '';
+                  return false;
+              }
+
+
+          else{
+              $.ajax({
+                  url:frontendURL+"bulkuploadshiftallotment",
+                  data: fd,
+                  type: 'POST',
+                  processData: false,
+                  contentType: false,
+                  dataType: 'json',
+                  success:function(response){
+
+                      console.log("respo",response)
+                      if(response.response.n==1){
+                        $("#uploadshift").modal('toggle');
+
+                          swal({
+                              icon: response.response.status,
+                              title: "",
+                              text: response.response.msg,
+                              button: "Close",
+                          }).then(() => {
+                            // Code to execute after the user closes the SweetAlert dialog
+                            location.reload(); // Reload the page
+                          });
+                          
+                      }else{
+                          swal({
+                              icon: response.response.status,
+                              title: "",
+                              text: response.response.msg,
+                              button: "Close",
+                          });
+                          
+
+                      }         
+                  }
+              })
+          }
+  }
+
+
+
+
+
+
+
+
+
+
+
+  function getemployee1allotedshift(){
+    var employee1=$('#employee_name1').val()
+    var shiftdate1=$('#shiftdate1').val()
+
+
+
+      $.ajax({ 
+        type: "POST",
+        url: frontendURL + "getemployeeallotedshift",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'employee':employee1,
+            'shiftdate':shiftdate1,
+
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+        },
+        
+        success: function(response) {
+            console.log("response",response)
+            if(response.n != 1){
+                swal({
+                    icon: "warning",
+                    title: "",
+                    text: response.msg,
+                    button: "Close",
+                });
+            }else{
+                var selecthtml=''
+                $.each(response.data, function(i,o){
+                  selecthtml+=`<option value=`+o.shiftId+`>`+o.shift_name+`</option>`
+                })
+                $('#shift1').html(selecthtml)
+            } 
+    
+        
+        }
+      });
+  }
+
+  function getemployee2allotedshift(){
+    var employee2=$('#employee_name2').val()
+    var shiftdate2=$('#shiftdate2').val()
+
+
+
+      $.ajax({ 
+        type: "POST",
+        url: frontendURL + "getemployeeallotedshift",
+        headers:{
+          'Authorization': 'Token '+ '{{token}}'
+        },
+        data: {
+            'employee':employee2,
+            'shiftdate':shiftdate2,
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+            
+        },
+        
+        success: function(response) {
+            console.log("response",response)
+            if(response.n != 1){
+                swal({
+                    icon: "warning",
+                    title: "",
+                    text: response.msg,
+                    button: "Close",
+                });
+            }else{
+
+
+                var selecthtml=''
+                $.each(response.data, function(i,o){
+                  selecthtml+=`<option value=`+o.shiftId+`>`+o.shift_name+`</option>`
+                })
+                $('#shift2').html(selecthtml)
+    
+    
+    
+    
+            } 
+    
+        
+        }
+      });
+  }
+
+
+
+
+
+
+  
+
+  function swap_shift(){
+     
+      var employee1=$('#employee_name1').val()
+      var shiftdate1=$('#shiftdate1').val()
+      var shift1=$('#shift1').val()
+      var employee2=$('#employee_name2').val()
+      var shiftdate2=$('#shiftdate2').val()
+      var shift2=$('#shift2').val()
+
+      if (IsValid(employee1)){
+        $('#employee_name1_error').show().delay(3000).slideUp();
+        $('#employee_name1_error').html('Please select first employee');
+        $('#employee_name1_error').focus();
+          return false;
+      }else if (IsValid(shiftdate1)){
+        $('#shiftdate1_error').show().delay(3000).slideUp();
+        $('#shiftdate1_error').html('Please select first employee shift date');
+        $('#shiftdate1_error').focus();
+          return false;
+      }else if (IsValid(shift1)){
+        $('#shift1_error').show().delay(3000).slideUp();
+        $('#shift1_error').html('Please select first employee shift ');
+        $('#shift1_error').focus();
+          return false;
+      }else if (IsValid(employee2)){
+        $('#employee_name2_error').show().delay(3000).slideUp();
+        $('#employee_name2_error').html('Please select second employee');
+        $('#employee_name2_error').focus();
+          return false;
+      }else if (IsValid(shiftdate2)){
+        $('#shiftdate2_error').show().delay(3000).slideUp();
+        $('#shiftdate2_error').html('Please select second employee shift date');
+        $('#shiftdate2_error').focus();
+          return false;
+      }else if (IsValid(shift2)){
+        $('#shift2_error').show().delay(3000).slideUp();
+        $('#shift2_error').html('Please select second employee shift ');
+        $('#shift2_error').focus();
+          return false;
+      }else{
+        $.ajax({ 
+          type: "POST",
+          url: frontendURL + "swapshift",
+          headers:{
+            'Authorization': 'Token '+ '{{token}}'
+          },
+          data: {
+              'employee1':employee1,
+              'shiftdate1':shiftdate1,
+              'shift1':shift1,
+              'employee2':employee2,
+              'shiftdate2':shiftdate2,
+              'shift2':shift2,
+              'csrfmiddlewaretoken':'{{csrf_token}}'
+          },
+          
+          success: function(response) {
+              console.log("response",response)
+              if(response.n != 1){
+                  swal({
+                      icon: "warning",
+                      title: "",
+                      text: response.msg,
+                      button: "Close",
+                  });
+              }else{
+                  swal({
+                      icon: "success",
+                      title: "",
+                      text: response.msg,
+                      buttons: false,
+                      timmer:2000,
+                  });
+                  $(".modal").modal('hide');
+      
+      
+      
+      
+              } 
+      
+          
+          }
+        });
+      }
+
+
+
+
+  }
+
+</script>
+{%endblock%}

@@ -1,0 +1,258 @@
+{% extends "index.html" %}
+{% load static %} 
+{% block headercontent %}
+<div class="nav-item newheading">
+    Payment History
+</div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
+
+<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: 35px !important;
+      }
+      .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-left: 0px;
+        padding-top: 0px;
+        font-size: var(--f-lg);
+        color: var(--fc-md-dark);
+      }
+</style>
+<main class="main-wrapper">
+ <!-- NavBar -->
+ {% if messages %}
+ <div class="row" style="justify-content: center;">
+     <div class="col-sm-6 col-sm-offset-3">
+     {% for message in messages %}
+     <div style="display: flex; margin: 15px 0px;flex-direction: row-reverse;justify-content: center;align-items: center;" class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; border: none; font-size: 25px; color: #ff0000;">
+         <span aria-hidden="true">&times;</span>
+         </button>
+         <p style="margin-bottom: 0px;">{{ message }}</p>
+     </div>
+     {% endfor %}
+     </div>
+ </div>
+ {% endif %}
+       
+ <div class="title-div">
+        
+    {% comment %} <span class="company-title">Payment History</span>
+    <span class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#myModaladd"> Make Payment</span> {% endcomment %}
+    
+    <div class="modal fade" id="myModaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content p-2">
+          <div class="modal-header">
+            <h5 class="modal-title pt-3" id="exampleModalLabel"> Make Payment</h5>
+          </div>
+          <form class="mt-2" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                            <label for="companyId">Company Name</label>
+                            <select  onclick="this.setAttribute('value', this.value);" placeholder=" " value="" id="companyId" name="companyId" class="input-feild select2dropdown">
+                                <option value="" disabled selected>Select Company Name</option>
+                                {% for p in companylist %}
+                                <option class="text-capitalize" value="{{p.id}}">{{p.companyName}}</option>
+                                {%endfor%}
+                            </select>
+                            <span class="error" id="companyId_err"></span>
+                        </div>
+
+
+
+                </div>
+
+
+
+                <div class="row mt-3">
+                    <div class="position-relative form-group modal-header px-2">
+                        <h5 class="">Payment Section</h5>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                            <label for="period">Select Plan</label>
+                            <select  onchange="getamountbyperiod();" onclick="this.setAttribute('value', this.value);" placeholder=" " value="" id="period" name="planperiod" class="input-feild select2dropdown">
+                                <option value="" disabled selected>Select Plan</option>
+                                {% for p in periodlist %}
+                                <option class="text-capitalize" value="{{p.period}}">{{p.period}}</option>
+                                {%endfor%}
+                            </select>
+                            <span class="error" id="period_err"></span>
+                    </div>
+
+                    <div class="col-lg-6 mt-3">
+                        <label for="payment">Payment</label>
+                        <input type="text" id="payment" name="payment" placeholder=" Payment" class="input-feild" readonly/>
+                        <span class="error" id="payment_err"></span>
+                    </div> 
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 mt-3">
+                        <label for="StartDate">Start Date</label>
+                        <input type="text" id="StartDate" name="StartDate" placeholder="Start Date" class="input-feild" readonly/>
+                        <span class="error" id="StartDate_err"></span>
+                    </div>
+
+                    <div class="col-lg-6 mt-3">
+                        <label for="EndDate">End Date</label>
+                        <input type="text" id="EndDate" name="EndDate" placeholder="End Date" class="input-feild" readonly/>
+                        <span class="error" id="EndDate_err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Cancel</button>
+              <button class="trackproBtn w-25"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+          
+<div class="table-div">
+    <table class="row-border w-100" id="myTable">
+        <thead>
+            <th>Sr. no</th>
+            <th>Company</th>
+            <th>Plan period</th>
+            <th>Start Date</th>
+            <th>Expiry Date</th>
+            <th>Payment</th>
+        </thead>
+
+        <tbody>
+            {% for c in companypaymentlist%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{c.compname}}</td>
+                <td>{{c.planperiod}}</td>
+                <td>{{c.startdate}}</td>
+                <td>{{c.expirydate}}</td>
+                <td>{{c.payment}}</td>
+            </tr>
+            
+            {%endfor%}
+
+
+        </tbody>
+    </table>
+</div>  
+
+</main>
+{% endblock %}
+{% block indexaddbuttons %}
+
+<li><a data-bs-toggle="modal" data-bs-target="#myModaladd">
+  <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Payment History"
+  src="{% static 'assets/svg/addtaskicon.svg' %}">
+</a></li>
+ {% endblock %}
+{% block script %}
+{{block.super}}
+<script>
+
+
+    // payment --------------------------------------------------------------------
+
+    $( document ).ready(function() {
+        var currentdate = new Date();
+        var  sdate=currentdate.getDate();
+        var smonth=currentdate.getMonth()+1;
+
+        if(sdate<10){
+            sdate="0"+sdate
+        }
+        if(smonth<10){
+            smonth="0"+smonth
+        }
+
+
+        //var twoDigitMonthstartate = ((currentdate.getMonth().length+1) === 1)? (currentdate.getMonth()+1) : '0' + (currentdate.getMonth()+1);
+        var StartDate = sdate + "-" + smonth + "-" + currentdate.getFullYear();
+        console.log("start date",StartDate);
+        $("#StartDate").val(StartDate)
+
+        $(".usermapping-form-button").hide()
+        $('#myTable').DataTable();
+        $('.input-feild').on("focus", function () {
+          var label = $('label[for=' + this.id + ']');
+          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        });
+
+    });
+
+    function formValidation(){
+       
+        var regex = /[A-Za-z0-9_~\-!@#\$%\^&\*\(\)]+$/;
+        var companyid = $('#companyId').val();
+        var period =  $('#period').val(); 
+        var payment = $('#payment').val(); 
+      
+        if (IsValid(companyid)) {
+          $('#companyId_err').show().delay(3000).slideUp();
+          $('#companyId_err').html('Please Select Company ');
+          $('#companyId').focus();
+          return false;
+        }else if (IsValid(period)) {
+          $('#period_err').show().delay(3000).slideUp();
+          $('#period_err').html('Please Select Plan');
+          $('#period').focus();
+          return false;
+        }else if (IsValid(payment)) {
+            $('#payment_err').show().delay(3000).slideUp();
+            $('#payment_err').html('Please provide payment');
+            $('#payment').focus();
+            return false;
+            }
+    }
+      
+    function getamountbyperiod() {
+        
+        var period = $('#period').val();
+        var html;
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "company/billingPeriodbyid",
+            data: {
+                'period': period,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {   
+                console.log("response date",response);
+
+                $("#payment").val(response.data.data.amount)
+
+                var currentdate = new Date();
+                currentdate.setDate(currentdate.getDate() + response.data.data.duration);
+                var emonth = currentdate.getMonth()+1;
+                var edate=currentdate.getDate();
+
+                if(emonth<10){
+                    emonth="0"+emonth
+                }
+                if(edate<10){
+                    edate="0"+edate
+                }
+                
+                //var twoDigitMonthendate = ((currentdate.getMonth().length+1) === 1)? (currentdate.getMonth()+1) : '0' + (currentdate.getMonth()+1);
+                var EndDate = edate + "-" + emonth + "-" + currentdate.getFullYear();
+                $("#EndDate").val(EndDate)
+            }
+        });
+    }
+</script>
+{% endblock %}

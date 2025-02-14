@@ -1,0 +1,1019 @@
+{% extends "index.html" %}
+{% load static %}
+{% block headercontent %}
+<div class="nav-item newheading">
+    Packetwise Leave Rule Builder</div>
+{% endblock %}
+{% block content %}
+<link src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+<link src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" />
+<style>
+    .leftheading {
+        font-weight: 500;
+        margin-left: 5px;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @keyframes fade {
+        from {
+            opacity: .4
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+
+
+
+
+    .nav-pills-custom .nav-link {
+        color: #000000;
+        position: relative;
+        background: #fbfbfb;
+        border: 1px solid #e1e1e1;
+
+    }
+
+    .main-card {
+        padding: 1rem;
+        min-height: 440px;
+    }
+
+    .main-cardheading {
+        font-weight: 500;
+        padding-bottom: 1rem;
+        font-size: 18px;
+    }
+
+
+
+    .nav-pills-custom .nav-link.active {
+        color: #ffffff;
+        background: #174fa3;
+        box-shadow: 0px 4px 8px #0000001F;
+    }
+
+    .nav-pills-custom .nav-link.active img {
+        /* filter: invert(17%) sepia(94%) saturate(1178%) hue-rotate(185deg) brightness(91%) contrast(101%); */
+        filter: brightness(0) invert(1);
+
+    }
+
+    .lefticons {
+        width: 20px;
+        height: 20px;
+    }
+
+    .imagepre {
+        width: 100%;
+    }
+
+    .cameraicon {
+        margin-top: -20px;
+    }
+
+    .upload-button {
+        position: absolute;
+        left: 58%;
+        cursor: pointer;
+        font-size: 18px;
+        top: 58%;
+    }
+
+    .file-upload {
+        display: none;
+    }
+
+    label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #174fa3;
+    }
+
+    input {
+        width: 100%;
+        font-size: 16px;
+        color: #5f5b5b;
+        border: none;
+        border-bottom: 1px solid rgb(214, 214, 214);
+        background: transparent;
+        height: 30px;
+        transition: border 0.4s ease;
+    }
+
+
+
+    .proheading {
+        font-weight: 500;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .username {
+        color: black;
+        font-weight: 500;
+    }
+
+
+    .select2-container--default .select2-selection--single {
+        border-bottom: 1px solid rgb(214, 214, 214) !important;
+        border: none;
+        height: 30px;
+        box-shadow: none;
+        border-radius: 0px;
+    }
+
+    .nav-pills .nav-link {
+        border-radius: 0px;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        padding-left: 0px;
+        padding-top: 0px;
+    }
+
+    /* Add indicator arrow for the active tab */
+
+    .nav-pills-custom .nav-link.active::before {
+        opacity: 1;
+    }
+
+
+
+
+
+    .navigation-side,
+    .rounded {
+
+        background: white;
+        border-radius: 10px !important;
+        padding: 5px 15px;
+    }
+
+    .packet-nav {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        color: #ffffff;
+        background-color: #009cf3;
+    }
+
+    .nav-tabs .nav-link {
+        color: grey;
+        background-color: #e9e9e9;
+        font-weight: 500;
+        font-size: 12px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 5px 10px;
+    }
+
+    .inner-tabs>.tab-content {
+        border: 1px solid #e3e3e3;
+        border-top: none;
+    }
+
+    .nav-tabs .nav-link:focus,
+    .nav-tabs .nav-link:hover {
+        border-color: #e9e9e9;
+    }
+
+    .nav-tabs {
+        background-color: #e9e9e9;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .modalClose {
+        padding: 5px 7px;
+        border-radius: 23px;
+    }
+
+    .rule_div {
+        display: flex;
+        font-size: 14px;
+        align-items: center;
+        padding: 5px 0px;
+    }
+
+    .rule_input_box {
+        min-width: 50px;
+        max-width: 100px;
+        outline: none;
+        border: 1px solid #bfbfbf;
+        border-radius: 10px;
+        padding: 5px;
+        font-size: 13px;
+        color: black;
+        margin: 0 3px;
+
+    }
+</style>
+
+
+<!-- Main page -> Manage Task -->
+<main class="main-wrapper">
+    <!-- ==================Row1======================= -->
+    <div class="common-box-section">
+
+        <div id="snackbar"></div>
+
+        <div class="row pt-3">
+            <div class="col-xl-3 navigation-side shadow">
+                <div>
+                    <div class="main-cardheading my-2">Packets Name</div>
+                </div>
+                <div class="packet-nav">
+                    {% for i in packetlist %}
+                    <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist"
+                        aria-orientation="vertical">
+                        <a class="nav-link p-2 {% if forloop.counter == 1 %}active{% endif %}" id="Packet{{ i.id }}-tab"
+                            data-bs-toggle="pill" href="#Packet{{ i.id }}" role="tab" aria-controls="Packet{{ i.id }}"
+                            aria-selected="true">
+                            <span class="small leftheading">{{ i.PacketName|title }}</span>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-xl-9">
+                <!-- Account details card -->
+                <div class="tab-content" id="v-pills-tabContent">
+                    {% for i in packetlist %}
+                    <div class="tab-pane fade shadow rounded bg-white {% if forloop.counter == 1 %}show active{% endif %}"
+                        id="Packet{{ i.id }}" role="tabpanel" aria-labelledby="Packet{{ i.id }}-tab">
+                        <div class="main-card">
+                            <div class="main-cardheading">Rule Description</div>
+                            <div class="inner-tabs">
+
+
+
+
+                                <ul class="nav nav-tabs overflow-x-auto">
+
+
+                                    {% for leavetype in leavetypes %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link {% if forloop.counter == 1 %}active{% endif %}"
+                                            data-bs-toggle="tab" href="#leavetype{{leavetype.id}}-P{{i.id}}"
+                                            onclick="get_packet_leave_rules('{{i.id}}','{{leavetype.id}}')">{{leavetype.TypeName|title}}</a>
+                                    </li>
+                                    {% endfor %}
+
+                                    <li class="nav-item ms-auto">
+                                        <a class="nav-link text-black" data-bs-toggle="modal" href="#addleavetype">
+                                            + Add Leave Type
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    {% for leavetype in leavetypes %}
+
+                                    <div class="tab-pane container {% if forloop.counter == 1 %}active{% endif %}"
+                                        id="leavetype{{leavetype.id}}-P{{i.id}}">
+
+
+
+
+                                        <div class="rule_div">
+                                            1)
+                                            <input type="checkbox" name="rule" id="Rule1-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            There are
+                                            <input type="text" name="" id="LeaveCount-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            {{leavetype.TypeName}} and only
+                                            <input type="text" name=""
+                                                id="LeaveCarryForwardCount-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            can carry forward to next year
+                                        </div>
+
+                                        <div class="rule_div">
+                                            2) <input type="checkbox" name="rule" id="Rule2-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1"> This leave is
+                                            applicable to
+                                            <select name="" id="ApplicableEmployements-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="All">All</option>
+                                                <option value="probation">Probation</option>
+                                                <option value="confirm">Confirm</option>
+                                                <option value="intern">Intern</option>
+                                                <option value="trainee">Trainee</option>
+                                            </select>
+                                            employees
+                                        </div>
+
+                                        <div class="rule_div">
+                                            3) <input type="checkbox" name="rule" id="Rule3-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            All
+                                            <select name="" id="WPOLType-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="Both" selected>Both</option>
+                                                <option value="Holiday">Holiday</option>
+                                                <option value="WeeklyOff">WeeklyOff</option>
+                                            </select>
+                                            falling within the period of leave application shall
+                                            <select name="" id="WPOLStatus-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="be">be</option>
+                                                <option value="not be">not be</option>
+                                            </select>
+
+                                            treated as part of the leave.
+
+
+                                        </div>
+                                        <div class="rule_div">
+                                            Preceding / Succeeding 
+                                            <select name="" id="PSStatus-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="will">will</option>
+                                                <option value="not">will not</option>
+                                            </select>
+                                            be counted as leave.
+                                            This rule shall be applicable if Number of days of leave
+                                        </div>
+                                        <div class="rule_div">
+                                            application is more than
+                                            <input type="text" name="" id="AtLeastNoDays-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            days.
+                                        </div>
+
+                                        <div class="rule_div">
+                                            4) <input type="checkbox" name="rule" id="Rule4-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            <select name="" id="ApprovalLevels-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3" selected>3</option>
+                                            </select>
+                                            approver level ,If the Approver does not take any action, then the Leave
+                                            application should be automatically
+
+                                            <select name="" id="IfNoAction-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="Approve">approved</option>
+                                                <option value="Reject">rejected</option>
+                                            </select>
+                                        </div>
+                                        <div class="rule_div">
+                                            before
+                                            <input type="text" name="" id="IfNoActionBefore-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            days. from
+                                            <select name="" id="IfNoActionFrom-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="leave application date">leave application date</option>
+                                                <option value="leave start date">leave start date</option>
+                                            </select>
+
+                                        </div>
+
+
+
+                                        <div class="rule_div">
+                                            5)
+                                            <input type="checkbox" name="rule" id="Rule5-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            leave application can be applied for upto
+                                            <input type="text" name="" id="ApplyUptoFuture-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            days in the future from current date.
+
+
+                                        </div>
+
+                                        <div class="rule_div">
+                                            6) <input type="checkbox" name="rule" id="Rule6-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            This leave application can be applied backdated for upto
+                                            <input type="text" name="" id="ApplyUptoPast-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            days from current date.
+                                        </div>
+
+
+                                        <div class="rule_div">
+                                            7) <input type="checkbox" name="rule" id="Rule7-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            {{leavetype.TypeName|title}} leave can be applied before
+                                            <input type="text" name="" id="ApplyBefore-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            days
+                                        </div>
+
+
+
+                                        <div class="rule_div">
+                                            8) <input type="checkbox" name="rule" id="Rule8-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">If
+                                            {{leavetype.TypeName}} is leave longer than
+                                            <input type="text" name="" id="LeaveLongerThan-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            consecutive days ,then attachments required
+
+                                            <select name="" id="AttachmentRequired-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="yes">yes</option>
+                                                <option value="no">no</option>
+                                            </select>
+
+
+
+                                        </div>
+
+
+
+
+
+                                        <div class="rule_div">
+                                            9) <input type="checkbox" name="rule" id="Rule9-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            Weekly Off will consider on
+
+                                            <select name="" id="WeeklyOffConsider-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                            </select>
+                                            if 6
+                                            <select name="" id="IfWeeklyOff6-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="yes">yes</option>
+                                                <option value="no">no</option>
+                                            </select>
+                                            selected
+                                            it is
+                                            <select name="" id="WeeklyOffPattern-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="even">even</option>
+                                                <option value="odd">odd</option>
+                                            </select>
+                                            weeklyoff
+
+
+
+                                        </div>
+
+
+                                        <div class="rule_div">
+                                            10)
+                                            <input type="checkbox" name="rule" id="Rule10-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+                                            Pro rated calculation can be done from
+                                            <select name="" id="ProRatedCalculation-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="date of joining">date of joining</option>
+                                                <option value="date of confirmation">date of confirmation</option>
+                                            </select>
+                                        </div>
+
+
+                                        <div class="rule_div">
+                                            11)<input type="checkbox" name="rule" id="Rule11-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">Auto encashment of {{leavetype.TypeName}} beyond
+
+                                            <input type="text" name=""
+                                                id="AutoEncashmentBeyond-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0">
+                                            days
+
+
+                                        </div>
+
+                                        <div class="rule_div">
+                                            12) <input type="checkbox" name="rule" id="Rule12-{{leavetype.id}}-{{i.id}}"
+                                                class="mx-1">
+
+                                            Employees can encashed the leave in
+
+                                            <select name="" id="EncashmentType-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box">
+                                                <option value="Partial">Partial</option>
+                                                <option value="full">full</option>
+                                            </select>
+                                            and
+                                            <input type="text" name=""
+                                                id="EncashmentApplyCount-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="1">
+                                            number of times in a year.
+                                            A single application can be a
+
+
+                                        </div>
+                                        <div class="rule_div">
+                                            minimum of
+                                            <input type="text" name="" id="MinEncashmentDays-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0"> days
+                                            and a maximum of
+                                            <input type="text" name="" id="MaxEncashmentDays-{{leavetype.id}}-{{i.id}}"
+                                                class="rule_input_box" value="0"> days.
+                                        </div>
+
+
+                                        <div class="d-flex justify-content-center py-2">
+                                            <!-- <button class="modalClose" style="width: auto;padding: 0 30px;">Cancel</button> -->
+
+                                            <button class="" id="addEmployeeBtn"
+                                                onclick="return apply_rules('{{i.id}}','{{leavetype.id}}');">Submit</button>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    {% endfor %}
+
+
+
+
+                                </div>
+
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+
+
+        <!-----------------------------modal pop up--------------------------------------------------->
+        <!-- {{document}} -->
+        <div class="modal fade" id="addleavetype" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Leave Type</h5>
+                    </div>
+                    <div class="modal-body px-3 py-0">
+                        <div class="row">
+
+                            <div class="col-12" style="position:relative;">
+                                <label for="TypeName">Type Name<span style="color:red;">*</span></label>
+                                <input type="text" class="form-control" id="TypeName" value="" name="TypeName"
+                                    placeholder="Enter Type Name">
+                                <span id="TypeNameerror" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="modalClose" data-bs-dismiss="modal">Close</button>
+                        <button class="" id="addEmployeeBtn" onclick="return addleavetype();">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+{%endblock%}
+{% block script%}
+{{block.super}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let tabLinks = document.querySelectorAll(".nav-link[data-bs-toggle='pill']");
+
+        tabLinks.forEach(tab => {
+            tab.addEventListener("shown.bs.tab", function (event) {
+                // Remove active class from all nav-links
+                document.querySelectorAll(".nav-link").forEach(link => {
+                    link.classList.remove("active");
+                });
+
+                // Add active class to the newly selected tab
+                event.target.classList.add("active");
+            });
+        });
+    });
+
+
+    function addleavetype(id) {
+
+        var TypeName = $('#TypeName').val().trim();
+
+        if (IsValid(TypeName)) {
+            $('#TypeName').html('');
+            $('#TypeNameerror').show().delay(3000).slideUp();
+            $('#TypeNameerror').html('Type name is required');
+            $('#TypeName').focus();
+            return false;
+        }
+        else {
+
+            $.ajax({
+                type: "POST",
+                url: frontendURL + "leave/add_leavetype",
+                data: {
+                    'TypeName': TypeName,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (response) {
+                    console.log("reps", response)
+                    if (response.response.n == 1) {
+                        swal({
+                            icon: "success",
+                            title: "",
+                            text: response.response.msg,
+                            buttons: false,
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+
+                        swal({
+                            icon: "warning",
+                            title: "",
+                            text: response.response.msg,
+                            button: "Close",
+                        });
+                    }
+
+                }
+            });
+        }
+    }
+
+    function apply_rules(packetid, leavetypeid) {
+        debugger
+        var Rule1 = $('#Rule1-' + leavetypeid + '-' + packetid).prop('checked');
+        var LeaveCount = $('#LeaveCount-' + leavetypeid + '-' + packetid).val()
+        var LeaveCarryForwardCount = $('#LeaveCarryForwardCount-' + leavetypeid + '-' + packetid).val()
+
+        var Rule2 = $('#Rule2-' + leavetypeid + '-' + packetid).prop('checked');
+        var ApplicableEmployements = $('#ApplicableEmployements-' + leavetypeid + '-' + packetid).val()
+
+        var Rule3 = $('#Rule3-' + leavetypeid + '-' + packetid).prop('checked');
+        var WPOLType = $('#WPOLType-' + leavetypeid + '-' + packetid).val()
+        var WPOLStatus = $('#WPOLStatus-' + leavetypeid + '-' + packetid).val()
+        var AtLeastNoDays = $('#AtLeastNoDays-' + leavetypeid + '-' + packetid).val()
+        var PSStatus = $('#PSStatus-' + leavetypeid + '-' + packetid).val()
+        var HAtLeastNoDays = AtLeastNoDays
+        var WOAtLeastNoDays = AtLeastNoDays
+        
+        if (WPOLType == 'Both' && WPOLStatus == 'be') {
+            var WPOLHoliday = true
+            var WPOLWeeklyOff = true
+            if(PSStatus=='will'){
+                var PSHoliday = true
+                var PSWeeklyOff = true   
+            }
+            else{
+                var PSHoliday = false
+                var PSWeeklyOff = false
+            }
+
+        }
+        else if (WPOLType == 'Holiday' && WPOLStatus == 'be'){
+            var WPOLHoliday = true
+            var WPOLWeeklyOff = false
+            if(PSStatus=='will'){
+                var PSHoliday = true
+                var PSWeeklyOff = false   
+            }else{
+                var PSHoliday = false
+                var PSWeeklyOff = false
+            }
+
+        }
+        else if (WPOLType == 'WeeklyOff' && WPOLStatus == 'be'){
+            var WPOLHoliday = false
+            var WPOLWeeklyOff = true
+            if(PSStatus=='will'){
+                var PSHoliday = false
+                var PSWeeklyOff = true   
+            }else{
+                var PSHoliday = false
+                var PSWeeklyOff = false
+            }
+
+        }
+        else{
+            var WPOLHoliday = false
+            var WPOLWeeklyOff = false
+            var PSHoliday = false
+            var PSWeeklyOff = false 
+        }
+
+
+
+
+
+        
+
+
+
+        var Rule4 = $('#Rule4-' + leavetypeid + '-' + packetid).prop('checked');
+        var ApprovalLevels = $('#ApprovalLevels-' + leavetypeid + '-' + packetid).val()
+        var IfNoAction = $('#IfNoAction-' + leavetypeid + '-' + packetid).val()
+        var IfNoActionBefore = $('#IfNoActionBefore-' + leavetypeid + '-' + packetid).val()
+        var IfNoActionFrom = $('#IfNoActionFrom-' + leavetypeid + '-' + packetid).val()
+
+        var Rule5 = $('#Rule5-' + leavetypeid + '-' + packetid).prop('checked');
+        var ApplyUptoFuture = $('#ApplyUptoFuture-' + leavetypeid + '-' + packetid).val()
+
+        var Rule6 = $('#Rule6-' + leavetypeid + '-' + packetid).prop('checked');
+        var ApplyUptoPast = $('#ApplyUptoPast-' + leavetypeid + '-' + packetid).val()
+
+        var Rule7 = $('#Rule7-' + leavetypeid + '-' + packetid).prop('checked');
+        var ApplyBefore = $('#ApplyBefore-' + leavetypeid + '-' + packetid).val()
+
+
+        var Rule8 = $('#Rule8-' + leavetypeid + '-' + packetid).prop('checked');
+        var LeaveLongerThan = $('#LeaveLongerThan-' + leavetypeid + '-' + packetid).val()
+        var AttachmentRequired = $('#AttachmentRequired-' + leavetypeid + '-' + packetid).val()
+        if (AttachmentRequired == 'yes') {
+            AttachmentRequired = true
+        } else {
+            AttachmentRequired = false
+        }
+
+        var Rule9 = $('#Rule9-' + leavetypeid + '-' + packetid).prop('checked');
+        var WeeklyOffConsider = $('#WeeklyOffConsider-' + leavetypeid + '-' + packetid).val()
+        var IfWeeklyOff6 = $('#IfWeeklyOff6-' + leavetypeid + '-' + packetid).val()
+        if (IfWeeklyOff6 == 'yes') {
+            IfWeeklyOff6 = true
+        } else {
+            IfWeeklyOff6 = false
+        }
+        var WeeklyOffPattern = $('#WeeklyOffPattern-' + leavetypeid + '-' + packetid).val()
+
+
+        var Rule10 = $('#Rule10-' + leavetypeid + '-' + packetid).prop('checked');
+        var ProRatedCalculation = $('#ProRatedCalculation-' + leavetypeid + '-' + packetid).val()
+
+
+        var Rule11 = $('#Rule11-' + leavetypeid + '-' + packetid).prop('checked');
+        var AutoEncashmentBeyond = $('#AutoEncashmentBeyond-' + leavetypeid + '-' + packetid).val()
+
+        var Rule12 = $('#Rule12-' + leavetypeid + '-' + packetid).prop('checked');
+        var EncashmentType = $('#EncashmentType-' + leavetypeid + '-' + packetid).val()
+        var EncashmentApplyCount = $('#EncashmentApplyCount-' + leavetypeid + '-' + packetid).val()
+        var MinEncashmentDays = $('#MinEncashmentDays-' + leavetypeid + '-' + packetid).val()
+        var MaxEncashmentDays = $('#MaxEncashmentDays-' + leavetypeid + '-' + packetid).val()
+
+
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "packet/apply_packet_rules",
+            data: {
+
+
+                'PacketId': packetid,
+                'LeaveTypeId': leavetypeid,
+                'Rule1': Rule1,
+                'LeaveCount': LeaveCount,
+                'LeaveCarryForwardCount': LeaveCarryForwardCount,
+
+                'Rule2': Rule2,
+                'ApplicableEmployements': ApplicableEmployements,
+
+                'Rule3': Rule3,
+                'WPOLHoliday': WPOLHoliday,
+                'WPOLWeeklyOff': WPOLWeeklyOff,
+                'HAtLeastNoDays': HAtLeastNoDays,
+                'WOAtLeastNoDays': WOAtLeastNoDays,
+                'PSHoliday': PSHoliday,
+                'PSWeeklyOff': PSWeeklyOff,
+
+
+                'Rule4': Rule4,
+                'ApprovalLevels': ApprovalLevels,
+                'IfNoAction': IfNoAction,
+                'IfNoActionBefore': IfNoActionBefore,
+                'IfNoActionFrom': IfNoActionFrom,
+
+
+                'Rule5': Rule5,
+                'ApplyUptoFuture': ApplyUptoFuture,
+
+
+                'Rule6': Rule6,
+                'ApplyUptoPast': ApplyUptoPast,
+
+                'Rule7': Rule7,
+                'ApplyBefore': ApplyBefore,
+
+                'Rule8': Rule8,
+                'LeaveLongerThan': LeaveLongerThan,
+                'AttachmentRequired': AttachmentRequired,
+
+                'Rule9': Rule9,
+                'WeeklyOffConsider': WeeklyOffConsider,
+                'IfWeeklyOff6': IfWeeklyOff6,
+                'WeeklyOffPattern': WeeklyOffPattern,
+
+
+                'Rule10': Rule10,
+                'ProRatedCalculation': ProRatedCalculation,
+
+
+                'Rule11': Rule11,
+                'AutoEncashmentBeyond': AutoEncashmentBeyond,
+                'Rule12': Rule12,
+                'EncashmentType': EncashmentType,
+                'EncashmentApplyCount': EncashmentApplyCount,
+                'MinEncashmentDays': MinEncashmentDays,
+                'MaxEncashmentDays': MaxEncashmentDays,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {
+                console.log("reps", response)
+                if (response.response.n == 1) {
+                    swal({
+                        icon: "success",
+                        title: "",
+                        text: response.response.msg,
+                        buttons: false,
+                    })
+                    // .then(() => {
+                    //     window.location.reload();
+                    // });
+                } else {
+
+                    swal({
+                        icon: "warning",
+                        title: "",
+                        text: response.response.msg,
+                        button: "Close",
+                    });
+                }
+
+            }
+        });
+
+
+
+
+
+    }
+
+    function get_packet_leave_rules(packetid, leavetypeid) {
+        $.ajax({
+            type: "POST",
+            url: frontendURL + "packet/get_packet_leave_rules",
+            data: {
+                'PacketId': packetid,
+                'LeaveTypeId': leavetypeid,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {
+                console.log("get_packet_leave_rules", response)
+                if (response.response.n == 1) {
+                    // swal({
+                    //     icon: "success",
+                    //     title: "",
+                    //     text: response.response.msg,
+                    //     buttons: false,
+                    // })
+
+                    for (var i = 1; i <= 12; i++) {
+                        
+                        $('#Rule' + i + '-' + leavetypeid + '-' + packetid).prop('checked', response.data["Rule" + i]);
+                    }
+                    $('#LeaveCount-' + leavetypeid + '-' + packetid).val(response.data.LeaveCount);
+                    $('#LeaveCarryForwardCount-' + leavetypeid + '-' + packetid).val(response.data.LeaveCarryForwardCount);
+                    $('#ApplicableEmployements-' + leavetypeid + '-' + packetid).val(response.data.ApplicableEmployements);
+                    
+                    if(response.data.WPOLWeeklyOff==true && response.data.WPOLHoliday==false){
+                        $('#WPOLType-' + leavetypeid + '-' + packetid).val('WeeklyOff');
+                        $('#WPOLStatus-' + leavetypeid + '-' + packetid).val('be');
+
+                    }else if(response.data.WPOLWeeklyOff==false && response.data.WPOLHoliday==true){
+                        $('#WPOLType-' + leavetypeid + '-' + packetid).val('Holiday');
+                        $('#WPOLStatus-' + leavetypeid + '-' + packetid).val('be');
+
+                    }else if(response.data.WPOLWeeklyOff==true && response.data.WPOLHoliday==true){
+                        $('#WPOLType-' + leavetypeid + '-' + packetid).val('Both');
+                        $('#WPOLStatus-' + leavetypeid + '-' + packetid).val('be');
+
+                        
+                    }else{
+                        $('#WPOLType-' + leavetypeid + '-' + packetid).val('Both');
+                        $('#WPOLStatus-' + leavetypeid + '-' + packetid).val('not be');
+
+                    }
+
+
+                
+
+
+                    if(response.data.PSWeeklyOff==true && response.data.PSHoliday==false){
+                        $('#PSStatus-' + leavetypeid + '-' + packetid).val('will');
+                    }else if(response.data.PSWeeklyOff==false && response.data.PSHoliday==true){
+                        $('#PSStatus-' + leavetypeid + '-' + packetid).val('will');
+                    }else if(response.data.PSWeeklyOff==true && response.data.PSHoliday==true){
+                        $('#PSStatus-' + leavetypeid + '-' + packetid).val('will');
+                    }else{
+                        $('#PSStatus-' + leavetypeid + '-' + packetid).val('not');
+                    }
+
+                    if ($('#WPOLType-' + leavetypeid + '-' + packetid).val() =='WeeklyOff'){
+                        $('#AtLeastNoDays-' + leavetypeid + '-' + packetid).val(response.data.WOAtLeastNoDays);
+                    }else{
+                        $('#AtLeastNoDays-' + leavetypeid + '-' + packetid).val(response.data.HAtLeastNoDays);
+                    }
+
+                    $('#ApprovalLevels-' + leavetypeid + '-' + packetid).val(response.data.ApprovalLevels);
+                    $('#IfNoAction-' + leavetypeid + '-' + packetid).val(response.data.IfNoAction);
+                    $('#IfNoActionBefore-' + leavetypeid + '-' + packetid).val(response.data.IfNoActionBefore);
+                    $('#IfNoActionFrom-' + leavetypeid + '-' + packetid).val(response.data.IfNoActionFrom);
+                    $('#ApplyUptoFuture-' + leavetypeid + '-' + packetid).val(response.data.ApplyUptoFuture);
+                    $('#ApplyUptoPast-' + leavetypeid + '-' + packetid).val(response.data.ApplyUptoPast);
+                    $('#ApplyBefore-' + leavetypeid + '-' + packetid).val(response.data.ApplyBefore);
+                    $('#LeaveLongerThan-' + leavetypeid + '-' + packetid).val(response.data.LeaveLongerThan);
+                    if(response.data.AttachmentRequired == true){
+                        $('#AttachmentRequired-' + leavetypeid + '-' + packetid).val('yes');
+
+                    }else{
+                        $('#AttachmentRequired-' + leavetypeid + '-' + packetid).val('no');
+
+                    }
+                    $('#WeeklyOffConsider-' + leavetypeid + '-' + packetid).val(response.data.WeeklyOffConsider);
+                    if(response.data.IfWeeklyOff6 == true){
+                        $('#IfWeeklyOff6-' + leavetypeid + '-' + packetid).val('yes');
+
+                    }else{
+                        $('#IfWeeklyOff6-' + leavetypeid + '-' + packetid).val('no');
+
+                    }
+
+
+                    $('#WeeklyOffPattern-' + leavetypeid + '-' + packetid).val(response.data.WeeklyOffPattern);
+                    $('#ProRatedCalculation-' + leavetypeid + '-' + packetid).val(response.data.ProRatedCalculation);
+                    $('#AutoEncashmentBeyond-' + leavetypeid + '-' + packetid).val(response.data.AutoEncashmentBeyond);
+                    $('#EncashmentType-' + leavetypeid + '-' + packetid).val(response.data.EncashmentType);
+                    $('#EncashmentApplyCount-' + leavetypeid + '-' + packetid).val(response.data.EncashmentApplyCount);
+                    $('#MinEncashmentDays-' + leavetypeid + '-' + packetid).val(response.data.MinEncashmentDays);
+                    $('#MaxEncashmentDays-' + leavetypeid + '-' + packetid).val(response.data.MaxEncashmentDays);
+
+
+
+
+
+
+                } else {
+
+                    // swal({
+                    //     icon: "warning",
+                    //     title: "",
+                    //     text: response.response.msg,
+                    //     button: "Close",
+                    // });
+                }
+
+            }
+        });
+
+    }
+
+</script>
+{%endblock%}
