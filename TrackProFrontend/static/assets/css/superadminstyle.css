@@ -11,7 +11,7 @@
     top: 9%;
     width: 50px;
     height: 100%;
-    /* background-color: #174fa3; */
+    /* background-color: #00b0ef; */
     background-color: #bfc0c0;
     overflow: hidden !important;
 }
@@ -63,29 +63,29 @@ h6 {
 .addcompanybtn {
     padding: 5px 30px;
     border-radius: 10rem;
-    background-color: #174fa3;
-    border-color: #174fa3;
+    background-color: #00b0ef;
+    border-color: #00b0ef;
     color: white;
 }
 .addcompanybtn:hover{
     outline:none;
     border-color: none;
-    background-color: #174fa3;
+    background-color: #00b0ef;
     color:white;
 }
 .addcompanybtn:focus{
     padding: 5px 30px;
     border-radius: 10rem;
-    background-color: #174fa3 !important;
-    border-color: #174fa3;
+    background-color: #00b0ef !important;
+    border-color: #00b0ef;
     color: white;
 }
 /* 
 #button:hover {
     padding: 5px 30px;
     border-radius: 10rem;
-    background-color: #00afef;
-    border-color: #174fa3;
+    background-color: #174fa3;
+    border-color: #00b0ef;
     color: #fff;
 } */
 
@@ -115,24 +115,24 @@ h6 {
 .cancelbtn{
     padding: 5px 30px;
     border-radius: 10rem;
-    border:1px solid #174fa3;
+    border:1px solid #00b0ef;
     background-color: white;
-    border-color: #174fa3;
-    color: #174fa3;
+    border-color: #00b0ef;
+    color: #00b0ef;
     margin-right:7px;
 }
 .submitbtn{
     padding: 5px 30px;
     border-radius: 10rem;
-    border:1px solid #174fa3;
-    background-color: #174fa3;
-    border-color: #174fa3;
+    border:1px solid #00b0ef;
+    background-color: #00b0ef;
+    border-color: #00b0ef;
     color: white;
 }
 .submitbtn:hover{
     outline:none;
     border-color: none;
-    background-color: #174fa3;
+    background-color: #00b0ef;
     color:white;
 }
 
@@ -264,23 +264,23 @@ h6 {
     padding: 0 20px;
     background: #fff;
     color: #323840;
-    border: 1px solid #3d85d8;
+    border: 1px solid #174fa3;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
 .did-floating-input:focus,
 .did-floating-select:focus {
-    outline: #00afef;
-    color: #00afef !important;
-    border: 2px solid #00afef !important;
+    outline: #174fa3;
+    color: #174fa3 !important;
+    border: 2px solid #174fa3 !important;
 }
 
 .did-floating-input:focus~.did-floating-label,
 .did-floating-select:focus~.did-floating-label {
     top: -8px;
     font-size: 13px;
-    color: #00afef;
+    color: #174fa3;
 }
 
 select.did-floating-select {
@@ -296,19 +296,19 @@ select.did-floating-select::-ms-expand {
 .did-floating-input:not(:placeholder-shown)~.did-floating-label {
     top: -8px;
     font-size: 13px;
-    color: #00afef;
+    color: #174fa3;
 }
 
 .did-floating-select:not([value=""]):valid~.did-floating-label {
     top: -8px;
     font-size: 13px;
-    color: #00afef;
+    color: #174fa3;
 }
 
 .did-floating-select[value=""]:focus~.did-floating-label {
     top: 11px;
     font-size: 13px;
-    color: #00afef;
+    color: #174fa3;
 }
 
 .did-floating-select:not([multiple]):not([size]) {
@@ -358,7 +358,7 @@ select.did-floating-select::-ms-expand {
     font-size: 12px;
     text-align: center;
     white-space: nowrap;
-    border: 1px solid #3d85d8;
+    border: 1px solid #174fa3;
     border-radius: 4px 0 0 4px;
     border-right: none;
 }
@@ -398,7 +398,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .DropInp select:invalid~.DropLabel,
 .DropInp select:focus~.DropLabel {
-    color: #00afef;
+    color: #174fa3;
     transform: translateX(10px) translateY(-7px);
     font-size: 0.85rem;
     font-weight: 600;
@@ -409,8 +409,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .DropInp select:invalid,
 .DropInp select:focus {
-    color: #00afef;
-    border: 2px solid #00afef;
+    color: #174fa3;
+    border: 2px solid #174fa3;
     outline: none;
 }
 
@@ -436,8 +436,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .floating-input:focus,
 .floating-select:focus {
-    color: #00afef;
-    border: 2px solid #00afef;
+    color: #174fa3;
+    border: 2px solid #174fa3;
     outline: none;
 }
 
@@ -460,7 +460,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .floating-select:focus~label,
 .floating-select:not([value=""]):valid~label {
-    color: #00afef;
+    color: #174fa3;
     transform: translateX(1px) translateY(-16px);
     font-size: 0.65rem;
     font-weight: 600;
@@ -639,6 +639,7 @@ select:invalid {
     background-color: #fff;
     box-shadow: 0px 4px 8px #0000001F;
     padding:5px;
+    /* overflow: auto; */
 }
 .imagecontainer {
     width: 35px;

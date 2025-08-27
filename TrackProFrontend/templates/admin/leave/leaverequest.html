@@ -3,14 +3,10 @@
 {% load encryption_filters %}
 
 {% block headercontent %}
-<div class="nav-item newheading">
   Leave Requests
-</div>
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/leave_request.css' %}">
 
 <main class="main-wrapper">
 
@@ -34,7 +30,7 @@
 
       <span class="application-filter-box px-2">
 
-        <select class="input-feild select2dropdown" id="ApplicationType" onchange="search_by_name();">
+        <select class="input-feild js-example-basic-single" id="ApplicationType" onchange="search_by_name();">
           <option value="" selected>All</option>
           <option value="Leave"> Leave</option>
           <option value="Work From Home">Work from home</option>
@@ -42,7 +38,7 @@
       </span>
 
       <div class="application-filter-box px-2">
-        <select class="input-feild select2dropdown" id="searchdept" onchange="search_by_name();">
+        <select class="input-feild js-example-basic-single" id="searchdept" onchange="search_by_name();">
           <option selected value="">Search by Department</option>
 
         </select>
@@ -50,7 +46,7 @@
 
       <span class="application-filter-box px-2">
 
-        <select class="input-feild select2dropdown" id="search_month" onchange="search_by_name();">
+        <select class="input-feild js-example-basic-single" id="search_month" onchange="search_by_name();">
           <option value="" selected>Select Month</option>
           <option value="1">January</option>
           <option value="2">February</option>
@@ -71,7 +67,7 @@
 
       <span class="application-filter-box px-2">
 
-        <select class="input-feild select2dropdown" id="search_year" onchange="search_by_name();">
+        <select class="input-feild js-example-basic-single" id="search_year" onchange="search_by_name();">
 
         </select>
 
@@ -306,7 +302,7 @@
                                             <div class="modal-footer">
                                 
                                               <div class="w-50 text-center">
-                                                <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                                <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                                               </div>
                               
                                             </div>

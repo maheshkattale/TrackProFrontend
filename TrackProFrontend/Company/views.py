@@ -177,6 +177,7 @@ def companyleads(request):
             return redirect('users:updatepassword', id=request.session.get('userID'))
         companyLeadResponse = requests.get(companyleadsURL, headers=headers)
         companyLeadinfo = companyLeadResponse.json()
+        
         companyTypeResponse = requests.get(companyListURL, headers=headers)
         companyTypeData = companyTypeResponse.json()
         periodlistResponse = requests.get(BillingPeriodlistUrl, headers=headers)

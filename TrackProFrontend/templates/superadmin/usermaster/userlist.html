@@ -1,14 +1,12 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Users list
-</div>
+
 {% endblock %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
 <style>
     .select2-container--default .select2-selection--single {
         height: 35px !important;
@@ -55,36 +53,36 @@
             {% csrf_token %}
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                             <label for="firstName">Enter First Name</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" class="input-feild"  onkeydown="return /[a-z]/i.test(event.key)"/>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" class="form-control"  onkeydown="return /[a-z]/i.test(event.key)"/>
                             <span id="firstName_err" class="error"></span>
                     </div>
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                             <label for="lastName">Enter last Name</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="Enter last Name " class="input-feild"  onkeydown="return /[a-z]/i.test(event.key)"/>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter last Name " class="form-control"  onkeydown="return /[a-z]/i.test(event.key)"/>
                             <span id="lastName_err" class="error"></span>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                         <label for="email">Enter Email ID</label>
-                        <input type="email" id="email" name="email" placeholder="Enter Email" class="input-feild"/>
+                        <input type="email" id="email" name="email" placeholder="Enter Email" class="form-control"/>
                         <span id="email_err" class="error"></span>
                     </div>
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                         <label for="mobileNumber">Enter Mobile Number</label>
 
-                            <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number" class="input-feild" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  maxlength="10"/>
+                            <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  maxlength="10"/>
                             <span id="mobileNumber_err" class="error"></span>
                     </div>
                 
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                             <label for="role">Role</label>
-                            <select  onclick="this.setAttribute('value', this.value);" placeholder=" " id="role" name="role" class="input-feild select2dropdown">
+                            <select  onclick="this.setAttribute('value', this.value);" placeholder=" " id="role" name="role" class="form-control js-example-basic-single">
                                 <option value="">Select Role</option>
                                 {% for p in rolelist %}
                                 <option class="text-capitalize" value="{{p.id}}">{{p.RoleName}}</option>
@@ -92,17 +90,17 @@
                             </select>
                             <span id="role_err" class="error"></span>
                     </div>
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                             <label for="password">Enter Password</label>
 
-                            <input type="password" id="password" name="password" placeholder=" Enter Password" class="input-feild"/>
+                            <input type="password" id="password" name="password" placeholder=" Enter Password" class="form-control"/>
                             <span id="password_err" class="error"></span>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Close</button>
-              <button class="trackproBtn w-25"  type="submit" id="editEmployeeDetails" onclick="return formValidation();">Submit</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-gradient-info btn-rounded btn-fw w-25"  type="submit" id="editEmployeeDetails" onclick="return formValidation();">Submit</button>
 
             </div>
           </form>
@@ -114,7 +112,7 @@
 
           
 <div class="table-div">
-    <table class="row-border w-100" id="myTable">
+    <table class="row-border w-100 table-bordered" id="myTable">
         <thead>
             <th>Sr. no</th>
             <th>Name</th>
@@ -156,36 +154,36 @@
         <div class="modal-body">
 
             <div class="row">
-                <div class="col-lg-6 mt-3">
+                <div class="col-lg-6 mt-3 form-group">
                         <label for="firstName{{i.id}}">Enter First Name</label>
-                        <input type="text" id="firstName{{i.id}}" name="firstName" placeholder="Enter First Name" class="input-feild" value="{{i.Firstname}}" onkeydown="return /[a-z]/i.test(event.key)"//>
+                        <input type="text" id="firstName{{i.id}}" name="firstName" placeholder="Enter First Name" class="form-control" value="{{i.Firstname}}" onkeydown="return /[a-z]/i.test(event.key)"//>
                         <span id="firstName_err{{i.id}}" class="error"></span>
                 </div>
-                <div class="col-lg-6 mt-3">
+                <div class="col-lg-6 mt-3 form-group">
                         <label for="lastName{{i.id}}">Enter last Name</label>
-                        <input type="text" id="lastName{{i.id}}" name="lastName" placeholder="Enter last Name " class="input-feild" value="{{i.Lastname}}" onkeydown="return /[a-z]/i.test(event.key)"//>
+                        <input type="text" id="lastName{{i.id}}" name="lastName" placeholder="Enter last Name " class="form-control" value="{{i.Lastname}}" onkeydown="return /[a-z]/i.test(event.key)"//>
                         <span id="lastName_err{{i.id}}" class="error"></span>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-lg-6 mt-3">
+                <div class="col-lg-6 mt-3 form-group">
                     <label for="email{{i.id}}">Enter Email ID</label>
-                    <input type="email" id="email{{i.id}}" name="email" placeholder="Enter Email" class="input-feild" value="{{i.email}}"/>
+                    <input type="email" id="email{{i.id}}" name="email" placeholder="Enter Email" class="form-control" value="{{i.email}}"/>
                     <span id="email_err{{i.id}}" class="error"></span>
                 </div>
-                <div class="col-lg-6 mt-3">
+                <div class="col-lg-6 mt-3 form-group">
                     <label for="mobileNumber{{i.id}}">Enter Mobile Number</label>
 
-                        <input type="text" id="mobileNumber{{i.id}}" name="mobileNumber" placeholder="Enter Mobile Number" class="input-feild" value="{{i.Phone}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  maxlength="10"/>
+                        <input type="text" id="mobileNumber{{i.id}}" name="mobileNumber" placeholder="Enter Mobile Number" class="form-control" value="{{i.Phone}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  maxlength="10"/>
                         <span id="mobileNumber_err{{i.id}}" class="error"></span>
                 </div>
             
             </div>
             <div class="row">
-                <div class="col-lg-6 mt-3">
+                <div class="col-lg-6 mt-3 form-group">
                         <label for="role{{i.id}}">Role</label>
-                        <select  onclick="this.setAttribute('value', this.value);" placeholder=" " id="role{{i.id}}" name="role" class="input-feild select2dropdown">
+                        <select  onclick="this.setAttribute('value', this.value);" placeholder=" " id="role{{i.id}}" name="role" class="form-control js-example-basic-single">
                             <option value="{{i.RoleID}}" selected>{{i.RoleID}}</option>
                             {% for p in rolelist %}
                                 {%if p.RoleName == i.RoleID %}
@@ -198,15 +196,15 @@
                         </select>
                         <span id="role_err{{i.id}}" class="error"></span>
                 </div>
-                <div class="col-lg-6 mt-3">
+                <div class="col-lg-6 mt-3 form-group">
 
                 </div>
             </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Close</button>
-          <button class="trackproBtn w-25" id="editEmployeeDetails" onclick="updateuser({{i.id}});">Submit</button>
+          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-gradient-info btn-rounded btn-fw w-25" id="editEmployeeDetails" onclick="updateuser({{i.id}});">Submit</button>
         </div>
       </div>
     </div>
@@ -230,10 +228,7 @@
     $( document ).ready(function() {
         $(".usermapping-form-button").hide()
         $('#myTable').DataTable();
-        $('.input-feild').on("focus", function () {
-          var label = $('label[for=' + this.id + ']');
-          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
-        });
+
     });
 
     // first name--------------------------------------------------------------------

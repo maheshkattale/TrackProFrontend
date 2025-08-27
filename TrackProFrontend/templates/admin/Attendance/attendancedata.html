@@ -2,14 +2,10 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Attendance Report
-</div>
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 
 <style>
@@ -114,9 +110,7 @@ Attendance Report
         background-color: var(--fc-main);
         color: #fff;
     }
-    .table-div{
-        margin-top:0px !important;
-    }
+
 </style>
 
 
@@ -236,7 +230,7 @@ Attendance Report
 </main>
 {% endblock %}{%block script%}{{block.super}}
   <!-- ==================================================================================================================================================== -->
-<script src="{% static 'assets/js/validation/validations.js'%}"></script>
+<script src="{% static 'js/validation/validations.js'%}"></script>
 
 
 

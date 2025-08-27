@@ -151,8 +151,9 @@ def addTaskAjax(request):
             data["AssignBy"]=AssignBy
             UserId = request.session['userID']
             chwar = {'Employee':UserId,'Year':year,'Week':week}
-            chkIfTrackProExists = requests.post(remoteURL+"checktrackpro/api/checkwarscoreexists",data= chwar,headers = headers)
+            chkIfTrackProExists = requests.post(remoteURL+"checktrackpro/api/checktrackproscoreexists",data= chwar,headers = headers)
             warExists = chkIfTrackProExists.json()
+            print("warExists['n']",warExists['n'])
             if warExists['n'] == 0:
                 return HttpResponse(json.dumps(warExists), content_type="application/json")
             else:

@@ -3,13 +3,10 @@
 {% load encryption_filters %}
 
 {% block headercontent %}
-<div class="nav-item newheading">
  Device Requests
-</div>
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
 
@@ -894,8 +891,8 @@
           
           </div>
           <div class="modal-footer">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-            <span type="submit" class="trackproBtn" id="editEmployeeDetails" onclick="rejectapplication({{i.id}})">Submit</span>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <span type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="rejectapplication({{i.id}})">Submit</span>
           </div>
         </div>
       </div>
@@ -922,7 +919,7 @@
             </div>            
           </div>
           <div class="modal-footer">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
             <span   data-bs-dismiss="modal" onclick="ApplicationApprove({{i.id}})" class="trackproBtn" id="editEmployeeDetails">Approve</span>
           </div>
         </div>

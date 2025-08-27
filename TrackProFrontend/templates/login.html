@@ -59,9 +59,12 @@
 </head>
 
 <style>
-  .djangoerrormsg {
+.djangoerrormsg {
     font-size: 20px;
-  }
+    position: absolute;
+    top: 10%;
+    left: 40%;
+}
 
   .alert-error {
     background-color: #ffdede !important;
@@ -72,21 +75,8 @@
 <body>
 
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-7">
-        <div class="content">
-          <img src="static/assets/images/2456062.jpg" alt="Pair programming" class="img-fluid w-75 mx-auto" />
-        </div>
-      </div>
 
-      <div class="col-lg-5">
 
-        <div class="form-div">
-
-          <form method="post" class="row g-3">
-            {%csrf_token%}
-            <img src="static/assets/images/zentro_logo.jpeg" alt="zentro logo" class="img-fluid" />
-            <!-- <h3>Track Pro</h3> -->
             <div class="djangoerrormsg">
               {% if messages %}
               <div class="row" style="justify-content: center;">
@@ -104,6 +94,24 @@
               </div>
               {% endif %}
             </div>
+
+
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <div class="content">
+          <img src="static/assets/images/2456062.jpg" alt="Pair programming" class="img-fluid w-75 mx-auto" />
+        </div>
+      </div>
+      
+      <div class="col-lg-5">
+
+        <div class="form-div">
+
+          <form method="post" class="row g-3">
+            {%csrf_token%}
+            <img src="static/assets/images/zentro_logo.jpeg" alt="zentro logo" class="img-fluid" />
+            <!-- <h3>Track Pro</h3> -->
+
 
 
             <div class="col-md-12">

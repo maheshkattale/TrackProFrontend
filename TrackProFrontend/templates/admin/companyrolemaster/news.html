@@ -2,9 +2,7 @@
 {% load static %} 
 
 {% block headercontent %}
-<div class="nav-item newheading">
 News
-</div>
 
 {% endblock %}
 {% block content %}
@@ -103,8 +101,8 @@ News
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-            <button onclick="updatenews('{{i.id}}');" class="trackproBtn" id="editEmployeeDetails" >Update</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <button onclick="updatenews('{{i.id}}');" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" >Update</button>
           </div>
         </div>
       </div>

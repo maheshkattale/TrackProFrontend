@@ -122,7 +122,7 @@ sendwarningmailURL = remoteURL+"users/api/sendwarningmail"
 tokenmsg = """<div style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;">
             <h1>Session Expired</h1>
                 <p>Click 
-                    <a href="http://trackpro.oneroof.tech"> here</a>
+                    <a href="http://trackpro.zentro.tech"> here</a>
                 to login again</p>
             </div>
         """
@@ -157,8 +157,10 @@ def loginPage(request):
         data['username'] = Username
         data['password'] = password
         data['desktopToken'] = desktopToken
+        print("loginurl",loginurl)
         loginResponse = requests.post(loginurl, data=data)
         Response_ = loginResponse.json()
+        print("Response_",Response_)
         if Response_.get('msg'):
             msg = Response_['msg']
             messages.error(request, msg)
@@ -1824,7 +1826,7 @@ def get_the_user_device_location(request):
 #     if tok:
 #         t = 'Token {}'.format(tok)
 #         headers = {'Authorization': t}
-#         ip_address = 'waruat.onerooftechnologiesllp.com'
+#         ip_address = 'waruat.zentrotechnologiesllp.com'
 #         # ip_address = request.META.get('REMOTE_ADDR')
 
         
@@ -1926,7 +1928,7 @@ def permission(request):
 
         role_list_request = requests.get(role_list_url,headers=headers)
         role_list_response = role_list_request.json()
-
+        print("role_list_response",role_list_response)
         return render(request,'admin/permission.html',{'menuList':menu_list_response,'roleList':role_list_response['data'],'permissionlist':permission_list_response})
     else:
         return redirect('users:login')

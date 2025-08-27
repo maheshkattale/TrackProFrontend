@@ -1,12 +1,10 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
-Update Employee</div>
+Update Employee
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
 
 
@@ -445,7 +443,7 @@ Update Employee</div>
                               </div>
                               <div class="modal-footer pe-5">
                                 <div>
-                                <button type="button" class="trackproBtn modalClose w-100 mx-4" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw w-100 mx-4" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -491,7 +489,7 @@ Update Employee</div>
                               </div>
                               <div class="modal-footer pe-5">
                                 <div>
-                                <button type="button" class="trackproBtn modalClose w-100 mx-4" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw w-100 mx-4" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -537,7 +535,7 @@ Update Employee</div>
                                   </div>
                                   <div class="modal-footer pe-5">
                                     <div>
-                                    <button type="button" class="trackproBtn modalClose w-100 mx-4" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw w-100 mx-4" data-bs-dismiss="modal">Close</button>
                                     </div>
                                   </div>
                                 </div>
@@ -711,7 +709,7 @@ Update Employee</div>
                                   </div>            
                                 </div>
                                 <div class="modal-footer d-flex">
-                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -838,7 +836,7 @@ Update Employee</div>
                                   </div>            
                                 </div>
                                 <div class="modal-footer d-flex">
-                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -861,7 +859,7 @@ Update Employee</div>
                                   </div>            
                                 </div>
                                 <div class="modal-footer d-flex">
-                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -1052,7 +1050,7 @@ Update Employee</div>
           
           </div>
           <div class="modal-footer mt-3">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </form>
@@ -1072,7 +1070,7 @@ Update Employee</div>
           
           </div>
           <div class="modal-footer mt-3">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </form>
@@ -1102,8 +1100,8 @@ Update Employee</div>
           
           </div>
           <div class="modal-footer mt-3 justify-content-center">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-            <button onclick="return rejectedDocument({{secondaryInfo.userId}});" class="trackproBtn" id="">Submit</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <button onclick="return rejectedDocument('{{secondaryInfo.userId}}');" class="btn btn-gradient-info btn-rounded btn-fw" id="">Submit</button>
           </div>
         </div>
       </div>

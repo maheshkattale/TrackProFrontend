@@ -1,9 +1,7 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
   Leave Calendar
-</div>
 {% endblock %}
 {% block content %}
 
@@ -11,8 +9,6 @@
 
 
 
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/leave_calender.css' %}">
 
 
 <main class="main-wrapper">
@@ -48,7 +44,7 @@
 
                   <div class="col-12 px-4 pt-2">
                     <label for="Type">Select Type</label>
-                    <select class="input-feild select2dropdown" id="Type">
+                    <select class="input-feild js-example-basic-single" id="Type">
                       <option value="" selected disabled>Select Type</option>
                       <option value="1">Apply for leave</option>
                       <option value="2">Apply for Work from home</option>
@@ -61,7 +57,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
               <button class="Role-btn" onclick="modalopen();" id="addEmployeeBtn" >Submit</button>
             </div>
         </div>
@@ -164,7 +160,7 @@
             </div>
             <div class="modal-footer">
               <div class="w-50 justify-content-center">
-                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                 <button class="Role-btn" onclick="validation();"  id="addEmployeeBtn" >Submit</button>
               </div>
             </div>
@@ -252,7 +248,7 @@
           </div>
           <div class="modal-footer">
             <div class="w-50 justify-content-center">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
               <button class="Role-btn" onclick="WFHApplyleave();"  id="addEmployeeBtn" >Submit</button>
             </div>
           </div>
@@ -282,7 +278,7 @@
             
             </div>
             <div class="modal-footer mt-3">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
       </div>

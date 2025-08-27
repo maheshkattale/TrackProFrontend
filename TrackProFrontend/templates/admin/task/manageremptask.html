@@ -1,13 +1,10 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Assign Tasks
-</div>
 {% endblock %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
   #calendarIcon {
@@ -118,12 +115,7 @@ font-size:18px;
     display:flex;
     transform: translate(0px, 23px) !important;
 }
-/* .select2-container--default .select2-selection--single {
-    border: none;
-    border-radius: 20 px !important;
-    height: 50px;
-    border-bottom: 1px solid rgb(214, 214, 214);
-} */
+
 .thours{
   font-size:14px;
 }
@@ -288,12 +280,7 @@ text-align: left;
   box-shadow: 2px 3px 4px #00000029;
 
 }
-.select2-container--default .select2-selection--single{
-  border-bottom:1px solid #acacac !important;
-  box-shadow:none !important;
-  border-radius: 0 !important;
 
-}
 .trackpropercent{
   font-size: 12px;
   color:#7c7b7b;
@@ -311,7 +298,7 @@ text-align: left;
   font-size:12px;
 }
 .pointscard img{
-  height :35px;
+  height :48px;
 }
 .head1{
   letter-spacing: 0px;
@@ -565,7 +552,7 @@ font-weight:500;
     <div class="row justify-content-around mb-3 collapse" id="filtersRow">
         <div class="col-md-2">
           <!-- <label for="Year">Year:</label><br> -->
-        <select id='Year' name="Year" class="select2dropdown yearselect" onchange="getOnChangeWeek();">
+        <select id='Year' name="Year" class="js-example-basic-single yearselect" onchange="getOnChangeWeek();">
           {% for y in year %}
           {%if currYear == y.Year%}
           <option value="{{y.Year}}" selected>{{y.Year}}</option>
@@ -578,14 +565,14 @@ font-weight:500;
 
         <div class="col-md-2">
           <!-- <label for="Week">Week:</label><br> -->
-          <select class="form-control select2dropdown" type="text" id="Week" name="Week" onchange="usercurrentweekdata();">
+          <select class="form-control js-example-basic-single" type="text" id="Week" name="Week" onchange="usercurrentweekdata();">
             <option value="All">All Weeks</option>
           </select>
         </div>
 
         <div class="col-md-3">
         <!-- <label for="Employee">Employee:</label><br> -->
-        <select id='Employee' name="Employee" class="select2dropdown" onchange="usercurrentweekdata();">
+        <select id='Employee' name="Employee" class="js-example-basic-single" onchange="usercurrentweekdata();">
           <option value='All' selected> All Employees</option> 
           {% for i in emplist %}
           <option value="{{i.UserID}}">{{i.UserIDStr}}</option>
@@ -595,7 +582,7 @@ font-weight:500;
 
       <div class="col-md-2">
         <!-- <label for="Task">Task Status:</label><br> -->
-      <select id='TaskStatus' name="TaskStatus" class="select2dropdown" onchange="usercurrentweekdata();">
+      <select id='TaskStatus' name="TaskStatus" class="js-example-basic-single" onchange="usercurrentweekdata();">
         <option value="All" selected>All Statuses</option>
         <option value="InProcess">InProcess</option>
         <option value="Completed">Completed</option>
@@ -604,7 +591,7 @@ font-weight:500;
 
     <div class="col-md-2">
       <!-- <label for="Review">Review:</label><br> -->
-    <select id='Review' name="Review" class="select2dropdown" onchange="usercurrentweekdata();">
+    <select id='Review' name="Review" class="js-example-basic-single" onchange="usercurrentweekdata();">
       <option value="All" >All Review</option>
       <option value="Checked" >Checked</option>
       <option value="Unchecked"selected >Unchecked</option>
@@ -768,7 +755,7 @@ font-weight:500;
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="modal-add-btn" data-bs-dismiss="modal" onclick="removebackdrop();"><span id="modalclosesection">Done</span></button>
+        <button type="button" class="btn btn-gradient-info btn-rounded btn-fw" data-bs-dismiss="modal" onclick="removebackdrop();"><span id="modalclosesection">Done</span></button>
       </div>
     </div>
   </div>
@@ -789,7 +776,7 @@ font-weight:500;
                 <div class="mb-3">
                   <div class="editid" id="edittaskid"></div>
                   <label for="Project">Project Name</label>
-                  <select class="form-control select2dropdown" id="editProject" name="Project" >
+                  <select class="form-control js-example-basic-single" id="editProject" name="Project" >
                     <option value="">Select Project</option>
                     {% for p in project reversed %}
                       {% if p.Active == True %}
@@ -804,7 +791,7 @@ font-weight:500;
             </div>
             <div class="col-md-6">
               <label for="task">Assign By</label>
-              <select class="form-control select2dropdown" id="editAssignBy" name="AssignBy">
+              <select class="form-control js-example-basic-single" id="editAssignBy" name="AssignBy">
                 <option value="">Select Manager</option>
                 <option value="{{userID}}" selected>{{Firstname}} {{Lastname}}</option>
               </select>
@@ -826,8 +813,8 @@ font-weight:500;
       </div>
       
       <div class="modal-footer">
-        <span class="modal-add-btn" onclick="updateTask();" data-bs-dismiss="modal">Add</span>
-        <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
+        <span class="btn btn-gradient-info btn-rounded btn-fw" onclick="updateTask();" data-bs-dismiss="modal">Add</span>
+        <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
@@ -850,7 +837,7 @@ font-weight:500;
       usercurrentweekdata();
       getOnChangeWeek();
       getTodaydate();
-      $(".select2dropdown").select2();
+      $(".js-example-basic-single").select2();
     })
 
   

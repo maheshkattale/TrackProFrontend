@@ -9,7 +9,7 @@ body {
     height: 100vh;
     display: flex;
     align-items: center;
-    font-family: "Rubik", sans-serif;
+    font-family: "Quicksand", sans-serif;
     margin: 0 20px;
 }
 
@@ -25,7 +25,7 @@ body {
 
 .form-div {
     background: #fff;
-    box-shadow: 0px 15px 30px rgb(0 175 239 / 28%);
+    box-shadow: 0px 15px 30px #a35dff59 ;
     padding: 50px 40px;
     width: 80%;
     margin: 0 auto;
@@ -58,30 +58,30 @@ body {
     font-weight: 400;
     margin-bottom: 30px;
     text-decoration: none;
-    color: #00afef;
+    color: #b66dff;
 }
 
 .login-btn {
     width: 100%;
     margin-top: 20px;
     background: transparent;
-    border: 2px solid #174fa3;
-    color: #174fa3;
+    border: 2px solid #b66dff;
+    color: #b66dff;
     font-size: 18px;
     transition: 0.5s all;
     padding: 7px 0;
 }
 
 .login-btn:hover {
-    background: #174fa3;
-    border: 2px solid #174fa3;
+    background: #b66dff;
+    border: 2px solid #b66dff;
 }
 
 input {
     border: 0 !important;
     background: transparent !important;
     border-radius: 0 !important;
-    border-bottom: 1px solid #174fa3 !important;
+    border-bottom: 1px solid #b66dff !important;
     font-size: 16px !important;
     padding-left: 3px !important;
     padding-top: 30px !important;

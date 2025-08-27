@@ -3,503 +3,618 @@
 
 <head>
   {% load static %}
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TrackPro-Dashboard</title>
-  <link rel="icon" type="image/x-icon" href="{% static 'assets/icons/ortblck.svg' %}">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
-    integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <!-- 2.Owl carousel Theme min.css -->
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
-    integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
-    integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="{% static 'assets/scripts/select2-4.1.0-rc.0/dist/css/select2.min.css' %}">
-
-  <link href="{% static 'assets/scripts/select2-bootstrap-theme-0.1.0-beta.10/dist/select2-bootstrap.min.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
-  <link rel="stylesheet" href="{% static 'admin/sweetalert.css'%}">
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-
-
-  <!-- <link rel="stylesheet" href="{% static 'admin/dashboard/datepicker.css'%}" /> -->
-
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Track Pro</title>
   <link rel="stylesheet" href="{% static 'admin/dashboard/dashboard.css'%}" />
   <link rel="stylesheet" href="{% static 'assets/css/style2.css'%}" />
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/font-awesome/css/font-awesome.min.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/css/style.css' %}">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="{% static 'trackpro/src/assets/images/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/select2/select2.min.css' %}">
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+  <!-- <link rel="stylesheet" href="{% static 'assets/css/apply_leave.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/leave_request.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/update_employee.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/leave_calender.css' %}"> -->
+
+
+
+
+
+
+
 </head>
 
 <body>
-  <!-- ==================Overlay Element and Expanded Navbar======================= -->
+  <div class="container-scroller">
 
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
 
-  <!-- ==================Navbar(Header)======================= -->
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-dark gradient-custom fixed-top">
-      <div class="container-fluid">
-        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button> -->
-        <div class="collapse navbar-collapse justify-content-between" id="navbarTogglerDemo03">
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item">
-              <div class="pe-2 cursor-pointer" id="menu2">
-                <div>
-                  <img src="{% static 'assets\images\menu_icon.svg'%}" alt="menuicon" width="30px">
-                </div>
-              </div>
-            </li>
-            <li class="nav-item">
-              <div class="companylogo">
-                {%if companylogo is None %}
-                <img class="img" src="{% static 'assets\images\zentro_logo.jpeg'%}" alt="" width="100">
-                {%elif companylogo == "" %}
-                <img class="img" src="{% static 'assets\images\zentro_logo.jpeg'%}" alt="" width="100">
-                {%else%}
-                <img class="img" src="{{ImageURL}}/media/{{companylogo}}" alt="No logo" width="100">
-                {%endif%}
-              </div>
+        {%if companylogo is None %}
+        <a class="navbar-brand brand-logo" href="/dashboard"><img src="{% static 'assets\images\zentro_logo.jpeg'%}"
+            alt="logo" /></a>
 
-            </li>
-
-          </ul>
-
-
-          {%block headercontent%}
-
-          {%endblock%}
-
-          <div class="me-2 navdropdown">
-            <div class="notbar">
-              <ul class="notulbar">
-                {%if basecheck_taskmanager == True %}
-                <li class="iconli">
-                  <a href="{% url 'task:ManagerReview'%}" class="position-relative">
-                    <img id="icon" class="notficonimg" src="{% static 'assets/icons/pending_actions.svg' %}">
-                    <span class="bg_notification badge">
-
-                      <span class="visually-hidden">unread messages</span>
-                    </span>
-                  </a>
-
-                </li>
-                {%endif%}
-
-                {%if basecheck_leavemanager == True %}
-                <li class="dropdown notifications-menu notify dropstart iconli" onclick="leavenotification();">
-                  <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown"
-                    style="margin-top: -4px;" class="notf" class="position-relative">
-                    <img id="icon" class="notficonimg" src="{% static 'assets/icons/leavenotf.svg' %}">
-                    <span class="bg_leave_notification badge">
-                    </span>
-                  </a>
-                  <ul class="dropdown-menu activenotify dropstart"
-                    style="width: 340px !important;max-height:400px !important;box-shadow: 0 3px 5px rgb(0 0 0 / 38%);">
-                    <li class="header">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div>Leave Requests</div>
-                        <div class="me-2"><span type="button" class="close">&times;</span></div>
-                      </div>
-                    </li>
-                    <li>
-                      <!-- inner menu: contains the actual data -->
-                      <div class="menu leavenotfmenu">
-
-
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-                {%endif%}
-                <li class="dropdown notifications-menu notify dropstart iconli">
-                  <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown"
-                    style="margin-top: -4px;" class="notf" onclick="readnotification();">
-                    <i class="fa fa-bell-o"></i>
-                    <span class="label badge" id="leavelabel" style="background: #00aeef !important;"></span>
-                  </a>
-                  <ul class="dropdown-menu  activenotify dropstart"
-                    style="width: 340px !important;max-height:400px !important;box-shadow: 0 3px 5px rgb(0 0 0 / 38%);">
-                    <li class="header" id="noftnum">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div>Notifications</div>
-                        <div class="me-2"><span type="button" class="close">&times;</span></div>
-                      </div>
-                    </li>
-                    <li>
-                      <!-- inner menu: contains the actual data -->
-                      <div class="menu notfmenu">
-
-
-                      </div>
-                    </li>
-                    <li>
-                      <div class="d-flex justify-content-center">
-                        <div class="viewmorenotf"><a href="{% url 'users:filternotificationslist' %}" class=""
-                            id="">View More</a></div>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-
-
-            <div class="username py-3">
-              <div>{{Firstname}} {{Lastname}}</div>
-              <div class="desgntion">{{Designation}}</div>
-            </div>
-
-            <div class="dropdown dropleft">
-              <a class="dropdown-toggle" data-bs-toggle="dropdown" class="userimage">
-                <img src="{{photo}}" width="35" height="35" class="rounded-circle">
-                {% comment %} <img id="icon" class="drpdwnimg" width="70%"
-                  src="{% static 'assets/icons/profile.png' %}">{% endcomment %}
-              </a>
-              <ul class="dropdown-menu index-dropdown">
-                <li><a class="dropdown-item" href="{% url 'users:secondary_info' %}">
-                    <img id="icon" class="drpdwnimg" src="{% static 'assets/icons/profile.png' %}"> My Profile</a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="{% url 'users:updatepassword' userID %}">
-                    <img id="icon" class="drpdwnimg" src="{% static 'assets/icons/changepassword.png' %}">Change
-                    Password</a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{% url 'users:logout' %}">
-                    <img id="icon" class="drpdwnimg" src="{% static 'assets/icons/logout.png' %}">Logout</a>
-                </li>
-              </ul>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-    </nav>
-
-    <div class="row">
-      <div class="content">
-        <!-- <div class="row">
-              {%for i in Menulist %}
-              {%if i.ParentID != 0 %}
-              <div class="nav-content">
-                  <a href="{{i.MenuPath}}" class="font">
-                    <div class="navbarimage">
-                      <img id="icon" class="svg" 
-                        src="{% static 'assets/svg/' %}{{i.MenuIcon}}.svg">
-                      </div></a>
-                  <p class="icon-text"><b>{{i.MenuName}}</b></p>
-              </div>
-              {%endif%}
-              {%endfor%}
-
-          </div> -->
-
-
-        {% for i in Menulist %}
-        {% if i.ParentID == 0 %}
-        <div class="mainmenuheader">
-          {{i.MenuName}}
-        </div>
-
-        <div class="row" id="">
-          {% for j in Menulist %}
-          {% if i.MenuID == j.ParentID %}
-          <div class="col-md-3 nav-content">
-            <a href="{{j.MenuPath}}" class="font iconsvg">
-              <div class="navbarimage">
-                <img id="icon" class="svg" src="{% static 'assets/svg/' %}{{j.MenuIcon}}.svg">
-              </div>
-              <div class="icon-text">{{j.MenuName}}</div>
-            </a>
-          </div>
-          {% endif%}
-          {% endfor %}
-        </div>
+        {%elif companylogo == "" %}
+        <a class="navbar-brand brand-logo" href="/dashboard"><img src="{% static 'assets\images\zentro_logo.jpeg'%}"
+            alt="logo" /></a>
+        {%else%}
+        <a class="navbar-brand brand-logo" href="/dashboard"><img src="{{ImageURL}}/media/{{companylogo}}"
+            alt="logo" /></a>
 
         {%endif%}
-        {%endfor%}
+        <a class="navbar-brand brand-logo-mini text-center" href="/dashboard"><img
+            src="{% static 'trackpro/src/assets/images/logo-mini.svg' %}" alt="logo" /></a>
       </div>
-    </div>
-  </header>
-
-
-
-  {% block content %}
-
-  {% endblock %}
-  {% if basecheck_taskmanager == True %}
-  <!----  Assign task modal-->
-  <div class="modal" id="baseassignTaskModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalToggleLabel">Assign Task</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-menu"></span>
+        </button>
+        <div class="search-field d-none d-md-block">
+          <form class="d-flex align-items-center h-100" action="#">
+            <div class="form-group">
+              <!-- <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div> -->
+              <!-- <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects"> -->
+            </div>
+          </form>
         </div>
-        <div class="modal-body p-2">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="baseassigntaskProject">Project Name</label>
-                  <select class="form-control select2dropdown indexselect2" id="baseassigntaskProject"
-                    name="baseassigntaskProject">
-                    <option value="">Select Project</option>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown" onclick="readnotification();">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+              data-bs-toggle="dropdown">
+              <i class="mdi mdi-bell-outline"></i>
+              <span class="count-symbol bg-danger" id="leavelabel"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
+              aria-labelledby="notificationDropdown">
+              <h6 class="p-3 mb-0">Notifications</h6>
 
-                  </select>
-                  <span id="baseassigntaskProjectrequired"></span>
+              <div class="p-3 menu notfmenu">
+
+
+              </div>
+
+
+
+
+
+              <div class="dropdown-divider"></div>
+              <h6 class="p-3 mb-0 text-center">
+                <a class="text-black" href="{% url 'users:filternotificationslist' %}">See all notifications</a>
+
+              </h6>
+            </div>
+          </li>
+
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <div class="nav-profile-img">
+                <img src="{{photo}}" alt="image">
+                <span class="availability-status online"></span>
+              </div>
+              <div class="nav-profile-text">
+                <p class="mb-1 text-black">{{Firstname}} {{Lastname}}</p>
+              </div>
+            </a>
+            <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="{% url 'users:secondary_info' %}">
+                <i class="mdi mdi-cached me-2 text-success"></i> Profile </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'users:updatepassword' userID %}">
+                <i class="mdi mdi-lock me-2 text-primary"></i> Change Password </a>
+              <a class="dropdown-item" href="{% url 'users:logout' %}">
+                <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+            </div>
+          </li>
+          <!-- <li class="nav-item d-none d-lg-block full-screen-link">
+            <a class="nav-link">
+              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+            </a>
+          </li> -->
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="mdi mdi-email-outline"></i>
+              <span class="count-symbol bg-warning"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+              <h6 class="p-3 mb-0">Messages</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <img src="{% static 'trackpro/src/assets/images/faces/face4.jpg' %}" alt="image" class="profile-pic">
+                </div>
+                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Mark send you a message</h6>
+                  <p class="text-gray mb-0"> 1 Minutes ago </p>
+                </div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <img src="{% static 'trackpro/src/assets/images/faces/face2.jpg' %}" alt="image" class="profile-pic">
+                </div>
+                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Cregh send you a message</h6>
+                  <p class="text-gray mb-0"> 15 Minutes ago </p>
+                </div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <img src="{% static 'trackpro/src/assets/images/faces/face3.jpg' %}" alt="image" class="profile-pic">
+                </div>
+                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                  <h6 class="preview-subject ellipsis mb-1 font-weight-normal">Profile picture updated</h6>
+                  <p class="text-gray mb-0"> 18 Minutes ago </p>
+                </div>
+              </a>
+              <div class="dropdown-divider"></div>
+              <h6 class="p-3 mb-0 text-center">4 new messages</h6>
+            </div>
+          </li> -->
+
+          <!-- <li class="nav-item nav-logout d-none d-lg-block">
+            <a class="nav-link" href="#">
+              <i class="mdi mdi-power"></i>
+            </a>
+          </li> -->
+          <!-- <li class="nav-item nav-settings d-none d-lg-block">
+            <a class="nav-link" href="#">
+              <i class="mdi mdi-format-line-spacing"></i>
+            </a>
+          </li> -->
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item nav-profile">
+            <a href="#" class="nav-link">
+              <div class="nav-profile-image">
+                <img src="{{photo}}" alt="profile" />
+                <span class="login-status online"></span>
+                <!--change to offline or busy as needed-->
+              </div>
+              <div class="nav-profile-text d-flex flex-column">
+                <span class="font-weight-bold mb-2">{{Firstname}} {{Lastname}}</span>
+                <span class="text-secondary text-small">{{Designation}}</span>
+              </div>
+              <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+            </a>
+          </li>
+
+
+          {% for i in Menulist %}
+          {% if i.ParentID == 0 %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="#menu{{i.MenuID}}" data-bs-toggle="collapse" aria-expanded="false"
+              aria-controls="menu{{i.MenuID}}">
+              <span class="menu-title">{{i.MenuName}}</span>
+              <i class="menu-arrow"></i>
+              <i class="fa fa-{{i.MenuIcon}} menu-icon"></i>
+            </a>
+            <div class="collapse" id="menu{{i.MenuID}}">
+              <ul class="nav flex-column sub-menu">
+                {% for j in Menulist %}
+                {% if i.MenuID == j.ParentID %}
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{{j.MenuPath}}">{{j.MenuName}}</a>
+                </li>
+                {% endif%}
+                {% endfor %}
+              </ul>
+            </div>
+          </li>
+
+          {%endif%}
+          {%endfor%}
+
+
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title">
+              <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <i class="mdi mdi-home"></i>
+              </span>
+
+              {%block headercontent %}
+              {%endblock%}
+
+
+            </h3>
+
+          </div>
+          <div class="row">
+            {% block content %}
+
+            {% endblock %}
+          </div>
+          <div>
+            {% if basecheck_taskmanager == True %}
+            <!----  Assign task modal-->
+            <div class="modal" id="baseassignTaskModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Assign Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-2">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="mb-3">
+                            <label for="baseassigntaskProject">Project Name</label>
+                            <select class="js-example-basic-single" id="baseassigntaskProject"
+                              name="baseassigntaskProject">
+                              <option value="">Select Project</option>
+
+                            </select>
+                            <span id="baseassigntaskProjectrequired"></span>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label for="baseassigntaskBy">Assign By</label>
+                          <select class="js-example-basic-single id="baseassigntaskBy"
+                            name="baseassigntaskBy">
+
+                            <option value="{{userID}}" selected>{{Firstname}} {{Lastname}}</option>
+
+                          </select>
+                          <span id="baseassigntaskByrequired"></span>
+                        </div>
+
+
+                        <div class="col-md-6">
+                          <label for="baseassignTaskEmployee">Employee</label>
+                          <select class="form-control js-example-basic-single" id="baseassignTaskEmployee"
+                            name="baseassignTaskEmployee">
+                            <option value="">Select Employee</option>
+
+                          </select>
+                          <span id="baseassignTaskEmployeerequired"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                          <label for="baseAssigntaskDate">Date</label>
+                          <input type="text" id="baseAssigntaskDate" placeholder="Select Date" name="DateofJoining"
+                            autocomplete="off" readonly>
+                          <span id="baseAssigntaskDaterequired"></span>
+                          <!-- <div id="calendarIcon"></div> -->
+                        </div>
+
+                        <div class="col-md-12">
+                          <label for="baseassignTaskTitle">Task details</label>
+                          <textarea name="baseassignTaskTitle" id="baseassignTaskTitle" cols="10" rows="3"
+                            style="width: 100%;"></textarea>
+                          <span id="baseassignTaskTitlerequired"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
+                    <span class="btn btn-gradient-info btn-rounded btn-fw" id="savebutton" onclick="baseassignsaveTask();">Add</span>
+                  </div>
                 </div>
               </div>
-
-              <div class="col-md-6">
-                <label for="baseassigntaskBy">Assign By</label>
-                <select class="form-control select2dropdown indexselect2" id="baseassigntaskBy" name="baseassigntaskBy">
-
-                  <option value="{{userID}}" selected>{{Firstname}} {{Lastname}}</option>
-
-                </select>
-                <span id="baseassigntaskByrequired"></span>
-              </div>
-
-
-              <div class="col-md-6">
-                <label for="baseassignTaskEmployee">Employee</label>
-                <select class="form-control select2dropdown" id="baseassignTaskEmployee" name="baseassignTaskEmployee">
-                  <option value="">Select Employee</option>
-
-                </select>
-                <span id="baseassignTaskEmployeerequired"></span>
-              </div>
-
-              <div class="col-md-6">
-                <label for="baseAssigntaskDate">Date</label>
-                <input type="text" id="baseAssigntaskDate" placeholder="Select Date" name="DateofJoining"
-                  autocomplete="off" readonly>
-                <span id="baseAssigntaskDaterequired"></span>
-                <!-- <div id="calendarIcon"></div> -->
-              </div>
-
-              <div class="col-md-12">
-                <label for="baseassignTaskTitle">Task details</label>
-                <textarea name="baseassignTaskTitle" id="baseassignTaskTitle" cols="10" rows="3"
-                  style="width: 100%;"></textarea>
-                <span id="baseassignTaskTitlerequired"></span>
-              </div>
             </div>
-          </div>
-        </div>
+            {% endif %}
+            {% block header_parent %}
+            <div>
+              <a class="float" id="menu-share">
+                <i class="fa fa-plus my-float" aria-hidden="true"></i>
+              </a>
+              <ul class="floatul">
+                {% block indexaddbuttons %}
 
-        <div class="modal-footer">
-          <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
-          <span class="modal-add-btn" id="savebutton" onclick="baseassignsaveTask();">Add</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  {% block header_parent %}
-  <div>
-    <a class="float" id="menu-share">
-      <i class="fa fa-plus my-float" aria-hidden="true"></i>
-    </a>
-    <ul class="floatul">
-      {% block indexaddbuttons %}
+                {% endblock %}
 
-      {% endblock %}
-      {% if basecheck_taskmanager == True %}
-      <li onclick="baseassign_tasklist()"><a data-bs-toggle="modal" href="#baseassignTaskModal">
-          <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Assign Task"
-            src="{% static 'assets/svg/assigntaskicon.svg' %}">
-        </a></li>
-      {%endif%}
-      <li><a data-bs-toggle="modal" href="#baseTaskModal" onclick="baseprojectlist()">
-          <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left" title="Add Task"
-            src="{% static 'assets/svg/addtaskicon.svg' %}">
-        </a></li>
-    </ul>
-  </div>
-
-  {% endblock %}
-  <div class="notfacceptmodalhtml">
-    <div class="modal fade" id="notfapprovemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-
-        <div class="modal-content">
-          <div class="modal-header pb-0">
-            <h5 class="modal-title py-2" id="exampleModalLabel">Accept Application</h5>
-          </div>
-          <div class="modal-body py-0">
-            <input type="hidden" id="acceptmodalapprovalid">
-            <input type="hidden" id="acceptmodalleaveid">
-            <div class="row py-1">
-              <div> Are you sure you want to Approve leave Request?
-              </div>
+                {% if basecheck_taskmanager == True %}
+                <li onclick="baseassign_tasklist()"><a data-bs-toggle="modal" href="#baseassignTaskModal">
+                    <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left"
+                      title="Assign Task" src="{% static 'assets/svg/assigntaskicon.svg' %}">
+                  </a></li>
+                {%endif%}
+                <li><a data-bs-toggle="modal" href="#baseTaskModal" onclick="baseprojectlist()">
+                    <img id="icon" class="floatingimg" data-bs-toggle="tooltip" data-bs-placement="left"
+                      title="Add Task" src="{% static 'assets/svg/addtaskicon.svg' %}">
+                  </a></li>
+              </ul>
             </div>
-          </div>
-          <div class="modal-footer">
-            <div class="notfindexfooter">
-              <a href="javascript:void(0)" class="btn btn-outline-danger btn-font rounded-pill"
-                data-bs-dismiss="modal">Close</a>
-              <a href="javascript:void(0)" data-bs-dismiss="modal"
-                onclick="notfApplicationApprove(document.getElementById('acceptmodalapprovalid').value,document.getElementById('acceptmodalleaveid').value)"
-                class="btn btn-outline-success  btn-font rounded-pill" id="">Approve</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
+            {% endblock %}
+            <div class="notfacceptmodalhtml">
+              <div class="modal fade" id="notfapprovemodal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
 
-  <div class="notfrejectmodalhtml">
-    <div class="modal fade" id="notfrejectmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-
-        <div class="modal-content">
-          <div class="modal-header ps-4 py-1">
-            <h5 class="modal-title py-2" id="exampleModalLabel">Reject Application</h5>
-          </div>
-          <div class="modal-body py-0">
-            <input type="hidden" id="rejectmodalapprovalid">
-            <input type="hidden" id="rejectmodalleaveid">
-            <div class="row">
-              <div class="col-12 px-4">
-                <label for="reason">Comment </label>
-                <textarea rows="3" style="width:100%;" id="notfreason" name="comment"></textarea>
-                <span id="notfreasonerror" class="error-message"></span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="notfindexfooter">
-              <a href="javascript:void(0)" class="btn btn-outline-danger  btn-font rounded-pill closemodalpopup"
-                data-bs-dismiss="modal" id="rejectclosemodal">Close</a>
-              <a href="javascript:void(0)" class="btn btn-outline-success  btn-font rounded-pill"
-                onclick="notfrejectleave(document.getElementById('rejectmodalapprovalid').value,document.getElementById('rejectmodalleaveid').value)">Reject</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!----add task modal-->
-  <div class="modal" id="baseTaskModal" aria-hidden="true" aria-labelledby="baseTaskModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="baseTaskModal">Add Task</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body p-0">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="baseProject">Project Name</label>
-
-                  <select class="form-control select2dropdown" id="baseProject" name="Project">
-                    <option value="">Select Project</option>
-
-                    {% for p in project %}
-                    {% if p.Active == True %}
-                    <option value="{{p.id}}">{{p.ProjectName}}</option>
-                    {% endif %}
-                    {% endfor %}
-
-                  </select>
-                  <span id="baseprojectrequired"></span>
+                  <div class="modal-content">
+                    <div class="modal-header pb-0">
+                      <h5 class="modal-title py-2" id="exampleModalLabel">Accept Application</h5>
+                    </div>
+                    <div class="modal-body py-0">
+                      <input type="hidden" id="acceptmodalapprovalid">
+                      <input type="hidden" id="acceptmodalleaveid">
+                      <div class="row py-1">
+                        <div> Are you sure you want to Approve leave Request?
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="notfindexfooter">
+                        <a href="javascript:void(0)" class="btn btn-outline-danger btn-font rounded-pill"
+                          data-bs-dismiss="modal">Close</a>
+                        <a href="javascript:void(0)" data-bs-dismiss="modal"
+                          onclick="notfApplicationApprove(document.getElementById('acceptmodalapprovalid').value,document.getElementById('acceptmodalleaveid').value)"
+                          class="btn btn-outline-success  btn-font rounded-pill" id="">Approve</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+
+            <div class="notfrejectmodalhtml">
+              <div class="modal fade" id="notfrejectmodal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+
+                  <div class="modal-content">
+                    <div class="modal-header ps-4 py-1">
+                      <h5 class="modal-title py-2" id="exampleModalLabel">Reject Application</h5>
+                    </div>
+                    <div class="modal-body py-0">
+                      <input type="hidden" id="rejectmodalapprovalid">
+                      <input type="hidden" id="rejectmodalleaveid">
+                      <div class="row">
+                        <div class="col-12 px-4">
+                          <label for="reason">Comment </label>
+                          <textarea rows="3" style="width:100%;" id="notfreason" name="comment"></textarea>
+                          <span id="notfreasonerror" class="error-message"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="notfindexfooter">
+                        <a href="javascript:void(0)"
+                          class="btn btn-outline-danger  btn-font rounded-pill closemodalpopup" data-bs-dismiss="modal"
+                          id="rejectclosemodal">Close</a>
+                        <a href="javascript:void(0)" class="btn btn-outline-success  btn-font rounded-pill"
+                          onclick="notfrejectleave(document.getElementById('rejectmodalapprovalid').value,document.getElementById('rejectmodalleaveid').value)">Reject</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!----add task modal-->
+            <div class="modal" id="baseTaskModal" aria-hidden="true" aria-labelledby="baseTaskModal">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="baseTaskModal">Add Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-0">
+                    <div class="container-fluid">
+                      <div class="row mx-0">
+                        <div class="col-md-6 px-1">
+                          <div class="py-2">
+                            <label for="baseProject">Project Name</label>
+
+                            <select class="form-control js-example-basic-single" id="baseProject" name="Project">
+                              <option value="">Select Project</option>
+
+                              {% for p in project %}
+                              {% if p.Active == True %}
+                              <option value="{{p.id}}">{{p.ProjectName}}</option>
+                              {% endif %}
+                              {% endfor %}
+
+                            </select>
+                            <span id="baseprojectrequired"></span>
+                          </div>
 
 
 
-              </div>
-              <div class="col-md-6">
-                <label for="baseAssignBy">Assign By</label>
-                <select class="form-control select2dropdown" id="baseAssignBy" name="AssignBy">
-                  <option value="">Select Manager</option>
-                  {% for m in basemanagerlist %}
-                  <option value="{{m.ManagerID}}">{{m.ManagerIDStr}}</option>
-                  {% endfor %}
-                </select>
-                <span id="baseassignByrequired"></span>
-              </div>
-              <div class="col-md-6">
-                <label for="baseAssignDate">Date</label>
-                <input type="text" id="baseAssignDate" placeholder="Select Date" name="DateofJoining" autocomplete="off"
-                  readonly>
-                <span id="basedaterequired"></span>
-                <!-- <div id="calendarIcon"></div> -->
-              </div>
-              <div class="col-md-12">
-                <label for="baseTaskTitle">Task details</label>
-                <textarea name="TaskTitle" id="baseTaskTitle" cols="10" rows="3" style="width: 100%;"></textarea>
-                <span id="basetasknamerequired"></span>
+                        </div>
+                        <div class="col-md-6 px-1">
+                          <div class="py-2">
+                          <label for="baseAssignBy">Assign By</label>
+                          <select class="form-control js-example-basic-single" id="baseAssignBy" name="AssignBy">
+                            <option value="">Select Manager</option>
+                            {% for m in basemanagerlist %}
+                            <option value="{{m.ManagerID}}">{{m.ManagerIDStr}}</option>
+                            {% endfor %}
+                          </select>
+                          <span id="baseassignByrequired"></span>
+                          </div>
+                        </div>
+                        <div class="col-md-6 px-1">
+                          <div class="py-2">
+                            <label for="baseAssignDate">Date</label>
+                            <input type="text" id="baseAssignDate" placeholder="Select Date" name="DateofJoining"
+                              autocomplete="off" readonly>
+                            <span id="basedaterequired"></span>
+                          </div>
+                          <!-- <div id="calendarIcon"></div> -->
+                        </div>
+                        <div class="col-md-12 px-1">
+                          <div class="py-2">
+                                                      <label for="baseTaskTitle">Task details</label>
+                          <textarea class="form-control" name="TaskTitle" id="baseTaskTitle" cols="10" rows="3"
+                            style="width: 100%;"></textarea>
+                          <span id="basetasknamerequired"></span>
+                          
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
+                    <span class="btn btn-gradient-info btn-rounded btn-fw" id="basesavebutton" onclick="basesaveTask();">Add</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="modal-footer">
-          <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
-          <span class="modal-add-btn" id="basesavebutton" onclick="basesaveTask();">Add</span>
         </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025 <a
+                href="https://www.zentrotechnologies.com/" target="_blank">Zentro Technologies</a>. All rights
+              reserved.</span>
+            <!-- <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i
+                class="mdi mdi-heart text-danger"></i></span> -->
+          </div>
+        </footer>
+        <!-- partial -->
       </div>
+      <!-- main-panel ends -->
     </div>
+    <!-- page-body-wrapper ends -->
   </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
 
-  <footer class="main-footer" id="footer">
-    <div class="pull-right hidden-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="06 Jan 2024">
-      <b>Version</b> 3.18
-    </div>
-    <strong>Copyright © 2024 <a href="https://onerooftech.com/" target="_blank" class="acolor">OneRoof Technologies
-        LLP</a></strong> All rights
-    reserved.
-  </footer>
+  {%block script %}
+  <script src="{% static 'trackpro/src/assets/vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="{% static 'trackpro/src/assets/vendors/chart.js/chart.umd.js' %}"></script>
+  <script src="{% static 'trackpro/src/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="{% static 'trackpro/src/assets/js/off-canvas.js' %}"></script>
+  <script src="{% static 'trackpro/src/assets/js/misc.js' %}"></script>
+  <script src="{% static 'trackpro/src/assets/js/settings.js' %}"></script>
+  <script src="{% static 'trackpro/src/assets/js/todolist.js' %}"></script>
+  <script src="{% static 'trackpro/src/assets/js/jquery.cookie.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page -->
+  <script src="{% static 'trackpro/src/assets/js/dashboard.js' %}"></script>
+  <!-- End custom js for this page -->
 
 
 
-  <!-- Script Files -->
-  {% block script %}
-  <!--     
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-      crossorigin="anonymous"
-    ></script> -->
-  <!-- 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
     crossorigin="anonymous"></script>
+
+  <!-- 
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
+
+
+
+
+ -->
 
   <script src="{% static 'js/jquerry/jquery.js'%}"></script>
   <script src="{% static 'js/jquerry/jquery.min.js'%}"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   <script src="{% static 'js/sweetalert.js'%}"></script>
+  <!-- <script src="{% static 'assets/scripts/select2-4.1.0-rc.0/dist/js/select2.min.js' %}"></script> -->
 
-  <script src="{% static 'assets/scripts/select2-4.1.0-rc.0/dist/js/select2.min.js' %}"></script>
+
+  
+
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="{% static 'trackpro/src/assets/vendors/select2/select2.min.js'%}"></script>
+  <script src="{% static 'trackpro/src/assets/vendors/typeahead.js/typeahead.bundle.min.js'%}"></script>
+  <!-- End plugin js for this page -->
+
+  <!-- endinject -->
+  <!-- Custom js for this page -->
+  <script src="{% static 'trackpro/src/assets/js/file-upload.js'%}"></script>
+  <script src="{% static 'trackpro/src/assets/js/typeahead.js'%}"></script>
+  <script src="{% static 'trackpro/src/assets/js/select2.js'%}"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
   <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -508,8 +623,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 
-
   <script src="{% static 'js/validation/validations.js'%}"></script>
+
   <script>
 
     $(".alert").slideDown("slow").delay(3000).slideUp();
@@ -535,9 +650,7 @@
       })
 
 
-      $(".select2dropdown").select2(
 
-      );
 
       $('.content').hide();
       $("#menu2").click(function () {
@@ -1004,6 +1117,7 @@
           },
 
           success: function (response) {
+            console.log("add task",response)
             $("#basetoggle").prop('checked', true);
             $('#basesavebutton').html('Add');
             $("#basesavebutton").css({ "pointer-events": "auto", "opacity": "1" });
@@ -1061,7 +1175,8 @@
                 console.log("noooooooooo")
               }
 
-            } else {
+            } 
+            else {
               $('#baseTaskModal').modal('hide');
               $('.modal-backdrop').remove();
               $("#baseProject").val("").trigger("change");
@@ -1072,7 +1187,7 @@
               swal({
                 icon: "warning",
                 title: "",
-                text: "TrackPro Marks has been already given for this week",
+                text: "Task Marks has been already given for this week",
                 button: "Close",
               });
             }
@@ -1152,12 +1267,8 @@
     });
 
 
-    //  $(document).click('select2:open', () => {
-    //     document.querySelector('.select2-search__field').focus();
-    //   });
 
-  </script>
-  <script>
+
 
     $(".dark-overlay").click(function () {
       closeExpandedNav();
@@ -1311,7 +1422,7 @@
 
           if (response.data.data.length > 0) {
             $.each(response.data.data, function (i, o) {
-              console.log("00",o)
+              console.log("00", o)
               if (o.leaveID != null) {
                 if (o.To_manager == true && o.action_Taken == false) {
                   if (o.leaveID != 0) {
@@ -1479,7 +1590,7 @@
           else {
             $('#leavelabel').hide()
             notfitem += `
-              <div class='linotf ps-2 pe-2'>          
+              <div class='linotf'>          
                 <div class='leave'>
                     No Notifications
                 </div>           
@@ -1747,7 +1858,14 @@
 
   </script>
 
-  {% endblock %}
+
+
+
+
+
+
+
+  {%endblock%}
 </body>
 
 </html>

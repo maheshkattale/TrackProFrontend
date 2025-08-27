@@ -3,13 +3,10 @@
 {% load encryption_filters %}
 
 {% block headercontent %}
-<div class="nav-item newheading">
 Apply Attendance
-</div>
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
   <style>
     #pills-tab{
@@ -53,10 +50,7 @@ Apply Attendance
 
         height: 48px;
     }
-    .table-div {
 
-        padding: 16px 15px 15px 15px !important;
-    }
     #latemarktable>tbody>tr>td {
         padding: 15px !important;
     }
@@ -607,8 +601,8 @@ Apply Attendance
           
           </div>
           <div class="modal-footer">
-            <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">No</button>
-            <button onclick="Cancelrequest({{i.id}})" data-bs-dismiss="modal" class="trackproBtn" data-bs-dismiss="modal" id="addEmployeeBtn">Yes</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">No</button>
+            <button onclick="Cancelrequest('{{i.id}}')" data-bs-dismiss="modal" class="btn btn-gradient-info btn-rounded btn-fw" data-bs-dismiss="modal" id="addEmployeeBtn">Yes</button>
           </div>
         </div>
       </div>
@@ -634,8 +628,8 @@ Apply Attendance
         </div>
         <div class="modal-footer">
           <div class="w-50 justify-content-center">
-            <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="Role-btn" id="addEmployeeBtn" onclick="updaterequest({{i.id}})">Update</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="Role-btn" id="addEmployeeBtn" onclick="updaterequest('{{i.id}}')">Update</button>
           </div>
         </div>
       </div>
@@ -668,8 +662,8 @@ Apply Attendance
       </div>
       <div class="modal-footer">
         <div class="w-50 justify-content-center">
-          <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="Role-btn" id="addEmployeeBtn" onclick="Addrequest({{i.id}})">Apply</button>
+          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="Role-btn" id="addEmployeeBtn" onclick="Addrequest('{{i.id}}')">Apply</button>
         </div>
       </div>
     </div>

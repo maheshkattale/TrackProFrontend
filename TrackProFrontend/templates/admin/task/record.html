@@ -18,7 +18,7 @@
           <div class="col-md-3">
             <div class="task-report-selector">
               <label for="employee">Employee:</label>
-              <select class="form-select select2dropdown" onchange="getlastYear();" aria-label="Default select example" id="CreatedBy">
+              <select class="form-select js-example-basic-single" onchange="getlastYear();" aria-label="Default select example" id="CreatedBy">
                 {% for u in uniquetasklist %}
               <option value="{{u.id}}" >{{u.Firstname}} {{u.Lastname}}</option>
               {% endfor %}
@@ -28,7 +28,7 @@
           <div class="col-md-3">
             <div class="task-report-selector">
               <label for="year">Year</label>
-              <select class="form-select select2dropdown" onchange="getYearWisedata();" aria-label="Default select example" id="Year">
+              <select class="form-select js-example-basic-single" onchange="getYearWisedata();" aria-label="Default select example" id="Year">
                 <option>Select Year</option>   
                 {% for y in combined.results.year %}
               <option value="{{y.Year}}">{{y.Year}}</option>
@@ -39,7 +39,7 @@
           <div class="col-md-3">
             <div class="task-report-selector">
               <label for="week">Week</label>
-              <select class="form-select select2dropdown" aria-label="Default select example" id="Week" onchange="getData();">
+              <select class="form-select js-example-basic-single" aria-label="Default select example" id="Week" onchange="getData();">
                
               </select>
             </div>

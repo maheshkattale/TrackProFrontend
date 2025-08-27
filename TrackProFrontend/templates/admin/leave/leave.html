@@ -1,9 +1,7 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
  Apply Leave
-</div>
 {% endblock %}
 {% block content %}
 
@@ -11,8 +9,7 @@
 
 
 
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/apply_leave.css' %}">
+
 <style>
   label{
     font-size: 14px !important;
@@ -83,7 +80,7 @@
 
                   <div class="col-12 px-4 pt-2">
                     <label for="Type">Select Type</label>
-                    <select class="input-feild select2dropdown" id="Type">
+                    <select class="input-feild js-example-basic-single" id="Type">
                       <option value="" selected disabled>Select Type</option>
                       <option value="1">Apply for leave</option>
                       <option value="2">Apply for Work from home</option>
@@ -96,7 +93,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
               <button class="Role-btn" onclick="modalopen();" id="addEmployeeBtn" >Submit</button>
             </div>
         </div>
@@ -209,7 +206,7 @@
             </div>
             <div class="modal-footer">
               <div class="w-100 d-flex justify-content-center">
-                <button type="button" class="Role-btn modalClose mx-4" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw mx-4" data-bs-dismiss="modal">Close</button>
                 <button class="Role-btn btn border btn-light mx-0" onclick="validation('Draft');"  id="" >Save</button>
                 <button class="Role-btn mx-4" onclick="validation('Normal');"  id="addEmployeeBtn" >Submit</button>
               </div>
@@ -298,7 +295,7 @@
           </div>
           <div class="modal-footer">
             <div class="w-50 justify-content-center">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
               <button class="Role-btn" onclick="WFHApplyleave();"  id="addEmployeeBtn" >Submit</button>
             </div>
           </div>
@@ -482,7 +479,7 @@
                           <div class="modal-footer">
             
                             <div class="w-50 text-center">
-                              <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                              <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                             </div>
             
                           </div>
@@ -709,7 +706,7 @@
                       <div class="modal-footer">
         
                         <div class="w-50 text-center">
-                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                         </div>
         
                       </div>
@@ -930,7 +927,7 @@
                       <div class="modal-footer">
         
                         <div class="w-50 text-center">
-                          <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                          <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                         </div>
         
                       </div>
@@ -1169,7 +1166,7 @@
                   <div class="modal-footer">
     
                     <div class="w-50 text-center">
-                      <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                      <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                     </div>
     
                   </div>
@@ -1363,7 +1360,7 @@
                   <div class="modal-footer">
     
                     <div class="w-50 text-center">
-                      <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                      <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                     </div>
     
                   </div>
@@ -1468,7 +1465,7 @@
               <div class="modal-footer">
 
                 <div class="w-50 justify-content-center">
-                  <button type="button"class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                  <button type="button"class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                   <button type="button" class="Role-btn" onclick="Updateappliedleave('{{i.id}}');" id="addEmployeeBtn">Update</button>
                 </div>
 
@@ -1508,10 +1505,10 @@
             <div class="modal-footer row">
               <span class="col-lg-5">
 
-              <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">No</button>
+              <button type="button" style="margin:0px !important;" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">No</button>
             </span>
             <span class="col-lg-5">
-              <span onclick="withrawapplication('{{i.id}}')" data-bs-dismiss="modal" style="margin:0px !important; cursor: pointer;" class="trackproBtn" data-bs-dismiss="modal" id="editEmployeeDetails">Yes</span>
+              <span onclick="withrawapplication('{{i.id}}')" data-bs-dismiss="modal" style="margin:0px !important; cursor: pointer;" class="btn btn-gradient-info btn-rounded btn-fw" data-bs-dismiss="modal" id="editEmployeeDetails">Yes</span>
 
             </span>
             </div>
@@ -1622,7 +1619,7 @@
               </div>
               <div class="modal-footer">
                 <div class="w-50 justify-content-center">
-                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                   <button type="submit" class="Role-btn" id="addEmployeeBtn" onclick="updateleave('{{i.id}}')">Update</button>
                 </div>
               </div>
@@ -1654,10 +1651,10 @@
             </div>
             <div class="modal-footer row">
               <span class="col-lg-5">
-                <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+                <button type="button" style="margin:0px !important;" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
               </span>
               <span class="col-lg-5">
-              <a href="{% url 'leave:deleteleave' i.id %}" style="margin:0px !important;"  class="trackproBtn" id="editEmployeeDetails">Delete</a>
+              <a href="{% url 'leave:deleteleave' i.id %}" style="margin:0px !important;"  class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Delete</a>
 
               </span>
             </div>
@@ -1692,10 +1689,10 @@
             <div class="modal-footer row">
               <span class="col-lg-5">
 
-              <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">No</button>
+              <button type="button" style="margin:0px !important;" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">No</button>
             </span>
             <span class="col-lg-5">
-              <a href="{% url 'leave:deleteleave' i.id %}" style="margin:0px !important;" class="trackproBtn"  id="editEmployeeDetails">Yes</a>
+              <a href="{% url 'leave:deleteleave' i.id %}" style="margin:0px !important;" class="btn btn-gradient-info btn-rounded btn-fw"  id="editEmployeeDetails">Yes</a>
             </span>
             </div>
           </div>
@@ -1725,10 +1722,10 @@
             <div class="modal-footer row">
               <span class="col-lg-5">
 
-              <button type="button" style="margin:0px !important;" class="trackproBtn modalClose" data-bs-dismiss="modal">No</button>
+              <button type="button" style="margin:0px !important;" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">No</button>
             </span>
             <span class="col-lg-5">
-              <span onclick="withrawapplication('{{i.id}}')" style="margin:0px !important; cursor: pointer;" class="trackproBtn" data-bs-dismiss="modal" id="editEmployeeDetails">Yes</span>
+              <span onclick="withrawapplication('{{i.id}}')" style="margin:0px !important; cursor: pointer;" class="btn btn-gradient-info btn-rounded btn-fw" data-bs-dismiss="modal" id="editEmployeeDetails">Yes</span>
             </span>
             </div>
           </div>
@@ -1753,10 +1750,10 @@
             </div>
             <div class="modal-footer row">
               <span class="col-lg-5">
-                <button type="button" class="trackproBtn modalClose" style="margin:0px !important;" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="margin:0px !important;" data-bs-dismiss="modal">Close</button>
               </span>
               <span class="col-lg-5">
-                <span onclick="applyfromdraftapplication('{{i.id}}');" class="trackproBtn" style="margin:0px !important;"  data-bs-dismiss="modal" id="editEmployeeDetails">Apply</span>
+                <span onclick="applyfromdraftapplication('{{i.id}}');" class="btn btn-gradient-info btn-rounded btn-fw" style="margin:0px !important;"  data-bs-dismiss="modal" id="editEmployeeDetails">Apply</span>
               </span>
             </div>
           </div>

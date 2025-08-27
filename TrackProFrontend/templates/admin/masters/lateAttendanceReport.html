@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Late Attendance Report
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}">
 <style>
     .uppercard{
     background-color:white;
@@ -16,12 +13,7 @@ Late Attendance Report
     box-shadow: 2px 3px 4px #00000029;
   
   }
-  .select2-container--default .select2-selection--single{
-    border-bottom:1px solid #acacac !important;
-    box-shadow:none !important;
-    border-radius: 0 !important;
-  
-  }
+
   .heading{
     color: var(--unnamed-color-888888);
   text-align: left;
@@ -29,13 +21,7 @@ Late Attendance Report
   letter-spacing: 0px;
   color: #888888;
   }
-  .table-div {
-      background-color: white !important;
-      border-radius: 16px !important;
-      margin: 11px 9px !important;
-      padding: 0 15px 15px 15px !important;
-  
-  }
+
   #myTable>tbody>tr>td{
       text-transform: capitalize;
       font-weight: 400;

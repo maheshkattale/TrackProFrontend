@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 User Mapping
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
@@ -18,7 +15,6 @@ User Mapping
     #myTable_filter {
         position: absolute !important;
         top: 0px!important;
-
         right: 0px !important;
         z-index: 100;
     }
@@ -39,10 +35,7 @@ User Mapping
 
         height: 48px;
     }
-    .table-div {
 
-        padding: 16px 15px 15px 15px !important;
-    }
     #myTable>tbody>tr>td {
 
         padding: 15px !important;
@@ -101,7 +94,7 @@ User Mapping
             {% csrf_token %}
                 <div class="row">
                 <div class="col-4">
-                    <select id="ManagerID" name="ManagerID"   class="input-feild select2dropdown text-black">
+                    <select id="ManagerID" name="ManagerID"   class="input-feild js-example-basic-single text-black">
                         <option value=''>Select Team Leader</option> 
                         {% for i in employeelist %}
                             <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
@@ -113,7 +106,7 @@ User Mapping
                 <div class="col-6">
 
 
-                    <select id='lstBox1' name="UserID" class="input-feild select2dropdown" data-placeholder="Select employee" multiple >
+                    <select id='lstBox1' name="UserID" class="input-feild js-example-basic-multiple" data-placeholder="Select employee" multiple >
                         <option value="selectAll">Select All</option>
 
                         {% for i in employeelist %}

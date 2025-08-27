@@ -1,13 +1,11 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Company Type Master
-</div>
+
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
 
 <style>
     .fa-minus-circle{
@@ -41,7 +39,7 @@
       <div class="modal-dialog modal-dialog-centered w-25">
         <div class="modal-content py-2">
           <div class="modal-header py-3">
-            <h5 class="modal-title" id="exampleModalLabel"> Add Company Type</h5>
+            <h5 class="modal-title mb-3" id="exampleModalLabel"> Add Company Type</h5>
           </div>
           <form class="mt-2" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -51,9 +49,9 @@
 
 
                 <div class="row">
-                    <div class="col-lg-12 mt-3">
+                    <div class="col-lg-12 m-0 form-group">
                         <label for="companytype">Company Type Name</label>
-                        <input type="text"  name="companyType" id="companytype" placeholder="Enter company type" class="input-feild" onkeydown="return /[a-z]/i.test(event.key)"/>
+                        <input type="text"  name="companyType" id="companytype" placeholder="Enter company type" class="form-control m-0" onkeydown="return /[a-z]/i.test(event.key)"/>
                         <span class="error" id="companytype_e"></span>
                     </div>
 
@@ -61,8 +59,8 @@
 
             </div>
             <div class="modal-footer">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Cancel</button>
-              <button class="trackproBtn Role-btn"  type="submit" id="addEmployeeBtn" onclick="return formvalidation();">Submit</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn btn-gradient-info btn-rounded btn-fw"  type="submit" id="addEmployeeBtn" onclick="return formvalidation();">Submit</button>
             </div>
           </form>
         </div>
@@ -73,11 +71,11 @@
 
           
 <div class="table-div">
-    <table class="row-border w-100" id="myTable">
+    <table class="row-border w-100 table-bordered" id="myTable">
         <thead>
-            <th style="width:5%">Sr. no</th>
-            <th style="width:90%">Name</th>
-            <th style="width:5%">Action</th>
+            <th style="width:10%">Sr. no</th>
+            <th style="width:70%">Name</th>
+            <th style="width:15%">Action</th>
         </thead>
 
         <tbody>
@@ -113,7 +111,7 @@
         <div class="modal-dialog modal-dialog-centered w-25">
             <div class="modal-content py-2">
                 <div class="modal-header py-2">
-                <h5 class="modal-title" id="exampleModalLabel"> Update Company Type</h5>
+                <h5 class="modal-title mb-3" id="exampleModalLabel"> Update Company Type</h5>
                 </div>
                 <div class="modal-body">
 
@@ -121,9 +119,9 @@
      
 
                     <div class="row">
-                        <div class="col-lg-12 mt-3">
+                        <div class="col-lg-12 m-0 form-group">
                             <label for="companytype{{i.id}}">Company Type Name</label>
-                            <input type="text"  name="companytype" id="companytype{{i.id}}" value="{{i.companyType}}" placeholder="Company Type Name" class="input-feild" onkeydown="return /[a-z]/i.test(event.key)"/>
+                            <input type="text"  name="companytype" id="companytype{{i.id}}" value="{{i.companyType}}" placeholder="Company Type Name" class="form-control m-0" onkeydown="return /[a-z]/i.test(event.key)"/>
                             <span class="error" id="companytype_e{{i.id}}"></span>
 
                         </div>
@@ -131,8 +129,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                <button class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="return updatecompany({{i.id}});">Update</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="return updatecompany({{i.id}});">Update</button>
                 </div>
             </div>
         </div>
@@ -172,7 +170,7 @@
 
    
     function formvalidation(){
-         
+         debugger
         var companytype = $('#companytype').val().trim(); 
         if (IsValid(companytype)) {
             $('#companytype').html('');

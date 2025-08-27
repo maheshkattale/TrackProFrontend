@@ -1,10 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">Warning Mail</div>
+Warning Mail
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
 
@@ -81,7 +80,7 @@
                         <label class="col-sm-1  text-start labelrow" for="mailtoemp">To :<span style="color:red">*</span></label>
                         <div class="col-sm-11">
                             <!-- {{employeelist}} -->
-                            <select id="mailtoemp" class="input-feild select2dropdown form-select" name="mailtoemp" onchange="gethistory();">
+                            <select id="mailtoemp" class="input-feild js-example-basic-single form-select" name="mailtoemp" onchange="gethistory();">
                                 <option value=''>Select Employee</option> 
                                 {% for r in employeelist %}
                                 <option value="{{r.id}}">{{r.Firstname}} {{r.Lastname}}</option>
@@ -95,7 +94,7 @@
                 <div class="row datarow g-0">
                     <label class="col-sm-1 text-start labelrow" id="mailfrom">From :<span style="color:red">*</span></label>
                     <div class="col-sm-11">
-                        <div style="padding-top: 8px;">onerooftechnologies.com</div>
+                        <div style="padding-top: 8px;">zentrotechnologies.com</div>
                         <span id="mailfrom_err" class="error"></span>
                     </div>
                 </div>
@@ -104,7 +103,7 @@
                  <div class="row datarow g-0">
                     <label class="col-sm-1  text-start labelrow" for="mailType">Category:<span style="color:red">*</span></label>
                     <div class="col-sm-11 ps-4">
-                        <select id="mailType" class="input-feild select2dropdown form-select" name="mailType">
+                        <select id="mailType" class="input-feild js-example-basic-single form-select" name="mailType">
                             <option value=''>Select Category</option> 
                             <option value="Concern" >Concern</option>
                             <option value="Escalation" >Escalation</option>

@@ -1,14 +1,13 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Add Plan
-</div>
+
 {% endblock %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
+
 <main class="main-wrapper">
  <!-- NavBar -->
  {% if messages %}
@@ -42,14 +41,14 @@
             <div class="modal-body">
 
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 form-group">
                         <label for="period">Plan Period Name</label>
-                        <input type="text"  id="period" name="period" placeholder="Enter period" class="input-feild"/>
+                        <input type="text"  id="period" name="period" placeholder="Enter period" class="form-control"/>
                         <span class="error" id="period_e"></span>
                     </div>
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 form-group">
                         <label for="duration">Duration in days</label>
-                        <input type="text" name="duration" id="duration" placeholder="Enter duration" class="input-feild" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                        <input type="text" name="duration" id="duration" placeholder="Enter duration" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
                         <span class="error" id="duration_e"></span>
                     </div>
                 </div>
@@ -57,9 +56,9 @@
 
 
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 form-group">
                         <label for="amount">Enter Amount</label>
-                        <input type="text"  name="amount" id="amount" placeholder="Enter amount" class="input-feild" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                        <input type="text"  name="amount" id="amount" placeholder="Enter amount" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
                         <span class="error" id="amount_e"></span>
                     </div>
 
@@ -67,8 +66,8 @@
 
             </div>
             <div class="modal-footer">
-              <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Cancel</button>
-              <button class="trackproBtn w-25"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn btn-gradient-info btn-rounded btn-fw w-25"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
             </div>
           </form>
         </div>
@@ -79,7 +78,7 @@
 
           
 <div class="table-div">
-    <table class="row-border w-100" id="myTable">
+    <table class="row-border w-100 table-bordered" id="myTable">
         <thead>
             <th>Sr. no</th>
             <th>Plan</th>
@@ -120,30 +119,30 @@
 
 
                     <div class="row">
-                        <div class="col-lg-6 mt-3">
+                        <div class="col-lg-6 mt-3 form-group">
                             <label for="period{{i.id}}">Plan Period Name</label>
-                            <input type="text"  id="period{{i.id}}" name="period" value="{{i.period}}" placeholder="Enter period" class="input-feild"/>
+                            <input type="text"  id="period{{i.id}}" name="period" value="{{i.period}}" placeholder="Enter period" class="form-control"/>
                             <span class="error" id="period_e{{i.id}}"></span>
                         </div>
-                        <div class="col-lg-6 mt-3">
+                        <div class="col-lg-6 mt-3 form-group">
                             <label for="duration{{i.id}}">Duration in days</label>
-                            <input type="text" name="duration" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"  id="duration{{i.id}}" value="{{i.duration}}" placeholder="Enter duration" class="input-feild"/>
+                            <input type="text" name="duration" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"  id="duration{{i.id}}" value="{{i.duration}}" placeholder="Enter duration" class="form-control"/>
                             <span class="error" id="duration_e{{i.id}}"></span>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6 mt-3">
+                        <div class="col-lg-6 mt-3 form-group">
                             <label for="amount{{i.id}}">Enter Amount</label>
-                            <input type="text"  name="amount" id="amount{{i.id}}" value="{{i.amount}}" placeholder="Enter amount" class="input-feild" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                            <input type="text"  name="amount" id="amount{{i.id}}" value="{{i.amount}}" placeholder="Enter amount" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
                             <span class="error" id="amount_e{{i.id}}"></span>
                         </div>
     
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Close</button>
-                <button class="trackproBtn w-25" id="editEmployeeDetails" onclick="return updateplan({{i.id}});">Update</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-gradient-info btn-rounded btn-fw w-25" id="editEmployeeDetails" onclick="return updateplan({{i.id}});">Update</button>
                 </div>
             </div>
         </div>
@@ -165,39 +164,39 @@
     $( document ).ready(function() {
         $(".usermapping-form-button").hide()
         $('#myTable').DataTable();
-        $('.input-feild').on("focus", function () {
-          var label = $('label[for=' + this.id + ']');
-          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
-        });
+        // $('.form-control').on("focus", function () {
+        //   var label = $('label[for=' + this.id + ']');
+        //   label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
+        // });
     });
 
 
     // Name--------------------------------------------------------------------
-    const planName = document.getElementById("planName");
-    planName.addEventListener("focus", function () {
-        planName.setAttribute("placeholder", "Enter Plan Period Name");
-    });
-    planName.addEventListener("blur", function () {
-        planName.removeAttribute("placeholder");
-    });
+    // const planName = document.getElementById("planName");
+    // planName.addEventListener("focus", function () {
+    //     planName.setAttribute("placeholder", "Enter Plan Period Name");
+    // });
+    // planName.addEventListener("blur", function () {
+    //     planName.removeAttribute("placeholder");
+    // });
 
     // Duration--------------------------------------------------------------------
-    const duration = document.getElementById("duration");
-    duration.addEventListener("focus", function () {
-        duration.setAttribute("placeholder", "Enter Duration");
-    });
-    duration.addEventListener("blur", function () {
-        duration.removeAttribute("placeholder");
-    });
+    // const duration = document.getElementById("duration");
+    // duration.addEventListener("focus", function () {
+    //     duration.setAttribute("placeholder", "Enter Duration");
+    // });
+    // duration.addEventListener("blur", function () {
+    //     duration.removeAttribute("placeholder");
+    // });
 
     // Duration--------------------------------------------------------------------
-    const amount = document.getElementById("amount");
-    amount.addEventListener("focus", function () {
-        amount.setAttribute("placeholder", "Enter Amount");
-    });
-    amount.addEventListener("blur", function () {
-        amount.removeAttribute("placeholder");
-    });
+    // const amount = document.getElementById("amount");
+    // amount.addEventListener("focus", function () {
+    //     amount.setAttribute("placeholder", "Enter Amount");
+    // });
+    // amount.addEventListener("blur", function () {
+    //     amount.removeAttribute("placeholder");
+    // });
 
     function updateplan(id){
 

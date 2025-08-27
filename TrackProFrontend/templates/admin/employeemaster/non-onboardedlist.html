@@ -3,11 +3,9 @@
 {% block headercontent %}
 {% load encryption_filters %}
 
-<div class="nav-item newheading">
-Onboarding List</div>
+Onboarding List
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <style>
   .cursor-pointer{
     cursor: pointer;
@@ -308,8 +306,8 @@ Onboarding List</div>
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                  <button class="trackproBtn Role-btn" id="editEmployeeDetails"  onclick="return formValidation({{i.id}});">Submit</button>
+                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                  <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails"  onclick="return formValidation({{i.id}});">Submit</button>
                 </div>
               </div>
             </div>
@@ -349,8 +347,8 @@ Onboarding List</div>
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="updateDesignation({{i.id}})">Update</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="updateDesignation({{i.id}})">Update</button>
             </div>
 
 
@@ -836,8 +834,8 @@ Onboarding List</div>
             }
 
             $("#reject-footer").html(`
-            <button type="button" class="trackproBtn modalClose w-25" data-bs-dismiss="modal">Close</button>
-            <button onclick="return rejectedDocument(`+response.secondaryInfo.userId+`);" class="trackproBtn w-25" id="">Submit</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw w-25" data-bs-dismiss="modal">Close</button>
+            <button onclick="return rejectedDocument(`+response.secondaryInfo.userId+`);" class="btn btn-gradient-info btn-rounded btn-fw w-25" id="">Submit</button>
             `)
 
             $("#personalfirstname").val(response.users.data.Firstname)

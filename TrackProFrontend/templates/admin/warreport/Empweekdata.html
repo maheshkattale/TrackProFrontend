@@ -1,9 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
   Employee Trackpro Report
-</div>
+
 {% endblock %}
 {% block content %}
 
@@ -16,12 +16,7 @@
   box-shadow: 2px 3px 4px #00000029;
 
 }
-.select2-container--default .select2-selection--single{
-  border-bottom:1px solid #acacac !important;
-  box-shadow:none !important;
-  border-radius: 0 !important;
 
-}
 .gradepoints {
     display: flex;
     justify-content: space-between;
@@ -38,13 +33,7 @@ font-size:12px;
 letter-spacing: 0px;
 color: #888888;
 }
-.table-div {
-    background-color: white !important;
-    border-radius: 16px !important;
-    margin: 11px 9px !important;
-    padding: 0 15px 15px 15px !important;
 
-}
 #Weeklydata>tbody>tr>td{
     text-transform: capitalize;
     font-weight: 400;
@@ -288,7 +277,7 @@ color: #282828;
            
           </div>
           <div class="col-md-3 ">
-            <select class="form-select select2dropdown" aria-label="Default select example" onchange="WeekDetail();" id="year">
+            <select class="form-select js-example-basic-single" aria-label="Default select example" onchange="WeekDetail();" id="year">
                 {% for y in Yearlist %}
                 {% if y.Year == currentyear %}
                <option value="{{y.Year}}" selected>{{y.Year}}</option>
@@ -300,7 +289,7 @@ color: #282828;
           </div>
          
           <div class="col-md-3 ">
-            <select class="form-select select2dropdown" aria-label="Default select example" onchange="WeekDetail();" id="empid">
+            <select class="form-select js-example-basic-single" aria-label="Default select example" onchange="WeekDetail();" id="empid">
                 <!-- <option value="">All Employees</option> -->
                {% for u in emplist %}
                <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>

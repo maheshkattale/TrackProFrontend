@@ -1,20 +1,15 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 User Dashboard
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
   .toast-body{
     width: 100%;
   }
-  .table-div {
-    margin: 10px 14px !important;
-}
+
 .green_status{
   color:#228B22
 }
@@ -38,19 +33,12 @@ User Dashboard
   font-size:14px;
   border-bottom:1px solid black;
 }
-.select2-container--default .select2-selection--single {
-    height: 40px;
-}
-.select2-container--default .select2-selection--single {
-    height: 30px;
-}
+
 .select2-container .select2-selection--single .select2-selection__rendered {
     padding-top: 0px;
     font-size: 13px;
 }
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    top: 1px;
-}
+
 thead th{
   font-size:12px;
   font-weight:500;
@@ -208,41 +196,41 @@ thead th{
     <div class="row mt-3 d-flex align-items-center">
       <div class="col deptcol">
         <label class="filterlabel">Dept</label>
-        <select class="input-feild select2dropdown" id="filter_department" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_department" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
         </select>
       </div>
       <div class="col managercol">
         <label class="filterlabel">Manager</label>
-        <select class="input-feild select2dropdown" id="filter_taskmanager" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_taskmanager" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
          
         </select>
       </div>
       <div class="col projectcol">
         <label class="filterlabel">Project</label>
-        <select class="input-feild select2dropdown" id="filter_project" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_project" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
         
         </select>
       </div>
       <div class="col pmngcol">
         <label class="filterlabel">Project Manager</label>
-        <select class="input-feild select2dropdown" id="filter_projectmanager" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_projectmanager" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
           
         </select>
       </div>
       <div class="col clientsidecol">
         <label class="filterlabel">Client Side</label>
-        <select class="input-feild select2dropdown" id="filter_clientside" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_clientside" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
           
         </select>
       </div>
       <div class="col ToWcol">
         <label class="filterlabel">Type of Work</label>
-        <select class="input-feild select2dropdown" id="filter_typeofwork" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_typeofwork" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
           <option value="1">Work from home</option>
           <option value="2">Work from Office</option>
@@ -252,7 +240,7 @@ thead th{
       </div>
       <div class="col statuscol">
         <label class="filterlabel">Status</label>
-        <select class="input-feild select2dropdown" id="filter_status" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_status" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
           <option value="idle">Idle</option>
           <option value="sixhours">More than 6 hours</option>
@@ -260,7 +248,7 @@ thead th{
       </div>
       <div class="col locationcol">
         <label class="filterlabel">Location</label>
-        <select class="input-feild select2dropdown" id="filter_location" onchange="get_user_dashboard();">
+        <select class="input-feild js-example-basic-single" id="filter_location" onchange="get_user_dashboard();">
           <option value="" selected>All</option>
           
         </select>

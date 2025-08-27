@@ -1,9 +1,6 @@
 {% extends "index.html" %} {% load static %}{% block headercontent %}
-<div class="nav-item newheading">
     L1 L2 Dashboard 
-</div>
 {% endblock %}{% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -53,12 +50,7 @@
     letter-spacing: 0px;
     color: #888888;
   }
-  .table-div {
-    background-color: white !important;
-    border-radius: 16px !important;
-    margin: 11px 9px !important;
-    padding: 5px 15px 15px 15px !important;
-  }
+
 
 
   .dataTables_filter input[type="search"] {
@@ -411,7 +403,7 @@ label{
             <div class="py-2">
                 <label for="employeeId">Employee </label>
                 
-                <select class="select2dropdown" id='employeeId' name="employeeId" onchange="return search_tasks();" >
+                <select class="js-example-basic-single" id='employeeId' name="employeeId" onchange="return search_tasks();" >
 
                 </select>
                 
@@ -424,7 +416,7 @@ label{
             <div class="py-2">
                 <label for="task_status">Task Status </label>
                 
-                <select class="select2dropdown" id='task_status' name="task_status" onchange="return search_tasks();" >
+                <select class="js-example-basic-single" id='task_status' name="task_status" onchange="return search_tasks();" >
                   <option value="true">Ongoing</option>
                   <option value="false" >Completed</option>
                   <option value="All" selected>All</option>

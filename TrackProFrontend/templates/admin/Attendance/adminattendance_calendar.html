@@ -2,13 +2,10 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Attendance calendar
-</div>
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <!-- Bootstrap CSS -->
 
 <!-- Bootstrap JavaScript Bundle (Bootstrap JS and Popper.js) -->
@@ -42,7 +39,7 @@ Attendance calendar
 <link rel="stylesheet" href="{% static 'assets/css/attendance_calender.css' %}">
 
 
-<main class="main-wrapper">
+<main class="p-0 main-wrapper">
     {% if messages %}
         <div class="row" style="justify-content: center;">
             <div class="col-sm-6 col-sm-offset-3">
@@ -60,15 +57,7 @@ Attendance calendar
       
     <div id="snackbar"></div>
         
-      <div class="title-div pt-1">
-          <span class="first-container">
-            <div class="company-title pe-2  d-none">Attendance Calender</div>
-    
-
-          </span>
-
-
-
+      <div class="title-div">
           <span>
             
             <div class="row d-flex justify-content-between align-items-center h-100">
@@ -100,7 +89,7 @@ Attendance calendar
       
                         <div class="col-12 px-4 pt-2">
                           <label for="Type">Select Type</label>
-                          <select class="input-feild select2dropdown" id="Type">
+                          <select class="input-feild js-example-basic-single" id="Type">
                             <option value="" selected disabled>Select Type</option>
                             <option value="1">Apply for leave</option>
                             <option value="2">Apply for Work from home</option>
@@ -113,7 +102,7 @@ Attendance calendar
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                     <button class="Role-btn" onclick="modalopen();" id="addEmployeeBtn" >Submit</button>
                   </div>
               </div>
@@ -216,7 +205,7 @@ Attendance calendar
                   </div>
                   <div class="modal-footer">
                     <div class="w-50 justify-content-center">
-                      <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                       <button class="Role-btn" onclick="validation();"  id="addEmployeeBtn" >Submit</button>
                     </div>
                   </div>
@@ -304,7 +293,7 @@ Attendance calendar
                 </div>
                 <div class="modal-footer">
                   <div class="w-50 justify-content-center">
-                    <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                     <button class="Role-btn" onclick="WFHApplyleave();"  id="addEmployeeBtn" >Submit</button>
                   </div>
                 </div>
@@ -402,7 +391,7 @@ Attendance calendar
                   
                   </div>
                   <div class="modal-footer mt-3">
-                    <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                   </div>
               </div>
             </div>
@@ -415,7 +404,7 @@ Attendance calendar
     <div class="leads-div">
 
 
-        <div class="bar-div py-2 mt-2">
+        <div class="bar-div">
           <div class="row attandance_heading_bar mx-0">
             <div class="col-lg-12">
               <div class="row attandance_score_bar">
@@ -463,7 +452,7 @@ Attendance calendar
     
                     <div class="emp-dropdown d-none">
                       <span class="mx-3 selectdrop">
-                        <select class="input-feild select2dropdown" onchange="calcal();" id="EmployeeId" name="EmployeeId" >
+                        <select class="input-feild js-example-basic-single" onchange="calcal();" id="EmployeeId" name="EmployeeId" >
                           <option value="{{UserId}}" selected>{{username}}</option>
                         </select>
                       </span>
@@ -689,12 +678,12 @@ Attendance calendar
 
         </div>
 
-        <div class="p-2">
-          <div class="row m-1">
+        <div class="">
+          <div class="row mx-0">
 
             <div class="col-lg-8 col-md-12 col-sm-12 px-0">
               <div class="preview-month">
-                <div class="p-2"  style="overflow-x:auto;" >
+                <div class=""  style="overflow-x:auto;" >
                   <div id="popupContainer"></div>
                 </div>
               </div>
@@ -702,9 +691,9 @@ Attendance calendar
 
             <div class="col-lg-4 col-sm-12 col-md-12 py-3">
 
-              <div class="row mb-3">
+              <div class="row">
 
-                <div class="col d-flex justify-content-center">
+                <div class="calener-labels-div">
                   <div class="week_off_colorbox"></div> <div class="inner-text-font-size">Week Off</div>
                   <div class="Half_Day_colorbox"></div> <div class="inner-text-font-size">Half Day</div>
                   <div class="Wfh_day_colorbox  "></div> <div class="inner-text-font-size">WFH</div>
@@ -719,7 +708,7 @@ Attendance calendar
               </div>
 
 
-              <div id="calendar" class="overflow-auto" style="max-height: 700px;"></div>
+              <div id="calendar" class="overflow-auto" style="max-height: 80vh;"></div>
 
             </div>
           </div>

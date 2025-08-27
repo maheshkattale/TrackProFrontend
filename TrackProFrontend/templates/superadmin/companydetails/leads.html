@@ -1,13 +1,11 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Leads
-</div>
+
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
 <style>
     .payment_button{
         padding:2px;
@@ -15,10 +13,7 @@
     .fa-pencil-square-o{
         color:#174fa3;
     }
-    .head{
-        background-color: white;
-        padding:10px;
-    }
+
     .card{
         padding:5px;
     }
@@ -81,43 +76,43 @@
                         <div class="modal-body">
                             <form action="post">
                                 <div class="row pt-3">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="Update_Company_Name">Company Name</label>
                                         <input type="text" id="Update_Company_Name" name="Update_Company_Name" placeholder="Company Name"
-                                            class="input-feild">
+                                            class="form-control">
     
                                             <p id="Update_Company_Name_e" class="error"></p> 
     
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="Update_GST-IN">GST-IN</label>
     
                                         <input type="text" id="Update_GST-IN" name="Update_GST-IN" placeholder="GST-IN Number"
-                                            class="input-feild" maxlength="15" oninput="this.value = this.value.toUpperCase()">
+                                            class="form-control" maxlength="15" oninput="this.value = this.value.toUpperCase()">
                                             <p id="Update_GST-IN_e" class="error"></p> 
     
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="Update_CompanyAdminEmailId">Company Admin Email Id </label>
     
                                         <input type="text" id="Update_CompanyAdminEmailId" name="Update_CompanyAdminEmailId"
-                                            placeholder="Company Admin Email Id " class="input-feild">
+                                            placeholder="Company Admin Email Id " class="form-control">
                                             <p id="Update_CompanyAdminEmailId_e" class="error"></p> 
     
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="Update_AadharNumber">Aadhar Number </label>
     
                                         <input type="text" id="Update_AadharNumber" name="Update_AadharNumber"
-                                            placeholder="Aadhar Number " class="input-feild" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                            placeholder="Aadhar Number " class="form-control" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
                                             <p id="Update_AadharNumber_e" class="error"></p> 
     
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="Update_CompanyType">Company Type </label>
     
                                         <select id="Update_CompanyType" name="Update_CompanyType" placeholder="Company Type "
-                                            class="input-feild select2dropdown">
+                                            class="form-control js-example-basic-single">
                                             {% for p in companytypelist %}
                                                 <option value="{{p.companyType}}">{{p.companyType}}</option>
                                             {%endfor%}
@@ -125,25 +120,25 @@
                                         <p id="Update_CompanyType_e" class="error"></p> 
     
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="Update_Pan-CardNumber">Pan-Card Number </label>
     
                                         <input type="text" id="Update_Pan-CardNumber" name="Update_Pan-CardNumber"
-                                            placeholder="Pan-Card Number " class="input-feild"  maxlength="10" oninput="this.value = this.value.toUpperCase()">
+                                            placeholder="Pan-Card Number " class="form-control"  maxlength="10" oninput="this.value = this.value.toUpperCase()">
                                             <p id="Update_Pan-CardNumber_e" class="error"></p> 
     
                                     </div>
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12 form-group">
                                         <label for="Update_CompanyAddress">Company Address </label>
     
                                         <input type="text" id="Update_CompanyAddress" name="Update_CompanyAddress"
-                                            placeholder="Company Address " class="input-feild">
+                                            placeholder="Company Address " class="form-control">
                                             <p id="Update_CompanyAddress_e" class="error"></p> 
     
                                     </div>
     
     
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12 form-group">
                                         <label for="Update_gstcertificate" class="Documents col-lg-12 m-0 p-0">
                                             <p class="m-0 p-0">Upload GST Documents</p>
                                             <div class="col-lg-12 m-0 p-0 d-flex justify-content-between">
@@ -159,7 +154,7 @@
                                     <div class="col-lg-12">
                                         <img id="preview_Update_gstcertificate" width="100px" height="100px" src=""  alt="Update gstcertificate">
                                     </div>  
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-12 form-group">
                                         <label for="Update_companylogos" class="Documents col-lg-12 m-0 p-0 mt-2">
                                             <p class="m-0 p-0">Upload Company Logo</p>
                                             <div class="col-lg-12 m-0 p-0 d-flex justify-content-between">
@@ -182,11 +177,11 @@
                         </div>
                         <div class="modal-body">
                             <div class="row py-3">
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 form-group">
                                     <label for="Update_Plan_Period">Plan Period</label>
                                     <select type="text" id="Update_Plan_Period" name="Update_Plan_Period" placeholder="Plan Period"
                                     onchange="updategetamountbyperiod();" onclick="this.setAttribute('value', this.value);"
-                                        class="input-feild select2dropdown">
+                                        class="form-control js-example-basic-single">
                                         <option value="" selected disabled>Select Plan</option>
                                         {%for p in periodlist%}
                                             <option value="{{p.period}}">{{p.period}}</option>
@@ -197,11 +192,11 @@
     
     
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 form-group">
                                     <label for="Update_Payment">Payment</label>
     
                                     <input type="text" id="Update_Payment" name="Update_Payment" placeholder="Payment"
-                                        class="input-feild">
+                                        class="form-control">
                                         <p id="Update_Payment_e" class="error"></p> 
                                         <input type="text" id="Update_companyid" name="Update_companyid" hidden>
                                 </div>
@@ -210,9 +205,9 @@
                             </form>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-outline-danger rounded-pill w-25"
+                            <button type="button" class="btn btn-outline-danger rounded-pill"
                                 data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" onclick="UpdateformValidation();" class="btn btn-primary rounded-pill w-25">+ Update</button>
+                            <button type="button" onclick="UpdateformValidation();" class="btn btn-info rounded-pill">+ Update</button>
                         </div>
                     </div>
                 </div>
@@ -245,7 +240,7 @@
             <div class="tab-pane fade show active" id="pills-incomplete" role="tabpanel" aria-labelledby="pills-incomplete_registration-tab">
                 
                 <div class="row all-leads-div">
-                    {%for i in incompleteregistration%}
+                    {%for i in incompleteregistration %}
                     <div class="col-lg-4 mt-3">
                         
                         <div id="card" class="card text-start">
@@ -255,7 +250,7 @@
                                     <h5 class="card-company-name">{{i.companyName}}</h5>
                                 </span>
                                 <span>
-                                    <a href="{% url 'company:viewCompany' i.id %}" class="payment_button" data-bs-toggle="tooltip" title="Make Payment" class="btn"> 
+                                    <a href="{% url 'company:viewCompany' i.id %}" class="payment_button" data-bs-toggle="tooltip" title="view company" class="btn"> 
                                         <img class="lead-icon-eye" src="{% static "assets/icons/Group 19829.svg"%}" aria-hidden="true" /> </a>
                                         <a class="px-1" id="{{i.id}}" data-bs-toggle="modal" onclick="getcompany(this.id);" data-bs-target="#UpdateexampleModal"><img class="edit-icon" src="{% static 'assets/images/Group 16728.svg' %}" height="20px" alt="edit icon"></a>
 
@@ -309,7 +304,7 @@
                                     <h5 class="card-company-name">{{i.companyName}}</h5>
                                 </span>
                                 <span>
-                                    <a href="{% url 'company:viewCompany' i.id%}" class="payment_button" data-bs-toggle="tooltip" title="More Details" class="btn">
+                                    <a href="{% url 'company:viewCompany' i.id%}" class="payment_button" data-bs-toggle="tooltip" title="view company" class="btn">
                                         <img class="lead-icon-eye" src="{% static "assets/icons/Group 19829.svg"%}" aria-hidden="true" /> </a>
                                 </span>
                                 

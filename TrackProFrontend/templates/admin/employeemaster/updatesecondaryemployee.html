@@ -1,8 +1,7 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
-  My Profile</div>
+  My Profile
 {% endblock %}
 {% block content %}
 <link src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
@@ -186,14 +185,7 @@
   font-weight: 500;
 
   }
-  .table thead tr th {
-  font-size: 14px;
-  background-color: transparent; 
-  text-align: left;
-  font-weight: 500;
-  padding: 5px 0px !important;
-  color: #174fa3;
-  }
+
   .table-input-text{
   outline:none;
   border:none;
@@ -364,13 +356,6 @@
   }
 
 
-  .select2-container--default .select2-selection--single{
-      border-bottom:1px solid rgb(214, 214, 214) !important;
-      border:none;
-      height:30px;
-      box-shadow:none;
-      border-radius:0px;
-      }
       .select2-container .select2-selection--single .select2-selection__rendered {
       padding-left: 0px;
       padding-top: 0px;
@@ -1050,7 +1035,7 @@
                                   </div>            
                                 </div>
                                 <div class="modal-footer d-flex">
-                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -1073,7 +1058,7 @@
                                   </div>            
                                 </div>
                                 <div class="modal-footer d-flex">
-                                  <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                 </div>
                               </div>
                             </div>
@@ -1300,11 +1285,11 @@
 
 
     $('#owl-carousel').owlCarousel({
-    loop: true,
-    margin: 30,
-    dots: false,
-    nav: true,
-    items: 1,
+      loop: true,
+      margin: 30,
+      dots: false,
+      nav: true,
+      items: 1,
     })
     updateInputField('accountno')
     updateInputField('confirmaccountno')

@@ -1,22 +1,14 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
-Add Employee</div>
+Add Employee
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
 
-    .select2-container--default .select2-selection--single{
-    border-bottom:1px solid rgb(214, 214, 214) !important;
-    border:none;
-    height:50px;
-    box-shadow:none;
-    border-radius:0px;
-    }
+
     .trackproBtn {
         width: 123px !important;
         height: 36px !important;
@@ -184,12 +176,11 @@ Add Employee</div>
             
         <div class="row justify-content-end">
           <div class="col-auto">
-             <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
-             <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn mobilerespon">Cancel</a>
+             <a href="{% url 'users:employeelist' %}" class="btn btn-gradient-danger btn-rounded btn-fw cancelBtn mobilerespon">Cancel</a>
              
           </div>
           <div class="col-auto">
-            <button class="trackproBtn submitBtn mobilerespon" onclick="return formValidation();">Submit</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw submitBtn mobilerespon" onclick="return formValidation();">Submit</button>
           </div>
         </div>
     </form>

@@ -1,9 +1,6 @@
 {% extends "index.html" %} {% load static %}{% block headercontent %}
-<div class="nav-item newheading">
    Shift Allotment Master
-</div>
 {% endblock %}{% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -53,12 +50,7 @@
     letter-spacing: 0px;
     color: #888888;
   }
-  .table-div {
-    background-color: white !important;
-    border-radius: 16px !important;
-    margin: 11px 9px !important;
-    padding: 5px 15px 15px 15px !important;
-  }
+
 
 
   .dataTables_filter input[type="search"] {
@@ -178,7 +170,7 @@ text-align: left;
         <div class="py-2">
             <label for="employee_name">Employee <span style="color:red">*</span></label>
             
-            <select class="input-feild select2dropdown" id='employee_name' name="employee_name" >
+            <select class="input-feild js-example-basic-single" id='employee_name' name="employee_name" >
                 <option value=''>Select Employee</option> 
                 {% for r in empshiftsdetails %}
       
@@ -196,7 +188,7 @@ text-align: left;
         <div class="py-2">
             <label for="shift">Shift <span style="color:red">*</span></label>
             
-            <select class="input-feild select2dropdown" id='shift' name="shift">
+            <select class="input-feild js-example-basic-single" id='shift' name="shift">
                 <option value=''>Select shift</option> 
                 {% for r in shifts %}
       
@@ -315,7 +307,7 @@ text-align: left;
                       <div class="py-2">
                           <label for="employee_name1">Employee 1<span style="color:red">*</span></label>
                           
-                          <select class="input-feild select2dropdown" id='employee_name1' name="employee_name1" onchange="getemployee1allotedshift()" >
+                          <select class="input-feild js-example-basic-single" id='employee_name1' name="employee_name1" onchange="getemployee1allotedshift()" >
                               <option value=''>Select Employee</option> 
                               {% for r in empshiftsdetails %}
                     
@@ -344,7 +336,7 @@ text-align: left;
                       <div class="py-2">
                           <label for="shift1">Shift <span style="color:red">*</span></label>
                           
-                          <select class="input-feild select2dropdown" id='shift1' name="shift1">
+                          <select class="input-feild js-example-basic-single" id='shift1' name="shift1">
                               <option value=''>Select shift</option> 
 
                               {% for r in shifts %}
@@ -372,7 +364,7 @@ text-align: left;
                       <div class="py-2">
                           <label for="employee_name2">Employee 2<span style="color:red">*</span></label>
                           
-                          <select class="input-feild select2dropdown" id='employee_name2' name="employee_name2" onchange="getemployee2allotedshift()">
+                          <select class="input-feild js-example-basic-single" id='employee_name2' name="employee_name2" onchange="getemployee2allotedshift()">
                               <option value=''>Select Employee</option> 
                               {% for r in empshiftsdetails %}
                     
@@ -401,7 +393,7 @@ text-align: left;
                       <div class="py-2">
                           <label for="shift2">Shift <span style="color:red">*</span></label>
                           
-                          <select class="input-feild select2dropdown" id='shift2' name="shift2">
+                          <select class="input-feild js-example-basic-single" id='shift2' name="shift2">
                               <option value=''>Select shift</option> 
 
                               {% for r in shifts %}
@@ -427,7 +419,7 @@ text-align: left;
               </div>
               <div class="modal-footer ">
                 <div class="w-50">
-                  <button type="button" class="Role-btn  w-50 modalClose" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                   <button type="button" class="Role-btn  w-50 text-center" onclick="swap_shift()" id="addEmployeeBtn">Swap</button>
                 </div>
               </div>
@@ -797,8 +789,8 @@ text-align: left;
                                             
                                             </div>
                                             <div class="modal-footer ">
-                                                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="Role-btn text-center" onclick="delete_shift(`+o.id+`)" id="addEmployeeBtn">Delete</button>
+                                                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" onclick="delete_shift(`+o.id+`)" id="addEmployeeBtn">Delete</button>
                                 
                                             </div>
                                             </div>
@@ -953,8 +945,8 @@ text-align: left;
                               
                               </div>
                               <div class="modal-footer ">
-                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                                  <button type="button" class="Role-btn text-center" onclick="delete_shift(`+o.id+`)" id="addEmployeeBtn">Delete</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" onclick="delete_shift(`+o.id+`)" id="addEmployeeBtn">Delete</button>
                   
                               </div>
                             </div>

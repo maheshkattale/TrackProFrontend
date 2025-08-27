@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
   Department Master
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <style>
   .fa-minus-circle{
     font-size:22px
@@ -135,9 +132,9 @@ margin-bottom: 10px;
                               
                               </div>
                               <div class="modal-footer ">
-                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                       
-                                  <a href="{% url 'users:delete_department' i.id %}"  class="Role-btn text-center" id="addEmployeeBtn">Delete</a>
+                                  <a href="{% url 'users:delete_department' i.id %}"  class="btn btn-gradient-danger btn-rounded btn-fw" id="addEmployeeBtn">Delete</a>
                   
                               </div>
                             </div>
@@ -177,7 +174,7 @@ margin-bottom: 10px;
                   <div class="col-12 px-4 ">
                     <div class="form-floating">
 
-                      <select id='departmenthead' name="departmenthead" class="form-control select2dropdown" aria-label="Floating label select example">
+                      <select id='departmenthead' name="departmenthead" class="form-control js-example-basic-single" aria-label="Floating label select example">
                       <option value="">Select Department Head</option>
                       {% for u in employeelist %}
                       <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
@@ -193,8 +190,8 @@ margin-bottom: 10px;
               
               </div>
               <div class="modal-footer mt-3">
-                <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-                <button onclick="return formValidation();" type="submit" class="trackproBtn" id="">+Add</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                <button onclick="return formValidation();" type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="">+Add</button>
               </div>
             </div>
           </form>
@@ -221,7 +218,7 @@ margin-bottom: 10px;
                 </div>
                 <div class="col-12 px-4">
                   <div class="form-floating">
-                    <select id="DepartmentHead{{i.id}}" name="departmenthead" class="form-control select2dropdown">
+                    <select id="DepartmentHead{{i.id}}" name="departmenthead" class="form-control js-example-basic-single">
                     {% for u in employeelist %}
                       {% if i.DepartmentHead == u.id %}
                       <option value="{{u.id}}" selected>{{u.Firstname}} {{u.Lastname}}</option>
@@ -237,8 +234,8 @@ margin-bottom: 10px;
               </div>
             </div>
             <div class="modal-footer mt-3">
-              <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-              <button type="button" onclick="updateDepartment({{i.id}});" class="trackproBtn" id="editEmployeeDetails">Update</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+              <button type="button" onclick="updateDepartment({{i.id}});" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Update</button>
             </div>
           </div>
           </form>

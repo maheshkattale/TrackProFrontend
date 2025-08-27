@@ -1,9 +1,8 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Project
-</div>
+
 {% endblock %}
 {% block content %}
 <style>
@@ -76,8 +75,8 @@ Project
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-            <button class="trackproBtn" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="updateRole('{{i.id}}')">Update</button>
           </div>
         </div>
       </div>

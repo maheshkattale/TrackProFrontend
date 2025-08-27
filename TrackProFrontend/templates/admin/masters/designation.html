@@ -1,13 +1,10 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Designation Master
-</div>
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <style>
   .fa-minus-circle{
     font-size:22px
@@ -77,8 +74,8 @@ Designation Master
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails"  onclick="return formValidation();">Submit</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails"  onclick="return formValidation();">Submit</button>
               </div>
             </div>
           </div>
@@ -137,9 +134,9 @@ Designation Master
                         
                         </div>
                         <div class="modal-footer ">
-                            <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                 
-                            <a href="{% url 'users:delete_designation' i.id %}"  class="Role-btn text-center" id="addEmployeeBtn">Delete</a>
+                            <a href="{% url 'users:delete_designation' i.id %}"  class="btn btn-gradient-danger btn-rounded btn-fw" id="addEmployeeBtn">Delete</a>
             
                         </div>
                       </div>
@@ -180,8 +177,8 @@ Designation Master
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="updateDesignation({{i.id}})">Update</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="updateDesignation({{i.id}})">Update</button>
             </div>
 
 

@@ -1,12 +1,10 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
-Role</div>
+Role
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
 
 <style>
   #myTable>tbody>tr>td {
@@ -62,7 +60,7 @@ Role</div>
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
                 <button class="Role-btn"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">+ Add Role</button>
               </div>
             </form>
@@ -124,8 +122,8 @@ Role</div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-              <button class="trackproBtn Role-btn" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="updateRole({{i.id}})">Update</button>
             </div>
           </div>
         </div>
@@ -185,7 +183,7 @@ Role</div>
             
           </div>
           <div class="modal-footer">
-            <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
             <span class="Role-btn" onclick="permissionValidate();" id="addEmployeeBtn">Submit</span>
           </div>
         </form>

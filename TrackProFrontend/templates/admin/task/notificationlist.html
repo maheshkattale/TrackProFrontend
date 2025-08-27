@@ -1,9 +1,7 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
   Notifications
-</div>
 {% endblock %}
 {% block content %}
 
@@ -16,15 +14,7 @@
   box-shadow: 2px 3px 4px #00000029;
 
 }
-.select2-container--default .select2-selection--single{
-  border:none;
-  border-bottom:1px solid #acacac !important;
-  box-shadow:none !important;
-  border-radius: 0 !important;
- 
-  background-color: transparent !important;
 
-}
 .heading{
   color: var(--unnamed-color-888888);
 text-align: left;
@@ -32,12 +22,7 @@ font-size:12px;
 letter-spacing: 0px;
 color: #888888;
 }
-.table-div {
-    background-color: white !important;
-    border-radius: 18px;
-    padding: 20px;
 
-}
 #notfTable>tbody>tr>td{
     text-transform: capitalize;
     font-weight: 400;
@@ -265,7 +250,7 @@ color: #282828;
           </div>
          
           <div class="col-md-3 ">
-            <select id='notftype' name="notftype" class="select2dropdown" onchange="notftypefilter();">
+            <select id='notftype' name="notftype" class="js-example-basic-single" onchange="notftypefilter();">
             <option value="" selected> All Notifications</option>
               {% for i in notftypelist%}
               <option value="{{i.id}}">{{i.Type}}</option>

@@ -1,9 +1,7 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Weekly Report
-</div>
 {% endblock %}
 {% block content %}
 
@@ -13,13 +11,7 @@ Weekly Report
     width:24px;
     height:26px;
   }
-   .select2-container--default .select2-selection--single {
-    border-bottom: 1px solid #acacac !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    background-color: transparent;
-    border:0;
-}
+
 .pagehead{
     font-size: 20px;
     font-weight: 500;
@@ -219,7 +211,7 @@ color:rgb(149, 149, 149);
        <div class="col-3 p-2">
        </div>
        <div class="col-2 p-2">
-           <select class="form-select select2dropdown" aria-label="Default select example" onchange="getweeklyinfo();" id="Employee">
+           <select class="form-select js-example-basic-single" aria-label="Default select example" onchange="getweeklyinfo();" id="Employee">
                {% for u in employeelist %}
                <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
                {% endfor %}
@@ -228,7 +220,7 @@ color:rgb(149, 149, 149);
               </select>
        </div>
        <div class="col-2 p-2">
-        <select class="form-select select2dropdown" aria-label="Default select example" onchange="getOnChangeWeek();" id="Year">
+        <select class="form-select js-example-basic-single" aria-label="Default select example" onchange="getOnChangeWeek();" id="Year">
             {% for y in Yearlist %}
               {% if y.Year == currentyear %}
               <option value="{{y.Year}}" selected>{{y.Year}}</option>
@@ -239,7 +231,7 @@ color:rgb(149, 149, 149);
            </select>
     </div>
     <div class="col-2 p-2">
-        <select class="form-select select2dropdown" aria-label="Default select example" onchange="getweeklyinfo();" id="Week">
+        <select class="form-select js-example-basic-single" aria-label="Default select example" onchange="getweeklyinfo();" id="Week">
             <option value="All">All</option>
             {% for y in weeklist %}
               {% if y.Week == prevweek %}
@@ -313,7 +305,7 @@ function getOnChangeWeek() {
     var year = $('#Year').val()
     $.ajax({
         type: 'post',
-        url: frontendURL + 'checktrackpro/TrackProResultWeek',
+        url: frontendURL + 'checktrackpro/trackproResultWeek',
         data: {
             'year': year,
             'csrfmiddlewaretoken': '{{csrf_token}}',

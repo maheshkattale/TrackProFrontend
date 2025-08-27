@@ -1,9 +1,6 @@
 {% extends "index.html" %} {% load static %}{% block headercontent %}
-<div class="nav-item newheading">
   Employee Shift Master
-</div>
 {% endblock %}{% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
 
@@ -46,12 +43,7 @@
     letter-spacing: 0px;
     color: #888888;
   }
-  .table-div {
-    background-color: white !important;
-    border-radius: 16px !important;
-    margin: 11px 9px !important;
-    padding: 5px 15px 15px 15px !important;
-  }
+
   #myTable2 > tbody > tr > td {
     text-transform: capitalize;
     font-weight: 400;
@@ -134,7 +126,7 @@
         <div class="py-2">
             <label for="employee_name">Employee <span style="color:red">*</span></label>
             
-            <select class="input-feild select2dropdown" id='employee_name' name="employee_name">
+            <select class="input-feild js-example-basic-single" id='employee_name' name="employee_name">
                 <option value=''>Select Employee</option> 
                 {% for r in employees %}
       
@@ -151,7 +143,7 @@
         </div>
 
       <div class="col-md-3 my-auto text-center">
-        <button onclick="return add_shift();" class="trackproBtn submitBtn mobilerespon">+ Add</button>
+        <button onclick="return add_shift();" class="btn btn-gradient-info btn-rounded btn-fw submitBtn mobilerespon">+ Add</button>
       </div>
     </div>
 </div>
@@ -198,8 +190,8 @@
                               
                               </div>
                               <div class="modal-footer ">
-                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                                  <button type="button" class="Role-btn text-center" onclick="delete_shift({{i.id}})" id="addEmployeeBtn">Delete</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" onclick="delete_shift({{i.id}})" id="addEmployeeBtn">Delete</button>
                   
                               </div>
                             </div>
@@ -311,8 +303,8 @@
                                               
                                               </div>
                                               <div class="modal-footer ">
-                                                  <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                                                  <button type="button" class="Role-btn text-center" onclick="delete_shift(`+response.data.id+`)" id="addEmployeeBtn">Delete</button>
+                                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                                                  <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" onclick="delete_shift(`+response.data.id+`)" id="addEmployeeBtn">Delete</button>
                                   
                                               </div>
                                             </div>

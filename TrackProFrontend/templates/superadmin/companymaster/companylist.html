@@ -2,32 +2,23 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Company list
-</div>
+
 {% endblock %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css' %}">
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
 
 <style>
     #myTable>tbody>tr>td {
 
         padding: 15px !important;
     }
-    .select2-container--default .select2-selection--single {
-        height: 35px !important;
-      }
-      .select2-container .select2-selection--single .select2-selection__rendered {
-        padding-left: 0px;
-        padding-top: 0px;
-        font-size: var(--f-lg);
-        color: var(--fc-md-dark);
-      }
+
       .error{
         font-size: 12px;
       }
+
 </style>
 
 
@@ -35,7 +26,6 @@
 
 
 
-{% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css"> {% endcomment %}
 
 
 
@@ -81,61 +71,61 @@
                             <div class="modal-body">
         
                                     <div class="row pt-3">
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 form-group">
                                             <label for="companyname">Company Name</label>
                                             <input type="text" id="companyname" name="companyname" placeholder="Company Name"
-                                                class="input-feild">
-                                                <p id="companyname_e" class="error"></p>
+                                                class="form-control">
+                                                <span id="companyname_e" class="error"></span>
         
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 form-group">
                                             <label for="gstNumber">GST-IN Number</label>
-                                            <input type="text"  id="gstNumber" name="gstNumber" placeholder="GST-IN Number" maxlength="15" class="input-feild" oninput="this.value = this.value.toUpperCase()">
-                                                <p id="gstNumber_e" class="error"></p>
+                                            <input type="text"  id="gstNumber" name="gstNumber" placeholder="GST-IN Number" maxlength="15" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                                <span id="gstNumber_e" class="error"></span>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 form-group">
                                             <label for="memberadmin">Company Admin Email Id </label>
         
                                             <input type="text" id="memberadmin" name="memberadmin"
-                                                placeholder="Company Admin Email Id " class="input-feild">
-                                                <p id="memberadmin_e" class="error"></p>
+                                                placeholder="Company Admin Email Id " class="form-control">
+                                                <span id="memberadmin_e" class="error"></span>
         
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 form-group">
                                             <label for="aadhaar">Aadhar Number </label>
         
                                             <input type="text" id="aadhaar" name="adhaarNumber"
-                                                placeholder="Aadhar Number" maxlength="12" class="input-feild" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
-                                                <p id="aadhaar_e" class="error"></p>
+                                                placeholder="Aadhar Number" maxlength="12" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                                <span id="aadhaar_e" class="error"></span>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 form-group">
                                             <label for="companyType">Company Type </label>
         
-                                            <select  onclick="this.setAttribute('value', this.value);" class="input-feild select2dropdown" placeholder="Company Type " id="companyType" name="companyType">
+                                            <select class="form-control js-example-basic-single w-100" id="companyType" name="companyType">
                                                 <option value="">Select Type</option>
                                                 {% for p in companytypelist %}
-                                                <option value="{{p.companyType}}">{{p.companyType}}</option>
+                                                    <option value="{{p.companyType}}">{{p.companyType}}</option>
                                                 {%endfor%}
                                             </select>
-                                            <p id="companyType_e" class="error"></p>
+                                            <span id="companyType_e" class="error"></span>
         
         
         
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-6 form-group">
                                             <label for="panNumber">Pan-Card Number </label>
         
                                             <input type="text" id="panNumber" name="panNumber"
-                                                placeholder="Pan-Card Number" maxlength="10" class="input-feild" oninput="this.value = this.value.toUpperCase()">
-                                                <p id="panNumber_e" class="error"></p>
+                                                placeholder="Pan-Card Number" maxlength="10" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                                <span id="panNumber_e" class="error"></span>
         
                                         </div>
                                         <div class="col-lg-12">
                                             <label for="caddress">Company Address </label>
         
                                             <input type="text" id="caddress" name="caddress"
-                                                placeholder="Company Address " class="input-feild">
-                                                <p id="caddress_e" class="error"></p>
+                                                placeholder="Company Address " class="form-control">
+                                                <span id="caddress_e" class="error"></span>
                                         </div>
                                         <div class="col-lg-12">
                                             <label for="gstcertificate" class="Documents col-lg-12 m-0 p-0">
@@ -147,7 +137,7 @@
                                                 </div>
                                                 <input type="file" onchange="imagePreview(this);" name="gstcertificate" id="gstcertificate" class="form-control-file" onchange="document.getElementById('gstcertificatePreview').src = window.URL.createObjectURL(this.files[0])" data-file_types="jpg|jpeg|png|ico|bmp" hidden="hidden">
                                             </label>
-                                            <p id="gstcertificate_e" class="error"></p> 
+                                            <span id="gstcertificate_e" class="error"></span> 
         
         
                                         </div>
@@ -163,7 +153,7 @@
                                                 </div>
                                                 <input type="file" onchange="imagePreview(this);"  name="companylogos" id="companylogos" class="form-control-file" onchange="document.getElementById('companylogosPreview').src = window.URL.createObjectURL(this.files[0])" data-file_types="jpg|jpeg|png|ico|bmp" hidden="hidden" >
                                             </label>
-                                            <p id="companylogos_e" class="error"></p> 
+                                            <span id="companylogos_e" class="error"></span> 
                                         </div>
                                         <div class="col-lg-12">
                                             <img class="preview-img" id="preview_companylogos" width="100px" height="100px" src="" alt="Add companylogos">
@@ -177,36 +167,36 @@
                             <div class="modal-body">
         
                                 <div class="row py-3">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="period">Plan Period</label>
-                                        <select  id="period" onchange="getamountbyperiod();" name="period" onclick="this.setAttribute('value', this.value);" class="input-feild select2dropdown">
+                                        <select  id="period" onchange="getamountbyperiod();" name="period" class="form-control js-example-basic-single w-100">
                                             <option value="">Select Your Plan</option>
-                                            {%for p in periodlist%}
+                                            {%for p in periodlist %}
                                             <option value="{{p.period}}">{{p.period}}</option>
                                             {%endfor%}
                                         </select>
-                                        <p id="period_e" class="error"></p> 
+                                        <span id="period_e" class="error"></span> 
         
         
         
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 form-group">
                                         <label for="payment">Payment</label>
         
                                         <input type="text"  id="payment" name="payment" placeholder="Payment"
-                                            class="input-feild" readonly>
+                                            class="form-control" readonly>
                                     </div>
         
                                 </div>
                                
                             </div>
-                            <div class="modal-footer row justify-content-center">
+                            <div class="modal-footer">
                                 <div class="col-lg-4">
                                     
                                 <button type="button" class="btn btn-outline-danger rounded-pill w-100" data-bs-dismiss="modal">Cancel</button>
                                 </div>
                                 <div class="col-lg-4">
-                                    <button onclick="return formValidation();" type="submit" class="add-btn w-100">+ Add</button>
+                                    <button onclick="return formValidation();" type="submit" class="btn btn-gradient-info btn-rounded btn-fw">+ Add</button>
 
                                 </div>
 
@@ -239,61 +229,61 @@
                                         <div class="col-lg-6">
                                             <label for="Update_Company_Name">Company Name</label>
                                             <input type="text" id="Update_Company_Name" name="Update_Company_Name" placeholder="Company Name"
-                                                class="input-feild">
+                                                class="form-control">
         
-                                                <p id="Update_Company_Name_e" class="error"></p> 
+                                                <span id="Update_Company_Name_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="Update_GST-IN">GST-IN</label>
         
                                             <input type="text" id="Update_GST-IN" name="Update_GST-IN" placeholder="GST-IN Number"
-                                                class="input-feild" maxlength="15" oninput="this.value = this.value.toUpperCase()">
-                                                <p id="Update_GST-IN_e" class="error"></p> 
+                                                class="form-control" maxlength="15" oninput="this.value = this.value.toUpperCase()">
+                                                <span id="Update_GST-IN_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="Update_CompanyAdminEmailId">Company Admin Email Id </label>
         
                                             <input type="text" id="Update_CompanyAdminEmailId" name="Update_CompanyAdminEmailId"
-                                                placeholder="Company Admin Email Id " class="input-feild">
-                                                <p id="Update_CompanyAdminEmailId_e" class="error"></p> 
+                                                placeholder="Company Admin Email Id " class="form-control">
+                                                <span id="Update_CompanyAdminEmailId_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="Update_AadharNumber">Aadhar Number </label>
         
                                             <input type="text" id="Update_AadharNumber" name="Update_AadharNumber"
-                                                placeholder="Aadhar Number " class="input-feild" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
-                                                <p id="Update_AadharNumber_e" class="error"></p> 
+                                                placeholder="Aadhar Number " class="form-control" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                                <span id="Update_AadharNumber_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="Update_CompanyType">Company Type </label>
         
                                             <select id="Update_CompanyType" name="Update_CompanyType" placeholder="Company Type "
-                                                class="input-feild select2dropdown">
+                                                class="form-control js-example-basic-single w-100">
                                                 {% for p in companytypelist %}
                                                 <option value="{{p.companyType}}">{{p.companyType}}</option>
                                                 {%endfor%}
                                             </select>
-                                            <p id="Update_CompanyType_e" class="error"></p> 
+                                            <span id="Update_CompanyType_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="Update_Pan-CardNumber">Pan-Card Number </label>
         
                                             <input type="text" id="Update_Pan-CardNumber" name="Update_Pan-CardNumber"
-                                                placeholder="Pan-Card Number " class="input-feild" maxlength="10" oninput="this.value = this.value.toUpperCase()">
-                                                <p id="Update_Pan-CardNumber_e" class="error"></p> 
+                                                placeholder="Pan-Card Number " class="form-control" maxlength="10" oninput="this.value = this.value.toUpperCase()">
+                                                <span id="Update_Pan-CardNumber_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-12">
                                             <label for="Update_CompanyAddress">Company Address </label>
         
                                             <input type="text" id="Update_CompanyAddress" name="Update_CompanyAddress"
-                                                placeholder="Company Address " class="input-feild">
-                                                <p id="Update_CompanyAddress_e" class="error"></p> 
+                                                placeholder="Company Address " class="form-control">
+                                                <span id="Update_CompanyAddress_e" class="error"></span> 
         
                                         </div>
         
@@ -308,7 +298,7 @@
                                                 </div>
                                                 <input type="file" onchange="imagePreview(this);" name="Update_gstcertificate" id="Update_gstcertificate" class="form-control-file"  hidden="hidden">
                                             </label>
-                                            <p id="Update_gstcertificate_e" class="error"></p> 
+                                            <span id="Update_gstcertificate_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-12">
@@ -323,7 +313,7 @@
                                                 </div>
                                                 <input type="file" onchange="imagePreview(this);" name="Update_companylogos" id="Update_companylogos" class="form-control-file"  hidden="hidden" >
                                             </label>
-                                            <p id="Update_companylogos_e" class="error"></p> 
+                                            <span id="Update_companylogos_e" class="error"></span> 
         
                                         </div>
                                         <div class="col-lg-12">
@@ -340,8 +330,8 @@
                                     <div class="col-lg-6">
                                         <label for="Update_Plan_Period">Plan Period</label>
                                         <select type="text" id="Update_Plan_Period" name="Update_Plan_Period" placeholder="Plan Period"
-                                        onchange="updategetamountbyperiod();" onclick="this.setAttribute('value', this.value);"
-                                            class="input-feild select2dropdown">
+                                        onchange="updategetamountbyperiod();"  
+                                            class="form-control js-example-basic-single w-100">
                                             <option value="">Select Your Plan</option>
                                             
                                             {%for p in periodlist%}
@@ -349,7 +339,7 @@
                                             {%endfor%}
                                         </select>
         
-                                        <p id="Update_Plan_Period_e" class="error"></p> 
+                                        <span id="Update_Plan_Period_e" class="error"></span> 
         
         
                                     </div>
@@ -357,22 +347,22 @@
                                         <label for="Update_Payment">Payment</label>
         
                                         <input type="text" id="Update_Payment" name="Update_Payment" placeholder="Payment"
-                                            class="input-feild">
-                                            <p id="Update_Payment_e" class="error"></p> 
+                                            class="form-control">
+                                            <span id="Update_Payment_e" class="error"></span> 
                                             <input type="text" id="Update_companyid" name="Update_companyid" hidden>
                                     </div>
         
                                 </div>
                                 </form>
                             </div>
-                            <div class="modal-footer row justify-content-center">
+                            <div class="modal-footer">
                                 <div class="col-lg-4">
                                     <button type="button" class="btn btn-outline-danger rounded-pill w-100"
                                     data-bs-dismiss="modal">Cancel</button>
                                 </div>
                                 
                                 <div class="col-lg-4">
-                                <button type="button" onclick="UpdateformValidation();" class="add-btn w-100">+ Update</button>
+                                <button type="button" onclick="UpdateformValidation();" class="btn btn-gradient-info btn-rounded btn-fw">+ Update</button>
 
                                 </div>
 
@@ -384,7 +374,7 @@
             <!-- Update Company end-->
         
             <div class="table-div">
-                <table class="row-border w-100" id="myTable">
+                <table class="w-100 table-bordered" id="myTable">
                     <thead>
                         <th>
                             Sr.No
@@ -437,26 +427,25 @@
  {% endblock %}
 {%block script%}{{block.super}}
   <!-- ==================================================================================================================================================== -->
-<script src="{% static 'assets/js/validation/validations.js'%}"></script>
+<script src="{% static 'js/validation/validations.js'%}"></script>
 
 
 <script>
     $( document ).ready(function() {
         $(".usermapping-form-button").hide()
         $('#myTable').DataTable();
-        $('.input-feild').on("focus", function () {
-          var label = $('label[for=' + this.id + ']');
-          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
-        });
+
     });
 
     const realFileBtn = document.getElementById("gstcertificate");
     const customBtn = document.getElementById("fileName");
     const customTxt = document.getElementById("custom-text");
-    
-    customBtn.addEventListener("click", function() {
+    if( customBtn){
+        customBtn.addEventListener("click", function() {
         realFileBtn.click();
     });
+
+    }
 
     realFileBtn.addEventListener("change", function() {
         if (realFileBtn.value) {
@@ -537,10 +526,12 @@
     const reallogoFileBtn = document.getElementById("companylogos");
     const customlogoBtn = document.getElementById("logofileName");
     const logocustomTxt = document.getElementById("logocustom-text");
-
-    customlogoBtn.addEventListener("click", function() {
+    if (customlogoBtn){
+        customlogoBtn.addEventListener("click", function() {
         reallogoFileBtn.click();
     });
+    }
+
 
     reallogoFileBtn.addEventListener("change", function() {
         if (reallogoFileBtn.value) {
@@ -716,18 +707,18 @@
                 $("#Update_GST-IN").val(response.data.gstNumber);
                 $("#Update_CompanyAdminEmailId").val(response.data.memberadmin);
                 $("#Update_AadharNumber").val(response.data.adhaarNumber);
-                $("#Update_CompanyType").val(response.data.companyType);
+                $("#Update_CompanyType").val(response.data.companyType).trigger('change');
                 $("#Update_Pan-CardNumber").val(response.data.panNumber);
                 $("#Update_CompanyAddress").val(response.data.companyAddress);
-                if(response.data.period != "null"){
-                    $("#Update_Plan_Period option[value="+response.data.period+"]").prop("selected",true)
-                
-                }
+
                 $("#Update_Payment").val(response.data.payment);
                 $('#Update_companyid').val(response.data.id);  
                 $('#preview_Update_companylogos').attr('src', response.data.companylogos);
                 $('#preview_Update_gstcertificate').attr('src', response.data.gstcertificate);
-
+                if(response.data.period != "null"){
+                    $("#Update_Plan_Period option[value="+response.data.period+"]").prop("selected",true)
+                
+                }
             }
         })
     }

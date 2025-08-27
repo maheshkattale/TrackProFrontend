@@ -1,9 +1,7 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
  Application Details
-</div>
 {% endblock %}
 {% block content %}
 
@@ -97,12 +95,8 @@
   .select2-container .select2-selection--single .select2-selection__rendered {
           padding-top: 2px;
       }
-  .select2-container--default .select2-selection--single {
-      height: 30px;
-  }
-  .select2-container--default .select2-selection--single .select2-selection__arrow {
-          top: 2px;
-      }
+
+
       .cardheadding {
           font-size: 18px;
           font-weight: 500;
@@ -202,7 +196,6 @@
   }
 </style>
 
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <main class="main-wrapper">
   {% if messages %}
@@ -328,7 +321,7 @@
                     <div class="d-flex p-2 justify-content-between">
                         <div class="cardheadding">Application History</div>
                         <div class="w-25">
-                            <select class="select2dropdown" onchange="leavefilter()" id="typeofleave">
+                            <select class="js-example-basic-single" onchange="leavefilter()" id="typeofleave">
                                 <option value="" selected>All</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Approved">Approved</option>
@@ -418,8 +411,8 @@
         
         </div>
         <div class="modal-footer">
-          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-          <span type="submit" class="trackproBtn"  id="editEmployeeDetails" onclick="rejectleave()">Submit</span>
+          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+          <span type="submit" class="btn btn-gradient-info btn-rounded btn-fw"  id="editEmployeeDetails" onclick="rejectleave()">Submit</span>
         </div>
       </div>
     </div>
@@ -439,8 +432,8 @@
           </div>            
         </div>
         <div class="modal-footer">
-          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-          <span  onclick="ApplicationApprove()" class="trackproBtn" id="editEmployeeDetails">Approve</span>
+          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+          <span  onclick="ApplicationApprove()" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Approve</span>
         </div>
       </div>
     </div>

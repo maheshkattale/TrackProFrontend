@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
   Configuration Master
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
 <style>
   .fa-minus-circle{
     font-size:22px
@@ -29,13 +26,6 @@
 
 }
 
-.select2-container--default .select2-selection--single {
-    border-bottom: 1px solid rgb(214, 214, 214) !important;
-    border: none;
-    height: 50px;
-    box-shadow: none;
-    border-radius: 0px;
-}
 
 .trackproBtn {
     width: 150px !important;
@@ -124,7 +114,7 @@
                               <div class="row mb-3">
                                   <div class="col-md-6">
                                     <label for="sectionId">Section<span style="color:red">*</span></label>
-                                    <select  class="select2dropdown" name="sectionId">
+                                    <select  class="js-example-basic-single" name="sectionId">
                                       <option value=''>Select an option</option> 
                                       {%for i in section_list%}
                                       <option value="{{i.id}}" >{{i.Name}}</option>
@@ -134,7 +124,7 @@
                                   </div>
                                   <div class="col-md-6">
                                     <label for="sectionId">Investype Type<span style="color:red">*</span></label>
-                                    <select  class="select2dropdown" name="sectionId">
+                                    <select  class="js-example-basic-single" name="sectionId">
                                       <option value=''>Select an option</option> 
                                       {%for i in section_list%}
                                       <option value="{{i.id}}" >{{i.Name}}</option>
@@ -146,7 +136,7 @@
                                   <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="sectionId">Field Type<span style="color:red">*</span></label>
-                                        <select  class="select2dropdown" name="sectionId">
+                                        <select  class="js-example-basic-single" name="sectionId">
                                         <option value=''>Select an option</option> 
                                         {%for i in section_list%}
                                         <option value="{{i.id}}" >{{i.Name}}</option>
@@ -156,7 +146,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="sectionId">Lender Type<span style="color:red">*</span></label>
-                                        <select id='sectionId' class="select2dropdown" name="sectionId">
+                                        <select id='sectionId' class="js-example-basic-single" name="sectionId">
                                           <option value=''>Select an option</option> 
                                           {%for i in section_list%}
                                           <option value="{{i.id}}" >{{i.Name}}</option>
@@ -272,17 +262,16 @@
               
                       {% comment %} <div class="row justify-content-end">
                           <div class="col-auto">
-                              <!-- <button class="trackproBtn cancelBtn" onclick="e.preventDefault"><a href="{% url 'users:employeelist' %}">Cancel</a></button>  -->
-                              <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>
+                              <a href="{% url 'users:employeelist' %}" class="btn btn-gradient-danger btn-rounded btn-fw cancelBtn">Cancel</a>
               
                           </div>
                           <div class="col-auto">
-                              <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+                              <button class="btn btn-gradient-info btn-rounded btn-fw submitBtn" onclick="return formValidation();">Submit</button>
                           </div>
                       </div> {% endcomment %}
                       <div class="modal-footer">
-                          <button type="button" class="Role-btn modalClose" data-bs-dismiss="modal">Close</button>
-                          <button type="submit" class="trackproBtn Role-btn" id="editEmployeeDetails"  onclick="return formValidation();">Submit</button>
+                          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails"  onclick="return formValidation();">Submit</button>
                         </div>
                   </form>
                 

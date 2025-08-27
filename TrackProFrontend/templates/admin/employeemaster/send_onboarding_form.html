@@ -1,23 +1,14 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Onboarding Form
-</div>
 {% endblock %}
 {% block content %}
 
     
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
-.select2-container--default .select2-selection--single{
-border-bottom:1px solid rgb(214, 214, 214) !important;
-border:none;
-height:50px;
-box-shadow:none;
-border-radius:0px;
-}
+
 .trackproBtn {
     width: 150px !important;
     height: 38px !important;
@@ -200,10 +191,10 @@ border-radius:0px;
 
         <div class="row justify-content-end">
           <div class="col-auto">
-            <a href="{% url 'users:employeelist' %}" class="trackproBtn cancelBtn">Cancel</a>             
+            <a href="{% url 'users:employeelist' %}" class="btn btn-gradient-danger btn-rounded btn-fw cancelBtn">Cancel</a>             
           </div>
           <div class="col-auto">
-            <button class="trackproBtn submitBtn" onclick="return formValidation();">Submit</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw submitBtn" onclick="return formValidation();">Submit</button>
           </div>
         </div>
     </form>

@@ -13,7 +13,7 @@
         background-color: #f0f1f2;
         max-width: 100vw;
         overflow-x: hidden;
-        font-family: "Rubik", sans-serif !important;
+        font-family: "Quicksand", sans-serif !important;
         font-weight: 400 !important;
     } 
     .card-defaults {
@@ -289,7 +289,7 @@
     
     #calPeriod {
         padding: 10px;
-        background: #5ecff8;
+        background: #174fa3;
         margin-top: 20px;
     }
     
@@ -302,7 +302,7 @@
     }
     
     .sky-total {
-        color: #5ecff8;
+        color: #174fa3;
     }
     
     .calmonthbox {
@@ -549,12 +549,7 @@
     
 
     
-    .main-wrapper {
-        padding-top: 2rem;
-        /* margin-bottom:3rem;
-        margin-top: 2rem; */
-        margin:2rem 1rem 10rem 1rem;
-    }
+
 
     /* ================================== Expanded Nav Layout ================================== */
     
@@ -1771,7 +1766,7 @@
         background: transparent;
         padding-bottom: 8px;
         margin-top: 6px;
-        margin-bottom: 28px;
+        /* margin-bottom: 28px; */
     }
     
     .modal-footer {
@@ -1828,27 +1823,12 @@
         width: 100%!important;
     }
     
-    .select2-container .select2-selection--single .select2-selection__rendered {
-        padding-left: 0px;
-        padding-top: 10px;
-        font-size: var(--f-lg);
-        color: var(--fc-md-dark);
-    }
+
     
-    .select2-container--default .select2-selection--single {
-        border:1px solid white;
-        border-radius:8px;
-        height: 50px;
-        box-shadow: 0px 4px 8px #00000029;
-    }
+
     
-    /* .select2-container--default .select2-selection--single:focus {
-        border-bottom: 1px solid var(--fc-main);
-    } */
+
     
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        top: 11px;
-    }
     
 
     
@@ -1968,7 +1948,7 @@
     #designationfile-custom-button {
         padding: 10px;
         color: #fff;
-        background-color: #5ecff8;
+        background-color: #174fa3;
         box-shadow: 0 0 10px #0000001f;
         border-radius: 5px;
         cursor: pointer;
@@ -1983,7 +1963,7 @@
     #departmentfile-custom-button {
         padding: 10px;
         color: #fff;
-        background-color: #5ecff8;
+        background-color: #174fa3;
         box-shadow: 0 0 10px #0000001f;
         border-radius: 5px;
         cursor: pointer;
@@ -1998,7 +1978,7 @@
     #locationfile-custom-button {
         padding: 10px;
         color: #fff;
-        background-color: #5ecff8;
+        background-color: #174fa3;
         box-shadow: 0 0 10px #0000001f;
         border-radius: 5px;
         cursor: pointer;
@@ -2013,7 +1993,7 @@
     #employeefile-custom-button {
         padding: 10px;
         color: #fff;
-        background-color: #5ecff8;
+        background-color: #174fa3;
         box-shadow: 0 0 10px #0000001f;
         border-radius: 5px;
         cursor: pointer;
@@ -2273,13 +2253,7 @@
     }
    
     
-    .table thead tr th {
-        font-size: 14px;
-        background-color:lightgrey;
-        text-align: left;
-        font-weight: 500;
-        padding:5px 10px !important;
-    }
+
     
     input[type=checkbox] {
         width: 18px;
@@ -3022,7 +2996,7 @@
     }
     
     .form-content {
-        color: #5ecff8;
+        color: #174fa3;
         font-weight: 500;
         font-size: 16px;
     }
@@ -3266,7 +3240,7 @@
     #custom-button {
         padding: 10px;
         color: #fff;
-        background-color: #5ecff8;
+        background-color: #174fa3;
         box-shadow: 0 0 10px #0000001f;
         border-radius: 5px;
         cursor: pointer;
@@ -3282,7 +3256,7 @@
     .file-upload-box {
         width: 50%;
         text-align: center;
-        border: 2px dashed #5ecff8;
+        border: 2px dashed #174fa3;
         margin-top: 2rem;
         height: 200px;
         position: relative;
@@ -3836,7 +3810,7 @@
   display:none;
 } */
   .calendar .calendar-dates-day {
-    font-family: "Manrope", sans-serif;
+    font-family: "Quicksand", sans-serif;
     font-size: 13px;
     border: 1px solid #efefef;
     padding: 4px;
@@ -3880,7 +3854,7 @@
   .calendar #today {
     padding: 2px 6px;
     box-sizing: border-box;
-    font-family: "Manrope", sans-serif;
+    font-family: "Quicksand", sans-serif;
     font-size: 20px;
     line-height: 20px;
     border: 1px solid #e0e0e0;
@@ -4067,9 +4041,7 @@ color:grey;
         div.dt-buttons .dt-button {
             font-size: 5px !important;
         }
-        .dataTables_wrapper #attlisttable_filter input {
-            width: 50% !important;
-        }
+
         #attlisttable_filter {
             position: absolute;
             top: -12% !important;
@@ -4233,9 +4205,7 @@ color:grey;
         .head1{
             font-size:10px !important;
         }
-        .select2-container .select2-selection--single .select2-selection__rendered {
-            font-size:13px !important;
-        }
+
         .task-report-box {
             margin-top: 13rem !important;
             padding:6px !important;

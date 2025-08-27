@@ -3,23 +3,14 @@
 {% load encryption_filters %}
 
 {% block headercontent %}
-<div class="nav-item newheading">
 Update Employee
-</div>
 {% endblock %}
 {% block content %}
 
     
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
-  .select2-container--default .select2-selection--single{
-  border-bottom:1px solid rgb(214, 214, 214) !important;
-  border:none;
-  height:58px;
-  box-shadow:none;
-  border-radius:0px;
-  }
+
   .trackproBtn {
       width: 150px !important;
       height: 38px !important;
@@ -53,7 +44,7 @@ Update Employee
       color: #174fa3 !important;
     }
       .form-content {
-        color: #5ecff8 !important;
+        color: #174fa3 !important;
         font-weight: 500;
         font-size: 16px;
       }
@@ -366,11 +357,6 @@ Update Employee
     outline: none;
     padding: 0px 10px;
   }
-  .select2-container--default .select2-selection--single,.form-floating .form-control {
-    border-bottom: 1px solid #b6b6b6 !important;
-
-  }
-  .select2-container--default .select2-selection--single 
 
 
   .text-right{
@@ -1279,7 +1265,7 @@ Update Employee
                                     </div>            
                                   </div>
                                   <div class="modal-footer d-flex">
-                                    <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                   </div>
                                 </div>
                               </div>
@@ -1302,7 +1288,7 @@ Update Employee
                                     </div>            
                                   </div>
                                   <div class="modal-footer d-flex">
-                                    <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                                   </div>
                                 </div>
                               </div>
@@ -1732,8 +1718,8 @@ Update Employee
   
     
     $(document).ready(function() {
-      residentialcitydata({{employeedetails.userSecondaryObject.residentialaddresscity|default_if_none:''}})
-      permanentcitydata({{employeedetails.userSecondaryObject.permanantaddresscity|default_if_none:''}})
+      residentialcitydata('{{employeedetails.userSecondaryObject.residentialaddresscity|default_if_none:""}}')
+      permanentcitydata('{{employeedetails.userSecondaryObject.permanantaddresscity|default_if_none:""}}')
       getrolelist()
       getdesignationlist()
       getlocationlist()
@@ -2643,7 +2629,7 @@ Update Employee
   
           var formData = new FormData();
   
-          formData.append("id",{{userID}});
+          formData.append("id",'{{userID}}');
   
   
   
@@ -2788,7 +2774,7 @@ Update Employee
 
           var formData = new FormData();
   
-          formData.append("id",{{userID}});
+          formData.append("id",'{{userID}}');
           formData.append("employeeId",addEmpAttendanceId);
           formData.append("email",empemail);
           formData.append("DesignationId",addEmpDesignation);
@@ -3258,7 +3244,7 @@ Update Employee
     
               var companydata = new FormData();
     
-              companydata.append("id",{{userID}});
+              companydata.append("id",'{{userID}}');
               companydata.append("comapanyname",companyName);
               companydata.append("joinDate",joinDate);
               companydata.append("designation",designation);
@@ -3405,7 +3391,7 @@ Update Employee
                             </div>            
                           </div>
                           <div class="modal-footer d-flex">
-                            <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                           </div>
                         </div>
                       </div>
@@ -3428,7 +3414,7 @@ Update Employee
                             </div>            
                           </div>
                           <div class="modal-footer d-flex">
-                            <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                           </div>
                         </div>
                       </div>
@@ -3616,7 +3602,7 @@ Update Employee
         }else{
           var editcompanydata = new FormData();
           editcompanydata.append("id",editingcompanyid);
-          editcompanydata.append("userid",{{userID}});
+          editcompanydata.append("userid",'{{userID}}');
           editcompanydata.append("comapanyname",companyName);
           editcompanydata.append("joinDate",joinDate);
           editcompanydata.append("designation",designation);
@@ -3758,7 +3744,7 @@ Update Employee
                           </div>            
                         </div>
                         <div class="modal-footer d-flex">
-                          <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                         </div>
                       </div>
                     </div>
@@ -3781,7 +3767,7 @@ Update Employee
                           </div>            
                         </div>
                         <div class="modal-footer d-flex">
-                          <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
                         </div>
                       </div>
                     </div>

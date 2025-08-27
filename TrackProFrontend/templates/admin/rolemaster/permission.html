@@ -1,13 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Permissionssss
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
 
 <style>
   .submit-button{
@@ -15,6 +11,9 @@ Permissionssss
  }
  .error{
    font-size:18px !important;
+ }
+ .Checkbox {
+  margin: 5px;
  }
 </style>
 
@@ -47,7 +46,7 @@ Permissionssss
           <div class="col d-flex align-items-center justify-content-between p-0">
           
               <span>
-              <select name="RoleID" id="RoleID" class="Select-feild" onchange="getpermissionbyrole()">
+              <select name="RoleID" id="RoleID" class="js-example-basic-single" onchange="getpermissionbyrole()">
                 <option selected value="">Select Role</option>
                 {% for i in rolelist%}
                 <option value="{{i.id}}">{{i.RoleName}}</option>   

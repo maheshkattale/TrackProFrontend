@@ -3,21 +3,16 @@
 {% load encryption_filters %}
 
 {% block headercontent %}
-<div class="nav-item newheading">
-Employee List</div>
+Employee List
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <style>
   .main-wrapper {
     padding-left: 15px;
     padding-right: 15px;
 }
-.title-div {
-  margin: 27px 0px !important;
 
-}
 .viewEmpDeetsBtn .fa{
   font-size: 18px;
   cursor: pointer !important;
@@ -55,28 +50,28 @@ Employee List</div>
       </div>
 
       <div class="col-lg-3 col-md-6 col-6">
-        <select class="input-feild select2dropdown" id="searchdesg" onchange="multiple_search();">
+        <select class="input-feild js-example-basic-single" id="searchdesg" onchange="multiple_search();">
           <option selected value="">Search by Designation</option>
 
         </select>
       </div>
 
       <div class="col-lg-3 col-md-6 col-6">
-        <select class="input-feild select2dropdown" id="searchdept" onchange="multiple_search();">
+        <select class="input-feild js-example-basic-single" id="searchdept" onchange="multiple_search();">
           <option selected value="">Search by Department</option>
 
         </select>
       </div>
 
       <div class="col-lg-2 col-md-6 col-6">
-        <select class="input-feild select2dropdown" id="searchlocation" onchange="multiple_search();">
+        <select class="input-feild js-example-basic-single" id="searchlocation" onchange="multiple_search();">
           <option selected value="">Search by Location</option>
 
         </select>
       </div>
 
       <div class="col-lg-2 col-md-6 col-6">
-        <select class="input-feild select2dropdown" id="searchattendance" onchange="multiple_search();">
+        <select class="input-feild js-example-basic-single" id="searchattendance" onchange="multiple_search();">
           <option selected value="">Attendance Id</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
@@ -180,8 +175,8 @@ Employee List</div>
               </div>            
             </div>
             <div class="modal-footer d-flex">
-              <button type="button" class="trackproBtn modalClose" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
-              <button  onclick="blockemployee({{i.id}})" class="notfapprovebtn" id="">Delete</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" style="width: 20% !important;" data-bs-dismiss="modal">Close</button>
+              <button  onclick="blockemployee('{{i.id}}')" class="notfapprovebtn" id="">Delete</button>
             </div>
           </div>
         </div>

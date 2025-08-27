@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %}
 {% block headercontent %}
-<div class="nav-item newheading">
  Permissions
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
 
 <style>
   .flexitembox {
@@ -177,7 +174,7 @@
 
       <div class="col-md-9 p-0">
         <div class="flexitembox">
-          {% for k in permissionlist%}
+          {% for k in permissionlist %}
           <div class="rolecol">
             <div class="roledetails ">
               <div class="roleoptions">
@@ -248,7 +245,7 @@
   </div>
 
   <!-- The Modal -->
-  {% for j in permissionlist%}
+  {% for j in permissionlist %}
 <div class="modal" id="myeditModal{{j.RoleID}}">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -268,8 +265,8 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="cancel-btn" data-bs-dismiss="modal">Cancel</button>
-        <span class="modal-add-btn" id="savebutton" onclick="editrole({{j.RoleID}});">Add</span>
+        <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
+        <span class="btn btn-gradient-info btn-rounded btn-fw" id="savebutton" onclick="editrole('{{j.RoleID}}');">Add</span>
       </div>
 
     </div>

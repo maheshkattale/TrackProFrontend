@@ -1,13 +1,11 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Reminders
-</div>
+
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
 <style>
     .fa-bell{
         color:rgba(255, 0, 0, 0.573);
@@ -105,8 +103,8 @@
 
                                                     <!--  -->
                                             <div class="d-flex justify-content-around align-items-center mt-2">
-                                                <button data-bs-dismiss="modal" type="reset" id="button" class="btn mt-3">CLOSE</button>
-                                                <button onclick="sendReminder({{i.id}})" id="button" class="btn mt-3">SEND</button>
+                                                <button data-bs-dismiss="modal" type="reset" id="button" class="btn btn-gradient-danger btn-rounded btn-fw">CLOSE</button>
+                                                <button onclick="sendReminder({{i.id}})" id="button" class="btn btn-gradient-info btn-rounded btn-fw">SEND</button>
                                             </div>
 
                                                 </div>
@@ -261,8 +259,8 @@
 
                                                     <!--  -->
                                             <div class="d-flex justify-content-around align-items-center mt-2">
-                                                <button data-bs-dismiss="modal" type="reset" id="button" class="btn mt-3">CLOSE</button>
-                                                <button onclick="sendReminder({{i.id}})" id="button" class="btn mt-3">SEND</button>
+                                                <button data-bs-dismiss="modal" type="reset" id="button" class="btn btn-gradient-danger btn-rounded btn-fw">CLOSE</button>
+                                                <button onclick="sendReminder({{i.id}})" id="button" class="btn btn-gradient-info btn-rounded btn-fw">SEND</button>
                                             </div>
 
                                                 </div>

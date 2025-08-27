@@ -1,9 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
 TrackPro Check Report
-</div>
+
 {% endblock %}
 {% block content %}
 
@@ -24,25 +24,14 @@ TrackPro Check Report
     padding: 4px 14px;
     font-size:12px;
 }
-.select2-container--default .select2-selection--single{
-  border-bottom:1px solid #acacac !important;
-  box-shadow:none !important;
-  border-radius: 0 !important;
 
-}
 .heading{
 text-align: left;
 font-size:14px;
 letter-spacing: 0px;
 color: #888888;
 }
-.table-div {
-    background-color: white !important;
-    border-radius: 16px !important;
-    margin: 11px 9px !important;
-    padding: 0 15px 15px 15px !important;
 
-}
 
 #projecttotalhours{
   font-size:14px;
@@ -86,7 +75,7 @@ color: #282828;
           </div>
          
           <div class="col-md-3">
-            <select id='year' name="year" class="select2dropdown" onchange="onchangeweek();">
+            <select id='year' name="year" class="js-example-basic-single" onchange="onchangeweek();">
                <option value="">Select Year</option>
                 {% for y in yearlist%}
                   {% if y.Year == curryear %}
@@ -99,7 +88,7 @@ color: #282828;
             </select>
           </div>
           <div class="col-md-3">
-            <select id='week' name="week" class="select2dropdown" onchange="viewprojectdetails();">
+            <select id='week' name="week" class="js-example-basic-single" onchange="viewprojectdetails();">
              
             </select>
           </div>
@@ -164,7 +153,7 @@ $(document).ready(function () {
     var year = $('#year').val();
     $.ajax({
     type: 'post',
-    url: frontendURL + 'checktrackpro/TrackProResultWeek',
+    url: frontendURL + 'checktrackpro/trackproResultWeek',
     data: {
         'year':year,
         csrfmiddlewaretoken: '{{ csrf_token }}',

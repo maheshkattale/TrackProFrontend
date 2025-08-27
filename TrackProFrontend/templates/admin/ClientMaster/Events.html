@@ -1,13 +1,10 @@
 {% extends "index.html" %}
 {% load static %}
 {% block headercontent %}
-<div class="nav-item newheading">
 Events
-</div>
 
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
 <style>
   #Eventtable>tbody>tr>td {
     text-transform: capitalize;
@@ -179,8 +176,8 @@ Events
             <div class="col-3 px-4">
               <input type="hidden" name="eventid" value="{{i.id}}">
               <label for="upclientname{{i.id}}">Client Name</label>
-                <select id='upclientname{{i.id}}' name="Updateclient" class="select2dropdown"
-                  onchange="updategetclientdata({{i.id}},this.value,{{i.Assign_To}},{{i.Assign_By}},{{i.Project}});">
+                <select id='upclientname{{i.id}}' name="Updateclient" class="js-example-basic-single"
+                  onchange="updategetclientdata('{{i.id}}',this.value,'{{i.Assign_To}}','{{i.Assign_By}}','{{i.Project}}');">
                   <option value=''>  Select Client </option>
                   {% for c in clientlist %}
                     {%if c.id == i.ClientId%}
@@ -195,7 +192,7 @@ Events
 
             <div class="col-3 px-4">
               <label for="clientproject{{i.id}}">Project</label>
-              <select id='clientproject{{i.id}}' name="updateclientproject" class="select2dropdown">
+              <select id='clientproject{{i.id}}' name="updateclientproject" class="js-example-basic-single">
                 <option value=''>Select Project</option>
               </select>
               <span id="clientprojecterror{{i.id}}" class="error-message"></span>
@@ -203,14 +200,14 @@ Events
 
             <div class="col-3 px-4">
               <label for="AssignTo{{i.id}}">AssignTo</label>
-              <select id='AssignTo{{i.id}}' name="UpdateAssign_To" class="select2dropdown">
+              <select id='AssignTo{{i.id}}' name="UpdateAssign_To" class="js-example-basic-single">
                 <option value=''>Select Team Member</option>
               </select>
               <span id="AssignToerror{{i.id}}" class="error-message"></span>
             </div>
             <div class="col-3 px-4">
               <label for="AssignBy{{i.id}}">AssignBy</label>
-              <select id='AssignBy{{i.id}}' name="UpdateAssign_By" class="select2dropdown">
+              <select id='AssignBy{{i.id}}' name="UpdateAssign_By" class="js-example-basic-single">
                 <option value=''>Select Client-side Manager</option>
               </select>
               <span id="AssignByerror{{i.id}}" class="error-message"></span>
@@ -385,7 +382,7 @@ Events
           <div class="row mt-4">
             <div class="col-3 px-4">
               <label for="clientname">Client Name <span style="color:red;">*</span></label>
-              <select id='clientname' name="ClientId" class="select2dropdown" onchange="getclientdata();">
+              <select id='clientname' name="ClientId" class="js-example-basic-single" onchange="getclientdata();">
                 <option value=''>Select Client </option> 
                 {% for c in clientlist %}
                 <option value="{{c.id}}">{{c.ClientName}}</option>
@@ -396,7 +393,7 @@ Events
 
             <div class="col-3 px-4">
               <label for="clientproject">Project <span style="color:red;">*</span></label>
-              <select id='clientproject' name="clientproject" class="select2dropdown">
+              <select id='clientproject' name="clientproject" class="js-example-basic-single">
                 <option value=''>Select Project </option> 
 
               </select>
@@ -406,7 +403,7 @@ Events
 
             <div class="col-3 px-4">
             <label for="AssignTo">AssignTo <span style="color:red;">*</span></label>
-            <select id='AssignTo' name="Assign_To" class="select2dropdown">
+            <select id='AssignTo' name="Assign_To" class="js-example-basic-single">
                   <option value=''>Select Team Member</option> 
             </select>
             <span id="AssignToerror" class="error-message"></span>
@@ -414,7 +411,7 @@ Events
 
             <div class="col-3 px-4">
               <label for="AssignBy">AssignBy <span style="color:red;">*</span></label>
-              <select id='AssignBy' name="Assign_By" class="select2dropdown">
+              <select id='AssignBy' name="Assign_By" class="js-example-basic-single">
                 <option value=''>Select Client-side Manager</option> 
               </select>
               <span id="AssignByrerror" class="error-message"></span>

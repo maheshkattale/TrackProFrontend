@@ -1,9 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
  my trackpro score
-</div>
+
 {% endblock %}
 {% block content %}
 
@@ -29,7 +29,7 @@
         <div class="col d-flex align-items-center p-0">
             <div class="col-md-3">
                 <label for="Year">Year:</label><br>
-                <select id='Year' name="Year" class="select2dropdown">
+                <select id='Year' name="Year" class="js-example-basic-single">
                   {% for y in combined.results.year %}
                   <option value="{{y.Year}}">{{y.Year}}</option>
                   {% endfor %}

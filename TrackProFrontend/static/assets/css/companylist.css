@@ -4,12 +4,11 @@
 .table-div {
     background-color: white !important;
     border-radius: 12px !important;
-    margin:27px 14px !important;
-    padding: 12px 15px 15px 15px !important;
+    margin:10px 0 !important;
+    padding: 15px 15px 15px 15px !important;
     box-shadow: 0 4px 8px #0000001f;
 }
 .title-div {
-    margin:14px 14px;
     display: flex !important;
     justify-content: space-between !important;
 
@@ -19,7 +18,7 @@
 .company-title {
     font-size: 20px !important;
     font-weight: 500 !important;
-    font-family: 'Rubik', sans-serif !important;
+    font-family: 'Quicksand', sans-serif !important;
 }
 .add-btn {
     background: #174fa3 !important;
@@ -37,7 +36,7 @@
 
 #exampleModalLabel {
     font-weight: 500 !important;
-    font-family: 'Rubik', sans-serif !important;
+    font-family: 'Quicksand', sans-serif !important;
 
 }
 
@@ -607,7 +606,7 @@ input[type="date"]:before {
 .file-upload-box {
     width: 65%;
     text-align: center;
-    border: 2px dashed #5ecff8;
+    border: 2px dashed #174fa3;
     margin-top: 2rem;
     height: 250px;
     position: relative;
@@ -670,18 +669,6 @@ input[type="date"]:before {
 
 
 
-.select2-container--default .select2-selection--single {	
-    border-bottom: 1px solid #acacac !important;	
-    box-shadow: none !important;	
-    border-radius: 0 !important;	
-    background-color: transparent;	
-    border:0;	
-}	
-.select2-container--default .select2-selection--multiple{	
-    height:70px;	
-    overflow-y:scroll;	
-    overflow-x:hidden;	
-}
 .page-item.active .page-link {	
     color: #9b9b9b !important;	
 }
@@ -944,7 +931,7 @@ input[type="date"]:before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1000;
+    z-index: 10000;
 
  }
  @keyframes alertmsg {

@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %}
 {% block headercontent %}
-<div class="nav-item newheading">
     Employee Packets Mapping
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <style>
     .modal-body label {
         display: block;
@@ -205,7 +202,7 @@
                                 <div class="col-4">
                                     <label for="PacketName">Packet Name</label>
                                     <select name="PacketName" id="PacketName"
-                                        class="form-control select2dropdown indexselect2" onchange="get_employees();">
+                                        class="js-example-basic-single" onchange="get_employees();">
                                         {% for i in packetlist %}
                                         <option value="{{i.id}}">{{i.PacketName}}</option>
                                         {%endfor%}
@@ -217,7 +214,7 @@
                                 <div class="col-4">
                                     <label for="Location">Location</label>
                                     <select name="Location" id="Location"
-                                        class="form-control select2dropdown indexselect2" onchange="get_employees();">
+                                        class="js-example-basic-single" onchange="get_employees();">
                                         <option value="">Select Location</option>
                                         {% for i in locations %}
                                         <option value="{{i.id}}">{{i.LocationName}}</option>

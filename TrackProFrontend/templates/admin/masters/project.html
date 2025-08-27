@@ -4,12 +4,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
 Project
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css'%}" />
 <style>
   .select2-dropdown {
     z-index: 111111 !important;
@@ -27,9 +24,7 @@ tr{
   display:flex;
   justify-content: space-around;
 }
-.table-div {
-    margin: 10px 14px !important;
-}
+
 </style>
 
 
@@ -60,7 +55,7 @@ tr{
         </div>
         <div class="col-3">
           <label for="ProjectBA">Project BA</label>
-          <select id='ProjectBA' name="ProjectBA" class="input-feild select2dropdown">
+          <select id='ProjectBA' name="ProjectBA" class="input-feild js-example-basic-single">
                 <option value=''>Select Project BA</option> 
                 {% for i in employeelist %}
                 <option value="{{i.id}}">{{i.Firstname}} {{i.Lastname}}</option>
@@ -70,7 +65,7 @@ tr{
         </div>
         <div class="col-4">
           <label for="ProjectCoordinator">Project Coordinator</label>
-          <select id='ProjectCoordinator' name="ProjectCoordinator" class="input-feild select2dropdown" data-placeholder="Select Project Coordinator" multiple >
+          <select id='ProjectCoordinator' name="ProjectCoordinator" class="input-feild js-example-basic-multiple" data-placeholder="Select Project Coordinator" multiple >
             <option value="">Select project coordinator</option>
 
                 {% for i in employeelist %}
@@ -133,7 +128,7 @@ tr{
               </div>
               <div class="col-4 px-4">
               <label for="ProjectBA{{i.id}}">Project BA</label>
-              <select id='ProjectBA{{i.id}}' name="ProjectBA" class="select2dropdown">
+              <select id='ProjectBA{{i.id}}' name="ProjectBA" class="js-example-basic-single">
                     <option value=''>Select Project BA</option> 
                     {% for e in employeelist %}
                       {% if e.id == i.ProjectBA %}
@@ -147,7 +142,7 @@ tr{
               </div>
               <div class="col-4 px-4">
                 <label for="ProjectCoordinator{{i.id}}">Project Coordinator</label>
-                <select id='ProjectCoordinator{{i.id}}' name="ProjectCoordinator" class="select2dropdown" style="bottom: 100%;" multiple>
+                <select id='ProjectCoordinator{{i.id}}' name="ProjectCoordinator" class="js-example-basic-multiple" style="bottom: 100%;" multiple>
                       {% for u in employeelist %}
                       {% if u.id in i.ProjectCoordinator  %}
                       <option value="{{u.id}}" selected>{{u.Firstname}} {{u.Lastname}}</option>
@@ -162,8 +157,8 @@ tr{
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-            <button class="trackproBtn" id="editEmployeeDetails" onclick="projectname({{i.id}})">Update</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="projectname({{i.id}})">Update</button>
           </div>
         </div>
       </div>
@@ -195,9 +190,9 @@ tr{
         <div class="modal-footer row">
 
 
-            <button type="button"  class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
+            <button type="button"  class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
 
-            <a href="{% url 'project:delete_project' i.id %}"  class="trackproBtn" id="editEmployeeDetails">Delete</a>
+            <a href="{% url 'project:delete_project' i.id %}"  class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Delete</a>
 
         </div>
       </div>
@@ -376,7 +371,7 @@ tr{
                             </div>
                             <div class="col-4 px-4">
                             <label for="ProjectBA`+o.id+`">Project BA</label>
-                            <select id='ProjectBA`+o.id+`' name="ProjectBA" class="select2dropdown">
+                            <select id='ProjectBA`+o.id+`' name="ProjectBA" class="js-example-basic-single">
                                   <option value=''>Select Project BA </option> 
 
 
@@ -392,7 +387,7 @@ tr{
                             </div>
                             <div class="col-4 px-4">
                               <label for="ProjectCoordinator`+o.id+`">Project Coordinator</label>
-                              <select id='ProjectCoordinator`+o.id+`' name="ProjectCoordinator" class="select2dropdown" style="bottom: 100%;" multiple>
+                              <select id='ProjectCoordinator`+o.id+`' name="ProjectCoordinator" class="js-example-basic-multiple" style="bottom: 100%;" multiple>
 
 
 
@@ -408,8 +403,8 @@ tr{
                           </div>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-                          <button class="trackproBtn" id="editEmployeeDetails" onclick="projectname(`+o.id+`)">Update</button>
+                          <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                          <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="projectname(`+o.id+`)">Update</button>
                         </div>
                       </div>
                     </div>

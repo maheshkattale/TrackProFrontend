@@ -1,9 +1,10 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block headercontent %}
-<div class="nav-item newheading">
+
+
 Late Attendance Report
-</div>
+
 {% endblock %}
 {% block content %}
 
@@ -14,12 +15,10 @@ Late Attendance Report
   </script>
   
 
-  <link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
 
 
-  <link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 
 <style>
   .leads-div {
@@ -36,10 +35,7 @@ Late Attendance Report
 
           height: 48px;
       }
-      .table-div {
 
-          padding: 16px 15px 15px 15px !important;
-      }
       .select2-dropdown {
         z-index: 111111 !important;
     }
@@ -86,7 +82,7 @@ Late Attendance Report
 
         <span class="col-lg-8 d-flex justify-content-end">
             <span class="mx-3 selectdrop w-25">
-                <select class="form-control select2dropdown" id="EmployeeId" name="EmployeeId" onchange="Pagination();">
+                <select class="form-control js-example-basic-single" id="EmployeeId" name="EmployeeId" onchange="Pagination();">
                     <option value="">All</option>
 
                 {% for i in employees %}
@@ -327,6 +323,7 @@ Late Attendance Report
         })
       }
     }
+    
     function Pagination(){
       var testflag =true;
       $('#secondpagination-demo2').html('<ul id="pagination-demo2" class="pagination-sm"></ul>');

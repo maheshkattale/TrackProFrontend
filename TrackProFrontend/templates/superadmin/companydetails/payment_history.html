@@ -1,14 +1,11 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
     Payment History
-</div>
+
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static "assets/css/companylist.css" %}">
-
-<link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
 <style>
     .select2-container--default .select2-selection--single {
         height: 35px !important;
@@ -53,9 +50,9 @@
             <div class="modal-body">
 
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                             <label for="companyId">Company Name</label>
-                            <select  onclick="this.setAttribute('value', this.value);" placeholder=" " value="" id="companyId" name="companyId" class="input-feild select2dropdown">
+                            <select  onclick="this.setAttribute('value', this.value);" placeholder=" " value="" id="companyId" name="companyId" class="form-control js-example-basic-single">
                                 <option value="" disabled selected>Select Company Name</option>
                                 {% for p in companylist %}
                                 <option class="text-capitalize" value="{{p.id}}">{{p.companyName}}</option>
@@ -79,9 +76,9 @@
 
 
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                             <label for="period">Select Plan</label>
-                            <select  onchange="getamountbyperiod();" onclick="this.setAttribute('value', this.value);" placeholder=" " value="" id="period" name="planperiod" class="input-feild select2dropdown">
+                            <select  onchange="getamountbyperiod();" onclick="this.setAttribute('value', this.value);" placeholder=" " value="" id="period" name="planperiod" class="form-control js-example-basic-single">
                                 <option value="" disabled selected>Select Plan</option>
                                 {% for p in periodlist %}
                                 <option class="text-capitalize" value="{{p.period}}">{{p.period}}</option>
@@ -90,30 +87,30 @@
                             <span class="error" id="period_err"></span>
                     </div>
 
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                         <label for="payment">Payment</label>
-                        <input type="text" id="payment" name="payment" placeholder=" Payment" class="input-feild" readonly/>
+                        <input type="text" id="payment" name="payment" placeholder=" Payment" class="form-control" readonly/>
                         <span class="error" id="payment_err"></span>
                     </div> 
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                         <label for="StartDate">Start Date</label>
-                        <input type="text" id="StartDate" name="StartDate" placeholder="Start Date" class="input-feild" readonly/>
+                        <input type="text" id="StartDate" name="StartDate" placeholder="Start Date" class="form-control" readonly/>
                         <span class="error" id="StartDate_err"></span>
                     </div>
 
-                    <div class="col-lg-6 mt-3">
+                    <div class="col-lg-6 mt-3 form-group">
                         <label for="EndDate">End Date</label>
-                        <input type="text" id="EndDate" name="EndDate" placeholder="End Date" class="input-feild" readonly/>
+                        <input type="text" id="EndDate" name="EndDate" placeholder="End Date" class="form-control" readonly/>
                         <span class="error" id="EndDate_err"></span>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="trackproBtn w-25 modalClose" data-bs-dismiss="modal">Cancel</button>
-              <button class="trackproBtn w-25"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
+              <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn btn-gradient-info btn-rounded btn-fw w-25"  type="submit" id="addEmployeeBtn" onclick="return formValidation();">Submit</button>
             </div>
           </form>
         </div>
@@ -124,7 +121,7 @@
 
           
 <div class="table-div">
-    <table class="row-border w-100" id="myTable">
+    <table class="table-bordered w-100" id="myTable">
         <thead>
             <th>Sr. no</th>
             <th>Company</th>
@@ -188,10 +185,7 @@
 
         $(".usermapping-form-button").hide()
         $('#myTable').DataTable();
-        $('.input-feild').on("focus", function () {
-          var label = $('label[for=' + this.id + ']');
-          label.delay("slow").animate({ 'font-size': '14px', 'font-weight': '400', 'padding': '1px', }, 'slow');
-        });
+
 
     });
 

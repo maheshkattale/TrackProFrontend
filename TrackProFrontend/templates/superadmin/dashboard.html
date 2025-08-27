@@ -2,37 +2,13 @@
 {% load static %} 
 {% block headercontent %}
 
-<div class="nav-item newheading">
 Dashboard
-</div>
 
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'assets/css/superadminstyle.css'%}" />
 <style>
-    .select2-container .select2-selection--single .select2-selection__rendered {
-    padding-left: 5px;
-    padding-top: 3px;
-    }
-    .select2-container--default .select2-selection--single {
-    height: 30px;
-    border:none;
-    box-shadow: none;
-    border-radius:none;
-    }
-    .select2-results__option {
-    padding: 2px;
-    font-size: 12px;
-    }
-    .select2-search--dropdown .select2-search__field {
-    padding: 0px 5px;
-    }
-    .select2-container .select2-selection--single .select2-selection__rendered {
-    font-size: 14px;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__arrow b {
-        top:24%;
-    }
+
     .dataTables_wrapper .dataTables_filter label {
     border-radius: 0px !important;
     border: none !important;
@@ -75,8 +51,12 @@ table.dataTable thead th {
     font-weight: 500;
     font-size:14px;
 }
+.dataTables_filter {
+    position: relative;
+    top: -38px;
+    right: -45%;
+    }
 </style>
-<main class="main-wrapper mx-2">
     <div class="row mt-3">
        <div class="col-md-7 firstcol">
         <div class="row pt-2 px-2">
@@ -117,13 +97,13 @@ table.dataTable thead th {
                 </div>
             </div>
         </div>
-        <div class="row pt-2">
-            <div class="col-md-12">
+        <div class="row pt-2 px-2">
+            <div class="col-md-12 px-1">
                 <div class="supadcard">
-                    <div class="d-flex justify-content-between px-2">
+                    <div class="d-flex px-2">
                         <div class="cardsheadtext">Company package</div>
                         <div class="plandiv">
-                        <select id='plan' name="plan" class="form-control select2dropdown" aria-label="Floating label select example" onchange="getpackagedata()">
+                        <select id='plan' name="plan" class="form-control js-example-basic-single" aria-label="Floating label select example" onchange="getpackagedata()">
                             <option value="" selected>All Plans</option>
                             {% for u in planlist %}
                             <option value="{{u.period}}">{{u.period}}</option>
@@ -165,8 +145,8 @@ table.dataTable thead th {
         </div>
        </div>
        <div class="col-md-5 secondcol">
-        <div class="row pt-2">
-            <div class="col-md-12">
+        <div class="row pt-2 px-0">
+            <div class="col-md-12 px-1">
                 <div class="supadcard">
                     <div class="cardsheadtext">Income Yearly</div>
                     <canvas id="incomechart"  height="170"></canvas>
@@ -174,8 +154,8 @@ table.dataTable thead th {
             </div>
             
         </div>
-        <div class="row pt-2">
-            <div class="col-md-12">
+        <div class="row pt-2 px-0">
+            <div class="col-md-12 px-1">
             <div class="supadcard">
                 <div class="d-flex justify-content-between">
                     <div class="cardsheadtext">Company Leads</div>
@@ -194,7 +174,6 @@ table.dataTable thead th {
          </div>
        </div>
     </div>
-</main>
 {% endblock %}
 {% block script %}
 {{block.super}}
@@ -252,7 +231,7 @@ function getpackagedata() {
                             <td>`+counter+`</td>
                             <td>
                                 <div class="d-flex cominfodiv">
-                                    <div class="companyimagecontainer"><img class="companylogo" width="100%" src="`+o.companyphoto+`" ></div>
+                                    <div class="companyimagecontainer"><img class="companylogo" width="50" height="50" src="`+o.companyphoto+`" ></div>
                                     <div class="cmpanyname">`+o.companyName+`</div>
                                 </div>
                             </td>

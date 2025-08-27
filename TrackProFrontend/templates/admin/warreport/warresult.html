@@ -1,9 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
+
  Trackpro Result
-</div>
+
 {% endblock %}
 
 {% block content %}
@@ -16,22 +16,9 @@
     font-size:20px;
     font-weight:500;
   }
-  .select2-container--default .select2-selection--single{
-  border-bottom:1px solid #acacac !important;
-  box-shadow:none !important;
-  border-radius: 0 !important;
-  background: transparent;
-  border: none;
-}
-/* datatable */
-.table-div {
-    background-color: white !important;
-    border-radius: 5px !important;
-    margin: 20px 5px !important;
-    padding: 8px 15px 15px 15px !important;
-    box-shadow: 0px 4px 8px #0000001F;
 
-}
+/* datatable */
+
 .rankdatatable>tbody>tr>td{
     text-transform: capitalize;
     font-weight: 400;
@@ -236,7 +223,7 @@ background: white !important;
   <div class="row">
     <div class="col-md-4">
       <div class="mx-3">
-        <select class="form-select select2dropdown" onchange="getWeek()" aria-label="Default select example" id="Year">
+        <select class="form-select js-example-basic-single" onchange="getWeek()" aria-label="Default select example" id="Year">
           <option value="" selected>Select Year</option>   
           {% for y in yearlist %}
           {% if y.Year == currYear %}
@@ -250,7 +237,7 @@ background: white !important;
     </div>
     <div class="col-md-4">
       <div class="mx-3">
-        <select class="form-select select2dropdown" aria-label="Default select example" id="Week" name="Week" onchange="publishemployeeinfo();">
+        <select class="form-select js-example-basic-single" aria-label="Default select example" id="Week" name="Week" onchange="publishemployeeinfo();">
             <option value="">Select Week</option>
          
          </select>
@@ -258,7 +245,7 @@ background: white !important;
     </div>
     <div class="col-md-4">
       <div class="mx-3">
-      <select class="form-select select2dropdown" aria-label="Default select example" id="Employee" onchange="publishemployeeinfo();">
+      <select class="form-select js-example-basic-single" aria-label="Default select example" id="Employee" onchange="publishemployeeinfo();">
         <option value="" selected>Select Employee</option>
         {% for u in employeelist %}
        <option value="{{u.id}}" >{{u.Firstname}} {{u.Lastname}}</option>
@@ -377,7 +364,7 @@ function getWeek() {
         // userID = $('#Employee').val()
         $.ajax({
             type: 'post',
-            url: frontendURL + 'checktrackpro/TrackProResultWeek',
+            url: frontendURL + 'checktrackpro/trackproResultWeek',
             data: {
                 'year': year
             },

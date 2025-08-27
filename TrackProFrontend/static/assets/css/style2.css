@@ -276,10 +276,7 @@
   text-align: center;
 }
  
-.head{
-    background-color: #f4f4f4;
-  }
-  
+
 .highlight {
     background-color: skyblue;
   }
@@ -662,12 +659,7 @@ background:#174fa3;
 .activelink{
   filter: invert(17%) sepia(94%) saturate(1178%) hue-rotate(185deg) brightness(91%) contrast(101%);
 }
-/* .select2-container--default .select2-selection--single{
-  border-bottom:1px solid #acacac !important;
-  box-shadow:none !important;
-  border-radius: 0 !important;
 
-} */
 .basetaskcontainer {
   width: 16%;
   display: flex;
@@ -889,7 +881,7 @@ background:#174fa3;
 }
 
 .float{
-	position:fixed;
+	position:fixed !important;
 	width:50px;
 	height:50px;
 	bottom:50px;
@@ -1180,3 +1172,45 @@ width:30%;
   justify-content: space-around;
   padding:10px 0px;
 }
+select{
+  border: 1px solid #b0b0b0;
+  padding: 2px;
+  border-radius: 5px;
+}
+.dataTables_empty{
+  text-align: center !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

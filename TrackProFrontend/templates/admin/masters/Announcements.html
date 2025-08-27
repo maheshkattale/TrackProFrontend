@@ -1,12 +1,9 @@
 {% extends "index.html" %}
 {% load static %} 
 {% block headercontent %}
-<div class="nav-item newheading">
  Announcements
-</div>
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'assets/css/companylist.css' %}">
 <style>
   .fa-minus-circle{
     font-size:22px
@@ -125,8 +122,8 @@ margin-bottom: 10px;
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-                <button class="trackproBtn" id="addEmployeeBtn"  onclick="return formValidation();">Submit</button>
+                <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn"  onclick="return formValidation();">Submit</button>
               </div>
             </form>
             </div>
@@ -161,8 +158,8 @@ margin-bottom: 10px;
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="trackproBtn modalClose" data-bs-dismiss="modal">Close</button>
-            <button class="trackproBtn" id="addEmployeeBtn" onclick="updateAnnouncement({{i.id}})">Update</button>
+            <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateAnnouncement({{i.id}})">Update</button>
           </div>
         </div>
       </div>
