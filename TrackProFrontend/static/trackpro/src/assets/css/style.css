@@ -26341,7 +26341,7 @@ dl li {
 	height:50px;
 	bottom:50px;
 	right:20px;
-	background-color:#174fa3;
+	background-color:#b66dff;
 	color:#FFF !important;
 	border-radius:50px;
 	text-align:center;
@@ -26365,7 +26365,7 @@ ul.floatul li{
 
 ul.floatul li a{
 	background-color:#fff;
-  border:2px solid #174fa3 ;
+  border:2px solid #b66dff ;
 	color:#FFF;
 	border-radius:50px;
 	text-align:center;
@@ -26461,7 +26461,7 @@ a#menu-share:hover > i{
   border-radius: 5px;
   box-shadow: 0 0 2px #c3c3c3;
 }
-.select2-container {
+.modal-content>.select2-container {
   z-index: 9999 !important;
   width: 100% !important;
 }

@@ -428,7 +428,7 @@
 }
 
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-    background-color: #174fa3;
+    background-color: #b66dff;
     color: white
 }
 
@@ -451,7 +451,7 @@
 }
 
 .select2-container--classic .select2-selection--single:focus {
-    border: 1px solid #174fa3
+    border: 1px solid #b66dff
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__rendered {
@@ -517,7 +517,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single {
-    border: 1px solid #174fa3
+    border: 1px solid #b66dff
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single .select2-selection__arrow {
@@ -563,7 +563,7 @@
 }
 
 .select2-container--classic .select2-selection--multiple:focus {
-    border: 1px solid #174fa3
+    border: 1px solid #b66dff
 }
 
 .select2-container--classic .select2-selection--multiple .select2-selection__clear {
@@ -621,7 +621,7 @@
 }
 
 .select2-container--classic.select2-container--open .select2-selection--multiple {
-    border: 1px solid #174fa3
+    border: 1px solid #b66dff
 }
 
 .select2-container--classic.select2-container--open.select2-container--above .select2-selection--multiple {
@@ -684,5 +684,5 @@
 }
 
 .select2-container--classic.select2-container--open .select2-dropdown {
-    border-color: #174fa3
+    border-color: #b66dff
 }

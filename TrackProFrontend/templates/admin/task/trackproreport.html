@@ -7,7 +7,7 @@ TrackPro Check
 
 <style>
   .cursor-pointer:hover{
-    color: #174fa3;
+    color: #b66dff;
   }
   .cursor-pointer{
     cursor: pointer;
@@ -204,7 +204,7 @@ position: absolute;
 }
 
 .points{
- color:#174fa3;
+ color:#b66dff;
  font-size:16px;
  font-weight:500;
  margin-left:20px;
@@ -230,7 +230,7 @@ position: absolute;
   font-size: 18px;
  }
  .helppoints{
- color:#174fa3;
+ color:#b66dff;
  font-weight:500;
   font-size: 18px;
  }
@@ -347,7 +347,7 @@ font-weight:500;
   opacity: 0.5;
 }
 .activeremark{
-  color:#174fa3;
+  color:#b66dff;
 }
 </style>
 
@@ -396,7 +396,7 @@ font-weight:500;
           <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead"> Total Tasks :</span><span class="points" id="TotalTask">0</span></div>
         </div>
     <div class="col-md-3 bor_end">
-      <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead"> Trackpro Percent :</span><span class="points" id="TrackProPercent">0</span><span style="color:#174fa3;">%</span></div>
+      <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead"> Trackpro Percent :</span><span class="points" id="TrackProPercent">0</span><span style="color:#b66dff;">%</span></div>
     </div>
     <div class="col-md-3 bor_end">
       <div><img src="/static/Media/taskicons/weektask.svg"  alt="Paris" onclick=""><span class="ms-1 totalhead">TrackPro Score:</span><span class="points" id="TrackProScore">0</span><sup><span id="trackprocreditpoints"></span></sup></div>
@@ -660,7 +660,7 @@ font-weight:500;
     $(".rejminussign").hide();
     $('#savedata').prop('disabled', true);
     $('#savedatafinal').prop('disabled', true);
-    $('#savedatafinal').css({'background-color': 'white','color':'#174fa3','border':'2px solid #174fa3','cursor':'not-allowed'})
+    $('#savedatafinal').css({'background-color': 'white','color':'#b66dff','border':'2px solid #b66dff','cursor':'not-allowed'})
     getyearlist();
     getweeklist();
     getemployeelist();
@@ -1911,7 +1911,7 @@ function getTrackProScore() {
                       $('#savedatafinal').show()
                       $('#savedatafinal').prop('disabled', true)
                       // $('.bonuscheck').attr('disabled', false);
-                      $('#savedatafinal').css({'background-color': 'white','color':'#174fa3','border':'2px solid #174fa3','cursor':'not-allowed'})
+                      $('#savedatafinal').css({'background-color': 'white','color':'#b66dff','border':'2px solid #b66dff','cursor':'not-allowed'})
                       $('.msgdiv').text('') 
                       Calculate();                   
                   }else{
@@ -1931,7 +1931,7 @@ function getTrackProScore() {
                       $('#savedata').show()
                       $('#savedatafinal').show()
                       $('#savedatafinal').prop('disabled', false);
-                      $('#savedatafinal').css({'background-color': '#174fa3','color':'white','border':'2px solid white','cursor':'pointer'})
+                      $('#savedatafinal').css({'background-color': '#b66dff','color':'white','border':'2px solid white','cursor':'pointer'})
                       $('.msgdiv').text('')
                       Calculate();
                   }  
@@ -2006,7 +2006,7 @@ function intermediatesaveTrackProScore() {
       success: function (response) {
           if (response.submitdata.n){
               $('#savedatafinal').prop('disabled', false);
-              $('#savedatafinal').css({'background-color': '#174fa3','color':'white','border':'2px solid white','cursor':'pointer'});
+              $('#savedatafinal').css({'background-color': '#b66dff','color':'white','border':'2px solid white','cursor':'pointer'});
             
           }
           swal({

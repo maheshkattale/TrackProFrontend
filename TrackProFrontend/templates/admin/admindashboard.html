@@ -104,8 +104,8 @@
       }
 
       .detailsbtndiv {
-      color: #174fa3;
-      border: 1px solid #174fa3;
+      color: #b66dff;
+      border: 1px solid #b66dff;
       border-radius: 15px;
       width: 80px;
       padding: 2px 5px;
@@ -119,14 +119,14 @@
       #option-1:checked:checked ~ .option-1,
       #option-2:checked:checked ~ .option-2,
       #option-3:checked:checked ~ .option-3{
-      border-color: #174fa3;
+      border-color: #b66dff;
 
       }
 
       #option-1:checked:checked ~ .option-1 .dot,
       #option-2:checked:checked ~ .option-2 .dot,
       #option-3:checked:checked ~ .option-3 .dot{
-      /* background: #174fa3; */
+      /* background: #b66dff; */
       display:none;
       }
 
@@ -145,7 +145,7 @@
       #option-1:checked:checked ~ .option-1 span,
       #option-2:checked:checked ~ .option-2 span,
       #option-3:checked:checked ~ .option-3 span{
-      color: #174fa3 ;
+      color: #b66dff ;
       }
       .searchbox{
         background-color: #EBFAFF;
@@ -187,7 +187,7 @@
       background-color: #d3d3d345;
     }
   .holdycolor .holdybar{
-    background-color: #174fa3;
+    background-color: #b66dff;
     color:white;
     text-align:center;
   }
@@ -228,7 +228,7 @@
     font-size:12px;
   }
   #modalempdesignation{
-      color: #174fa3;
+      color: #b66dff;
       display: flex;
       justify-content: center;
       background-color: #e2f7ff;
@@ -245,7 +245,7 @@
     margin: 0;
     font-size: 11px;
     background-color: white !important;
-    border: 1px solid #174fa3;
+    border: 1px solid #b66dff;
     border-radius: 10px;
     padding: 5px;
   }
@@ -325,7 +325,7 @@ padding: 5px !important;
     /* width: 400px; */
     background-color: white;
     font-size: 12px;
-    border: 1px solid #174fa3;
+    border: 1px solid #b66dff;
     border-radius: 10px;
   
   }
@@ -1053,7 +1053,7 @@ function att_listdata(){
                   <td>`+o.Latecount+`</td>
                   <td>`+o.Leavecount+`</td>
                   <td> <div class="detailsbtndiv">
-                        <a style="color:#174fa3;" style="cursor:pointer;" class="viewdt" onclick="attmodaldata(`+o.user+`)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle"> View Details </a>
+                        <a style="color:#b66dff;" style="cursor:pointer;" class="viewdt" onclick="attmodaldata(`+o.user+`)" data-bs-toggle="modal" data-bs-target="#exampleModalToggle"> View Details </a>
                     </div></td>
                 </tr>`
                 
@@ -1195,7 +1195,7 @@ var weekno  = $("#weeklist").val();
               labels: response.data.datelist,
               datasets: [{
                 label: 'Present',
-                backgroundColor: "#174fa3",
+                backgroundColor: "#b66dff",
                 data: response.data.presentlist,
 
               }, {
