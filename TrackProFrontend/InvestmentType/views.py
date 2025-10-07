@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse,HttpResponseRedirect
 import requests
 import os
 import json
-from Users.views import remoteURL
+from helpers.static_info import *
 from django.contrib import messages
 # Create your views here.
 

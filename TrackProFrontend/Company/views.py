@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from Users.views import remoteURL
+from helpers.static_info import *
 import requests
 from django.http.response import HttpResponse,HttpResponseRedirect
 import json

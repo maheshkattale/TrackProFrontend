@@ -1,13 +1,13 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from Users.views import remoteURL
+from helpers.static_info import *
 import requests
 from django.http.response import HttpResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 from Users.views import accessToPage,accessDenied,checksession
 from leave.templatetags.encryption_filters import decrypt_parameter
-imageURL = remoteURL[:-1]
+from helpers.static_info import *
 
 userListUrl = remoteURL + "users/api/userlist"
 user_emp_list_url = remoteURL + "users/api/user_emp_list"

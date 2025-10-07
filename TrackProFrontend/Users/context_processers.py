@@ -1,8 +1,6 @@
 import requests
-from Users.views import remoteURL
-ImageURL =  "http://127.0.0.1:8000"
-remoteURL = "http://127.0.0.1:8000/"
-frontendURL = 'http://127.0.0.1:8001/'
+from helpers.static_info import *
+
 
 
 def getMenu(request):

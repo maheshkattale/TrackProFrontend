@@ -12,10 +12,7 @@ from leave.templatetags.encryption_filters import decrypt_parameter
 from datetime import datetime
 from datetime import date as date_today  # Renamed to avoid conflict
 
-remoteURL = "http://127.0.0.1:8000/"
-frontendURL = 'http://127.0.0.1:8001/'
-
-imageURL = remoteURL[:-1]
+from helpers.static_info import *
 
 # from Users.context_processers import ImageURL as imageURL
 leave_maped_managers_listurl=remoteURL+"leave/api/mapped_managers"
@@ -267,7 +264,7 @@ def home(request):
         companyResponse_ = companydata.json()
 
 
-        w = datetime.datetime.now()
+        w = datetime.now()
         currYear = w.year
 
         BillingPeriodlistUrl = remoteURL + 'company/api/billingPeriodlist'
@@ -474,7 +471,7 @@ def admindashboard(request):
             Todaysstatus_res = Todaysstatus.json()
             todaystatus_list = Todaysstatus_res['data']
 
-            w = datetime.datetime.now()
+            w = datetime.now()
             currYear = w.year
             weekreqURL = remoteURL+'tasks/api/weekList?year={}'.format(currYear)
             weekExcludeResponse = requests.get(weekreqURL, headers=headers)
@@ -1765,7 +1762,7 @@ def punch_indata(request):
     if tok:
         attendanceId =  request.session.get('employeeId')
         
-        current_date = datetime.datetime.now().date()  
+        current_date = datetime.now().date()  
        
         t = 'Token {}'.format(tok)
         headers = {'Authorization': t}
@@ -1787,7 +1784,7 @@ def punch_outdata(request):
     tok = request.session['token']
     if tok:
         attendanceId =  request.session.get('employeeId')
-        current_date = datetime.datetime.now().date()  
+        current_date = datetime.now().date()  
        
         t = 'Token {}'.format(tok)
         headers = {'Authorization': t}
@@ -1874,7 +1871,7 @@ def get_data(request):
         t = 'Token {}'.format(tok)
         headers = {'Authorization': t}
         employeeId = request.session.get('employeeId')
-        current_date = datetime.datetime.now().date()  
+        current_date = datetime.now().date()  
         data = {
             'employeeId':employeeId,
             'date':current_date,

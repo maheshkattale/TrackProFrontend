@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from Users.views import remoteURL
+from helpers.static_info import *
 from django.shortcuts import render,  HttpResponse, redirect
 import requests
 import json
