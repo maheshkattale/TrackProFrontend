@@ -87,9 +87,9 @@ def permission(request):
         headers = {'Authorization': t}
         Menu = request.session['Menu']
         url = request.path
-        access = accessToPage(Menu, url)
-        if access == False:
-            return redirect('users:accessDenied')
+        # access = accessToPage(Menu, url)
+        # if access == False:
+        #     return redirect('users:accessDenied')
         if request.session.get('PasswordChanged') == False:
             return redirect('users:updatepassword', id=request.session.get('userID'))
         data = {}
