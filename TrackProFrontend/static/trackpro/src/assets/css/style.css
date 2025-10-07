@@ -9135,17 +9135,11 @@ progress {
   --bs-gutter-y: 0;
   display: flex;
   flex-wrap: wrap;
-  margin-top: calc(-1 * var(--bs-gutter-y));
-  margin-right: calc(-0.5 * var(--bs-gutter-x));
-  margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
 .row > * {
   flex-shrink: 0;
   width: 100%;
   max-width: 100%;
-  padding-right: calc(var(--bs-gutter-x) * 0.5);
-  padding-left: calc(var(--bs-gutter-x) * 0.5);
-  margin-top: var(--bs-gutter-y);
 }
 
 .col {
@@ -13943,7 +13937,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
   width: 100%;
   color: var(--bs-modal-color);
   pointer-events: auto;
-  background-color: var(--bs-modal-bg);
+  background-color: #fff;
   background-clip: padding-box;
   border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
   border-radius: var(--bs-modal-border-radius);
@@ -25676,7 +25670,7 @@ dl li {
   -webkit-align-items: center;
   align-items: center;
   white-space: nowrap;
-  padding: 1.125rem 0 1.125rem 0;
+  padding: 0.8rem 0;
   color: #3e4b5b;
   -webkit-transition-duration: 0.45s;
   -moz-transition-duration: 0.45s;
@@ -25730,7 +25724,7 @@ dl li {
 .sidebar .nav .nav-item .nav-link .menu-title {
   color: inherit;
   display: inline-block;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1;
   vertical-align: middle;
   white-space: normal;
@@ -25814,7 +25808,7 @@ dl li {
   color: #888;
   padding: 0.75rem 2rem 0.75rem 2rem;
   position: relative;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1;
   height: auto;
   border-top: 0;
@@ -26341,7 +26335,7 @@ dl li {
 	height:50px;
 	bottom:50px;
 	right:20px;
-	background-color:#174fa3;
+	background-color:#b66dff;
 	color:#FFF !important;
 	border-radius:50px;
 	text-align:center;
@@ -26365,7 +26359,7 @@ ul.floatul li{
 
 ul.floatul li a{
 	background-color:#fff;
-  border:2px solid #174fa3 ;
+  border:2px solid #b66dff ;
 	color:#FFF;
 	border-radius:50px;
 	text-align:center;
@@ -26445,8 +26439,9 @@ a#menu-share:hover > i{
 }
 .dataTables_filter{
   position: relative;
-  top: -38px;
+  top: -30px;
   right: -71%;
+  max-width: 300px;
 }
 .dataTables_paginate{
     display: flex;
@@ -26461,7 +26456,7 @@ a#menu-share:hover > i{
   border-radius: 5px;
   box-shadow: 0 0 2px #c3c3c3;
 }
-.select2-container {
+.modal-content>.select2-container {
   z-index: 9999 !important;
   width: 100% !important;
 }

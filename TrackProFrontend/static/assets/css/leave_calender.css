@@ -14,7 +14,7 @@
       padding: 8px 10px 8px 10px !important;
       margin-top: 8px !important;
       margin-right:5px;
-      background: #174fa3 !important;
+      background: #b66dff !important;
       /* margin: 0px !important; */
       border-radius: 24px !important;
       font-size: 13px !important;
@@ -192,7 +192,7 @@
     padding: 10px 5px;
   }
   .clndr-table .day.selected.event {
-    background:#174fa3;
+    background:#b66dff;
     color:white;
     border-radius:5px;
   }
@@ -278,7 +278,7 @@ tbody td:hover {
 }
 
 .selected {
-  background-color: #174fa3;
+  background-color: #b66dff;
   color: #fff !important;
   border-radius: 16px;
 }
@@ -335,9 +335,9 @@ tbody td:hover {
   border: 1px solid #a0a0a0!important;
 }
 .selected-weekday{
-  background-color: #174fa3 !important;
-  border:1px solid #174fa3 !important;
-  outline:1px solid #174fa3 !important;
+  background-color: #b66dff !important;
+  border:1px solid #b66dff !important;
+  outline:1px solid #b66dff !important;
   color: whitesmoke !important;
 }
 .weekend{

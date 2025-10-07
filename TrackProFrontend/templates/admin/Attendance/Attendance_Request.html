@@ -34,10 +34,6 @@ Attendance Request
     }
 
 
-    .input-feild {
-
-        height: 48px;
-    }
 
     #latemarktable>tbody>tr>td {
         padding: 15px !important;
@@ -581,7 +577,7 @@ Attendance Request
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-            <span   data-bs-dismiss="modal" onclick="ApplicationApprove({{i.id}})" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Approve</span>
+            <span   data-bs-dismiss="modal" onclick="ApplicationApprove('{{i.id}}')" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Approve</span>
           </div>
         </div>
       </div>
@@ -605,7 +601,7 @@ Attendance Request
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-          <span type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="rejectrequest({{i.id}})">Submit</span>
+          <span type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="rejectrequest('{{i.id}}')">Submit</span>
         </div>
       </div>
     </div>

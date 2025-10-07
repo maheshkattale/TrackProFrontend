@@ -18,17 +18,14 @@
     text-align: center;
     border: none;
 }
-.form-floating .form-control {
+.form-control {
   border: none;
   border-bottom: 1px solid #c2c2c2;
   box-shadow:None;
   border-radius: 0px;
   outline:none;
 }
-.form-floating>label {
-  
-  padding: 10px 0;
-}
+
 
 #addEmployeeForm input {
   width: 100%;
@@ -104,19 +101,19 @@ margin-bottom: 10px;
               </div>
               <div class="modal-body">
                 <div class="row">
-                  <div class="col-12 px-4">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="announcementText" value=""  name="announcementText"  placeholder="Enter Announcement">
+                  <div class="col-12">
+                    <div class="">
                         <label for="announcementText">Announcement<span style="color:red;">*</span></label>
-                        <span id="announcementTexterror" class="error"></span>
+                        <input type="text" class="form-control" id="announcementText" value=""  name="announcementText"  placeholder="Enter Announcement">
+                        <span id="announcementTexterror" class="error-message"></span>
                     </div>
                   </div>
-                  <div class="col-12 px-4">
-                    <div class="form-floating">
+                  <div class="col-12">
+                    <div class="">
                         <label for="date">Date<span style="color:red;">*</span></label> 
-                        <input class="pt-4" type="text" id="ann_date" placeholder="" name="ann_date" autocomplete="off" readonly>
+                        <input class="" type="text" id="ann_date" placeholder="" name="ann_date" autocomplete="off" readonly>
                         <div id="calendarIcon"></div>
-                        <span id="announcementDateerror" class="error"></span>
+                        <span id="announcementDateerror" class="error-message"></span>
                     </div>
                   </div>
                 </div>
@@ -140,15 +137,15 @@ margin-bottom: 10px;
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-12 px-4">
-                <div class="form-floating">
+              <div class="col-12">
+                <div class="">
                   <input type="text" class="form-control" id="updateannouncementText{{i.id}}" value="{{i.announcementText}}">
                   <label for="updateannouncementText{{i.id}}">Announcement</label>
                   <span id="AnnouncementTexterror{{i.id}}" class="error-message"></span>
                 </div>
               </div>
-              <div class="col-12 px-4">
-                <div class="form-floating">
+              <div class="col-12">
+                <div class="">
                     <!-- <label for="date">Date<span style="color:red;">*</span></label> -->
                     <input type="text" id="updateann_date{{i.id}}" class="updateann_date" placeholder="Select Date"  value="{{i.date}}" name="updateann_date" autocomplete="off">
                     <div id="calendarIcon"></div>
@@ -159,7 +156,7 @@ margin-bottom: 10px;
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateAnnouncement({{i.id}})">Update</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateAnnouncement('{{i.id}}')">Update</button>
           </div>
         </div>
       </div>

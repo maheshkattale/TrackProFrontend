@@ -128,7 +128,7 @@ tr{
               </div>
               <div class="col-4 px-4">
               <label for="ProjectBA{{i.id}}">Project BA</label>
-              <select id='ProjectBA{{i.id}}' name="ProjectBA" class="js-example-basic-single">
+              <select id='ProjectBA{{i.id}}' name="ProjectBA" class="nput-feild js-example-basic-single">
                     <option value=''>Select Project BA</option> 
                     {% for e in employeelist %}
                       {% if e.id == i.ProjectBA %}
@@ -158,7 +158,7 @@ tr{
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="projectname({{i.id}})">Update</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="projectname('{{i.id}}')">Update</button>
           </div>
         </div>
       </div>
@@ -371,7 +371,7 @@ tr{
                             </div>
                             <div class="col-4 px-4">
                             <label for="ProjectBA`+o.id+`">Project BA</label>
-                            <select id='ProjectBA`+o.id+`' name="ProjectBA" class="js-example-basic-single">
+                            <select id='ProjectBA`+o.id+`' name="ProjectBA" class="input-feild js-example-basic-single">
                                   <option value=''>Select Project BA </option> 
 
 

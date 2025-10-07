@@ -46,7 +46,7 @@ Shift Calendar
     }
 
     .custom-tabs .nav-link.active {
-      border-color: #174fa3;
+      border-color: #b66dff;
 
     }
     .nav-fill .nav-item, .nav-fill>.nav-link {
@@ -209,7 +209,7 @@ Shift Calendar
         padding: 10px 5px;
       }
       .clndr-table .day.selected.event {
-        background:#174fa3;
+        background:#b66dff;
         color:white;
         border-radius:5px;
       }
@@ -220,7 +220,7 @@ Shift Calendar
       padding: 8px 10px 8px 10px !important;
       margin-top: 8px !important;
       margin-right:5px;
-      background: #174fa3 !important;
+      background: #b66dff !important;
       /* margin: 0px !important; */
       border-radius: 24px !important;
       font-size: 13px !important;
@@ -245,7 +245,7 @@ Shift Calendar
     .request-btn{
       padding: 8px 10px 8px 10px !important;
       margin-top: 8px !important;
-      background: #174fa3 !important;
+      background: #b66dff !important;
       /* margin: 0px !important; */
       border-radius: 24px !important;
       font-size: 13px !important;
@@ -368,7 +368,7 @@ Shift Calendar
     }
 
     .month1.selected {
-      border: 2px solid #174fa3;
+      border: 2px solid #b66dff;
       opacity:1;
     }
     .table-bordered1{
@@ -384,7 +384,7 @@ Shift Calendar
 
     table tr.week-row th {
       color: #fff;
-      background-color: #174fa3;
+      background-color: #b66dff;
       font-weight: 500;
       padding: 5px;
 
@@ -650,7 +650,7 @@ Shift Calendar
 
 
   .image-selected {
-    border-color: #174fa3 !important;
+    border-color: #b66dff !important;
     transform: scale(1.3); /* Scale up on hover */
     margin-top: -7.5px;
 
@@ -674,7 +674,7 @@ Shift Calendar
   }
   .infobtn{
     font-size:18px;
-    color:#174fa3;
+    color:#b66dff;
     cursor:pointer;
   }
   .modal-lg {
@@ -1431,7 +1431,7 @@ Shift Calendar
                   inTime_toolip=b.inTime
                   outTime_tooltip=b.outTime 
                 }
-                date_html=`<p class="date-count-text"  data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`' >`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p><p class="inner-date-font-size">In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p>   <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
+                date_html=`<p class="date-count-text"  data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`' >`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p><p class="inner-date-font-size">In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p>   <p> <div class="date-count-text" style="color:#b66dff;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
                 $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
                 $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
                 $('#popupContainer').find('.date-'+b.fulldate).attr('title','In Time '+ inTime_toolip + '<br>Out Time '+outTime_tooltip +'<br>Total '+ b.Total+' Hrs'+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs  <br>' + b.shift.swap);
@@ -1445,7 +1445,7 @@ Shift Calendar
                 }
 
 
-                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`' >`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p></p><p class="inner-date-font-size">Work From Home <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p><p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size"-`+b.shift.outtime+`) Hrs</span></div> </p>`;
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`' >`+textContent+`<span class='extradays'> `+b.extra_days+`</span> </p></p><p class="inner-date-font-size">Work From Home <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p><p> <div class="date-count-text" style="color:#b66dff;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size"-`+b.shift.outtime+`) Hrs</span></div> </p>`;
                 $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
                 $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
                 $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(255, 212, 0)");
@@ -1461,7 +1461,7 @@ Shift Calendar
                   inTime_toolip=b.inTime
                   outTime_tooltip=b.outTime 
                 }
-                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`<span class='extradays'> `+b.extra_days+`</span></p><p class="inner-date-font-size">Halfday <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p> <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">-`+b.shift.outtime+`) Hrs</span></div> </p>`;
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`<span class='extradays'> `+b.extra_days+`</span></p><p class="inner-date-font-size">Halfday <br> In Time : `+b.inTime+`<br>Out Time  : `+b.outTime  +`<br>Total : `+ b.Total+` Hrs</p> <p> <div class="date-count-text" style="color:#b66dff;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">-`+b.shift.outtime+`) Hrs</span></div> </p>`;
                 $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
                 $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
                 $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "grey");
@@ -1471,7 +1471,7 @@ Shift Calendar
             
             }else if(b.att_status == 'L'){
                
-                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Leave</p>   <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
+                date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Leave</p>   <p> <div class="date-count-text" style="color:#b66dff;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
                 $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
                 $('#popupContainer').find('.date-'+b.fulldate).css("color", 'white');
                 $('#popupContainer').find('.date-'+b.fulldate).css("background-color", "rgb(158 219 255)");
@@ -1481,7 +1481,7 @@ Shift Calendar
             
             }else{
 
-              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Not Found</p> <p> <div class="date-count-text" style="color:#174fa3;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
+              date_html=`<p class="date-count-text" data-bs-toggle='modal' data-bs-target='#empattendancelog`+b.fulldate+`'>`+textContent+`</p><p class="inner-date-font-size">Not Found</p> <p> <div class="date-count-text" style="color:#b66dff;">`+b.shift.shiftname+`</div> <div><span class="inner-date-font-size" >(`+b.shift.intime+`</span>   <span class="inner-date-font-size">- `+b.shift.outtime+`) Hrs</span></div> </p>`;
               $('#popupContainer').find('.date-'+b.fulldate).html(date_html);
               $('#popupContainer').find('.date-'+b.fulldate).attr('data-bs-html',true);
               $('#popupContainer').find('.date-'+b.fulldate).attr('title','Not Found  '+'<br> '+ b.shift.shiftname+' <br>('+ b.shift.intime+'-'+ b.shift.outtime+') Hrs<br>' + b.shift.swap);

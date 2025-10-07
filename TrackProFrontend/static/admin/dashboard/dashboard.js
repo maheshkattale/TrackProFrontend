@@ -96,7 +96,7 @@ function checkInOut() {
         ioBtn.css("backgroundColor", "#BFBFBF");
 
         $("#totalHours").text(workingHours(iBtn.text(), oBtn.text()));
-        $("#totalHours").css("color", "#174fa3");
+        $("#totalHours").css("color", "#b66dff");
     }
 }
 
@@ -245,7 +245,7 @@ $("#taskResume").click(function() {
 //         datasets: [{
 //             label: "Attendance",
 //             data: attendanceArr,
-//             borderColor: "#174fa3",
+//             borderColor: "#b66dff",
 //             borderWidth: 1.5,
 //             fill: true,
 //             backgroundColor: gradient,

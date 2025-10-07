@@ -31,10 +31,6 @@ User Mapping
     #myTable_length {
         display: block !important;
     }
-    .input-feild {
-
-        height: 48px;
-    }
 
     #myTable>tbody>tr>td {
 
@@ -173,7 +169,7 @@ User Mapping
                                 Are you sure you want to delete?
                                 </div>
                                 <div class="modal-footer">
-                                  <a href="javascript:void(0)" onclick="deleteusermappings({{i.ManagerID}});" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
+                                  <a href="javascript:void(0)" onclick="deleteusermappings('{{i.ManagerID}}');" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                                 </div>
                               </div>

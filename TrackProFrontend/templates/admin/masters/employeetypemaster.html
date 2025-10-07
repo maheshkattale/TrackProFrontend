@@ -5,60 +5,7 @@
 {% endblock %}
 {% block content %}
 <style>
-  .fa-minus-circle{
-    font-size:22px
-  }
-  .savebtn {
-    background: #00a1ff !important;
-    padding: 5px 25px !important;
-    margin: 0px !important;
-    border-radius: 24px !important;
-    font-size: 15px !important;
-    color: white !important;
-    text-align: center;
-    border: none;
-}
-.del-icon{
-  cursor:pointer;
-}
 
-.modal-body label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #174fa3;
-}
-.modal-body input {
-    width: 100%;
-    font-size: 16px;
-    color: #5f5b5b;
-    border: none;
-    border-bottom: 1px solid rgb(214, 214, 214);
-    background: transparent;
-    height: 30px;
-    transition: border 0.4s ease;
-    margin-bottom:12px;
-}
-.modal-body input:focus{
-    width: 100%;
-    font-size: 16px;
-    color: #5f5b5b;
-    border: none;
-    border-bottom: 1px solid rgb(214, 214, 214);
-    background: transparent;
-    height: 30px;
-    transition: border 0.4s ease;
-    margin-bottom:12px;
-    outline:none;
-}
-.currentmonth{
-  color:Green;
-}
-#calendarIcon {
-
-  bottom: 30px;
-  right: 30px;
-}
 
 </style>
 <main class="main-wrapper">
@@ -121,10 +68,10 @@
               <div class="modal-body">
                 <div class="row">
 
-                  <div class="col-12 px-4" style="position:relative;">
-                      <label for="employeetype">Employee Type<span style="color:red;">*</span></label>
+                  <div class="col-12 px-2" style="position:relative;">
+                        <label for="employeetype">Employee Type<span style="color:red;">*</span></label>
                         <input type="text" class="" id="employeetype" value=""  name="employeetype"  placeholder="Enter Employee Type">
-                        <span id="employeetypeerror" class="error"></span>
+                        <span id="employeetypeerror" class="error-message"></span>
                   </div>
                 </div>
               </div>
@@ -148,7 +95,7 @@
           <div class="modal-body">
             <div class="row">
 
-              <div class="col-12 px-4">
+              <div class="col-12 px-2">
                   <label for="updateemployeetype{{i.id}}">Employee Type</label>
                   <input type="text" class="" id="updateemployeetype{{i.id}}" value="{{i.employeetype}}">
                   <span id="updateemployeetypeerror{{i.id}}" class="error-message"></span>
@@ -157,7 +104,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateemployeetype({{i.id}})">Update</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateemployeetype('{{i.id}}')">Update</button>
           </div>
         </div>
       </div>
@@ -174,7 +121,7 @@
             Are you sure you want to delete?
             </div>
             <div class="modal-footer">
-              <a href="javascript:void(0)" onclick="delete_employeetype({{i.id}})" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
+              <a href="javascript:void(0)" onclick="delete_employeetype('{{i.id}}')" class="btn btn-danger" data-bs-dismiss="modal">Yes</a>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
             </div>
           </div>

@@ -9,7 +9,7 @@ Tasks
 <style>
   .fa-comments{
     font-size: 20px;
-    color: #174fa3;
+    color: #b66dff;
   }
   .fa-ellipsis-h{
     color:#00000078;
@@ -24,7 +24,7 @@ Tasks
     left: 50%;
 }
     .nav-pills .nav-link.active{
-        background-color: #174fa3 !important; 
+        background-color: #b66dff !important; 
         color: #fff !important;
     }
     .nav-link{
@@ -68,7 +68,7 @@ Tasks
 }
 .fa-spinner{
   font-size: 90px;
-  color: #174fa3;
+  color: #b66dff;
 }
 .swal-modal {
   width: 400px;
@@ -86,7 +86,7 @@ Tasks
 
 
 .ellipsisColorStyle {
-  color: #174fa3;
+  color: #b66dff;
 }
 
 
@@ -244,7 +244,7 @@ width:70%;
 }
 
 .points{
- color:#174fa3;
+ color:#b66dff;
  font-size:15px;
  font-weight:500;
  margin-left:4px;
@@ -270,7 +270,7 @@ width:70%;
   font-size: 18px;
  }
  .helppoints{
- color:#174fa3;
+ color:#b66dff;
  font-weight:500;
   font-size: 18px;
  }
@@ -314,7 +314,7 @@ font-weight:500;
 	 z-index: 999;
 	 width: 200px;
 	 height: 50px;
-	 background: #174fa3;
+	 background: #b66dff;
 	 border-radius: 30px;
 	 cursor: pointer;
 	 display: flex;
@@ -396,7 +396,7 @@ font-weight:500;
     .addReadMore .readMore,
     .addReadMore .readLess {
         margin-left: 2px;
-        color: #174fa3;
+        color: #b66dff;
         cursor: pointer;
     }
 
@@ -468,10 +468,10 @@ font-weight:500;
   {% endif %}
 <div id="snackbar"></div>
 
-<div class="uppercard">
+<div class="uppercard p-1">
 
-  <div class="row">
-    <div class="col-md-11">
+  <div class="row mx-0">
+    <div class="col-md-11 ps-4">
       <div class="row justify-content-around mb-3 collapse" id="filtersRow">
           <div class="col-md-2">
             <!-- <label for="Year">Year:</label><br> -->
@@ -493,7 +493,7 @@ font-weight:500;
             </select>
           </div>
   
-          <div class="col-md-3">
+          <div class="col-md-2">
           <!-- <label for="Employee">Employee:</label><br> -->
           <select id='Employee' name="Employee" class="js-example-basic-single" onchange="usercurrentweekdata();">
           
@@ -519,36 +519,48 @@ font-weight:500;
         <option value="Unchecked" >Unchecked</option>
       </select>
     </div>
-    </div>
-    <div class="row justify-content-around p-2 trackpropercent">
-      <div class="col-md-2">
-        <div class="head1">Total Task & Percentage</div>
       </div>
-      <div class="col-md-10">
-        <div class="row">
-      <div class="col-md-3 bor_end">
-        <div><img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick=""><span class="ms-1"> Average Trackpro Percent :</span><span id="trackpropercent" class="points">0</span><span style="color:#174fa3;">%</span></div>
+      <div class="row justify-content-around p-3 trackpropercent">
+
+        <div class="col-md-12">
+          <div class="row mx-0">
+            <div class="col-md-3 bor_end">
+              <div>
+                <img src="/static/Media/taskicons/trackpropercent.svg"  alt="Paris" onclick="">]
+                <span class="ms-1"> Average Trackpro Percent :</span>
+                <span id="trackpropercent" class="points">0</span>
+                <span style="color:#b66dff;">%</span>
+              </div>
+            </div>
+            <div class="col-md-3 bor_end">
+              <div>
+                <img src="/static/Media/taskicons/weektask.svg"  alt="Paris" onclick="">
+                <span class="ms-1">Total Tasks of week :</span>
+                <span id="weektask" class="points">0</span>
+              </div>
+            </div>
+            <div class="col-md-2 bor_end">
+              <div>
+                <img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick="">
+                <span class="ms-1">Total Tasks :</span>
+                <span id="totaltask" class="points">0</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div><img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick=""><span class="ms-1">Weekly Percentage :</span><span id="weeklyperc" class="points">0</span><span style="color:#b66dff;">%</span></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-md-3 bor_end">
-        <div><img src="/static/Media/taskicons/weektask.svg"  alt="Paris" onclick=""><span class="ms-1">Total Tasks of week :</span><span id="weektask" class="points">0</span></div>
-      </div>
-      <div class="col-md-2 bor_end">
-        <div><img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick=""><span class="ms-1">Total Tasks :</span><span id="totaltask" class="points">0</span></div>
-      </div>
-      <div class="col-md-4">
-        <div><img src="/static/Media/taskicons/totaltasks.svg"  alt="Paris" onclick=""><span class="ms-1">Weekly Percentage :</span><span id="weeklyperc" class="points">0</span><span style="color:#174fa3;">%</span></div>
-      </div>
-    </div>
-    </div>
-    </div>
-  </div>   
+    </div> 
+
     <div class="col-md-1 mt-1">
       <button class="togglebtn" id="filterBtn" type="button" data-bs-toggle="collapse" data-bs-target="#filtersRow" aria-expanded="false" aria-controls="filtersRow"><img src="/static/Media/taskicons/toggle.svg"  alt="Paris" onclick=""></button>
     </div>
-    </div>
+  </div>
     
    
-  <div class="row my-3">
+  <div class="row my-3  mx-0">
     <div class="d-flex justify-content-around">
       <div class="row pointscard">
         <div class="col-md-4">
@@ -635,7 +647,7 @@ font-weight:500;
   </div>
   </div>
     <!-- Row 2 -->
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-1 px-0">
        <span class="d-none" id="newstarttime"></span>
    <div class="row d-flex justify-content-between align-items-center h-100">
       <div class="col-md-12 taskcontent textpadding">
@@ -1961,7 +1973,6 @@ function duplicatetaskf(id){
       success: function(response) {
         console.log("duplicate",response)
         if (response.n == 1){
-              
               swal({
                 icon: "success",
                 title: "",

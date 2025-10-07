@@ -17,7 +17,6 @@
   <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/font-awesome/css/font-awesome.min.css' %}">
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <!-- endinject -->
@@ -36,6 +35,7 @@
   <link rel="stylesheet" href="{% static 'assets/css/leave_calender.css' %}"> -->
 
 
+  <link rel="stylesheet" href="{% static 'trackpro/src/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
 
 
 
@@ -206,7 +206,7 @@
                 <!--change to offline or busy as needed-->
               </div>
               <div class="nav-profile-text d-flex flex-column">
-                <span class="font-weight-bold mb-2">{{Firstname}} {{Lastname}}</span>
+                <span class="font-weight-bold mb-2" style="max-width: 100px;    overflow: hidden;text-overflow: ellipsis;">{{Firstname}} {{Lastname}}</span>
                 <span class="text-secondary text-small">{{Designation}}</span>
               </div>
               <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
@@ -453,7 +453,7 @@
                               {% endfor %}
 
                             </select>
-                            <span id="baseprojectrequired"></span>
+                            <span id="baseprojectrequired" class="error-message"></span>
                           </div>
 
 
@@ -468,7 +468,7 @@
                             <option value="{{m.ManagerID}}">{{m.ManagerIDStr}}</option>
                             {% endfor %}
                           </select>
-                          <span id="baseassignByrequired"></span>
+                          <span id="baseassignByrequired" class="error-message"></span>
                           </div>
                         </div>
                         <div class="col-md-6 px-1">
@@ -476,16 +476,16 @@
                             <label for="baseAssignDate">Date</label>
                             <input type="text" id="baseAssignDate" placeholder="Select Date" name="DateofJoining"
                               autocomplete="off" readonly>
-                            <span id="basedaterequired"></span>
+                            <span id="basedaterequired" class="error-message"></span>
                           </div>
                           <!-- <div id="calendarIcon"></div> -->
                         </div>
                         <div class="col-md-12 px-1">
                           <div class="py-2">
-                                                      <label for="baseTaskTitle">Task details</label>
+                          <label for="baseTaskTitle">Task details</label>
                           <textarea class="form-control" name="TaskTitle" id="baseTaskTitle" cols="10" rows="3"
                             style="width: 100%;"></textarea>
-                          <span id="basetasknamerequired"></span>
+                          <span id="basetasknamerequired" class="error-message"></span>
                           
                           </div>
                         </div>
@@ -528,7 +528,6 @@
   <!-- endinject -->
   <!-- Plugin js for this page -->
   <script src="{% static 'trackpro/src/assets/vendors/chart.js/chart.umd.js' %}"></script>
-  <script src="{% static 'trackpro/src/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
   <script src="{% static 'trackpro/src/assets/js/off-canvas.js' %}"></script>
@@ -631,7 +630,12 @@
     var frontendURL = '{{basefrontendUrl}}'
 
     $(document).ready(function () {
-
+        $.datepicker.setDefaults({
+            dateFormat: 'dd-mm-yy',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true
+        });
       var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
       var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -1041,7 +1045,6 @@
 
 
     function basesaveTask() {
-      debugger
       var task = $("#baseTaskTitle").val().trim();
       var AssignDate = $("#baseAssignDate").val();
       var projectname = $("#baseProject").val();
@@ -1862,6 +1865,7 @@
 
 
 
+  <script src="{% static 'trackpro/src/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
 
 
 

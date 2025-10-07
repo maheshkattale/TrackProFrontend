@@ -5,10 +5,10 @@ import requests
 from django.http.response import HttpResponse
 import json
 import datetime
-from datetime import date
-from Users.views import accessToPage,accessDenied,checksession
+from datetime import date as date_today  # Renamed to avoid conflict
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
+from Users.views import accessToPage,accessDenied,checksession
 
 ManagerUserListUrl = remoteURL + "users/api/ManagerUserListAPI"
 userListUrl = remoteURL + "users/api/userlist"
@@ -45,10 +45,10 @@ def usertasklist(request):
             return redirect('users:accessDenied')
         
         weekdata = {}
-        currentdate = date.today()
-        day = currentdate.day
-        month = currentdate.month
-        year = currentdate.year
+        current_date = date_today.today()  # Use renamed import
+        day = current_date.day
+        month = current_date.month
+        year = current_date.year
         w = datetime.datetime(year,month, day)
         print("w1",w)
         
@@ -160,8 +160,8 @@ def addTaskAjax(request):
                 response = requests.post(remoteURL+"tasks/api/addNewTask",data= data,headers = headers)
                 task = response.json()
                 if task['n'] == 1 :
-                    date = task['data']["AssignDate"]
-                    currdate = date.split('-')
+                    assign_date = task['data']["AssignDate"]  # Renamed variable
+                    currdate = assign_date.split('-')
                     dateDay = int(currdate[2])
                     dateMonth = currdate[1]
                     datetime_object = datetime.datetime.strptime(dateMonth, "%m")
@@ -220,7 +220,7 @@ def usercurrentweektask(request):
         t = 'Token {}'.format(tok) 
         headers = {'Authorization': t}
         weekdata = {}
-        currentdate = date.today()
+        current_date = date_today.today()  # Use renamed import
         ajaxyear = request.POST.get('year')
         ajaxweek =json.loads(request.POST.get('week'))
         ajaxtaskstatus = request.POST.get('Task')
@@ -229,10 +229,10 @@ def usercurrentweektask(request):
         if ajaxyear is not None and ajaxyear != "":
             year = int(ajaxyear)
         else:
-            year = currentdate.year
-        day = currentdate.day
+            year = current_date.year
+        day = current_date.day
         #month
-        month = currentdate.month
+        month = current_date.month
         #year
         
         #week
@@ -278,8 +278,8 @@ def employee_record(request):
             mylist = sorted(tasklist, key=lambda k: (k['Firstname']))
             Combined = ExcludeResponse.json()
             for t in Combined['results']['TaskMaster']:
-                date = t['AssignDate']
-                currdate = date.split('-')
+                assign_date = t['AssignDate']  # Renamed variable
+                currdate = assign_date.split('-')
                 dateDay = currdate[2]
                 dateMonth = currdate[1]
                 dateYear = currdate[0]
@@ -618,8 +618,8 @@ def ThreeParamData(request):
             week = w.isocalendar()[1]+1
             if respons_json:
                 for t in respons_json:
-                        date = t['AssignDate']
-                        currdate = date.split('-')
+                        assign_date = t['AssignDate']  # Renamed variable
+                        currdate = assign_date.split('-')
                         dateDay = int(currdate[2])
                         dateMonth = currdate[1]
                         datetime_object = datetime.datetime.strptime(dateMonth, "%m")
@@ -733,12 +733,12 @@ def updateTaskAjax(request,id):
 #         taskmappingresponse = requests.get(taskmappingURL, headers = headers)
 #         taskmappingdata = taskmappingresponse.json()
 #         weekdata = {}
-#         currentdate = date.today()
-#         day = currentdate.day
+#         current_date = date_today.today()  # Use renamed import
+#         day = current_date.day
 #         #month
-#         month = currentdate.month
+#         month = current_date.month
 #         #year
-#         year = currentdate.year
+#         year = current_date.year
 #         #week
 #         w = datetime.datetime(year,month, day)
 #         week = w.isocalendar()[1]
@@ -835,7 +835,7 @@ def empcurrentweektask(request):
         t = 'Token {}'.format(tok) 
         headers = {'Authorization': t}
         taskdata = {}
-        currentdate = date.today()
+        current_date = date_today.today()  # Use renamed import
 
         managerid = request.session.get('userID')
 
@@ -931,8 +931,8 @@ def addTaskbymanager(request):
             else:
                 response = requests.post(remoteURL+"tasks/api/addNewTaskbyManager",data= data,headers = headers)
                 task = response.json()
-                date = task['data']["AssignDate"]
-                currdate = date.split('-')
+                assign_date = task['data']["AssignDate"]  # Renamed variable
+                currdate = assign_date.split('-')
                 dateDay = int(currdate[2])
                 dateMonth = currdate[1]
                 datetime_object = datetime.datetime.strptime(dateMonth, "%m")

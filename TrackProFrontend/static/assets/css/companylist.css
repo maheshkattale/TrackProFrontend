@@ -21,7 +21,7 @@
     font-family: 'Quicksand', sans-serif !important;
 }
 .add-btn {
-    background: #174fa3 !important;
+    background: #b66dff !important;
     padding: 8px 20px 10px 20px !important;
     margin: 0px !important;
     border-radius: 24px !important;
@@ -72,11 +72,7 @@ select{
 
 }
 
-.modal-body {
-    padding-top: 0px !important;
-    margin-top: 0px !important;
-    
-}
+
 
 .modal-content {
     border-radius: 18px !important;
@@ -170,7 +166,7 @@ select{
     font-style: normal !important;
     font-weight: normal !important;
     text-decoration: inherit !important;
-    color: #174fa3 !important;
+    color: #b66dff !important;
     font-size: 14px !important;
     padding-right: 0px !important;
     margin-right: 15px;
@@ -183,7 +179,7 @@ select{
     font-style: normal !important;
     font-weight: normal !important;
     text-decoration: inherit !important;
-    color: #174fa3 !important;
+    color: #b66dff !important;
     font-size: 14px !important;
     padding-right: 0px !important;
     margin-left: 15px;
@@ -191,34 +187,26 @@ select{
 }
 
 .text-primary{
-    color: #174fa3 !important;
+    color: #b66dff !important;
 }
 .input-feild {
 
     outline: none !important;
-    border: none !important;
-    border-bottom: 1px solid #ABABAB !important;
-    margin: 3px 0 !important;
+    border: 1px solid #aaaaaa !important;
     width: 100% !important;
-    /* transition:5s !important; */
     font-size: 14px !important;
-    padding-bottom: 10px !important;
-    margin-bottom: 0px !important;
     background-color: transparent;
+    padding: 5px;
+    border-radius: 5px;
 
 }
  .dataTables_wrapper #myTable_filter label {
-    border-radius: 0px !important;
-    border: none !important;
+    border-radius: 5px !important;
     padding: 5px !important;
     background-color: transparent !important;
-    margin-left: 3px !important;
-    border-bottom: 1px solid rgb(190, 190, 190) !important;
+    border: 1px solid rgb(190, 190, 190) !important;
     outline: none !important;
     color: rgb(151, 151, 151) !important;
-
-    /* position: relative !important;
-    top: -50px !important; */
 
 } 
 
@@ -303,18 +291,18 @@ select{
 }
 
 .Parent-Menuname{
-    color: #174fa3;
+    color: #b66dff;
 }
 .leads-div{
     min-height: 500px;
     border-radius: 15px;
     background-color: white;
-    margin: 15px;
+    margin: 15px 0;
     padding-bottom: 14px;
 }
 
 .card-company-name{
-    color: #174fa3;
+    color: #b66dff;
     font-size: 16px;
 }
 .alert-message{
@@ -374,7 +362,7 @@ select{
 
 }
 .permission-submit-button{
-    background-color: #174fa3;
+    background-color: #b66dff;
     border-radius: 40px;
     color: white;
     border:none;
@@ -449,7 +437,7 @@ input[type="date"]:before {
     color: #000 !important;
 }
 .btn-round-blue{
-    background: #174fa3 !important;
+    background: #b66dff !important;
     padding: 10px 20px 10px 20px !important;
     margin: 0px !important;
     border-radius: 24px !important;
@@ -606,7 +594,7 @@ input[type="date"]:before {
 .file-upload-box {
     width: 65%;
     text-align: center;
-    border: 2px dashed #174fa3;
+    border: 2px dashed #b66dff;
     margin-top: 2rem;
     height: 250px;
     position: relative;
@@ -644,7 +632,7 @@ input[type="date"]:before {
     left: 30%;
     bottom: 0;
     width: 18%;
-    border-bottom: 3px solid #174fa3;
+    border-bottom: 3px solid #b66dff;
 }
 
 
@@ -763,7 +751,7 @@ input[type="date"]:before {
 
 
 .leave-Manager-Title{
-    color: #174fa3;
+    color: #b66dff;
     font-weight: 500;
     font-size: 14px;
 }
@@ -957,7 +945,7 @@ input[type="date"]:before {
 .user_name_atcal{
     font-size: 16px;
     font-weight: 600;
-    color: #174fa3;    
+    color: #b66dff;    
 }
 .score-title    {
     color: #ababab;

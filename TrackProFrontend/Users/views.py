@@ -9,6 +9,8 @@ import datetime
 from datetime import date
 # from project.views import statuscheck
 from leave.templatetags.encryption_filters import decrypt_parameter
+from datetime import datetime
+from datetime import date as date_today  # Renamed to avoid conflict
 
 remoteURL = "http://127.0.0.1:8000/"
 frontendURL = 'http://127.0.0.1:8001/'
@@ -477,7 +479,7 @@ def admindashboard(request):
             weekreqURL = remoteURL+'tasks/api/weekList?year={}'.format(currYear)
             weekExcludeResponse = requests.get(weekreqURL, headers=headers)
             weeksersponse = weekExcludeResponse.json()
-            my_date = datetime.date.today()
+            my_date = date_today.today()
             year, week_num, day_of_week = my_date.isocalendar()
             currweek = week_num
             prevweek = currweek-1
@@ -653,7 +655,8 @@ def adminhome(request):
 
 
                 month = date.today().month
-                my_date = datetime.date.today()
+                my_date = date_today.today()
+
                 year, week_num, day_of_week = my_date.isocalendar()
                 currweek = week_num
                 prevweek = currweek-1
@@ -1286,7 +1289,7 @@ def attendance_cal(request):
     if tok:
         adminrole = (request.session.get('rolename')).lower()
         headers = {'Authorization': t}
-        today = datetime.date.today()
+        today = date_today.today()
         if checksession(request):
             messages.error(request,'Session expired !')
             return redirect ('users:login') 
@@ -1389,7 +1392,7 @@ def get_attendance_mapped_employees(request):
     if tok:
         adminrole = (request.session.get('rolename')).lower()
         headers = {'Authorization': t}
-        today = datetime.date.today()
+        today = date_today.today()
         
         if adminrole == "admin" or adminrole == "core team":
             data={}
@@ -1520,7 +1523,7 @@ def attendance_cal_year_change(request):
     if tok:
         headers = {'Authorization': t}
 
-        today = datetime.date.today()
+        today = date_today.today()
         data={}
         data['year'] = today.year
         data['month'] = today.month
@@ -2447,6 +2450,30 @@ def user_secondaryinfo(request,id):
         return render(request,'admin/errorPages/session-expired.html')
     return render(request,'admin/employeemaster/usersecondaryinfo.html',{'userID': id,'users': users,'secondaryInfo':secondaryInfoData['data'],'hostUrl':imageURL,'qualifications':educatiopnalqualificationsData['data'],'previouscompanys':previouscompanyData['data'],"ssc_qualification":ssc_qualification,"HSC_qualification":HSC_qualification,"POSTGraduation":POSTGraduation,"gaduation":gaduation,"countrys":getecountriesData['data'],'hosturl':frontendURL})
 
+
+def mmddyyyytoyyyymmdd(date_string):
+    """
+    Convert date from MM/DD/YYYY format to YYYY-MM-DD format.
+    
+    Args:
+        date_string (str): Date in MM/DD/YYYY format
+    
+    Returns:
+        str: Date in YYYY-MM-DD format
+    """
+    try:
+        # Parse the input date string
+        date_obj = datetime.strptime(date_string, '%m/%d/%Y')
+        
+        # Format the date to YYYY-MM-DD
+        return date_obj.strftime('%Y-%m-%d')
+    
+    except ValueError as e:
+        return ''
+
+
+
+
 def Announcementlist(request):
     if checksession(request):
         messages.error(request,'Session expired !')
@@ -2465,6 +2492,8 @@ def Announcementlist(request):
             data = {}
             data['announcementText'] = request.POST.get('announcementText')
             data['date'] = request.POST.get('ann_date')
+            data['date'] = mmddyyyytoyyyymmdd(data['date'])
+
             addannouncementreponse = requests.post(addannouncementURL,headers=headers,data=data)   
             add_anndata = addannouncementreponse.json()
             if add_anndata['response']['n'] == 1:
@@ -2485,7 +2514,8 @@ def updateAnnouncement(request):
         data['announcementText'] = request.POST.get('announcementText')
 
         data['date'] = request.POST.get('date')
-        date_object = datetime.datetime.strptime(data['date'], '%d-%m-%Y')
+        print("data['date']",data['date'])
+        date_object = datetime.strptime(data['date'], '%d-%m-%Y')
         formatted_date = date_object.strftime('%Y-%m-%d')
 
         data['date'] = formatted_date
@@ -3849,7 +3879,7 @@ def employeeshifthistory(request):
     t = 'Token {}'.format(tok)
     if tok:
         headers = {'Authorization': t}
-        today = datetime.date.today()
+        today = date_today.today()
         if checksession(request):
             messages.error(request,'Session expired !')
             return redirect ('users:login') 
@@ -3974,7 +4004,7 @@ def get_alloted_shift_header_details(request):
     if tok:
         headers = {'Authorization': t}
 
-        today = datetime.date.today()
+        today = date_today.today()
         data={}
         data['year'] = today.year
         data['month'] = today.month
@@ -4033,7 +4063,7 @@ def shift_history_by_month(request):
     t = 'Token {}'.format(tok)
     if tok:
         headers = {'Authorization': t}
-        today = datetime.date.today()
+        today = date_today.today()
         if checksession(request):
             messages.error(request,'Session expired !')
             return redirect ('users:login') 

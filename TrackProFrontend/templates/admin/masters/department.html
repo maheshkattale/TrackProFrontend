@@ -19,17 +19,7 @@
     border: none;
 }
 
-.form-floating .form-control {
-  border: none;
-  border-bottom: 1px solid #c2c2c2;
-  box-shadow:None;
-  border-radius: 0px;
-  outline:none;
-}
-.form-floating>label {
-  
-  padding: 10px 0;
-}
+
 
 #addEmployeeForm input {
   width: 100%;
@@ -42,14 +32,10 @@ font-size: 14px;
 margin-bottom: 10px;
 }
 .select2-container .select2-selection--single .select2-selection__rendered {
-  padding-left: 3px;
-  padding-top: 20px;
   font-size: 14px;
   color: black;
 }
-{% comment %} .modal-content{
-  width:500px !important;
-} {% endcomment %}
+
 
 </style>
 <main class="main-wrapper">
@@ -162,26 +148,26 @@ margin-bottom: 10px;
               <div class="modal-body">
                 
                 <div class="row">
-                  <div class="col-12 px-4">
-                    <div class="form-floating">
-                        <input type="text" id="DepartmentName" class="form-control" placeholder="Enter department" name="DepartmentName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                  <div class="col-12">
+                    <div class="">
                         <label for="DepartmentName">Department Name<span style="color:red;">*</span></label>
-                        <span id="DepartmentNameerror" class="error"></span>
+                        <input type="text" id="DepartmentName" class="form-control" placeholder="Enter department" name="DepartmentName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                        <span id="DepartmentNameerror" class="error-message"></span>
                     </div>
                   </div>
                   
                 
-                  <div class="col-12 px-4 ">
-                    <div class="form-floating">
+                  <div class="col-12 ">
+                    <div class="">
+                      <label for="departmenthead">Department Head<span style="color:red;">*</span></label>
 
                       <select id='departmenthead' name="departmenthead" class="form-control js-example-basic-single" aria-label="Floating label select example">
-                      <option value="">Select Department Head</option>
-                      {% for u in employeelist %}
-                      <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
-                      {% endfor %}
+                        <option value="">Select Department Head</option>
+                        {% for u in employeelist %}
+                        <option value="{{u.id}}">{{u.Firstname}} {{u.Lastname}}</option>
+                        {% endfor %}
                       </select>
-                      <label for="departmenthead">Department Head<span style="color:red;">*</span></label>
-                      <span id="DepartmentHeaderror" class="error"></span>
+                      <span id="DepartmentHeaderror" class="error-message"></span>
                     </div>
                   </div>
               
@@ -209,15 +195,16 @@ margin-bottom: 10px;
             </div>
             <div class="modal-body">
               <div class="row">
-                <div class="col-12 px-4">
-                  <div class="form-floating">
-                      <input type="text"  class="form-control"  id="departmentName{{i.id}}" value="{{i.DepartmentName}}" placeholder="Enter department" name="DepartmentName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                <div class="col-12">
+                  <div class="">
                       <label for="DepartmentName">Department Name<span style="color:red;">*</span></label>
-                      <span id="departmentnameerror{{i.id}}" class="error"></span>
+                      <input type="text"  class="form-control"  id="departmentName{{i.id}}" value="{{i.DepartmentName}}" placeholder="Enter department" name="DepartmentName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <span id="departmentnameerror{{i.id}}" class="error-message"></span>
                   </div>
                 </div>
-                <div class="col-12 px-4">
-                  <div class="form-floating">
+                <div class="col-12">
+                  <div class="">
+                    <label for="departmenthead">Department Head</label>
                     <select id="DepartmentHead{{i.id}}" name="departmenthead" class="form-control js-example-basic-single">
                     {% for u in employeelist %}
                       {% if i.DepartmentHead == u.id %}
@@ -227,7 +214,6 @@ margin-bottom: 10px;
                       {% endif %}
                     {% endfor %}
                     </select>
-                    <label for="departmenthead">Department Head</label>
                     <span id="DepartmentHeaderror{{i.id}}" class="error-message"></span>
                 </div>
               </div>
@@ -235,7 +221,7 @@ margin-bottom: 10px;
             </div>
             <div class="modal-footer mt-3">
               <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-              <button type="button" onclick="updateDepartment({{i.id}});" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Update</button>
+              <button type="button" onclick="updateDepartment('{{i.id}}');" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails">Update</button>
             </div>
           </div>
           </form>

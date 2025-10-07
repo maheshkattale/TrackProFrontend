@@ -5,66 +5,7 @@
 {% endblock %}
 {% block content %}
 <style>
-  .fa-minus-circle {
-    font-size: 22px
-  }
 
-  .savebtn {
-    background: #00a1ff !important;
-    padding: 5px 25px !important;
-    margin: 0px !important;
-    border-radius: 24px !important;
-    font-size: 15px !important;
-    color: white !important;
-    text-align: center;
-    border: none;
-  }
-
-  .del-icon {
-    cursor: pointer;
-  }
-
-  .modal-body label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #174fa3;
-  }
-
-  .modal-body input {
-    width: 100%;
-    font-size: 16px;
-    color: #5f5b5b;
-    border: none;
-    border-bottom: 1px solid rgb(214, 214, 214);
-    background: transparent;
-    height: 30px;
-    transition: border 0.4s ease;
-    margin-bottom: 12px;
-  }
-
-  .modal-body input:focus {
-    width: 100%;
-    font-size: 16px;
-    color: #5f5b5b;
-    border: none;
-    border-bottom: 1px solid rgb(214, 214, 214);
-    background: transparent;
-    height: 30px;
-    transition: border 0.4s ease;
-    margin-bottom: 12px;
-    outline: none;
-  }
-
-  .currentmonth {
-    color: Green;
-  }
-
-  #calendarIcon {
-
-    bottom: 30px;
-    right: 30px;
-  }
 </style>
 <main class="main-wrapper">
   {% if messages %}
@@ -152,16 +93,15 @@
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-12 px-4 mt-3" style="position:relative;">
+              <div class="col-12 px-2" style="position:relative;">
                 <label for="date">Date<span style="color:red;">*</span></label>
                 <input class="mt-2" type="text" id="Date" placeholder="Date" name="Date" autocomplete="off">
-                <div id="calendarIcon"></div>
-                <span id="Dateerror" class="error"></span>
+                <span id="Dateerror" class="error-message"></span>
               </div>
-              <div class="col-12 px-4" style="position:relative;">
+              <div class="col-12 px-2" style="position:relative;">
                 <label for="Festival">Festival/Occassion<span style="color:red;">*</span></label>
                 <input type="text" class="" id="Festival" value="" name="Festival" placeholder="Enter Festival">
-                <span id="Festivalerror" class="error"></span>
+                <span id="Festivalerror" class="error-message"></span>
               </div>
             </div>
           </div>

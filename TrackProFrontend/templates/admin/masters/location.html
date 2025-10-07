@@ -18,17 +18,7 @@ Location
     text-align: center;
     border: none;
 }
-.form-floating .form-control {
-  border: none;
-  border-bottom: 1px solid #c2c2c2;
-  box-shadow:None;
-  border-radius: 0px;
-  outline:none;
-}
-.form-floating>label {
-  
-  padding: 10px 0;
-}
+
 
 #addEmployeeForm input {
   width: 100%;
@@ -140,40 +130,40 @@ margin-bottom: 10px;
                 <h5 class="modal-title py-2" id="exampleModalLabel">Location Details</h5>
               </div>
               <div class="modal-body">
-                <div class="row px-4">
+                <div class="row">
                   <div class="col-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="LocationName" value=""  name="LocationName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');" placeholder="Enter location name">
+                    <div class="">
                         <label for="LocationName">Location Name<span style="color:red;">*</span></label>
-                        <span id="LocationNameerror" class="error"></span>
+                        <input type="text" class="form-control" id="LocationName" value=""  name="LocationName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');" placeholder="Enter location name">
+                        <span id="LocationNameerror" class="error-message"></span>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="lattitude" value=""  name="lattitude"  placeholder="Enter lattitude">
+                    <div class="">
                         <label for="lattitude">Lattitude<span style="color:red;">*</span></label>
-                        <span id="lattitudeerror" class="error"></span>
+                        <input type="text" class="form-control" id="lattitude" value=""  name="lattitude"  placeholder="Enter lattitude">
+                        <span id="lattitudeerror" class="error-message"></span>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="longitude" value=""  name="longitude"  placeholder="Enter longitude">
+                    <div class="">
                         <label for="longitude">Longitude<span style="color:red;">*</span></label>
-                        <span id="longitudeerror" class="error"></span>
+                        <input type="text" class="form-control" id="longitude" value=""  name="longitude"  placeholder="Enter longitude">
+                        <span id="longitudeerror" class="error-message"></span>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="meter" value=""  name="meter"  placeholder="Enter meter">
+                    <div class="">
                         <label for="meter">Radius<span style="color:red;">*</span></label>
-                        <span id="metererror" class="error"></span>
+                        <input type="text" class="form-control" id="meter" value=""  name="meter"  placeholder="Enter meter">
+                        <span id="metererror" class="error-message"></span>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="address" value=""  name="address"  placeholder="Enter address">
+                    <div class="">
                         <label for="address">Address<span style="color:red;">*</span></label>
-                        <span id="addresserror" class="error"></span>
+                        <input type="text" class="form-control" id="address" value=""  name="address"  placeholder="Enter address">
+                        <span id="addresserror" class="error-message"></span>
                     </div>
                   </div>
                 </div>
@@ -205,42 +195,42 @@ margin-bottom: 10px;
 
 
 
-            <div class="row px-4">
+            <div class="row">
               <div class="col-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="LocationName{{i.id}}" value="{{i.LocationName|default_if_none:''}}"  name="LocationName{{i.id}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');" placeholder="Enter location name">
+                <div class="">
                     <label for="LocationName{{i.id}}">Location Name<span style="color:red;">*</span></label>
-                    <span id="LocationNameerror{{i.id}}" class="error"></span>
+                    <input type="text" class="form-control" id="LocationName{{i.id}}" value="{{i.LocationName|default_if_none:''}}"  name="LocationName{{i.id}}" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');" placeholder="Enter location name">
+                    <span id="LocationNameerror{{i.id}}" class="error-message"></span>
 
                     
                 </div>
               </div>
               <div class="col-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="lattitude{{i.id}}" value="{{i.lattitude|default_if_none:''}}"  name="lattitude{{i.id}}"  placeholder="Enter lattitude{{i.id}}">
+                <div class="">
                     <label for="lattitude{{i.id}}">Lattitude<span style="color:red;">*</span></label>
-                    <span id="lattitudeerror{{i.id}}" class="error"></span>
+                    <input type="text" class="form-control" id="lattitude{{i.id}}" value="{{i.lattitude|default_if_none:''}}"  name="lattitude{{i.id}}"  placeholder="Enter lattitude{{i.id}}">
+                    <span id="lattitudeerror{{i.id}}" class="error-message"></span>
                 </div>
               </div>
               <div class="col-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="longitude{{i.id}}" value="{{i.longitude|default_if_none:''}}"  name="longitude{{i.id}}"  placeholder="Enter longitude{{i.id}}">
+                <div class="">
                     <label for="longitude{{i.id}}">Longitude<span style="color:red;">*</span></label>
-                    <span id="longitudeerror{{i.id}}" class="error"></span>
+                    <input type="text" class="form-control" id="longitude{{i.id}}" value="{{i.longitude|default_if_none:''}}"  name="longitude{{i.id}}"  placeholder="Enter longitude{{i.id}}">
+                    <span id="longitudeerror{{i.id}}" class="error-message"></span>
                 </div>
               </div>
               <div class="col-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="meter{{i.id}}" value="{{i.meter|default_if_none:''}}"  name="meter{{i.id}}"  placeholder="Enter meter{{i.id}}">
+                <div class="">
                     <label for="meter{{i.id}}">Radius<span style="color:red;">*</span></label>
-                    <span id="metererror{{i.id}}" class="error"></span>
+                    <input type="text" class="form-control" id="meter{{i.id}}" value="{{i.meter|default_if_none:''}}"  name="meter{{i.id}}"  placeholder="Enter meter{{i.id}}">
+                    <span id="metererror{{i.id}}" class="error-message"></span>
                 </div>
               </div>
               <div class="col-12">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="address{{i.id}}" value="{{i.address|default_if_none:''}}"  name="address{{i.id}}"  placeholder="Enter address{{i.id}}">
+                <div class="">
                     <label for="address{{i.id}}">Address<span style="color:red;">*</span></label>
-                    <span id="addresserror{{i.id}}" class="error"></span>
+                    <input type="text" class="form-control" id="address{{i.id}}" value="{{i.address|default_if_none:''}}"  name="address{{i.id}}"  placeholder="Enter address{{i.id}}">
+                    <span id="addresserror{{i.id}}" class="error-message"></span>
                 </div>
               </div>
             </div>
@@ -253,7 +243,7 @@ margin-bottom: 10px;
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateLocation({{i.id}})">Update</button>
+            <button class="btn btn-gradient-info btn-rounded btn-fw" id="addEmployeeBtn" onclick="updateLocation('{{i.id}}')">Update</button>
           </div>
         </div>
       </div>

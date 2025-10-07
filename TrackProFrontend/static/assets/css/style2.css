@@ -17,11 +17,11 @@
   overflow-x: hidden !important;
   }
   .notfviewbutton{
-    border: 2px solid #174fa3;
+    border: 2px solid #b66dff;
     border-radius: 15px;
     margin: 0px 10px;
     color: white;
-    background: #174fa3;
+    background: #b66dff;
     font-size: 12px;
     display: flex;
     justify-content: center;
@@ -147,7 +147,7 @@
 }
 .content{
     scrollbar-width: thin !important;
-    scrollbar-color: #174fa3 #ceebf6;
+    scrollbar-color: #b66dff #ceebf6;
     display: none;
 }
 .content::-webkit-scrollbar{
@@ -155,7 +155,7 @@
     border-radius:3px ;
 }
 .content::-webkit-scrollbar-thumb{
-  background:#174fa3;
+  background:#b66dff;
 }
 .zentro{
     font-size: 34px;
@@ -490,7 +490,7 @@ color:rgb(165, 164, 164);
   display:flex;
 }
 .nav-content:hover {
-  color:#174fa3 !important;
+  color:#b66dff !important;
 }
 .icon-text {
     font-size: 12px !important;
@@ -551,7 +551,7 @@ color:rgb(165, 164, 164);
   border-radius:3px ;
 }
 .activenotify::-webkit-scrollbar-thumb{
-background:#174fa3;
+background:#b66dff;
 }
 .linotf{
   border-bottom:1px solid lightgrey;
@@ -566,7 +566,7 @@ background:#174fa3;
   border-bottom: 1px solid lightgray;
 }
 .viewmorenotf{
-  color:#174fa3;
+  color:#b66dff;
   font-size:14px;
 }
 .notfimgdiv {
@@ -576,7 +576,7 @@ background:#174fa3;
   margin-bottom: 5px;
 }
 .notfmaintext{
-  color:#174fa3 !important;
+  color:#b66dff !important;
   font-size:12px !important;
   font-weight:500;
 }
@@ -619,7 +619,7 @@ background:#174fa3;
   margin:0px 2px;
 }
 .actionuser{
-  color:#174fa3;
+  color:#b66dff;
   font-weight:500;
   font-size:13px;
   margin:0px 2px;
@@ -631,7 +631,7 @@ background:#174fa3;
   margin:0px 2px;
 }
 .notfempname{
-  color:#174fa3;
+  color:#b66dff;
   font-weight:500;
   font-size:13px;
   margin:0px 2px;
@@ -639,19 +639,19 @@ background:#174fa3;
 
 .blue-text{
   font-weight:500;
-  color:#174fa3;
+  color:#b66dff;
   font-size:13px;
 }
 .blue-number{
   font-weight:500;
-  color:#174fa3;
+  color:#b66dff;
   font-size:15px;
 }
 
 .filterlabel{
   font-size:13px;
   font-weight:500;
-  color:#174fa3;
+  color:#b66dff;
   white-space: nowrap;
 
 }
@@ -681,7 +681,7 @@ background:#174fa3;
   z-index: 999;
   width: 200px;
   height: 50px;
-  background: #174fa3;
+  background: #b66dff;
   border-radius: 30px;
   cursor: pointer;
   display: flex;
@@ -712,7 +712,7 @@ background:#174fa3;
 .basenav {
   opacity: 1;
   transition: all 0.5s ease-in-out;
-  background: #174fa3;;
+  background: #b66dff;;
   width: 100%;
   border-radius: 5px;
   transform: translateX(10%);
@@ -751,7 +751,7 @@ background:#174fa3;
 }
 .basenav a:hover {
   color: #fff;
-  background: #174fa3;
+  background: #b66dff;
   border-radius: 15px;
 }
 #basetoggle:checked ~ label .basenav {
@@ -807,7 +807,7 @@ background:#174fa3;
   bottom: 0;
   right: 0;
   transition: transform 300ms;
-  background-color: #174fa3;
+  background-color: #b66dff;
   border-radius: 32px;
   z-index: 6;
 }
@@ -838,7 +838,7 @@ background:#174fa3;
   margin-bottom: 8px;
   margin-left: 8px;
   margin-right: 8px;
-  border:2px solid  #174fa3;
+  border:2px solid  #b66dff;
   background-color:#fff;
   transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -886,7 +886,7 @@ background:#174fa3;
 	height:50px;
 	bottom:50px;
 	right:20px;
-	background-color:#174fa3;
+	background-color:#b66dff;
 	color:#FFF !important;
 	border-radius:50px;
 	text-align:center;
@@ -910,7 +910,7 @@ ul.floatul li{
 
 ul.floatul li a{
 	background-color:#fff;
-  border:2px solid #174fa3 ;
+  border:2px solid #b66dff ;
 	color:#FFF;
 	border-radius:50px;
 	text-align:center;

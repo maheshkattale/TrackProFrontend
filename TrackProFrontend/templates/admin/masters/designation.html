@@ -60,11 +60,11 @@ Designation Master
               </div>
               <div class="modal-body">
                 <div class="row">
-                  <div class="col-12 px-4">
-                    <div class="form-floating">
-                      <input type="text"  class="form-control"  id="DesignationName" placeholder="Enter designation" name="DesignationName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                  <div class="col-12">
+                    <div class="">
                       <label for="DesignationName">Designation Name<span style="color:red">*</span></label>
-                      <span id="DesignationNameerror" class="error"></span>
+                      <input type="text"  class="form-control"  id="DesignationName" placeholder="Enter designation" name="DesignationName" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                      <span id="DesignationNameerror" class="error-message"></span>
                     </div>
 
 
@@ -166,10 +166,10 @@ Designation Master
             </div>
             <div class="modal-body">
               <div class="row">
-                <div class="col-12 px-4">
-                  <div class="form-floating">
-                    <input type="text" id="updatedesignation{{i.id}}" value="{{i.DesignationName}}" class="form-control" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
+                <div class="col-12">
+                  <div class="">
                     <label for="updatedesignation{{i.id}}">Designation Name</label>
+                    <input type="text" id="updatedesignation{{i.id}}" value="{{i.DesignationName}}" class="form-control" oninput="this.value = this.value.replace(/[^a-zA-Z ]+/g,'').replace(/(\..*)\./g, '$1');">
                     <span id="designationnameerror{{i.id}}" class="error-message"></span>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ Designation Master
 
             <div class="modal-footer">
               <button type="button" class="btn btn-gradient-danger btn-rounded btn-fw" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="updateDesignation({{i.id}})">Update</button>
+              <button type="submit" class="btn btn-gradient-info btn-rounded btn-fw" id="editEmployeeDetails" onclick="updateDesignation('{{i.id}}')">Update</button>
             </div>
 
 

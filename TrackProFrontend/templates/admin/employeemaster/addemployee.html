@@ -12,7 +12,6 @@ Add Employee
     .trackproBtn {
         width: 123px !important;
         height: 36px !important;
-        {% comment %} margin :0px !important; {% endcomment %}
     }
     .success{
         color:green  !important;
@@ -205,7 +204,6 @@ Add Employee
         $("#addEmpJoinDate").datepicker({
             dateFormat: 'dd-mm-yy',
             minDate: 0,
-            {% comment %} maxDate: 0 , {% endcomment %}
             changeYear:true,
             yearRange: "-100:+0",
             changeMonth: true,
@@ -284,18 +282,7 @@ function formValidation() {
          $('#addEmpLastname').focus();
          return false;
      }
-     {% comment %} if (IsValid(addEmpMobileNumber)) {
-        $('#addEmpMobileNumber_err').show().delay(3000).slideUp();
-        $('#addEmpMobileNumber_err').html('Please provide mobile number');
-        $('#addEmpMobileNumber').focus();
-        return false;
-    } 
-     if (addEmpMobileNumber.length != 10) {
-        $('#addEmpMobileNumber_err').show().delay(3000).slideUp();
-        $('#addEmpMobileNumber_err').html('Mobile Number should be of 10 digits');
-        $('#addEmpMobileNumber').focus();
-        return false;
-    } {% endcomment %}
+
       if (!validateEmail(addEmpEmailId)) {
         
          $('#addEmpEmailId_err').show().delay(3000).slideUp();

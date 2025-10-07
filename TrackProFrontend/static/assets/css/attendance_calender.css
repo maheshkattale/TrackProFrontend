@@ -24,7 +24,7 @@
     }
 
     .custom-tabs .nav-link.active {
-      border-color: #00B0EF;
+      border-color: #b66dff;
 
     }
     .nav-fill .nav-item, .nav-fill>.nav-link {
@@ -187,7 +187,7 @@
         padding: 10px 5px;
       }
       .clndr-table .day.selected.event {
-        background:#00B0EF;
+        background:#b66dff;
         color:white;
         border-radius:5px;
       }
@@ -198,7 +198,7 @@
       padding: 8px 10px 8px 10px !important;
       margin-top: 8px !important;
       margin-right:5px;
-      background: #00B0EF !important;
+      background: #b66dff !important;
       /* margin: 0px !important; */
       border-radius: 24px !important;
       font-size: 13px !important;
@@ -223,7 +223,7 @@
     .request-btn{
       padding: 8px 10px 8px 10px !important;
       margin-top: 8px !important;
-      background: #00B0EF !important;
+      background: #b66dff !important;
       /* margin: 0px !important; */
       border-radius: 24px !important;
       font-size: 13px !important;
@@ -356,7 +356,7 @@
     }
 
     .month1.selected {
-      border: 2px solid #00adff;
+      border: 2px solid #b66dff;
       opacity:1;
     }
     .table-bordered1{
@@ -372,7 +372,7 @@
 
     table tr.week-row th {
       color: #fff;
-      background-color: #00adff;
+      background-color: #b66dff;
       font-weight: 500;
       padding: 5px;
 
@@ -659,7 +659,7 @@
   }
 
   .image-selected {
-    border-color: #00adff !important;
+    border-color: #b66dff !important;
     transform: scale(1.3); /* Scale up on hover */
     margin-top: -7.5px;
 
@@ -685,7 +685,7 @@
 }
 .infobtn{
   font-size:18px;
-  color:#00B0EF;
+  color:#b66dff;
   cursor:pointer;
 }
 .modal-lg {
@@ -790,9 +790,7 @@ grid-row-gap: 15px;
   height:600px;
   border-radius:15px;
 }
-.select2-container .select2-selection--single .select2-selection__rendered {
-      padding-top: 2px;
-  }
+
 
 
   .cardheadding {
